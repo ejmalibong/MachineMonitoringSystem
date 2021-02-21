@@ -59,6 +59,8 @@ Partial Public Class dsMonitoring
     
     Private tableMntTransactionDetail As MntTransactionDetailDataTable
     
+    Private relationFK_MntTransactionDetail_MntTransactionHeader As Global.System.Data.DataRelation
+    
     Private relationFK_SecSection_SecDepartment As Global.System.Data.DataRelation
     
     Private relationFK_SecUser_SecWorkgroup As Global.System.Data.DataRelation
@@ -93,8 +95,6 @@ Partial Public Class dsMonitoring
     
     Private relationFK_MntTransactionHeader_MntArea As Global.System.Data.DataRelation
     
-    Private relationFK_MntTransactionHeader_MntMachine As Global.System.Data.DataRelation
-    
     Private relationFK_MntTransactionHeader_MntMachineStatus As Global.System.Data.DataRelation
     
     Private relationFK_MntTransactionHeader_SecUseEncode As Global.System.Data.DataRelation
@@ -109,7 +109,7 @@ Partial Public Class dsMonitoring
     
     Private relationFK_MntTransactionDetail_SecUser As Global.System.Data.DataRelation
     
-    Private relationFK_MntTransactionDetail_MntTransactionHeader As Global.System.Data.DataRelation
+    Private relationFK_MntTransactionHeader_MntMachine As Global.System.Data.DataRelation
     
     Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
     
@@ -630,6 +630,7 @@ Partial Public Class dsMonitoring
                 Me.tableMntTransactionDetail.InitVars
             End If
         End If
+        Me.relationFK_MntTransactionDetail_MntTransactionHeader = Me.Relations("FK_MntTransactionDetail_MntTransactionHeader")
         Me.relationFK_SecSection_SecDepartment = Me.Relations("FK_SecSection_SecDepartment")
         Me.relationFK_SecUser_SecWorkgroup = Me.Relations("FK_SecUser_SecWorkgroup")
         Me.relationFK_SecWorkgroup_SecSection = Me.Relations("FK_SecWorkgroup_SecSection")
@@ -647,7 +648,6 @@ Partial Public Class dsMonitoring
         Me.relationFK_MntTransactionHeader_GenShift = Me.Relations("FK_MntTransactionHeader_GenShift")
         Me.relationFK_MntTransactionHeader_GenTransactionStatus = Me.Relations("FK_MntTransactionHeader_GenTransactionStatus")
         Me.relationFK_MntTransactionHeader_MntArea = Me.Relations("FK_MntTransactionHeader_MntArea")
-        Me.relationFK_MntTransactionHeader_MntMachine = Me.Relations("FK_MntTransactionHeader_MntMachine")
         Me.relationFK_MntTransactionHeader_MntMachineStatus = Me.Relations("FK_MntTransactionHeader_MntMachineStatus")
         Me.relationFK_MntTransactionHeader_SecUseEncode = Me.Relations("FK_MntTransactionHeader_SecUseEncode")
         Me.relationFK_MntTransactionHeader_SecUser = Me.Relations("FK_MntTransactionHeader_SecUser")
@@ -655,7 +655,7 @@ Partial Public Class dsMonitoring
         Me.relationFK_MntTransactionHeader_SecUserManager = Me.Relations("FK_MntTransactionHeader_SecUserManager")
         Me.relationFK_MntTransactionDetail_GenShift = Me.Relations("FK_MntTransactionDetail_GenShift")
         Me.relationFK_MntTransactionDetail_SecUser = Me.Relations("FK_MntTransactionDetail_SecUser")
-        Me.relationFK_MntTransactionDetail_MntTransactionHeader = Me.Relations("FK_MntTransactionDetail_MntTransactionHeader")
+        Me.relationFK_MntTransactionHeader_MntMachine = Me.Relations("FK_MntTransactionHeader_MntMachine")
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -700,6 +700,14 @@ Partial Public Class dsMonitoring
         MyBase.Tables.Add(Me.tableMntTransactionHeader)
         Me.tableMntTransactionDetail = New MntTransactionDetailDataTable()
         MyBase.Tables.Add(Me.tableMntTransactionDetail)
+        Dim fkc As Global.System.Data.ForeignKeyConstraint
+        fkc = New Global.System.Data.ForeignKeyConstraint("FK_MntTransactionDetail_MntTransactionHeader", New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.TrxIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionDetail.TrxIdColumn})
+        Me.tableMntTransactionDetail.Constraints.Add(fkc)
+        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
+        fkc.DeleteRule = Global.System.Data.Rule.Cascade
+        fkc.UpdateRule = Global.System.Data.Rule.Cascade
+        Me.relationFK_MntTransactionDetail_MntTransactionHeader = New Global.System.Data.DataRelation("FK_MntTransactionDetail_MntTransactionHeader", New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.TrxIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionDetail.TrxIdColumn}, false)
+        Me.Relations.Add(Me.relationFK_MntTransactionDetail_MntTransactionHeader)
         Me.relationFK_SecSection_SecDepartment = New Global.System.Data.DataRelation("FK_SecSection_SecDepartment", New Global.System.Data.DataColumn() {Me.tableSecDepartment.DepartmentIdColumn}, New Global.System.Data.DataColumn() {Me.tableSecSection.DepartmentIdColumn}, false)
         Me.Relations.Add(Me.relationFK_SecSection_SecDepartment)
         Me.relationFK_SecUser_SecWorkgroup = New Global.System.Data.DataRelation("FK_SecUser_SecWorkgroup", New Global.System.Data.DataColumn() {Me.tableSecWorkgroup.WorkgroupIdColumn}, New Global.System.Data.DataColumn() {Me.tableSecUser.WorkgroupIdColumn}, false)
@@ -734,8 +742,6 @@ Partial Public Class dsMonitoring
         Me.Relations.Add(Me.relationFK_MntTransactionHeader_GenTransactionStatus)
         Me.relationFK_MntTransactionHeader_MntArea = New Global.System.Data.DataRelation("FK_MntTransactionHeader_MntArea", New Global.System.Data.DataColumn() {Me.tableMntArea.AreaIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.AreaIdColumn}, false)
         Me.Relations.Add(Me.relationFK_MntTransactionHeader_MntArea)
-        Me.relationFK_MntTransactionHeader_MntMachine = New Global.System.Data.DataRelation("FK_MntTransactionHeader_MntMachine", New Global.System.Data.DataColumn() {Me.tableMntMachine.MachineIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.MachineIdColumn}, false)
-        Me.Relations.Add(Me.relationFK_MntTransactionHeader_MntMachine)
         Me.relationFK_MntTransactionHeader_MntMachineStatus = New Global.System.Data.DataRelation("FK_MntTransactionHeader_MntMachineStatus", New Global.System.Data.DataColumn() {Me.tableMntMachineStatus.MachineStatusIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.DowntimeMachineStatusIdColumn}, false)
         Me.Relations.Add(Me.relationFK_MntTransactionHeader_MntMachineStatus)
         Me.relationFK_MntTransactionHeader_SecUseEncode = New Global.System.Data.DataRelation("FK_MntTransactionHeader_SecUseEncode", New Global.System.Data.DataColumn() {Me.tableSecUser.UserIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.EncodeUserIdColumn}, false)
@@ -750,8 +756,8 @@ Partial Public Class dsMonitoring
         Me.Relations.Add(Me.relationFK_MntTransactionDetail_GenShift)
         Me.relationFK_MntTransactionDetail_SecUser = New Global.System.Data.DataRelation("FK_MntTransactionDetail_SecUser", New Global.System.Data.DataColumn() {Me.tableSecUser.UserIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionDetail.UserIdColumn}, false)
         Me.Relations.Add(Me.relationFK_MntTransactionDetail_SecUser)
-        Me.relationFK_MntTransactionDetail_MntTransactionHeader = New Global.System.Data.DataRelation("FK_MntTransactionDetail_MntTransactionHeader", New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.TrxIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionDetail.TrxIdColumn}, false)
-        Me.Relations.Add(Me.relationFK_MntTransactionDetail_MntTransactionHeader)
+        Me.relationFK_MntTransactionHeader_MntMachine = New Global.System.Data.DataRelation("FK_MntTransactionHeader_MntMachine", New Global.System.Data.DataColumn() {Me.tableMntMachine.MachineIdColumn}, New Global.System.Data.DataColumn() {Me.tableMntTransactionHeader.MachineIdColumn}, false)
+        Me.Relations.Add(Me.relationFK_MntTransactionHeader_MntMachine)
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -8901,17 +8907,6 @@ Partial Public Class dsMonitoring
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property MntMachineRow() As MntMachineRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionHeader_MntMachine")),MntMachineRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionHeader_MntMachine"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property MntMachineStatusRow() As MntMachineStatusRow
             Get
                 Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionHeader_MntMachineStatus")),MntMachineStatusRow)
@@ -8962,6 +8957,17 @@ Partial Public Class dsMonitoring
             End Get
             Set
                 Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionHeader_SecUserManager"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property MntMachineRow() As MntMachineRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionHeader_MntMachine")),MntMachineRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionHeader_MntMachine"))
             End Set
         End Property
         
@@ -9231,6 +9237,16 @@ Partial Public Class dsMonitoring
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetMntTransactionDetailRows() As MntTransactionDetailRow()
+            If (Me.Table.ChildRelations("FK_MntTransactionDetail_MntTransactionHeader") Is Nothing) Then
+                Return New MntTransactionDetailRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FK_MntTransactionDetail_MntTransactionHeader")),MntTransactionDetailRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function GetMntTransactionMachinePartRows() As MntTransactionMachinePartRow()
             If (Me.Table.ChildRelations("FK_MntTransactionMachinePart_MntTransactionHeader") Is Nothing) Then
                 Return New MntTransactionMachinePartRow(-1) {}
@@ -9256,16 +9272,6 @@ Partial Public Class dsMonitoring
                 Return New MntTransactionUserRow(-1) {}
             Else
                 Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FK_MntTransactionUser_MntTransactionHeader")),MntTransactionUserRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetMntTransactionDetailRows() As MntTransactionDetailRow()
-            If (Me.Table.ChildRelations("FK_MntTransactionDetail_MntTransactionHeader") Is Nothing) Then
-                Return New MntTransactionDetailRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FK_MntTransactionDetail_MntTransactionHeader")),MntTransactionDetailRow())
             End If
         End Function
     End Class
@@ -9406,6 +9412,17 @@ Partial Public Class dsMonitoring
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property MntTransactionHeaderRow() As MntTransactionHeaderRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionDetail_MntTransactionHeader")),MntTransactionHeaderRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionDetail_MntTransactionHeader"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property GenShiftRow() As GenShiftRow
             Get
                 Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionDetail_GenShift")),GenShiftRow)
@@ -9423,17 +9440,6 @@ Partial Public Class dsMonitoring
             End Get
             Set
                 Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionDetail_SecUser"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property MntTransactionHeaderRow() As MntTransactionHeaderRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FK_MntTransactionDetail_MntTransactionHeader")),MntTransactionHeaderRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("FK_MntTransactionDetail_MntTransactionHeader"))
             End Set
         End Property
         

@@ -78,7 +78,7 @@ Partial Class frmMntTrxDetail
         Me.btnApprove = New PinkieControls.ButtonXP()
         Me.cmbRoutingStatus = New System.Windows.Forms.ComboBox()
         Me.lblActivityLogs = New System.Windows.Forms.Label()
-        Me.btnEdit = New PinkieControls.ButtonXP()
+        Me.btnEditRow = New PinkieControls.ButtonXP()
         Me.pnlApprovers = New System.Windows.Forms.Panel()
         Me.lblApprovers = New System.Windows.Forms.Label()
         Me.txtEngineerItem = New System.Windows.Forms.Label()
@@ -819,21 +819,21 @@ Partial Class frmMntTrxDetail
         Me.lblActivityLogs.Text = " Activity Logs"
         Me.lblActivityLogs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'btnEdit
+        'btnEditRow
         '
-        Me.btnEdit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEdit.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnEdit.DefaultScheme = False
-        Me.btnEdit.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnEdit.Font = New System.Drawing.Font("Verdana", 9.0!)
-        Me.btnEdit.Hint = ""
-        Me.btnEdit.Location = New System.Drawing.Point(1121, 5)
-        Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnEdit.Size = New System.Drawing.Size(100, 25)
-        Me.btnEdit.TabIndex = 280
-        Me.btnEdit.TabStop = False
-        Me.btnEdit.Text = "Edit Row"
+        Me.btnEditRow.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnEditRow.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnEditRow.DefaultScheme = False
+        Me.btnEditRow.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnEditRow.Font = New System.Drawing.Font("Verdana", 9.0!)
+        Me.btnEditRow.Hint = ""
+        Me.btnEditRow.Location = New System.Drawing.Point(1121, 5)
+        Me.btnEditRow.Name = "btnEditRow"
+        Me.btnEditRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnEditRow.Size = New System.Drawing.Size(100, 25)
+        Me.btnEditRow.TabIndex = 280
+        Me.btnEditRow.TabStop = False
+        Me.btnEditRow.Text = "Edit Row"
         '
         'pnlApprovers
         '
@@ -1279,7 +1279,7 @@ Partial Class frmMntTrxDetail
         Me.Controls.Add(Me.txtFileAttachment)
         Me.Controls.Add(Me.lblFileAttachment)
         Me.Controls.Add(Me.pnlApprovers)
-        Me.Controls.Add(Me.btnEdit)
+        Me.Controls.Add(Me.btnEditRow)
         Me.Controls.Add(Me.btnRemoveRow)
         Me.Controls.Add(Me.btnAddRow)
         Me.Controls.Add(Me.lblActivityLogs)
@@ -1394,7 +1394,7 @@ Partial Class frmMntTrxDetail
     Friend WithEvents btnApprove As PinkieControls.ButtonXP
     Friend WithEvents cmbRoutingStatus As System.Windows.Forms.ComboBox
     Friend WithEvents lblActivityLogs As System.Windows.Forms.Label
-    Friend WithEvents btnEdit As PinkieControls.ButtonXP
+    Friend WithEvents btnEditRow As PinkieControls.ButtonXP
     Friend WithEvents pnlApprovers As System.Windows.Forms.Panel
     Friend WithEvents txtEngineerItem As System.Windows.Forms.Label
     Friend WithEvents txtEngineerId As System.Windows.Forms.Label

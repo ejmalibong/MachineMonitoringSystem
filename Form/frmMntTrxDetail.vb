@@ -138,11 +138,6 @@ Public Class frmMntTrxDetail
         Me.bsTransactionHeader.DataSource = Me.myDataset
         Me.bsTransactionHeader.DataMember = dtTransactionHeader.TableName
 
-        'Me.bsTransactionDetail.DataMember = "FK_MntTransactionDetail_MntTransactionHeader"
-        'Me.bsTransactionDetail.DataSource = Me.bsTransactionHeader
-        Me.bsTransactionDetail.DataSource = Me.myDataset
-        Me.bsTransactionDetail.DataMember = dtTransactionDetail.TableName
-
         Me.bsMachinePart.DataSource = Me.myDataset
         Me.bsMachinePart.DataMember = dtMachinePart.TableName
         cmbMachinePart.DataSource = Me.bsMachinePart
@@ -154,20 +149,27 @@ Public Class frmMntTrxDetail
         dgvPic.DataSource = Me.bsTransactionUser
 
         If trxId = 0 Then
+            Me.bsTransactionDetail.DataSource = Me.myDataset
+            Me.bsTransactionDetail.DataMember = dtTransactionDetail.TableName
             Me.bsTransactionDetail.Sort = "TrxFrom"
-            Me.bsTransactionDetail.Filter = String.Format("TrxDetailId < 0")
+            Me.bsTransactionDetail.Filter = String.Format("TrxId IS NULL")
             dgvDetail.AutoGenerateColumns = False
             dgvDetail.DataSource = Me.bsTransactionDetail
         Else
+            Me.bsTransactionDetail.DataMember = "FK_MntTransactionDetail_MntTransactionHeader"
+            Me.bsTransactionDetail.DataSource = Me.bsTransactionHeader
+            dgvDetail.AutoGenerateColumns = False
+            dgvDetail.DataSource = Me.bsTransactionDetail
+
             Me.bsTransactionHeader.Position = Me.bsTransactionHeader.Find("TrxId", _trxId)
 
             txtTransactionId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "TrxId", False, DataSourceUpdateMode.Never))
-            datetimeBinding = New Binding("Text", Me.bsTransactionHeader.Current, "TrxDate", False, DataSourceUpdateMode.Never)
+            datetimeBinding = New Binding("Text", Me.bsTransactionHeader.Current, "TrxDate")
             txtTransactionDate.DataBindings.Add(datetimeBinding)
             cmbMachineName.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "MachineId"))
             cmbArea.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "AreaId", True, DataSourceUpdateMode.OnPropertyChanged))
             txtRuntimeAccumulated.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "TotalAccumulatedRuntime"))
-            cmbMachineStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "DowntimeMachineStatusId", True, DataSourceUpdateMode.OnPropertyChanged))
+            cmbMachineStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "DowntimeMachineStatusId"))
             txtDowntimeAccumulated.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "TotalAccumulatedDowntime"))
             txtProblem.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "Problem"))
             txtActionTaken.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "ActionTaken"))
@@ -185,10 +187,6 @@ Public Class frmMntTrxDetail
             txtEngineerRemarks.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerRemarks"))
             cmbTrxStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "TrxStatusId"))
             cmbRoutingStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "RoutingStatusId"))
-
-            Me.bsTransactionDetail.Filter = String.Format("TrxId = '{0}'", _trxId)
-            dgvDetail.AutoGenerateColumns = False
-            dgvDetail.DataSource = Me.bsTransactionDetail
         End If
     End Sub
 
@@ -227,6 +225,7 @@ Public Class frmMntTrxDetail
                 txtPartsReplaced.Enabled = False
                 txtPartNo.Enabled = False
                 GetPic()
+                btnEditRow.Enabled = False
                 btnDelete.Enabled = False
                 Me.ActiveControl = cmbMachineName
             Else
@@ -482,7 +481,6 @@ Public Class frmMntTrxDetail
                     .UserId = dgvDetail.Rows(_rowCount - 1).Cells("TechnicianColumn").Value
                     .ShiftId = dgvDetail.Rows(_rowCount - 1).Cells("ShiftIdColumn").Value
                     .EncodeUserId = userId
-                    .RoutingStatusId = 5
 
                     'selected done
                     If cmbTrxStatus.SelectedValue = 1 Then
@@ -500,6 +498,7 @@ Public Class frmMntTrxDetail
 
                         .DatetimeEnded = dgvDetail.Rows(_rowCount - 1).Cells("TrxToColumn").Value
                         .TrxStatusId = 1
+                        .RoutingStatusId = 4
 
                         'selected ongoing
                     Else
@@ -516,14 +515,21 @@ Public Class frmMntTrxDetail
 
                         .SetDatetimeEndedNull()
                         .TrxStatusId = 2
+                        .RoutingStatusId = 5
                     End If
                 End With
                 Me.myDataset.MntTransactionHeader.AddMntTransactionHeaderRow(_newRowHeader)
                 Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
 
-                'transaction detail (db direct)
-                For Each _row As DataGridViewRow In dgvDetail.Rows
-                    Me.adpTransactionDetail.Insert(_newRowHeader.TrxId, _row.Cells("TrxDateColumn").Value, _row.Cells("TrxFromColumn").Value, _row.Cells("TrxToColumn").Value, _row.Cells("ElapsedTimeColumn").Value, _row.Cells("TechnicianColumn").Value, _row.Cells("ShiftIdColumn").Value)
+                'transaction details
+                For Each _dataRowView As DataRowView In Me.bsTransactionDetail
+                    Dim _row = _dataRowView.Row
+                    _row.Item("TrxId") = _newRowHeader.TrxId
+
+                    '2/21
+                    'transaction user (db direct)
+                    'include start technician and end technician to transaction user table
+                    Me.adpTransactionUser.Insert(_newRowHeader.TrxId, _row("UserId"))
                 Next
 
                 'transaction machine part
@@ -560,22 +566,15 @@ Public Class frmMntTrxDetail
                 End With
                 Me.myDataset.MntTransactionSparePart.AddMntTransactionSparePartRow(_newRowSparePart)
 
-                'transaction user (db direct)
-                'include start technician and end technician to transaction user table
-                '2/19
-                For Each _row As DataGridViewRow In dgvDetail.Rows
-                    Me.adpTransactionUser.Insert(_newRowHeader.TrxId, _row.Cells("TechnicianColumn").Value)
-                Next
-
+                'insert selected pic from dgvPic
                 For Each _row As DataGridViewRow In dgvPic.Rows
-                    'insert selected pic from dgvPic
                     Dim _isSelected As Boolean = Convert.ToBoolean(_row.Cells("IsSelectedColumn").Value)
                     If _isSelected Then
                         Me.adpTransactionUser.Insert(_newRowHeader.TrxId, _row.Cells("UserIdColumn").Value)
                     End If
                 Next
             Else
-
+                'Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
             End If
 
             Me.DialogResult = Windows.Forms.DialogResult.OK
@@ -655,15 +654,34 @@ Public Class frmMntTrxDetail
 
     Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
         Try
-            If trxId <= 0 Then
-                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, Me.bsTransactionDetail, userId, 0, 0)
+            If trxId = 0 Then
+                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, Me.bsTransactionDetail, userId)
+                    frmDetailLog.ShowDialog(Me)
+
+                    If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
+                        Me.bsTransactionDetail.AddNew()
+                        Me.bsTransactionDetail.MoveLast()
+                        Me.bsTransactionDetail.Current("TrxId") = DBNull.Value
+                        Me.bsTransactionDetail.Current("TrxDate") = DateTime.Now
+                        Me.bsTransactionDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
+                        Me.bsTransactionDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
+                        Me.bsTransactionDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
+                        Me.bsTransactionDetail.Current("UserId") = frmDetailLog.cmbUser.SelectedValue
+                        Me.bsTransactionDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
+                        Me.bsTransactionDetail.EndEdit()
+                    Else
+                        Me.bsTransactionDetail.CancelEdit()
+                    End If
+                End Using
+            Else
+                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, Me.bsTransactionDetail, userId, trxId)
                     frmDetailLog.ShowDialog(Me)
 
                     If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
                         Me.bsTransactionDetail.AddNew()
                         Me.bsTransactionDetail.MoveLast()
 
-                        Me.bsTransactionDetail.Current("TrxId") = DBNull.Value
+                        Me.bsTransactionDetail.Current("TrxId") = trxId
                         Me.bsTransactionDetail.Current("TrxDate") = DateTime.Now
                         Me.bsTransactionDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
                         Me.bsTransactionDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
@@ -685,12 +703,11 @@ Public Class frmMntTrxDetail
         End Try
     End Sub
 
-    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEditRow.Click
         Try
             If dgvDetail.Rows.Count > 0 Then
                 Dim _trxDetailId As Integer = CType(Me.bsTransactionDetail.Current, DataRowView).Item("TrxId")
 
-                MsgBox(_trxDetailId)
             End If
 
             GetPic()

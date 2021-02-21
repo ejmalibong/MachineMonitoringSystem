@@ -80,6 +80,8 @@ Public Class frmMntTrxDetailLog
                 End If
             End If
 
+
+
             'Me.bsTransactionDetail.AllowNew = True
             'Me.bsTransactionDetail.AddNew()
             ''Me.bsTransactionDetail.MoveLast()

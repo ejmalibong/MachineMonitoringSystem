@@ -1,5 +1,5 @@
-﻿Imports MachineMonitoringSystem.dsMonitoringTableAdapters
-Imports MachineMonitoringSystem.dsMonitoring
+﻿Imports MachineMonitoringSystem.dsMonitoring
+Imports MachineMonitoringSystem.dsMonitoringTableAdapters
 Imports System.Reflection
 Imports System.ComponentModel
 
@@ -69,6 +69,8 @@ Public Class frmMntTrxConsole
     Private adpMachineStatus As New MntMachineStatusTableAdapter
     Private adpMachinePart As New MntMachinePartTableAdapter
     Private adpTechnician As New SecUserTableAdapter
+
+    Private adpActivity As New MntTransactionHeaderTableAdapter
     'for columns of dgvmachine
     Private dtMachine As New MntMachineDataTable
     Private dtAreaName As New MntAreaDataTable
@@ -80,6 +82,8 @@ Public Class frmMntTrxConsole
     Private rowWorkgroup As SecWorkgroupRow
     'for activity column
     Private dtLastDetail As New DataTable
+
+    Private adpTransactionHeaderActivity As New MntTransactionHeaderTableAdapter
 
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
 
@@ -95,6 +99,7 @@ Public Class frmMntTrxConsole
         Me.adpAreaName.Fill(Me.myDataset.MntArea)
 
         Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
+        Me.adpTransactionHeaderActivity.Fill(Me.myDataset.MntTransactionHeader)
         Me.adpNickname.Fill(Me.myDataset.SecUser)
         Me.adpMachineName.Fill(Me.myDataset.MntMachine)
         Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
@@ -151,7 +156,8 @@ Public Class frmMntTrxConsole
 
         Me.bsTransactionHeader.DataSource = Me.myDataset
         Me.bsTransactionHeader.DataMember = dtTransactionHeader.TableName
-        Me.bsTransactionHeader.Sort = "TrxId DESC, DatetimeEnded DESC"
+        'Me.bsTransactionHeader.Sort = "DatetimeStarted DESC, TrxId DESC"
+        Me.bsTransactionHeader.Sort = "TrxId DESC"
 
         Me.bsNickname.DataSource = Me.myDataset
         Me.bsNickname.DataMember = dtNickname.TableName
@@ -367,7 +373,7 @@ Public Class frmMntTrxConsole
     '2/19
     Private Sub dgvTransactionHeader_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvTransactionHeader.DataBindingComplete
         Try
-            dtLastDetail = Me.adpTransactionHeader.GetLastDetailByMachineId(Nothing)
+            dtLastDetail = Me.adpTransactionHeaderActivity.GetLastDetailByMachineId(Nothing)
 
             For Each _row As DataRow In dtLastDetail.Rows
                 For _i As Integer = 0 To dgvTransactionHeader.Rows.Count - 1
@@ -376,6 +382,7 @@ Public Class frmMntTrxConsole
                     End If
                 Next
             Next
+
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -452,6 +459,16 @@ Public Class frmMntTrxConsole
                     End If
                 End Using
             End If
+
+            dtLastDetail = Me.adpTransactionHeader.GetLastDetailByMachineId(Nothing)
+
+            For Each _row As DataRow In dtLastDetail.Rows
+                For _i As Integer = 0 To dgvTransactionHeader.Rows.Count - 1
+                    If dgvTransactionHeader.Rows(_i).Cells(0).Value = _row("TrxId") Then
+                        dgvTransactionHeader.Rows(_i).Cells("ActivityColumn").Value = _row("Activity")
+                    End If
+                Next
+            Next
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -511,16 +528,13 @@ Public Class frmMntTrxConsole
 
     Private Sub trxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles rdAll.CheckedChanged, rdDone.CheckedChanged, rdOngoing.CheckedChanged
         If rdAll.Checked = True Then
-            'Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator, 3)
             transactionStatusId = 3
         ElseIf rdDone.Checked = True Then
             Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = 1")
             transactionStatusId = 1
-            'Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator, 1)
         Else
             Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = 2")
             transactionStatusId = 2
-            'Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator, 2)
         End If
     End Sub
 
