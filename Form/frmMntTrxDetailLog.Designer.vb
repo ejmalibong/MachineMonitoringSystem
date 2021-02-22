@@ -53,7 +53,7 @@ Partial Class frmMntTrxDetailLog
         Me.cmbUser.Location = New System.Drawing.Point(134, 57)
         Me.cmbUser.Name = "cmbUser"
         Me.cmbUser.Size = New System.Drawing.Size(250, 24)
-        Me.cmbUser.TabIndex = 1
+        Me.cmbUser.TabIndex = 2
         Me.cmbUser.ValueMember = "UserId"
         '
         'rdDay
@@ -63,7 +63,7 @@ Partial Class frmMntTrxDetailLog
         Me.rdDay.Location = New System.Drawing.Point(35, 10)
         Me.rdDay.Name = "rdDay"
         Me.rdDay.Size = New System.Drawing.Size(81, 18)
-        Me.rdDay.TabIndex = 2
+        Me.rdDay.TabIndex = 0
         Me.rdDay.TabStop = True
         Me.rdDay.Text = "Day Shift"
         Me.rdDay.UseVisualStyleBackColor = True
@@ -75,7 +75,7 @@ Partial Class frmMntTrxDetailLog
         Me.rdNight.Location = New System.Drawing.Point(134, 10)
         Me.rdNight.Name = "rdNight"
         Me.rdNight.Size = New System.Drawing.Size(90, 18)
-        Me.rdNight.TabIndex = 3
+        Me.rdNight.TabIndex = 1
         Me.rdNight.TabStop = True
         Me.rdNight.Text = "Night Shift"
         Me.rdNight.UseVisualStyleBackColor = True
@@ -109,7 +109,7 @@ Partial Class frmMntTrxDetailLog
         Me.txtElapsedTime.Location = New System.Drawing.Point(134, 161)
         Me.txtElapsedTime.Name = "txtElapsedTime"
         Me.txtElapsedTime.Size = New System.Drawing.Size(250, 24)
-        Me.txtElapsedTime.TabIndex = 241
+        Me.txtElapsedTime.TabIndex = 6
         Me.txtElapsedTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtElapsedTime.UseCompatibleTextRendering = True
         '
@@ -125,7 +125,7 @@ Partial Class frmMntTrxDetailLog
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
-        Me.btnCancel.TabIndex = 253
+        Me.btnCancel.TabIndex = 8
         Me.btnCancel.TabStop = False
         Me.btnCancel.Text = "  Cancel"
         '
@@ -141,7 +141,7 @@ Partial Class frmMntTrxDetailLog
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
-        Me.btnSave.TabIndex = 252
+        Me.btnSave.TabIndex = 7
         Me.btnSave.TabStop = False
         Me.btnSave.Text = "  Save"
         '
@@ -154,7 +154,7 @@ Partial Class frmMntTrxDetailLog
         Me.txtTrxDetailId.Location = New System.Drawing.Point(134, 5)
         Me.txtTrxDetailId.Name = "txtTrxDetailId"
         Me.txtTrxDetailId.Size = New System.Drawing.Size(250, 24)
-        Me.txtTrxDetailId.TabIndex = 254
+        Me.txtTrxDetailId.TabIndex = 0
         Me.txtTrxDetailId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtTrxDetailId.UseCompatibleTextRendering = True
         '
@@ -168,7 +168,7 @@ Partial Class frmMntTrxDetailLog
         Me.txtTrxId.Location = New System.Drawing.Point(5, 200)
         Me.txtTrxId.Name = "txtTrxId"
         Me.txtTrxId.Size = New System.Drawing.Size(130, 24)
-        Me.txtTrxId.TabIndex = 255
+        Me.txtTrxId.TabIndex = 9
         Me.txtTrxId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtTrxId.UseCompatibleTextRendering = True
         Me.txtTrxId.Visible = False
@@ -181,7 +181,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblShift.Location = New System.Drawing.Point(5, 83)
         Me.lblShift.Name = "lblShift"
         Me.lblShift.Size = New System.Drawing.Size(130, 24)
-        Me.lblShift.TabIndex = 258
+        Me.lblShift.TabIndex = 13
         Me.lblShift.Text = " Shift"
         Me.lblShift.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -192,7 +192,7 @@ Partial Class frmMntTrxDetailLog
         Me.grpShift.Location = New System.Drawing.Point(134, 76)
         Me.grpShift.Name = "grpShift"
         Me.grpShift.Size = New System.Drawing.Size(250, 32)
-        Me.grpShift.TabIndex = 257
+        Me.grpShift.TabIndex = 3
         Me.grpShift.TabStop = False
         '
         'lblFrom
@@ -203,7 +203,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblFrom.Location = New System.Drawing.Point(5, 109)
         Me.lblFrom.Name = "lblFrom"
         Me.lblFrom.Size = New System.Drawing.Size(130, 24)
-        Me.lblFrom.TabIndex = 260
+        Me.lblFrom.TabIndex = 12
         Me.lblFrom.Text = " From"
         Me.lblFrom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -215,7 +215,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblUser.Location = New System.Drawing.Point(5, 57)
         Me.lblUser.Name = "lblUser"
         Me.lblUser.Size = New System.Drawing.Size(130, 24)
-        Me.lblUser.TabIndex = 261
+        Me.lblUser.TabIndex = 14
         Me.lblUser.Text = " Technician"
         Me.lblUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -227,7 +227,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblTo.Location = New System.Drawing.Point(5, 135)
         Me.lblTo.Name = "lblTo"
         Me.lblTo.Size = New System.Drawing.Size(130, 24)
-        Me.lblTo.TabIndex = 262
+        Me.lblTo.TabIndex = 11
         Me.lblTo.Text = " To"
         Me.lblTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -239,7 +239,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblElapsedTime.Location = New System.Drawing.Point(5, 161)
         Me.lblElapsedTime.Name = "lblElapsedTime"
         Me.lblElapsedTime.Size = New System.Drawing.Size(130, 24)
-        Me.lblElapsedTime.TabIndex = 263
+        Me.lblElapsedTime.TabIndex = 10
         Me.lblElapsedTime.Text = " Elapsed Time"
         Me.lblElapsedTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -251,7 +251,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblTrxDetailId.Location = New System.Drawing.Point(5, 5)
         Me.lblTrxDetailId.Name = "lblTrxDetailId"
         Me.lblTrxDetailId.Size = New System.Drawing.Size(130, 24)
-        Me.lblTrxDetailId.TabIndex = 264
+        Me.lblTrxDetailId.TabIndex = 16
         Me.lblTrxDetailId.Text = " Log ID"
         Me.lblTrxDetailId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -263,7 +263,7 @@ Partial Class frmMntTrxDetailLog
         Me.lblTrxDate.Location = New System.Drawing.Point(5, 31)
         Me.lblTrxDate.Name = "lblTrxDate"
         Me.lblTrxDate.Size = New System.Drawing.Size(130, 24)
-        Me.lblTrxDate.TabIndex = 266
+        Me.lblTrxDate.TabIndex = 15
         Me.lblTrxDate.Text = " Entry Date"
         Me.lblTrxDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -276,7 +276,7 @@ Partial Class frmMntTrxDetailLog
         Me.txtTrxDate.Location = New System.Drawing.Point(134, 31)
         Me.txtTrxDate.Name = "txtTrxDate"
         Me.txtTrxDate.Size = New System.Drawing.Size(250, 24)
-        Me.txtTrxDate.TabIndex = 265
+        Me.txtTrxDate.TabIndex = 1
         Me.txtTrxDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtTrxDate.UseCompatibleTextRendering = True
         '

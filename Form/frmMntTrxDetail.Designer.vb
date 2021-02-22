@@ -78,7 +78,6 @@ Partial Class frmMntTrxDetail
         Me.btnApprove = New PinkieControls.ButtonXP()
         Me.cmbRoutingStatus = New System.Windows.Forms.ComboBox()
         Me.lblActivityLogs = New System.Windows.Forms.Label()
-        Me.btnEditRow = New PinkieControls.ButtonXP()
         Me.pnlApprovers = New System.Windows.Forms.Panel()
         Me.lblApprovers = New System.Windows.Forms.Label()
         Me.txtEngineerItem = New System.Windows.Forms.Label()
@@ -550,7 +549,7 @@ Partial Class frmMntTrxDetail
         Me.btnAddRow.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnAddRow.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnAddRow.Hint = ""
-        Me.btnAddRow.Location = New System.Drawing.Point(1020, 5)
+        Me.btnAddRow.Location = New System.Drawing.Point(1121, 5)
         Me.btnAddRow.Name = "btnAddRow"
         Me.btnAddRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAddRow.Size = New System.Drawing.Size(100, 25)
@@ -804,6 +803,7 @@ Partial Class frmMntTrxDetail
         Me.cmbRoutingStatus.TabIndex = 278
         Me.cmbRoutingStatus.TabStop = False
         Me.cmbRoutingStatus.ValueMember = "RoutingStatusId"
+        Me.cmbRoutingStatus.Visible = False
         '
         'lblActivityLogs
         '
@@ -818,22 +818,6 @@ Partial Class frmMntTrxDetail
         Me.lblActivityLogs.TabIndex = 279
         Me.lblActivityLogs.Text = " Activity Logs"
         Me.lblActivityLogs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'btnEditRow
-        '
-        Me.btnEditRow.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEditRow.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnEditRow.DefaultScheme = False
-        Me.btnEditRow.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnEditRow.Font = New System.Drawing.Font("Verdana", 9.0!)
-        Me.btnEditRow.Hint = ""
-        Me.btnEditRow.Location = New System.Drawing.Point(1121, 5)
-        Me.btnEditRow.Name = "btnEditRow"
-        Me.btnEditRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnEditRow.Size = New System.Drawing.Size(100, 25)
-        Me.btnEditRow.TabIndex = 280
-        Me.btnEditRow.TabStop = False
-        Me.btnEditRow.Text = "Edit Row"
         '
         'pnlApprovers
         '
@@ -1279,7 +1263,6 @@ Partial Class frmMntTrxDetail
         Me.Controls.Add(Me.txtFileAttachment)
         Me.Controls.Add(Me.lblFileAttachment)
         Me.Controls.Add(Me.pnlApprovers)
-        Me.Controls.Add(Me.btnEditRow)
         Me.Controls.Add(Me.btnRemoveRow)
         Me.Controls.Add(Me.btnAddRow)
         Me.Controls.Add(Me.lblActivityLogs)
@@ -1394,7 +1377,6 @@ Partial Class frmMntTrxDetail
     Friend WithEvents btnApprove As PinkieControls.ButtonXP
     Friend WithEvents cmbRoutingStatus As System.Windows.Forms.ComboBox
     Friend WithEvents lblActivityLogs As System.Windows.Forms.Label
-    Friend WithEvents btnEditRow As PinkieControls.ButtonXP
     Friend WithEvents pnlApprovers As System.Windows.Forms.Panel
     Friend WithEvents txtEngineerItem As System.Windows.Forms.Label
     Friend WithEvents txtEngineerId As System.Windows.Forms.Label
@@ -1420,6 +1402,10 @@ Partial Class frmMntTrxDetail
     Friend WithEvents txtFileName As System.Windows.Forms.Label
     Friend WithEvents lblFileName As System.Windows.Forms.Label
     Friend WithEvents dgvDetail As System.Windows.Forms.DataGridView
+    Friend WithEvents IsSelectedColumn As System.Windows.Forms.DataGridViewCheckBoxColumn
+    Friend WithEvents UserIdColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents UserNameColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents txtRoutingStatus As System.Windows.Forms.Label
     Friend WithEvents TrxDetailIdColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents TrxIdColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents TrxDateColumn As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1427,8 +1413,4 @@ Partial Class frmMntTrxDetail
     Friend WithEvents TrxFromColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents TrxToColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ElapsedTimeColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents IsSelectedColumn As System.Windows.Forms.DataGridViewCheckBoxColumn
-    Friend WithEvents UserIdColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents UserNameColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents txtRoutingStatus As System.Windows.Forms.Label
 End Class

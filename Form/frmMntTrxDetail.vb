@@ -8,28 +8,41 @@ Imports System.Threading
 
 Public Class frmMntTrxDetail
     Private method As New clsMethod
+
     'access control
     Private isAdmin As Boolean = True
+
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
     Private isTechnicianManual As Boolean = True
     Private isImageRequired As Boolean = True
     Private isAllowEdit As Boolean = True
     Private isAllowDelete As Boolean = True
+
     'checking if new or exising record
     Private trxId As Integer = 0
+
+    'checking if already in pic table
+    Private trxCount As Integer = 0
+
     'image processing
     Private WithEvents opdTrxDetail As New OpenFileDialog
+
     Private memoStream As New MemoryStream
     Private bite As Byte() 'byte is not valid identifier
+
     'enable/disable validation
     Private isValidate As Boolean = True
+
     'custom binding
     Private WithEvents datetimeBinding As Binding
+
     'fetching / access dataset
     Private myDataset As New dsMonitoring
+
     'binding sources
     Private WithEvents bsRoutingStatus As New BindingSource
+
     Private WithEvents bsTransactionStatus As New BindingSource
     Private WithEvents bsMachine As New BindingSource
     Private WithEvents bsArea As New BindingSource
@@ -41,13 +54,19 @@ Public Class frmMntTrxDetail
     Private WithEvents bsTransactionUser As New BindingSource
     Private WithEvents bsMachinePart As New BindingSource
     Private WithEvents bsTechnician As New BindingSource
+
     'adapters
     Private adpTransactionHeader As New MntTransactionHeaderTableAdapter
+
     Private adpTransactionDetail As New MntTransactionDetailTableAdapter
+    Private adpTransactionMachinePart As New MntTransactionMachinePartTableAdapter
+    Private adpTransactionSparePart As New MntTransactionSparePartTableAdapter
     Private adpTransactionUser As New MntTransactionUserTableAdapter
     Private adpTechnician As New SecUserTableAdapter
+
     'datatables
     Private dtSecUserPic As New SecUserDataTable
+
     Private dtRoutingStatus As New GenRoutingStatusDataTable
     Private dtTransactionStatus As New GenTransactionStatusDataTable
     Private dtMachine As New MntMachineDataTable
@@ -55,10 +74,14 @@ Public Class frmMntTrxDetail
     Private dtMachineStatus As New MntMachineStatusDataTable
     Private dtTransactionHeader As New MntTransactionHeaderDataTable
     Private dtTransactionDetail As New MntTransactionDetailDataTable
+    Private dtTransactionMachinePart As New MntTransactionMachinePartDataTable
+    Private dtTransactionSparePart As New MntTransactionSparePartDataTable
+    Private dtTransactionUser As New MntTransactionUserDataTable
     Private dtMachinePart As New MntMachinePartDataTable
     Private dtTechnicianColumn As New SecUserDataTable
+
     'additional objects
-    Private dtTransactionUser As New DataTable
+    Private dtSecUser As New DataTable
 
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean, ByVal _isTechnicianManual As Boolean, ByVal _isImageRequired As Boolean, ByVal _isAllowEdit As Boolean, ByVal _isAllowDelete As Boolean, ByVal _myDataset As DataSet, Optional _trxId As Integer = 0)
 
@@ -133,6 +156,7 @@ Public Class frmMntTrxDetail
 
         Me.bsMachineStatus.DataSource = Me.myDataset
         Me.bsMachineStatus.DataMember = dtMachineStatus.TableName
+        Me.bsMachineStatus.Filter = "MachineStatusId <> 1"
         cmbMachineStatus.DataSource = Me.bsMachineStatus
 
         Me.bsTransactionHeader.DataSource = Me.myDataset
@@ -156,11 +180,6 @@ Public Class frmMntTrxDetail
             dgvDetail.AutoGenerateColumns = False
             dgvDetail.DataSource = Me.bsTransactionDetail
         Else
-            Me.bsTransactionDetail.DataMember = "FK_MntTransactionDetail_MntTransactionHeader"
-            Me.bsTransactionDetail.DataSource = Me.bsTransactionHeader
-            dgvDetail.AutoGenerateColumns = False
-            dgvDetail.DataSource = Me.bsTransactionDetail
-
             Me.bsTransactionHeader.Position = Me.bsTransactionHeader.Find("TrxId", _trxId)
 
             txtTransactionId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "TrxId", False, DataSourceUpdateMode.Never))
@@ -187,6 +206,50 @@ Public Class frmMntTrxDetail
             txtEngineerRemarks.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerRemarks"))
             cmbTrxStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "TrxStatusId"))
             cmbRoutingStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "RoutingStatusId"))
+
+            Me.bsTransactionDetail.DataMember = "FK_MntTransactionDetail_MntTransactionHeader"
+            Me.bsTransactionDetail.DataSource = Me.bsTransactionHeader
+            dgvDetail.AutoGenerateColumns = False
+            dgvDetail.DataSource = Me.bsTransactionDetail
+
+            If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                cmbArea.Enabled = False
+                cmbMachinePart.Enabled = True
+                cmbMachineStatus.Enabled = True
+
+                Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
+                Me.bsTransactionMachinePart.DataSource = Me.myDataset
+                Me.bsTransactionMachinePart.DataMember = dtTransactionMachinePart.TableName
+
+                Me.bsTransactionMachinePart.Position = Me.bsTransactionMachinePart.Find("TrxId", trxId)
+
+                cmbMachinePart.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionMachinePart.Current, "MachinePartId"))
+            Else
+                cmbArea.Enabled = True
+                cmbMachinePart.Enabled = False
+                cmbMachinePart.SelectedValue = 0
+                cmbMachineStatus.Enabled = False
+                cmbMachineStatus.SelectedValue = 0
+            End If
+
+            Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
+            Me.bsTransactionSparePart.DataSource = Me.myDataset
+            Me.bsTransactionSparePart.DataMember = dtTransactionSparePart.TableName
+
+            Me.bsTransactionSparePart.Position = Me.bsTransactionSparePart.Find("TrxId", trxId)
+
+            txtPartsReplaced.DataBindings.Add(New Binding("Text", Me.bsTransactionSparePart.Current, "SparePartName"))
+            txtPartNo.DataBindings.Add(New Binding("Text", Me.bsTransactionSparePart.Current, "SparePartNo"))
+
+            If CType(Me.bsTransactionSparePart.Current, DataRowView).Item("SparePartName") Is DBNull.Value Then
+                txtPartNo.Enabled = False
+            Else
+                txtPartNo.Enabled = True
+            End If
+
+            dtTransactionUser = Me.adpTransactionUser.GetDataByTrxId(trxId)
+
+            GetPic()
         End If
     End Sub
 
@@ -200,7 +263,7 @@ Public Class frmMntTrxDetail
         ElseIf e.KeyCode.Equals(Keys.F10) Then
             btnSave.PerformClick()
         ElseIf e.KeyCode.Equals(Keys.F8) Then
-            If isAllowDelete Then
+            If isAllowDelete And btnDelete.Enabled = True Then
                 btnDelete.PerformClick()
             End If
         End If
@@ -219,23 +282,21 @@ Public Class frmMntTrxDetail
                 cmbArea.SelectedValue = 0
                 cmbMachinePart.SelectedValue = 0
                 cmbMachinePart.Enabled = False
-                Me.bsMachineStatus.Filter = "MachineStatusId <> 1"
                 cmbMachineStatus.SelectedValue = 0
                 cmbMachineStatus.Enabled = False
                 txtPartsReplaced.Enabled = False
                 txtPartNo.Enabled = False
                 GetPic()
-                btnEditRow.Enabled = False
                 btnDelete.Enabled = False
                 Me.ActiveControl = cmbMachineName
             Else
-                Me.ActiveControl = txtActionTaken
-                txtActionTaken.Select(txtActionTaken.TextLength, 0)
-                btnDelete.Enabled = isAllowDelete
-
                 txtRoutingStatus.Text = cmbRoutingStatus.Text
+                cmbMachineName.Enabled = False
 
-                AddHandler cmbMachineName.Validated, AddressOf cmbMachineName_Validated
+                txtActionTaken.Select(txtActionTaken.TextLength, 0)
+
+                btnDelete.Enabled = isAllowDelete
+                Me.ActiveControl = txtActionTaken
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -260,10 +321,11 @@ Public Class frmMntTrxDetail
             cmbMachineStatus.Enabled = False
             cmbMachineStatus.SelectedValue = 0
 
-            '2/20 allow entry of spare parts replace even not machine entry
             'txtPartsReplaced.Enabled = False
             'txtPartNo.Enabled = False
 
+            '2/20 allow entry of spare parts replace even not machine entry
+            txtPartsReplaced.Enabled = True
             Me.ActiveControl = cmbArea
 
             'machine entry
@@ -295,28 +357,10 @@ Public Class frmMntTrxDetail
         GetTotalRuntime()
     End Sub
 
-    Private Sub cmbArea_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbArea.Validating
-        'If isValidate Then
-        '    If cmbArea.SelectedValue > 0 Then
-        '        e.Cancel = False
-        '    Else
-        '        e.Cancel = True
-        '    End If
-        'End If
-    End Sub
-
-    Public Sub dgvDetail_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvDetail.DataBindingComplete
-        Try
-            'GetPic()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub dgvPic_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvPic.DataBindingComplete
         For Each _row As DataRow In dtTransactionUser.Rows
             For _i As Integer = 0 To dgvPic.Rows.Count - 1
-                If dgvPic.Rows(_i).Cells(1).Value = _row("UserId") Then
+                If dgvPic.Rows(_i).Cells("UserIdColumn").Value = _row("UserId") Then
                     dgvPic.Rows(_i).Cells("IsSelectedColumn").Value = True
                 End If
             Next
@@ -387,31 +431,53 @@ Public Class frmMntTrxDetail
 
                 'transaction header
                 With _newRowHeader
-                    'machine entry
-                    If Not cmbMachineName.SelectedValue = 0 Then
-                        .MachineId = cmbMachineName.SelectedValue
-                        If String.IsNullOrWhiteSpace(txtRuntimeAccumulated.Text.Trim) Then
-                            .SetTotalAccumulatedRuntimeNull()
-                        Else
-                            .TotalAccumulatedRuntime = txtRuntimeAccumulated.Text.Trim
-                        End If
-                        .DowntimeMachineStatusId = cmbMachineStatus.SelectedValue
+                    'selected done
+                    If cmbTrxStatus.SelectedValue = 1 Then
+                        'machine entry
+                        If Not cmbMachineName.SelectedValue = 0 Then
+                            .MachineId = cmbMachineName.SelectedValue
+                            If String.IsNullOrWhiteSpace(txtRuntimeAccumulated.Text.Trim) Then
+                                .SetTotalAccumulatedRuntimeNull()
+                            Else
+                                .TotalAccumulatedRuntime = txtRuntimeAccumulated.Text.Trim
+                            End If
+                            .DowntimeMachineStatusId = cmbMachineStatus.SelectedValue
 
-                        'preventive maintenance
-                        If cmbMachineStatus.SelectedValue = 2 Then
-                            If Not String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                            'preventive maintenance
+                            If cmbMachineStatus.SelectedValue = 2 Then
+                                If Not String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    .Problem = txtProblem.Text.Trim
+                                Else
+                                    .SetProblemNull()
+                                End If
+
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                                'under repair
+                            Else
+                                If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtProblem.Focus()
+                                    Return
+                                End If
                                 .Problem = txtProblem.Text.Trim
-                            Else
-                                .SetProblemNull()
-                            End If
 
-                            If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtActionTaken.Focus()
+                                    Return
+                                End If
                                 .ActionTaken = txtActionTaken.Text.Trim
-                            Else
-                                .SetActionTakenNull()
                             End If
-                            'under repair
+                            'not machine-related entry
                         Else
+                            .SetMachineIdNull()
+                            .SetTotalAccumulatedRuntimeNull()
+                            .SetDowntimeMachineStatusIdNull()
+
                             If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
                                 MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                                 txtProblem.Focus()
@@ -427,25 +493,102 @@ Public Class frmMntTrxDetail
                             .ActionTaken = txtActionTaken.Text.Trim
                         End If
 
-                        'not machine-related entry
+                        If picImgAttachment.Image Is Nothing Then
+                            MessageBox.Show("Please attach image.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            btnBrowse.Focus()
+                            Return
+                        End If
+
+                        Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
+                        _resized.Save(memoStream, ImageFormat.Jpeg)
+                        bite = memoStream.GetBuffer()
+                        .Image = bite
+                        .ImageName = txtImageName.Text.Trim
+
+                        .DatetimeEnded = dgvDetail.Rows(_rowCount - 1).Cells("TrxToColumn").Value
+                        .TrxStatusId = 1
+                        .RoutingStatusId = 4
+
+                        'selected ongoing
                     Else
-                        .SetMachineIdNull()
-                        .SetTotalAccumulatedRuntimeNull()
-                        .SetDowntimeMachineStatusIdNull()
+                        'machine entry
+                        If Not cmbMachineName.SelectedValue = 0 Then
+                            .MachineId = cmbMachineName.SelectedValue
+                            If String.IsNullOrWhiteSpace(txtRuntimeAccumulated.Text.Trim) Then
+                                .SetTotalAccumulatedRuntimeNull()
+                            Else
+                                .TotalAccumulatedRuntime = txtRuntimeAccumulated.Text.Trim
+                            End If
+                            .DowntimeMachineStatusId = cmbMachineStatus.SelectedValue
 
-                        If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtProblem.Focus()
-                            Return
-                        End If
-                        .Problem = txtProblem.Text.Trim
+                            'preventive maintenance
+                            If cmbMachineStatus.SelectedValue = 2 Then
+                                If Not String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    .Problem = txtProblem.Text.Trim
+                                Else
+                                    .SetProblemNull()
+                                End If
 
-                        If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
-                            MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtActionTaken.Focus()
-                            Return
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                                'under repair
+                            Else
+                                If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtProblem.Focus()
+                                    Return
+                                End If
+                                .Problem = txtProblem.Text.Trim
+
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                            End If
+
+                            'not machine-related entry
+                        Else
+                            .SetMachineIdNull()
+                            .SetTotalAccumulatedRuntimeNull()
+                            .SetDowntimeMachineStatusIdNull()
+
+                            If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtProblem.Focus()
+                                Return
+                            End If
+                            .Problem = txtProblem.Text.Trim
+
+                            If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                .ActionTaken = txtActionTaken.Text.Trim
+                            Else
+                                .SetActionTakenNull()
+                            End If
                         End If
-                        .ActionTaken = txtActionTaken.Text.Trim
+
+                        If picImgAttachment.Image Is Nothing Then
+                            .SetImageNameNull()
+                            .SetImageNameNull()
+                        Else
+                            Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
+                            _resized.Save(memoStream, ImageFormat.Jpeg)
+                            bite = memoStream.GetBuffer()
+                            .Image = bite
+                            .ImageName = txtImageName.Text.Trim
+                        End If
+
+                        .SetDatetimeEndedNull()
+                        .TrxStatusId = 2
+                        .RoutingStatusId = 5
+
+                        If Not cmbMachineName.SelectedValue = 0 Then
+                            Dim _rowMachine As MntMachineRow = Me.myDataset.MntMachine.FindByMachineId(cmbMachineName.SelectedValue)
+                            _rowMachine.MachineStatusId = cmbMachineStatus.SelectedValue
+                        End If
                     End If
 
                     .TrxDate = DateTime.Now
@@ -481,47 +624,12 @@ Public Class frmMntTrxDetail
                     .UserId = dgvDetail.Rows(_rowCount - 1).Cells("TechnicianColumn").Value
                     .ShiftId = dgvDetail.Rows(_rowCount - 1).Cells("ShiftIdColumn").Value
                     .EncodeUserId = userId
-
-                    'selected done
-                    If cmbTrxStatus.SelectedValue = 1 Then
-                        If picImgAttachment.Image Is Nothing Then
-                            MessageBox.Show("Please attach image.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            btnBrowse.Focus()
-                            Return
-                        End If
-
-                        Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
-                        _resized.Save(memoStream, ImageFormat.Jpeg)
-                        bite = memoStream.GetBuffer()
-                        .Image = bite
-                        .ImageName = txtImageName.Text.Trim
-
-                        .DatetimeEnded = dgvDetail.Rows(_rowCount - 1).Cells("TrxToColumn").Value
-                        .TrxStatusId = 1
-                        .RoutingStatusId = 4
-
-                        'selected ongoing
-                    Else
-                        If picImgAttachment.Image Is Nothing Then
-                            .SetImageNameNull()
-                            .SetImageNameNull()
-                        Else
-                            Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
-                            _resized.Save(memoStream, ImageFormat.Jpeg)
-                            bite = memoStream.GetBuffer()
-                            .Image = bite
-                            .ImageName = txtImageName.Text.Trim
-                        End If
-
-                        .SetDatetimeEndedNull()
-                        .TrxStatusId = 2
-                        .RoutingStatusId = 5
-                    End If
                 End With
                 Me.myDataset.MntTransactionHeader.AddMntTransactionHeaderRow(_newRowHeader)
                 Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
 
                 'transaction details
+                'set first the trxid of each rows from technician logs
                 For Each _dataRowView As DataRowView In Me.bsTransactionDetail
                     Dim _row = _dataRowView.Row
                     _row.Item("TrxId") = _newRowHeader.TrxId
@@ -544,24 +652,20 @@ Public Class frmMntTrxDetail
                 Me.myDataset.MntTransactionMachinePart.AddMntTransactionMachinePartRow(_newRowMachinePart)
 
                 'transaction spare part
+                '2/21
                 With _newRowSparePart
                     .TrxId = _newRowHeader.TrxId
-                    If Not cmbMachineName.SelectedValue = 0 Then
-                        If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
-                            .SetSparePartNameNull()
-                            .SetSparePartNoNull()
-                        Else
-                            .SparePartName = txtPartsReplaced.Text.Trim
-                            If String.IsNullOrEmpty(txtPartNo.Text.Trim) Then
-                                MessageBox.Show("Please indicate the spare part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                txtPartNo.Focus()
-                                Return
-                            End If
-                            .SparePartNo = txtPartNo.Text.Trim
-                        End If
-                    Else
+                    If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
                         .SetSparePartNameNull()
                         .SetSparePartNoNull()
+                    Else
+                        .SparePartName = txtPartsReplaced.Text.Trim
+                        If String.IsNullOrEmpty(txtPartNo.Text.Trim) Then
+                            MessageBox.Show("Please indicate the spare part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            txtPartNo.Focus()
+                            Return
+                        End If
+                        .SparePartNo = txtPartNo.Text.Trim
                     End If
                 End With
                 Me.myDataset.MntTransactionSparePart.AddMntTransactionSparePartRow(_newRowSparePart)
@@ -573,8 +677,342 @@ Public Class frmMntTrxDetail
                         Me.adpTransactionUser.Insert(_newRowHeader.TrxId, _row.Cells("UserIdColumn").Value)
                     End If
                 Next
+
+                '2/22
+                'existing transaction
             Else
-                'Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
+                Dim _rowHeader As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(trxId)
+                Dim _rowMachine As MntMachineRow = Me.myDataset.MntMachine.FindByMachineId(cmbMachineName.SelectedValue)
+
+                'existing transaction (done)
+                If cmbTrxStatus.SelectedValue = 1 Then
+                    'transaction header
+                    With _rowHeader
+                        'machine entry
+                        If Not cmbMachineName.SelectedValue = 0 Then
+                            'preventive maintenance
+                            If cmbMachineStatus.SelectedValue = 2 Then
+                                If Not String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    .Problem = txtProblem.Text.Trim
+                                Else
+                                    .SetProblemNull()
+                                End If
+
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                                'under repair
+                            Else
+                                If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtProblem.Focus()
+                                    Return
+                                End If
+                                .Problem = txtProblem.Text.Trim
+
+                                If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtActionTaken.Focus()
+                                    Return
+                                End If
+                                .ActionTaken = txtActionTaken.Text.Trim
+                            End If
+
+                            'not machine-related entry
+                        Else
+                            .AreaId = cmbArea.SelectedValue
+
+                            If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtProblem.Focus()
+                                Return
+                            End If
+                            .Problem = txtProblem.Text.Trim
+
+                            If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtActionTaken.Focus()
+                                Return
+                            End If
+                            .ActionTaken = txtActionTaken.Text.Trim
+                        End If
+
+                        .DatetimeStarted = dgvDetail.Rows(0).Cells("TrxFromColumn").Value
+                        .TotalAccumulatedDowntime = txtDowntimeAccumulated.Text.Trim
+
+                        If String.IsNullOrEmpty(txtJoNumber.Text.Trim) Then
+                            .SetJoNumberNull()
+                        Else
+                            .JoNumber = txtJoNumber.Text.Trim
+                        End If
+
+                        If String.IsNullOrEmpty(txtJoRequestor.Text.Trim) Then
+                            .SetJoRequestorNull()
+                        Else
+                            .JoRequestor = txtJoRequestor.Text.Trim
+                        End If
+
+                        If picImgAttachment.Image Is Nothing Then
+                            MessageBox.Show("Please attach image.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            btnBrowse.Focus()
+                            Return
+                        End If
+
+                        Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
+                        _resized.Save(memoStream, ImageFormat.Jpeg)
+                        bite = memoStream.GetBuffer()
+                        .Image = bite
+                        .ImageName = txtImageName.Text.Trim
+
+                        .UserId = dgvDetail.Rows(_rowCount - 1).Cells("TechnicianColumn").Value
+                        .ShiftId = dgvDetail.Rows(_rowCount - 1).Cells("ShiftIdColumn").Value
+
+                        .DatetimeEnded = dgvDetail.Rows(_rowCount - 1).Cells("TrxToColumn").Value
+                        .TrxStatusId = 1
+                        .RoutingStatusId = 4
+                    End With
+                    Me.bsTransactionHeader.EndEdit()
+
+                    'transaction details
+                    'set first the trxid of each rows from technician logs
+                    For Each _dataRowView As DataRowView In Me.bsTransactionDetail
+                        Dim _row = _dataRowView.Row
+                        _row.Item("TrxId") = trxId
+                    Next
+                    Me.ValidateChildren()
+                    Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
+
+                    'transaction machine part
+                    With Me.bsTransactionMachinePart
+                        If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                            If cmbMachinePart.SelectedValue = 0 And cmbMachinePart.Enabled = False Then
+                                .Current("MachinePartId") = DBNull.Value
+                            Else
+                                .Current("MachinePartId") = cmbMachinePart.SelectedValue
+                            End If
+                        End If
+                    End With
+                    Me.bsTransactionMachinePart.EndEdit()
+
+                    'transaction spare part
+                    With Me.bsTransactionSparePart
+                        If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
+                            .Current("SparePartName") = DBNull.Value
+                            .Current("SparePartNo") = DBNull.Value
+                        Else
+                            If String.IsNullOrEmpty(txtPartNo.Text.Trim) Then
+                                MessageBox.Show("Please indicate the part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtPartNo.Focus()
+                                Return
+                            End If
+
+                            .Current("SparePartName") = txtPartsReplaced.Text.Trim
+                            .Current("SparePartNo") = txtPartNo.Text.Trim
+                        End If
+                    End With
+                    Me.bsTransactionSparePart.EndEdit()
+
+                    'transaction user
+                    For Each _row As DataGridViewRow In dgvPic.Rows
+                        Dim _userId As Integer = _row.Cells("UserIdColumn").Value
+                        Dim _isSelected As Boolean = Convert.ToBoolean(_row.Cells("IsSelectedColumn").Value)
+
+                        trxCount = Me.adpTransactionUser.CntMntTransactionUser(trxId, _userId)
+
+                        If trxCount > 0 Then
+                            If _isSelected Then
+                                'already on pic table - do nothing
+                            Else
+                                'not selected as pic - delete existing record of this technician
+                                Me.adpTransactionUser.DelMntTransactionUserByUserId(trxId, _userId)
+                            End If
+                        Else
+                            If _isSelected Then
+                                'selected as pic - add to pic table
+                                Me.adpTransactionUser.Insert(trxId, _row.Cells("UserIdColumn").Value)
+                            Else
+                                'not selected - do nothing
+                            End If
+                        End If
+                    Next
+
+                    For Each _row As DataRowView In Me.bsTransactionDetail
+                        trxCount = Me.adpTransactionUser.CntMntTransactionUser(trxId, _row.Item("UserId"))
+                        If Not trxCount > 0 Then
+                            adpTransactionUser.Insert(trxId, _row.Item("UserId"))
+                        End If
+                    Next
+
+                    'set machine to running state
+                    If Not cmbMachineName.SelectedValue = 0 Then
+                        _rowMachine.MachineStatusId = 1
+                    End If
+
+                    'existing transaction (ongoing)
+                Else
+                    'transaction header
+                    With _rowHeader
+                        'machine entry
+                        If Not cmbMachineName.SelectedValue = 0 Then
+                            'preventive maintenance
+                            If cmbMachineStatus.SelectedValue = 2 Then
+                                If Not String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    .Problem = txtProblem.Text.Trim
+                                Else
+                                    .SetProblemNull()
+                                End If
+
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                                'under repair
+                            Else
+                                If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                    MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                    txtProblem.Focus()
+                                    Return
+                                End If
+                                .Problem = txtProblem.Text.Trim
+
+                                If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                    .ActionTaken = txtActionTaken.Text.Trim
+                                Else
+                                    .SetActionTakenNull()
+                                End If
+                            End If
+
+                            'not machine-related entry
+                        Else
+                            .AreaId = cmbArea.SelectedValue
+
+                            If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                                MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtProblem.Focus()
+                                Return
+                            End If
+                            .Problem = txtProblem.Text.Trim
+
+                            If Not String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
+                                .ActionTaken = txtActionTaken.Text.Trim
+                            Else
+                                .SetActionTakenNull()
+                            End If
+                        End If
+
+                        .DatetimeStarted = dgvDetail.Rows(0).Cells("TrxFromColumn").Value
+                        .TotalAccumulatedDowntime = txtDowntimeAccumulated.Text.Trim
+
+                        If String.IsNullOrEmpty(txtJoNumber.Text.Trim) Then
+                            .SetJoNumberNull()
+                        Else
+                            .JoNumber = txtJoNumber.Text.Trim
+                        End If
+
+                        If String.IsNullOrEmpty(txtJoRequestor.Text.Trim) Then
+                            .SetJoRequestorNull()
+                        Else
+                            .JoRequestor = txtJoRequestor.Text.Trim
+                        End If
+
+                        If picImgAttachment.Image Is Nothing Then
+                            .SetImageNameNull()
+                            .SetImageNameNull()
+                        Else
+                            Dim _resized As Image = method.ResizeImage(picImgAttachment.Image, New Size(250, 250))
+                            _resized.Save(memoStream, ImageFormat.Jpeg)
+                            bite = memoStream.GetBuffer()
+                            .Image = bite
+                            .ImageName = txtImageName.Text.Trim
+                        End If
+
+                        .UserId = dgvDetail.Rows(_rowCount - 1).Cells("TechnicianColumn").Value
+                        .ShiftId = dgvDetail.Rows(_rowCount - 1).Cells("ShiftIdColumn").Value
+
+                        .DatetimeEnded = dgvDetail.Rows(_rowCount - 1).Cells("TrxToColumn").Value
+                        .TrxStatusId = 2
+                        .RoutingStatusId = 5
+                    End With
+                    Me.bsTransactionHeader.EndEdit()
+
+                    'transaction details
+                    'set first the trxid of each rows from technician logs
+                    For Each _dataRowView As DataRowView In Me.bsTransactionDetail
+                        Dim _row = _dataRowView.Row
+                        _row.Item("TrxId") = trxId
+                    Next
+                    Me.ValidateChildren()
+                    Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
+
+                    'transaction machine part
+                    With Me.bsTransactionMachinePart
+                        If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                            If cmbMachinePart.SelectedValue = 0 And cmbMachinePart.Enabled = False Then
+                                .Current("MachinePartId") = DBNull.Value
+                            Else
+                                .Current("MachinePartId") = cmbMachinePart.SelectedValue
+                            End If
+                        End If
+                    End With
+                    Me.bsTransactionMachinePart.EndEdit()
+
+                    'transaction spare part
+                    With Me.bsTransactionSparePart
+                        If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
+                            .Current("SparePartName") = DBNull.Value
+                            .Current("SparePartNo") = DBNull.Value
+                        Else
+                            If String.IsNullOrEmpty(txtPartNo.Text.Trim) Then
+                                MessageBox.Show("Please indicate the part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                txtPartNo.Focus()
+                                Return
+                            End If
+
+                            .Current("SparePartName") = txtPartsReplaced.Text.Trim
+                            .Current("SparePartNo") = txtPartNo.Text.Trim
+                        End If
+                    End With
+                    Me.bsTransactionSparePart.EndEdit()
+
+                    'transaction user
+                    For Each _row As DataGridViewRow In dgvPic.Rows
+                        Dim _userId As Integer = _row.Cells("UserIdColumn").Value
+                        Dim _isSelected As Boolean = Convert.ToBoolean(_row.Cells("IsSelectedColumn").Value)
+
+                        trxCount = Me.adpTransactionUser.CntMntTransactionUser(trxId, _userId)
+
+                        If trxCount > 0 Then
+                            If _isSelected Then
+                                'already on pic table - do nothing
+                            Else
+                                'not selected as pic - delete existing record of this technician
+                                Me.adpTransactionUser.DelMntTransactionUserByUserId(trxId, _userId)
+                            End If
+                        Else
+                            If _isSelected Then
+                                'selected as pic - add to pic table
+                                Me.adpTransactionUser.Insert(trxId, _row.Cells("UserIdColumn").Value)
+                            Else
+                                'not selected - do nothing
+                            End If
+                        End If
+                    Next
+
+                    For Each _row As DataRowView In Me.bsTransactionDetail
+                        trxCount = Me.adpTransactionUser.CntMntTransactionUser(trxId, _row.Item("UserId"))
+                        If Not trxCount > 0 Then
+                            adpTransactionUser.Insert(trxId, _row.Item("UserId"))
+                        End If
+                    Next
+
+                    'set machine to downtime
+                    If Not cmbMachineName.SelectedValue = 0 Then
+                        _rowMachine.MachineStatusId = cmbMachineStatus.SelectedValue
+                    End If
+                End If
             End If
 
             Me.DialogResult = Windows.Forms.DialogResult.OK
@@ -593,11 +1031,38 @@ Public Class frmMntTrxDetail
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+        Try
+            Dim _currentRow = CType(Me.bsTransactionHeader.Current, DataRowView).Row
+            Dim _rowState = _currentRow.RowState
 
+            Select Case _rowState
+                Case DataRowState.Added
+                    Me.bsTransactionHeader.RemoveCurrent()
+                Case DataRowState.Detached
+                    Me.bsTransactionHeader.CancelEdit()
+                Case DataRowState.Modified, DataRowState.Unchanged
+                    Dim message = String.Format("Delete transaction no. {0}?", trxId)
+                    If MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                        Me.bsTransactionHeader.RemoveCurrent()
+                        Me.DialogResult = Windows.Forms.DialogResult.OK
+                    End If
+                Case Else
+            End Select
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.bsTransactionHeader.CancelEdit()
+        Me.bsTransactionDetail.CancelEdit()
+        Me.bsTransactionUser.CancelEdit()
 
+        If Me.myDataset.HasChanges Then
+            Me.myDataset.RejectChanges()
+        End If
+
+        Me.Close()
     End Sub
 
     Private Sub btnApprove_Click(sender As Object, e As EventArgs) Handles btnApprove.Click
@@ -614,33 +1079,34 @@ Public Class frmMntTrxDetail
             opdTrxDetail.FilterIndex = 4
             opdTrxDetail.Title = "Select Image"
             opdTrxDetail.FileName = String.Empty
-            Dim mStream As New MemoryStream
+            Dim _mStream As New MemoryStream
 
             If opdTrxDetail.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 txtImageName.Text = opdTrxDetail.SafeFileName
 
                 '1/25
                 Using bmp As New Bitmap(opdTrxDetail.FileName)
-                    Dim jpgEncoder As ImageCodecInfo = method.GetEncoder(ImageFormat.Jpeg)
-                    Dim myEncoder As System.Drawing.Imaging.Encoder = System.Drawing.Imaging.Encoder.Quality
+                    Dim _jpgEncoder As ImageCodecInfo = method.GetEncoder(ImageFormat.Jpeg)
+                    Dim _myEncoder As System.Drawing.Imaging.Encoder = System.Drawing.Imaging.Encoder.Quality
 
-                    'create an EncoderParameters object.  
-                    'an EncoderParameters object has an array of EncoderParameter  objects. In this case, there is only one EncoderParameter object in the array.
-                    Dim myEncoderParameters As New EncoderParameters(1)
+                    'create an encoderparameters object
+                    'an encoderparameters object has an array of encoderparameter objects; in this case, there is only one encoderparameter object in the array.
+                    Dim _myEncoderParameters As New EncoderParameters(1)
 
-                    'save the bitmap as a JPG file with zero quality level compression.
-                    Dim myEncoderParameter = New EncoderParameter(myEncoder, 10L)
-                    myEncoderParameters.Param(0) = myEncoderParameter
-                    bmp.Save(mStream, jpgEncoder, myEncoderParameters)
+                    'save the bitmap as a JPG file with zero quality level compression
+                    Dim _myEncoderParameter = New EncoderParameter(_myEncoder, 10L)
+                    _myEncoderParameters.Param(0) = _myEncoderParameter
+                    bmp.Save(_mStream, _jpgEncoder, _myEncoderParameters)
 
                     'shows file size after compression
                     'lblFileSize.Visible = True
                     'lblFileSize.Text = method.ReadableFileSize(mStream.Length)
 
-                    picImgAttachment.Image = Image.FromStream(mStream)
+                    picImgAttachment.Image = Image.FromStream(_mStream)
                 End Using
             End If
-            mStream.Dispose()
+
+            _mStream.Dispose()
             opdTrxDetail.Dispose()
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -655,7 +1121,7 @@ Public Class frmMntTrxDetail
     Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, Me.bsTransactionDetail, userId)
+                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, userId)
                     frmDetailLog.ShowDialog(Me)
 
                     If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
@@ -674,13 +1140,12 @@ Public Class frmMntTrxDetail
                     End If
                 End Using
             Else
-                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, Me.bsTransactionDetail, userId, trxId)
+                Using frmDetailLog As New frmMntTrxDetailLog(Me.myDataset, userId, trxId)
                     frmDetailLog.ShowDialog(Me)
 
                     If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
                         Me.bsTransactionDetail.AddNew()
                         Me.bsTransactionDetail.MoveLast()
-
                         Me.bsTransactionDetail.Current("TrxId") = trxId
                         Me.bsTransactionDetail.Current("TrxDate") = DateTime.Now
                         Me.bsTransactionDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
@@ -689,7 +1154,6 @@ Public Class frmMntTrxDetail
                         Me.bsTransactionDetail.Current("UserId") = frmDetailLog.cmbUser.SelectedValue
                         Me.bsTransactionDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
                         Me.bsTransactionDetail.EndEdit()
-                        Me.bsTransactionDetail.MoveFirst()
                     Else
                         Me.bsTransactionDetail.CancelEdit()
                     End If
@@ -703,27 +1167,13 @@ Public Class frmMntTrxDetail
         End Try
     End Sub
 
-    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEditRow.Click
-        Try
-            If dgvDetail.Rows.Count > 0 Then
-                Dim _trxDetailId As Integer = CType(Me.bsTransactionDetail.Current, DataRowView).Item("TrxId")
-
-            End If
-
-            GetPic()
-            GetTotalDowntime()
-        Catch ex As Exception
-            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub btnRemoveRow_Click(sender As Object, e As EventArgs) Handles btnRemoveRow.Click
         Try
             If dgvDetail.Rows.Count > 0 Then
-                Dim currentRow = CType(Me.bsTransactionDetail.Current, DataRowView).Row
-                Dim state = currentRow.RowState
+                Dim _currentRow = CType(Me.bsTransactionDetail.Current, DataRowView).Row
+                Dim _rowState = _currentRow.RowState
 
-                Select Case state
+                Select Case _rowState
                     Case DataRowState.Added
                         Me.bsTransactionDetail.RemoveCurrent()
                     Case DataRowState.Detached
@@ -734,7 +1184,7 @@ Public Class frmMntTrxDetail
                             Exit Sub
                         End If
 
-                        Dim message = String.Format("Delete technician log no {0}?", Me.bsTransactionDetail.Current("TrxDetailId"))
+                        Dim message = String.Format("Delete selected log entry?")
                         If MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
                             Me.bsTransactionDetail.RemoveCurrent()
                         End If
@@ -806,9 +1256,6 @@ Public Class frmMntTrxDetail
 
     Private Sub GetPic()
         Try
-            dgvPic.AutoGenerateColumns = False
-            dgvPic.DataSource = Me.bsTransactionUser
-
             '2/19
             If dgvDetail.Rows.Count > 0 Then
                 Dim filterBuilder As New System.Text.StringBuilder("WorkgroupId IN (4,5,6,28) AND UserId NOT IN (")

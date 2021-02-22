@@ -4,35 +4,46 @@ Imports System.Data.SqlClient
 
 Public Class frmMntTrxDetailLog
     Private method As New clsMethod
+
     'access control
     Private userId As Integer = 0
+
     Private trxId As Integer = 0
-    Private trxDetailId As Integer = 0
     Private machineId As Integer = 0
+    Private position As Integer = 0
+
     'fetching / access dataset
     Private myDataset As New dsMonitoring
+
     'adapter
     Private adpDetail As New MntTransactionDetailTableAdapter
+
     'binding sources
     Private WithEvents bsTransactionDetail As New BindingSource
+
     Private WithEvents bsUser As New BindingSource
+
     'datatables
     Private dtTransactionDetail As New MntTransactionDetailDataTable
+
     Private dtUser As New SecUserDataTable
+
     'custom binding
     Private WithEvents datetimeBinding As Binding
+
     Private WithEvents radioButtonBinding As Binding
+
     'constants
     Private shift As Char
 
-    Public Sub New(ByVal _myDataset As DataSet, ByVal _bs As BindingSource, ByVal _userId As Integer, Optional _trxId As Integer = 0, Optional ByVal _trxDetailId As Integer = 0)
+    Public Sub New(ByVal _myDataset As DataSet, ByVal _userId As Integer, Optional _trxId As Integer = 0, Optional ByVal _position As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         userId = _userId
         trxId = _trxId
-        trxDetailId = _trxDetailId
+        position = _position
 
         Me.myDataset = _myDataset
 
@@ -40,18 +51,22 @@ Public Class frmMntTrxDetailLog
         Me.bsUser.DataMember = dtUser.TableName
         Me.bsUser.Filter = String.Format("WorkgroupId IN (4,5,6)")
         cmbUser.DataSource = Me.bsUser
+    End Sub
 
-        'Me.bsTransactionDetail.DataSource = _bs
+    Private Sub frmMntTrxDetailLog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode.Equals(Keys.Enter) Then
+            Me.SelectNextControl(Me.ActiveControl, True, True, True, True)
+        ElseIf e.KeyCode.Equals(Keys.F10) Then
+            btnSave.PerformClick()
+        End If
     End Sub
 
     Private Sub frmMntTrxDetailLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If trxDetailId = 0 Then
+        If position = 0 Then
             cmbUser.SelectedValue = userId
             GetShift()
             dtpFrom.Value = DateTime.Now
             dtpTo.Value = DateTime.Now
-        Else
-
         End If
     End Sub
 
@@ -79,19 +94,6 @@ Public Class frmMntTrxDetailLog
                     Return
                 End If
             End If
-
-
-
-            'Me.bsTransactionDetail.AllowNew = True
-            'Me.bsTransactionDetail.AddNew()
-            ''Me.bsTransactionDetail.MoveLast()
-            'Me.bsTransactionDetail.Current("TrxId") = DBNull.Value
-            'Me.bsTransactionDetail.Current("TrxDate") = DateTime.Now
-            'Me.bsTransactionDetail.Current("TrxFrom") = dtpFrom.Value
-            'Me.bsTransactionDetail.Current("TrxTo") = dtpTo.Value
-            'Me.bsTransactionDetail.Current("ElapsedTime") = txtElapsedTime.Text.Trim
-            'Me.bsTransactionDetail.Current("UserId") = cmbUser.SelectedValue
-            'Me.bsTransactionDetail.Current("ShiftId") = IIf(rdDay.Checked = True, "D", "N")
 
             Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex As Exception
@@ -124,6 +126,7 @@ Public Class frmMntTrxDetailLog
     End Sub
 
     Public Property ShiftMode() As String
+
         Get
             If rdDay.Checked = True Then
                 Return "D"
@@ -140,6 +143,7 @@ Public Class frmMntTrxDetailLog
                 rdDay.Checked = True
             End If
         End Set
+
     End Property
 
 #Region "Sub"
@@ -170,6 +174,50 @@ Public Class frmMntTrxDetailLog
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+#End Region
+
+#Region "UI"
+
+    Private Sub cmbUser_Enter(sender As Object, e As EventArgs) Handles cmbUser.Enter
+        lblUser.ForeColor = Color.White
+        lblUser.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbUser_Leave(sender As Object, e As EventArgs) Handles cmbUser.Leave
+        lblUser.ForeColor = Color.Black
+        lblUser.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub grpShift_Enter(sender As Object, e As EventArgs) Handles grpShift.Enter
+        lblShift.ForeColor = Color.White
+        lblShift.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub grpShift_Leave(sender As Object, e As EventArgs) Handles grpShift.Leave
+        lblShift.ForeColor = Color.Black
+        lblShift.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub dtpFrom_Enter(sender As Object, e As EventArgs) Handles dtpFrom.Enter
+        lblFrom.ForeColor = Color.White
+        lblFrom.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub dtpFrom_Leave(sender As Object, e As EventArgs) Handles dtpFrom.Leave
+        lblFrom.ForeColor = Color.Black
+        lblFrom.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub dtpTo_Enter(sender As Object, e As EventArgs) Handles dtpTo.Enter
+        lblTo.ForeColor = Color.White
+        lblTo.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub dtpTo_Leave(sender As Object, e As EventArgs) Handles dtpTo.Leave
+        lblTo.ForeColor = Color.Black
+        lblTo.BackColor = SystemColors.Control
     End Sub
 
 #End Region

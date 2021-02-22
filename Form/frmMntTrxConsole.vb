@@ -69,8 +69,7 @@ Public Class frmMntTrxConsole
     Private adpMachineStatus As New MntMachineStatusTableAdapter
     Private adpMachinePart As New MntMachinePartTableAdapter
     Private adpTechnician As New SecUserTableAdapter
-
-    Private adpActivity As New MntTransactionHeaderTableAdapter
+    'additional objects
     'for columns of dgvmachine
     Private dtMachine As New MntMachineDataTable
     Private dtAreaName As New MntAreaDataTable
@@ -82,8 +81,9 @@ Public Class frmMntTrxConsole
     Private rowWorkgroup As SecWorkgroupRow
     'for activity column
     Private dtLastDetail As New DataTable
-
+    'for updating status of each dgv
     Private adpTransactionHeaderActivity As New MntTransactionHeaderTableAdapter
+    Private adpMachineStatusColumn As New MntMachineTableAdapter
 
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
 
@@ -99,7 +99,6 @@ Public Class frmMntTrxConsole
         Me.adpAreaName.Fill(Me.myDataset.MntArea)
 
         Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
-        Me.adpTransactionHeaderActivity.Fill(Me.myDataset.MntTransactionHeader)
         Me.adpNickname.Fill(Me.myDataset.SecUser)
         Me.adpMachineName.Fill(Me.myDataset.MntMachine)
         Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
@@ -156,8 +155,7 @@ Public Class frmMntTrxConsole
 
         Me.bsTransactionHeader.DataSource = Me.myDataset
         Me.bsTransactionHeader.DataMember = dtTransactionHeader.TableName
-        'Me.bsTransactionHeader.Sort = "DatetimeStarted DESC, TrxId DESC"
-        Me.bsTransactionHeader.Sort = "TrxId DESC"
+        Me.bsTransactionHeader.Sort = "DatetimeStarted DESC, TrxId DESC"
 
         Me.bsNickname.DataSource = Me.myDataset
         Me.bsNickname.DataMember = dtNickname.TableName
@@ -210,7 +208,7 @@ Public Class frmMntTrxConsole
 
         SearchCriteria()
 
-        rdDone.Checked = True
+        rdOngoing.Checked = True
 
         method.EnableDoubleBuffered(dgvMachine)
         method.EnableDoubleBuffered(dgvTransactionHeader)
@@ -287,6 +285,8 @@ Public Class frmMntTrxConsole
     Private Sub frmMntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F2) Then
             btnCreate.PerformClick()
+        ElseIf e.KeyCode.Equals(Keys.F3) Then
+            btnEdit.PerformClick()
         ElseIf e.KeyCode.Equals(Keys.F5) Then
             btnRefresh.PerformClick()
         ElseIf e.KeyCode.Equals(Keys.F8) Then
@@ -323,7 +323,7 @@ Public Class frmMntTrxConsole
 
     Private Sub dgvMachine_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvMachine.DataBindingComplete
         Try
-            dtMachineLastTransaction = Me.adpMachine.GetLastTransactionByMachineid(Nothing)
+            dtMachineLastTransaction = Me.adpMachineStatusColumn.GetLastTransactionByMachineid(Nothing)
 
             For Each _row As DataRow In dtMachineLastTransaction.Rows
                 For _i As Integer = 0 To dgvMachine.Rows.Count - 1
@@ -390,7 +390,8 @@ Public Class frmMntTrxConsole
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
-
+            Me.bsMachine.ResetBindings(False)
+            Me.bsTransactionHeader.ResetBindings(False)
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -475,7 +476,35 @@ Public Class frmMntTrxConsole
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+        Try
+            If dgvTransactionHeader.Rows.Count > 0 Then
+                Dim _currentRow = CType(Me.bsTransactionHeader.Current, DataRowView).Row
+                Dim _rowState = _currentRow.RowState
 
+                Select Case _rowState
+                    Case DataRowState.Added
+                        Me.bsTransactionHeader.RemoveCurrent()
+                    Case DataRowState.Detached
+                        Me.bsTransactionHeader.CancelEdit()
+                    Case DataRowState.Modified, DataRowState.Unchanged
+                        If dgvTransactionHeader.SelectedCells.Count > 0 AndAlso dgvTransactionHeader.SelectedCells(0).RowIndex = dgvTransactionHeader.NewRowIndex Then
+                            Me.bsTransactionHeader.CancelEdit()
+                            Exit Sub
+                        End If
+
+                        Dim message = String.Format("Delete this transaction?")
+                        If MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                            Me.bsTransactionHeader.RemoveCurrent()
+                        End If
+                    Case Else
+                End Select
+
+                Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
+                Me.adpMachine.Update(Me.myDataset.MntMachine)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -553,7 +582,7 @@ Public Class frmMntTrxConsole
 
     'Private Sub cmbSearchTechnician_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles cmbSearchTechnician.SelectionChangeCommitted
     '    Me.bsPagedTransactionHeader.Filter = String.Format("UserId = '{0}'", cmbSearchTechnician.SelectedValue)
-    '    'Me.bsPagedTransactionHeader.ResetBindings(False)
+    '    Me.bsPagedTransactionHeader.ResetBindings(False)
     '    Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator)
     'End Sub
 
