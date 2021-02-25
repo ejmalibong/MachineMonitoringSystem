@@ -62,6 +62,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="PinkieControls">
       <HintPath>B:\Users BACKUP\NBCP-LT-058\Downloads\PinkieControls.dll</HintPath>
       <Private>True</Private>
@@ -104,6 +106,17 @@
     <Compile Include="Dataset\dsMonitoring.vb">
       <DependentUpon>dsMonitoring.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dataset\dsReport.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmMntTrxApproval.Designer.vb">
+      <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmMntTrxApproval.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\frmMain.Designer.vb">
       <DependentUpon>frmMain.vb</DependentUpon>
     </Compile>
@@ -134,6 +147,12 @@
     <Compile Include="Form\frmMntTrxDetailLog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\Report Form\frmMntActivityReport.Designer.vb">
+      <DependentUpon>frmMntActivityReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Report Form\frmMntActivityReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -151,6 +170,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Form\frmMntTrxApproval.resx">
+      <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\frmLogin.resx">
       <DependentUpon>frmLogin.vb</DependentUpon>
     </EmbeddedResource>
@@ -166,12 +188,21 @@
     <EmbeddedResource Include="Form\frmMntTrxDetailLog.resx">
       <DependentUpon>frmMntTrxDetailLog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\Report Form\frmMntActivityReport.resx">
+      <DependentUpon>frmMntActivityReport.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="ReportFile\FacActivityReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ReportFile\MntActivityReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Dataset\dsMonitoring.xsc">
@@ -184,6 +215,17 @@
     </None>
     <None Include="Dataset\dsMonitoring.xss">
       <DependentUpon>dsMonitoring.xsd</DependentUpon>
+    </None>
+    <None Include="Dataset\dsReport.xsc">
+      <DependentUpon>dsReport.xsd</DependentUpon>
+    </None>
+    <None Include="Dataset\dsReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReport.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Dataset\dsReport.xss">
+      <DependentUpon>dsReport.xsd</DependentUpon>
     </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>

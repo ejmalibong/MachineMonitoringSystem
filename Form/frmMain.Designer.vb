@@ -43,6 +43,7 @@ Partial Class frmMain
         Me.DepartmentToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
+        Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -107,6 +108,7 @@ Partial Class frmMain
         '
         'ReportsToolStripMenuItem
         '
+        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntActivityReportToolStripMenuItem})
         Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
         Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ReportsToolStripMenuItem.Text = "Reports"
@@ -180,6 +182,12 @@ Partial Class frmMain
         'tmrMain
         '
         '
+        'MntActivityReportToolStripMenuItem
+        '
+        Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
+        '
         'frmMain
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -223,4 +231,5 @@ Partial Class frmMain
     Friend WithEvents FileToolStripSeparator As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents LogOutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MntActivityReportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

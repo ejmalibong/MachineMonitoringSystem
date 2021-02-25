@@ -44,7 +44,7 @@ Partial Class frmLogin
         Me.btnLogin.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnLogin.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnLogin.Hint = "Login"
-        Me.btnLogin.Location = New System.Drawing.Point(271, 103)
+        Me.btnLogin.Location = New System.Drawing.Point(270, 103)
         Me.btnLogin.Name = "btnLogin"
         Me.btnLogin.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnLogin.Size = New System.Drawing.Size(100, 28)

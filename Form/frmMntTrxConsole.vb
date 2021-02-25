@@ -390,6 +390,16 @@ Public Class frmMntTrxConsole
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
+            Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
+            Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
+            Me.adpTransactionMachinePart.Update(Me.myDataset.MntTransactionMachinePart)
+            Me.adpTransactionSparePart.Update(Me.myDataset.MntTransactionSparePart)
+            Me.adpTransactionUser.Update(Me.myDataset.MntTransactionUser)
+            Me.adpMachine.Update(Me.myDataset.MntMachine)
+            Me.myDataset.AcceptChanges()
+
+            dgvTransactionHeader.Refresh()
+
             Me.bsMachine.ResetBindings(False)
             Me.bsTransactionHeader.ResetBindings(False)
         Catch ex As Exception
@@ -402,8 +412,8 @@ Public Class frmMntTrxConsole
             Using frmDetail As New frmMntTrxDetail(userId, workgroupId, isAdmin, isTechnicianManual, isImageRequired, isAllowEdit, isAllowDelete, Me.myDataset)
                 frmDetail.ShowDialog(Me)
 
-                Me.bsTransactionHeader.EndEdit()
-                Me.bsMachine.EndEdit()
+                'Me.bsTransactionHeader.EndEdit()
+                'Me.bsMachine.EndEdit()
 
                 If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
                     If Me.myDataset.HasChanges() Then
@@ -416,12 +426,13 @@ Public Class frmMntTrxConsole
                         Me.myDataset.AcceptChanges()
                     End If
 
-                    Me.bsMachine.ResetBindings(False)
-                    Me.bsTransactionHeader.ResetBindings(False)
-
-                    Me.bsTransactionHeader.MoveFirst()
+                    'Me.bsMachine.ResetBindings(False)
+                    'Me.bsTransactionHeader.ResetBindings(False)
+                    'Me.bsTransactionHeader.MoveFirst()
                 Else
                     Me.bsTransactionHeader.CancelEdit()
+                    Me.bsMachine.CancelEdit()
+                    Me.myDataset.RejectChanges()
                 End If
             End Using
 
@@ -453,23 +464,16 @@ Public Class frmMntTrxConsole
                             Me.myDataset.AcceptChanges()
                         End If
 
-                        Me.bsMachine.ResetBindings(False)
-                        Me.bsTransactionHeader.ResetBindings(False)
+                        'Me.bsMachine.ResetBindings(False)
+                        'Me.bsTransactionHeader.ResetBindings(False)
+                        'Me.bsTransactionHeader.MoveFirst()
                     Else
                         Me.bsTransactionHeader.CancelEdit()
+                        Me.bsMachine.CancelEdit()
+                        Me.myDataset.RejectChanges()
                     End If
                 End Using
             End If
-
-            dtLastDetail = Me.adpTransactionHeader.GetLastDetailByMachineId(Nothing)
-
-            For Each _row As DataRow In dtLastDetail.Rows
-                For _i As Integer = 0 To dgvTransactionHeader.Rows.Count - 1
-                    If dgvTransactionHeader.Rows(_i).Cells(0).Value = _row("TrxId") Then
-                        dgvTransactionHeader.Rows(_i).Cells("ActivityColumn").Value = _row("Activity")
-                    End If
-                Next
-            Next
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -501,6 +505,7 @@ Public Class frmMntTrxConsole
 
                 Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
                 Me.adpMachine.Update(Me.myDataset.MntMachine)
+                Me.myDataset.AcceptChanges()
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -515,48 +520,9 @@ Public Class frmMntTrxConsole
 
     End Sub
 
-    Private Sub btnStartSearch_Click(sender As Object, e As EventArgs) 'Handles btnStartSearch.Click
-
-    End Sub
-
-    Private Sub btnStartReset_Click(sender As Object, e As EventArgs) 'Handles btnStartReset.Click
-
-    End Sub
-
-    Private Sub btnEndSearch_Click(sender As Object, e As EventArgs) 'Handles btnEndSearch.Click
-
-    End Sub
-
-    Private Sub btnEndReset_Click(sender As Object, e As EventArgs) 'Handles btnEndReset.Click
-
-    End Sub
-
-    Private Sub cmbSearchMachineName_SelectedValueChanged(sender As Object, e As EventArgs) 'Handles cmbSearchMachineName.SelectedValueChanged
-
-    End Sub
-
-    Private Sub btnMachineReset_Click(sender As Object, e As EventArgs) 'Handles btnMachineReset.Click
-
-    End Sub
-
-    Private Sub cmbSearchMachineStatus_SelectedValueChanged(sender As Object, e As EventArgs) 'Handles cmbSearchMachineStatus.SelectedValueChanged
-
-    End Sub
-
-    Private Sub btnMachineStatusReset_Click(sender As Object, e As EventArgs) 'Handles btnMachineStatusReset.Click
-
-    End Sub
-
-    Private Sub cmbSearchUser_SelectedValueChanged(sender As Object, e As EventArgs) 'Handles cmbSearchUser.SelectedValueChanged
-
-    End Sub
-
-    Private Sub btnUserReset_Click(sender As Object, e As EventArgs) 'Handles btnUserReset.Click
-
-    End Sub
-
     Private Sub trxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles rdAll.CheckedChanged, rdDone.CheckedChanged, rdOngoing.CheckedChanged
         If rdAll.Checked = True Then
+            Me.bsTransactionHeader.Filter = String.Format("TrxStatusId IN (1,2)")
             transactionStatusId = 3
         ElseIf rdDone.Checked = True Then
             Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = 1")

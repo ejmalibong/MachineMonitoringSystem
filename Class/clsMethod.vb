@@ -163,10 +163,10 @@ showIt: Return fileLength & suffix
     End Function
 
     'format date to capture am to pm
-    Public Function FormatDate(ByVal _dateParam As DateTime, ByVal isStartDate As Boolean) As String
-        Dim year As String = "" & _dateParam.Year
-        Dim month As String = If((_dateParam.Month < 10), "0" & _dateParam.Month, "" & _dateParam.Month)
-        Dim day As String = If((_dateParam.Day < 10), "0" & _dateParam.Day, "" & _dateParam.Day)
+    Public Function FormatDate(ByVal dateParam As DateTime, ByVal isStartDate As Boolean) As String
+        Dim year As String = "" & dateParam.Year
+        Dim month As String = If((dateParam.Month < 10), "0" & dateParam.Month, "" & dateParam.Month)
+        Dim day As String = If((dateParam.Day < 10), "0" & dateParam.Day, "" & dateParam.Day)
 
         If isStartDate = True Then
             Return year & "-" & month & "-" & day & " 00:00:00"
@@ -175,14 +175,58 @@ showIt: Return fileLength & suffix
         End If
     End Function
 
-    'set bindingsource relationships
-    'Public Sub SetRelation(sender As DataSet, MasterTableName As String, ChildTableName As String, MasterKeyColumn As String, ChildKeyColumn As String)
-    '    sender.Relations.Add(
-    '     New DataRelation(String.Concat(MasterTableName, ChildTableName),
-    '        sender.Tables(MasterTableName).Columns(MasterKeyColumn),
-    '        sender.Tables(ChildTableName).Columns(ChildKeyColumn)
-    '     )
-    '  )
-    'End Sub
+    'combobox with unbound default value
+    Public Sub FillCmbWithCaption(ByVal spName As String, ByVal valueMember As String, ByVal displayMember As String, ByVal cmb As ComboBox, ByVal caption As String, Optional params() As SqlParameter = Nothing)
+        Dim row As DataRow
+
+        Try
+            table = New DataTable
+            table = sqlDbMethod.FillDataTable(spName, params)
+
+            If table.Rows.Count > 0 Then
+                row = table.NewRow()
+
+                If spName.Equals("ReadSecUserBySectionId") Then
+                    row("UserId") = 0
+                    row("UserName") = caption
+                    row.ItemArray = New Object() {row("UserId"), row("UserName")}
+                ElseIf spName.Equals("ReadMntArea") Then
+                    row("AreaId") = 0
+                    row("AreaName") = caption
+                    row.ItemArray = New Object() {row("AreaId"), row("AreaName")}
+                Else
+                    row.ItemArray = New Object() {0, caption}
+                End If
+
+                table.Rows.InsertAt(row, 0)
+
+                cmb.ValueMember = valueMember
+                cmb.DisplayMember = displayMember
+                cmb.DataSource = table
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Me.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    'iterate to all controls of a form
+    Public Sub ClearForm(ByVal form As Control)
+        Try
+            For Each ctrl As Control In form.Controls
+                ClearForm(ctrl)
+                If TypeOf ctrl Is TextBox Then
+                    CType(ctrl, TextBox).Text = String.Empty
+                End If
+                If TypeOf ctrl Is ComboBox Then
+                    CType(ctrl, ComboBox).SelectedValue = 0
+                End If
+                If TypeOf ctrl Is DateTimePicker Then
+                    CType(ctrl, DateTimePicker).Value = Date.Now
+                End If
+            Next ctrl
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, Me.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
 End Class

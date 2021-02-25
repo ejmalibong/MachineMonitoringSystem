@@ -117,6 +117,8 @@ Public Class frmMntTrxDetailLog
         ComputeElapsedTime()
     End Sub
 
+#Region "CustomBinding"
+
     Private Sub datetimeBinding_Format(sender As Object, e As ConvertEventArgs) Handles datetimeBinding.Format
         If Not e.Value Is DBNull.Value Then
             e.Value = Format(e.Value, "MMMM dd, yyyy  HH:mm")
@@ -145,6 +147,8 @@ Public Class frmMntTrxDetailLog
         End Set
 
     End Property
+
+#End Region
 
 #Region "Sub"
 

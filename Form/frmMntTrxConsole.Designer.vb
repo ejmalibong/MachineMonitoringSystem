@@ -104,7 +104,7 @@ Partial Class frmMntTrxConsole
         Me.btnDelete.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnDelete.Hint = ""
-        Me.btnDelete.Location = New System.Drawing.Point(1108, 565)
+        Me.btnDelete.Location = New System.Drawing.Point(1106, 565)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(100, 30)
@@ -119,7 +119,7 @@ Partial Class frmMntTrxConsole
         Me.btnEdit.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnEdit.Hint = ""
-        Me.btnEdit.Location = New System.Drawing.Point(1007, 565)
+        Me.btnEdit.Location = New System.Drawing.Point(1003, 565)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnEdit.Size = New System.Drawing.Size(100, 30)
@@ -134,7 +134,7 @@ Partial Class frmMntTrxConsole
         Me.btnCreate.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnCreate.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnCreate.Hint = ""
-        Me.btnCreate.Location = New System.Drawing.Point(906, 565)
+        Me.btnCreate.Location = New System.Drawing.Point(900, 565)
         Me.btnCreate.Name = "btnCreate"
         Me.btnCreate.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnCreate.Size = New System.Drawing.Size(100, 30)

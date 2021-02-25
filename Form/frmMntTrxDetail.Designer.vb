@@ -549,7 +549,7 @@ Partial Class frmMntTrxDetail
         Me.btnAddRow.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnAddRow.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnAddRow.Hint = ""
-        Me.btnAddRow.Location = New System.Drawing.Point(1121, 5)
+        Me.btnAddRow.Location = New System.Drawing.Point(1119, 5)
         Me.btnAddRow.Name = "btnAddRow"
         Me.btnAddRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAddRow.Size = New System.Drawing.Size(100, 25)
@@ -581,7 +581,7 @@ Partial Class frmMntTrxDetail
         Me.btnDelete.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnDelete.Hint = ""
-        Me.btnDelete.Location = New System.Drawing.Point(1125, 566)
+        Me.btnDelete.Location = New System.Drawing.Point(1123, 566)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(100, 30)
@@ -597,7 +597,7 @@ Partial Class frmMntTrxDetail
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnCancel.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnCancel.Hint = ""
-        Me.btnCancel.Location = New System.Drawing.Point(1024, 566)
+        Me.btnCancel.Location = New System.Drawing.Point(1020, 566)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
@@ -613,7 +613,7 @@ Partial Class frmMntTrxDetail
         Me.btnSave.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnSave.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnSave.Hint = ""
-        Me.btnSave.Location = New System.Drawing.Point(923, 566)
+        Me.btnSave.Location = New System.Drawing.Point(917, 566)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
@@ -782,7 +782,7 @@ Partial Class frmMntTrxDetail
         Me.btnApprove.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnApprove.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.btnApprove.Hint = ""
-        Me.btnApprove.Location = New System.Drawing.Point(180, 562)
+        Me.btnApprove.Location = New System.Drawing.Point(179, 562)
         Me.btnApprove.Name = "btnApprove"
         Me.btnApprove.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnApprove.Size = New System.Drawing.Size(100, 30)
@@ -803,7 +803,6 @@ Partial Class frmMntTrxDetail
         Me.cmbRoutingStatus.TabIndex = 278
         Me.cmbRoutingStatus.TabStop = False
         Me.cmbRoutingStatus.ValueMember = "RoutingStatusId"
-        Me.cmbRoutingStatus.Visible = False
         '
         'lblActivityLogs
         '

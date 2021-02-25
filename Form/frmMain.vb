@@ -76,7 +76,7 @@
 
     'file
     Private Sub MntTransactionApprovalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntTransactionApprovalToolStripMenuItem.Click
-
+        method.FormLoader(Me, New frmMntTrxApproval(userId, workgroupId, isAdmin))
     End Sub
 
     Private Sub MntTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntTransactionConsoleToolStripMenuItem.Click
@@ -146,7 +146,7 @@
                 OptionsToolStripMenuItem.Visible = False
                 'senior engineer
             ElseIf workgroupId = 4 Then
-                'method.FormLoader(Me, New frmMntTrxApproval(userId, workgroupId, isAdmin))
+                method.FormLoader(Me, New frmMntTrxApproval(userId, workgroupId, isAdmin))
             End If
 
             'facility
@@ -166,6 +166,10 @@
                 'method.FormLoader(Me, New frmFacDashboard(userId, workgroupId))
             End If
         End If
+    End Sub
+
+    Private Sub MntActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntActivityReportToolStripMenuItem.Click
+        method.FormLoader(Me, New frmMntActivityReport)
     End Sub
 
 End Class

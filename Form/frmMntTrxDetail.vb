@@ -18,6 +18,7 @@ Public Class frmMntTrxDetail
     Private isImageRequired As Boolean = True
     Private isAllowEdit As Boolean = True
     Private isAllowDelete As Boolean = True
+    Private isApprovedByEngineer As Boolean = True
 
     'checking if new or exising record
     Private trxId As Integer = 0
@@ -42,7 +43,6 @@ Public Class frmMntTrxDetail
 
     'binding sources
     Private WithEvents bsRoutingStatus As New BindingSource
-
     Private WithEvents bsTransactionStatus As New BindingSource
     Private WithEvents bsMachine As New BindingSource
     Private WithEvents bsArea As New BindingSource
@@ -57,7 +57,6 @@ Public Class frmMntTrxDetail
 
     'adapters
     Private adpTransactionHeader As New MntTransactionHeaderTableAdapter
-
     Private adpTransactionDetail As New MntTransactionDetailTableAdapter
     Private adpTransactionMachinePart As New MntTransactionMachinePartTableAdapter
     Private adpTransactionSparePart As New MntTransactionSparePartTableAdapter
@@ -66,7 +65,6 @@ Public Class frmMntTrxDetail
 
     'datatables
     Private dtSecUserPic As New SecUserDataTable
-
     Private dtRoutingStatus As New GenRoutingStatusDataTable
     Private dtTransactionStatus As New GenTransactionStatusDataTable
     Private dtMachine As New MntMachineDataTable
@@ -80,8 +78,8 @@ Public Class frmMntTrxDetail
     Private dtMachinePart As New MntMachinePartDataTable
     Private dtTechnicianColumn As New SecUserDataTable
 
-    'additional objects
-    Private dtSecUser As New DataTable
+    Private rowEngineer As SecUserRow 'senior engineer
+    Private rowManager As SecUserRow ' senior manager
 
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean, ByVal _isTechnicianManual As Boolean, ByVal _isImageRequired As Boolean, ByVal _isAllowEdit As Boolean, ByVal _isAllowDelete As Boolean, ByVal _myDataset As DataSet, Optional _trxId As Integer = 0)
 
@@ -102,14 +100,6 @@ Public Class frmMntTrxDetail
         End If
 
         Me.adpTechnician.Fill(Me.myDataset.SecUser)
-
-        'manager level, senior engineer and it
-        If Not isAdmin Or Not (workgroupId < 4 Or workgroupId = 7 Or workgroupId = 8 Or workgroupId = 13 Or workgroupId = 14) Then
-            txtManagerRemarks.ReadOnly = True
-            txtEngineerRemarks.ReadOnly = True
-            btnApprove.Enabled = False
-            btnReturn.Enabled = False
-        End If
 
         method.EnableDoubleBuffered(dgvPic)
         method.EnableDoubleBuffered(dgvDetail)
@@ -199,10 +189,10 @@ Public Class frmMntTrxDetail
             picImgAttachment.DataBindings.Add(New Binding("Image", Me.bsTransactionHeader.Current, "Image", True))
             txtImageName.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "ImageName"))
             txtManagerDateApproved.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorManagerApprovalDate", True, DataSourceUpdateMode.Never))
-            txtManagerId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorManagerId"))
+            'txtManagerId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorManagerId"))
             txtManagerRemarks.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorManagerRemarks"))
             txtEngineerDateApproved.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerApprovalDate", True, DataSourceUpdateMode.Never))
-            txtEngineerId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerId"))
+            'txtEngineerId.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerId"))
             txtEngineerRemarks.DataBindings.Add(New Binding("Text", Me.bsTransactionHeader.Current, "SeniorEngineerRemarks"))
             cmbTrxStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "TrxStatusId"))
             cmbRoutingStatus.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionHeader.Current, "RoutingStatusId"))
@@ -224,6 +214,10 @@ Public Class frmMntTrxDetail
                 Me.bsTransactionMachinePart.Position = Me.bsTransactionMachinePart.Find("TrxId", trxId)
 
                 cmbMachinePart.DataBindings.Add(New Binding("SelectedValue", Me.bsTransactionMachinePart.Current, "MachinePartId"))
+
+                If CType(Me.bsTransactionMachinePart.Current, DataRowView).Item("MachinePartId") Is DBNull.Value Then
+                    cmbMachinePart.Enabled = False
+                End If
             Else
                 cmbArea.Enabled = True
                 cmbMachinePart.Enabled = False
@@ -251,6 +245,53 @@ Public Class frmMntTrxDetail
 
             GetPic()
         End If
+
+        'if approved by senior engineer or senior manager - don't allow editing
+        If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Or Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
+            cmbTrxStatus.Enabled = False
+            cmbMachinePart.Enabled = False
+            cmbMachineStatus.Enabled = False
+            btnAddRow.Enabled = False
+            btnRemoveRow.Enabled = False
+            btnBrowse.Enabled = False
+            btnRemove.Enabled = False
+            btnAttachFile.Enabled = False
+            btnRemoveFile.Enabled = False
+            dgvPic.ReadOnly = True
+        End If
+
+        'If isFromConsole = True Then
+        '    'txtManagerRemarks.ReadOnly = False
+        '    'txtEngineerRemarks.ReadOnly = False
+        '    'btnApprove.Enabled = True
+        '    'btnReturn.Enabled = True
+
+        '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Then
+        '        rowEngineer = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId").ToString)
+        '        txtManagerRemarks.ReadOnly = True
+
+        '        txtEngineerId.Text = rowEngineer.UserName.ToString
+        '        txtEngineerItem.Text = rowEngineer.UserItem.ToString
+
+        '    End If
+
+        '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
+        '        rowManager = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId").ToString)
+
+        '        txtEngineerRemarks.ReadOnly = True
+
+        '        txtManagerId.Text = rowEngineer.UserName.ToString
+        '        txtManagerItem.Text = rowEngineer.UserItem.ToString
+        '    End If
+
+        'Else
+        '    txtManagerRemarks.ReadOnly = True
+        '    txtEngineerRemarks.ReadOnly = True
+        '    btnApprove.Enabled = False
+        '    btnReturn.Enabled = False
+
+        'End If
+
     End Sub
 
     Private Sub frmMntTrxDetail_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -295,7 +336,13 @@ Public Class frmMntTrxDetail
 
                 txtActionTaken.Select(txtActionTaken.TextLength, 0)
 
-                btnDelete.Enabled = isAllowDelete
+                '2/25 condition for enabling delete
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Or Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
+                    btnDelete.Enabled = False
+                Else
+                    btnDelete.Enabled = isAllowDelete
+                End If
+
                 Me.ActiveControl = txtActionTaken
             End If
         Catch ex As Exception
@@ -781,7 +828,7 @@ Public Class frmMntTrxDetail
                         Dim _row = _dataRowView.Row
                         _row.Item("TrxId") = trxId
                     Next
-                    Me.ValidateChildren()
+                    Me.Validate()
                     Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
 
                     'transaction machine part
@@ -849,6 +896,7 @@ Public Class frmMntTrxDetail
                     If Not cmbMachineName.SelectedValue = 0 Then
                         _rowMachine.MachineStatusId = 1
                     End If
+                    Me.bsMachine.EndEdit()
 
                     'existing transaction (ongoing)
                 Else
@@ -944,7 +992,7 @@ Public Class frmMntTrxDetail
                         Dim _row = _dataRowView.Row
                         _row.Item("TrxId") = trxId
                     Next
-                    Me.ValidateChildren()
+                    Me.Validate()
                     Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
 
                     'transaction machine part
@@ -1012,6 +1060,7 @@ Public Class frmMntTrxDetail
                     If Not cmbMachineName.SelectedValue = 0 Then
                         _rowMachine.MachineStatusId = cmbMachineStatus.SelectedValue
                     End If
+                    Me.bsMachine.EndEdit()
                 End If
             End If
 
@@ -1022,47 +1071,47 @@ Public Class frmMntTrxDetail
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        Me.bsTransactionHeader.CancelEdit()
-        Me.bsTransactionDetail.CancelEdit()
+        'Me.bsTransactionHeader.CancelEdit()
+        'Me.bsTransactionDetail.CancelEdit()
 
-        If Me.myDataset.HasChanges Then
-            Me.myDataset.RejectChanges()
-        End If
+        'If Me.myDataset.HasChanges Then
+        '    Me.myDataset.RejectChanges()
+        'End If
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
-            Dim _currentRow = CType(Me.bsTransactionHeader.Current, DataRowView).Row
-            Dim _rowState = _currentRow.RowState
+            If trxId > 0 Then
+                Dim _currentRow = CType(Me.bsTransactionHeader.Current, DataRowView).Row
+                Dim _rowState = _currentRow.RowState
 
-            Select Case _rowState
-                Case DataRowState.Added
-                    Me.bsTransactionHeader.RemoveCurrent()
-                Case DataRowState.Detached
-                    Me.bsTransactionHeader.CancelEdit()
-                Case DataRowState.Modified, DataRowState.Unchanged
-                    Dim message = String.Format("Delete transaction no. {0}?", trxId)
-                    If MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                Select Case _rowState
+                    Case DataRowState.Added
                         Me.bsTransactionHeader.RemoveCurrent()
-                        Me.DialogResult = Windows.Forms.DialogResult.OK
-                    End If
-                Case Else
-            End Select
+                    Case DataRowState.Detached
+                        Me.bsTransactionHeader.CancelEdit()
+                    Case DataRowState.Modified, DataRowState.Unchanged
+                        If dgvDetail.SelectedCells.Count > 0 AndAlso dgvDetail.SelectedCells(0).RowIndex = dgvDetail.NewRowIndex Then
+                            Me.bsTransactionHeader.CancelEdit()
+                            Exit Sub
+                        End If
+
+                        Dim message = String.Format("Delete this transaction?")
+                        If MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                            Me.bsTransactionHeader.RemoveCurrent()
+                        End If
+                    Case Else
+                End Select
+            End If
+
+            Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
-        Me.bsTransactionHeader.CancelEdit()
-        Me.bsTransactionDetail.CancelEdit()
-        Me.bsTransactionUser.CancelEdit()
-
-        If Me.myDataset.HasChanges Then
-            Me.myDataset.RejectChanges()
-        End If
-
-        Me.Close()
+        btnCancel.PerformClick()
     End Sub
 
     Private Sub btnApprove_Click(sender As Object, e As EventArgs) Handles btnApprove.Click
