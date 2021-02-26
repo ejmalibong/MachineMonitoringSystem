@@ -33,6 +33,7 @@ Partial Class frmMain
         Me.LogOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MasterlistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,7 +44,6 @@ Partial Class frmMain
         Me.DepartmentToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
-        Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -113,6 +113,12 @@ Partial Class frmMain
         Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ReportsToolStripMenuItem.Text = "Reports"
         '
+        'MntActivityReportToolStripMenuItem
+        '
+        Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
+        '
         'MasterlistToolStripMenuItem
         '
         Me.MasterlistToolStripMenuItem.Name = "MasterlistToolStripMenuItem"
@@ -181,12 +187,6 @@ Partial Class frmMain
         '
         'tmrMain
         '
-        '
-        'MntActivityReportToolStripMenuItem
-        '
-        Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
-        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'frmMain
         '

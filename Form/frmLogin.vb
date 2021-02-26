@@ -27,10 +27,10 @@ Public Class frmLogin
         'txtEmployeeId.Text = "1705-025"
 
         'sir clark
-        'txtEmployeeId.Text = "1709-006"
+        txtEmployeeId.Text = "1709-006"
 
         'sir emman
-        txtEmployeeId.Text = "1701-066"
+        'txtEmployeeId.Text = "1701-066"
 
         'sir harry
         'txtEmployeeId.Text = "1807-002"

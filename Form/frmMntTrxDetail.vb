@@ -246,9 +246,23 @@ Public Class frmMntTrxDetail
             GetPic()
         End If
 
+        'show approvers information if not null
+        If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Then
+            rowEngineer = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId").ToString)
+            txtEngineerId.Text = rowEngineer.UserName.ToString
+            txtEngineerItem.Text = rowEngineer.UserItem.ToString
+        End If
+
+        If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
+            rowManager = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId").ToString)
+            txtManagerId.Text = rowManager.UserName.ToString
+            txtManagerItem.Text = rowManager.UserItem.ToString
+        End If
+
         'if approved by senior engineer or senior manager - don't allow editing
         If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Or Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
             cmbTrxStatus.Enabled = False
+            cmbArea.Enabled = False
             cmbMachinePart.Enabled = False
             cmbMachineStatus.Enabled = False
             btnAddRow.Enabled = False
@@ -260,38 +274,20 @@ Public Class frmMntTrxDetail
             dgvPic.ReadOnly = True
         End If
 
-        'If isFromConsole = True Then
-        '    'txtManagerRemarks.ReadOnly = False
-        '    'txtEngineerRemarks.ReadOnly = False
-        '    'btnApprove.Enabled = True
-        '    'btnReturn.Enabled = True
-
-        '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Then
-        '        rowEngineer = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId").ToString)
-        '        txtManagerRemarks.ReadOnly = True
-
-        '        txtEngineerId.Text = rowEngineer.UserName.ToString
-        '        txtEngineerItem.Text = rowEngineer.UserItem.ToString
-
-        '    End If
-
-        '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
-        '        rowManager = Me.myDataset.SecUser.FindByUserId(CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId").ToString)
-
-        '        txtEngineerRemarks.ReadOnly = True
-
-        '        txtManagerId.Text = rowEngineer.UserName.ToString
-        '        txtManagerItem.Text = rowEngineer.UserItem.ToString
-        '    End If
-
-        'Else
-        '    txtManagerRemarks.ReadOnly = True
-        '    txtEngineerRemarks.ReadOnly = True
-        '    btnApprove.Enabled = False
-        '    btnReturn.Enabled = False
-
-        'End If
-
+        'senior manager, manager or senior engineer
+        If workgroupId = 2 Or workgroupId = 3 Or workgroupId = 4 Then
+            If workgroupId = 2 Or workgroupId = 3 Then
+                txtEngineerRemarks.ReadOnly = True
+            ElseIf workgroupId = 4 Then
+                txtManagerRemarks.ReadOnly = True
+            End If
+        Else
+            txtManagerRemarks.ReadOnly = True
+            txtEngineerRemarks.ReadOnly = True
+            btnApprove.Enabled = False
+            btnReturn.Enabled = False
+            Me.ActiveControl = txtActionTaken
+        End If
     End Sub
 
     Private Sub frmMntTrxDetail_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -336,14 +332,20 @@ Public Class frmMntTrxDetail
 
                 txtActionTaken.Select(txtActionTaken.TextLength, 0)
 
-                '2/25 condition for enabling delete
+                '2/25 don't allow deleting of transaction if already approved
                 If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorEngineerId") Is DBNull.Value Or Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("SeniorManagerId") Is DBNull.Value Then
                     btnDelete.Enabled = False
                 Else
                     btnDelete.Enabled = isAllowDelete
                 End If
 
-                Me.ActiveControl = txtActionTaken
+                If workgroupId = 2 Or workgroupId = 3 Then
+                    txtManagerRemarks.Select(txtManagerRemarks.TextLength, 0)
+                    Me.ActiveControl = txtManagerRemarks
+                ElseIf workgroupId = 4 Then
+                    txtEngineerRemarks.Select(txtEngineerRemarks.TextLength, 0)
+                    Me.ActiveControl = txtEngineerRemarks
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -1115,11 +1117,74 @@ Public Class frmMntTrxDetail
     End Sub
 
     Private Sub btnApprove_Click(sender As Object, e As EventArgs) Handles btnApprove.Click
+        Try
+            'senior manager
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(trxId)
+                _transactionRow.SeniorManagerId = 1
+                _transactionRow.SeniorManagerApprovalDate = DateTime.Now
+                _transactionRow.SeniorManagerId = userId
+                _transactionRow.RoutingStatusId = 1
 
+                If String.IsNullOrEmpty(txtManagerRemarks.Text.Trim) Then
+                    _transactionRow.SetSeniorManagerRemarksNull()
+                Else
+                    _transactionRow.SeniorManagerRemarks = txtManagerRemarks.Text.Trim
+                End If
+                'senior engineer
+            ElseIf workgroupId = 4 Then
+                Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(trxId)
+                _transactionRow.SeniorEngineerIsApproved = 1
+                _transactionRow.SeniorEngineerApprovalDate = DateTime.Now
+                _transactionRow.SeniorEngineerId = userId
+                _transactionRow.RoutingStatusId = 3
+
+                If String.IsNullOrEmpty(txtEngineerRemarks.Text.Trim) Then
+                    _transactionRow.SetSeniorEngineerRemarksNull()
+                Else
+                    _transactionRow.SeniorEngineerRemarks = txtEngineerRemarks.Text.Trim
+                End If
+            End If
+
+            Me.DialogResult = Windows.Forms.DialogResult.OK
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
+        Try
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(trxId)
+                _transactionRow.SeniorManagerId = 0
+                _transactionRow.SetSeniorManagerApprovalDateNull()
+                _transactionRow.SetSeniorManagerIdNull()
+                _transactionRow.RoutingStatusId = 4
 
+                If String.IsNullOrEmpty(txtManagerRemarks.Text.Trim) Then
+                    _transactionRow.SetSeniorManagerRemarksNull()
+                Else
+                    _transactionRow.SeniorManagerRemarks = txtManagerRemarks.Text.Trim
+                End If
+            ElseIf workgroupId = 4 Then
+                Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(trxId)
+                _transactionRow.SeniorEngineerIsApproved = 0
+                _transactionRow.SetSeniorEngineerApprovalDateNull()
+                _transactionRow.SetSeniorEngineerIdNull()
+                _transactionRow.RoutingStatusId = 5
+                _transactionRow.TrxStatusId = 2
+
+                If String.IsNullOrEmpty(txtEngineerRemarks.Text.Trim) Then
+                    _transactionRow.SetSeniorEngineerRemarksNull()
+                Else
+                    _transactionRow.SeniorEngineerRemarks = txtEngineerRemarks.Text.Trim
+                End If
+            End If
+
+            Me.DialogResult = Windows.Forms.DialogResult.OK
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub btnBrowse_Click(sender As Object, e As EventArgs) Handles btnBrowse.Click

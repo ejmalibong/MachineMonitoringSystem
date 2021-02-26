@@ -18,6 +18,8 @@ Public Class frmMntTrxConsole
     'constants
     Private machineStatusId As Integer = 1 'default to productive
     Private transactionStatusId As Integer = 1 'default to ongoing
+    Private indexScroll As Integer = 0
+    Private indexPosition As Integer = 0
     'elapsed time computation
     Private WithEvents tmrElapsedTime As New Timer
     Private tmrLastTransaction As New DateTime
@@ -85,6 +87,9 @@ Public Class frmMntTrxConsole
     Private adpTransactionHeaderActivity As New MntTransactionHeaderTableAdapter
     Private adpMachineStatusColumn As New MntMachineTableAdapter
 
+    Private WithEvents tmrRefresh As New Timer
+    Private counter As Integer = 0
+
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -95,25 +100,7 @@ Public Class frmMntTrxConsole
         workgroupId = _workgroupId
         isAdmin = _isAdmin
 
-        Me.adpMachine.Fill(Me.myDataset.MntMachine)
-        Me.adpAreaName.Fill(Me.myDataset.MntArea)
-
-        Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
-        Me.adpNickname.Fill(Me.myDataset.SecUser)
-        Me.adpMachineName.Fill(Me.myDataset.MntMachine)
-        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
-
-        Me.adpTransactionDetail.Fill(Me.myDataset.MntTransactionDetail)
-        Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
-        Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
-        Me.adpTransactionUser.Fill(Me.myDataset.MntTransactionUser)
-        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
-        Me.adpUser.Fill(Me.myDataset.SecUser)
-        Me.adpArea.Fill(Me.myDataset.MntArea)
-        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
-        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
-        Me.adpMachineStatus.Fill(Me.myDataset.MntMachineStatus)
-        Me.adpMachinePart.Fill(Me.myDataset.MntMachinePart)
+        RefreshValues()
     End Sub
 
     Private Sub frmMntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -210,9 +197,17 @@ Public Class frmMntTrxConsole
 
         rdOngoing.Checked = True
 
+        'tmrRefresh.Start()
+        'tmrRefresh.Interval = 1000
+        'AddHandler tmrRefresh.Tick, AddressOf tmrRefresh_Tick
+
         method.EnableDoubleBuffered(dgvMachine)
         method.EnableDoubleBuffered(dgvTransactionHeader)
     End Sub
+
+    'Private Sub tmrRefresh_Tick(sender As Object, e As EventArgs)
+    '    RefreshValues()
+    'End Sub
 
     'Public Sub SetPagedDataSource(ByVal _dataTable As DataTable, ByVal _bindingNavigator As BindingNavigator)
     '    If _dataTable Is Nothing OrElse _bindingNavigator Is Nothing Then
@@ -357,6 +352,14 @@ Public Class frmMntTrxConsole
                     End If
                 End If
             Next
+
+            'counter = counter + 1
+
+            ''3 minutes
+            'If counter = 18000 Then
+            '    RefreshValues()
+            '    counter = 0
+            'End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -390,18 +393,7 @@ Public Class frmMntTrxConsole
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
-            Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
-            Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
-            Me.adpTransactionMachinePart.Update(Me.myDataset.MntTransactionMachinePart)
-            Me.adpTransactionSparePart.Update(Me.myDataset.MntTransactionSparePart)
-            Me.adpTransactionUser.Update(Me.myDataset.MntTransactionUser)
-            Me.adpMachine.Update(Me.myDataset.MntMachine)
-            Me.myDataset.AcceptChanges()
-
-            dgvTransactionHeader.Refresh()
-
-            Me.bsMachine.ResetBindings(False)
-            Me.bsTransactionHeader.ResetBindings(False)
+            RefreshValues()
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -531,6 +523,44 @@ Public Class frmMntTrxConsole
             Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = 2")
             transactionStatusId = 2
         End If
+    End Sub
+
+    Public Sub RefreshValues()
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
+
+        Me.myDataset.EnforceConstraints = False
+        Me.adpMachine.Fill(Me.myDataset.MntMachine)
+        Me.adpAreaName.Fill(Me.myDataset.MntArea)
+
+        Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
+        Me.adpNickname.Fill(Me.myDataset.SecUser)
+        Me.adpMachineName.Fill(Me.myDataset.MntMachine)
+        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
+
+        Me.adpTransactionDetail.Fill(Me.myDataset.MntTransactionDetail)
+        Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
+        Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
+        Me.adpTransactionUser.Fill(Me.myDataset.MntTransactionUser)
+        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
+        Me.adpUser.Fill(Me.myDataset.SecUser)
+        Me.adpArea.Fill(Me.myDataset.MntArea)
+        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
+        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
+        Me.adpMachineStatus.Fill(Me.myDataset.MntMachineStatus)
+        Me.adpMachinePart.Fill(Me.myDataset.MntMachinePart)
+        Me.myDataset.EnforceConstraints = True
+
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
+    End Sub
+
+    Private Sub GetScrollingIndex()
+        indexScroll = dgvTransactionHeader.FirstDisplayedCell.RowIndex
+        indexPosition = dgvTransactionHeader.CurrentRow.Index
+    End Sub
+
+    Private Sub SetScrollingIndex()
+        dgvTransactionHeader.FirstDisplayedScrollingRowIndex = indexScroll
+        dgvTransactionHeader.Rows(indexPosition).Selected = True
     End Sub
 
     Private Sub SearchCriteria()

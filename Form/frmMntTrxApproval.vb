@@ -17,7 +17,8 @@ Public Class frmMntTrxApproval
     Private isAllowDelete As Boolean = True
     'constants
     Private machineStatusId As Integer = 1 'default to productive
-    Private transactionStatusId As Integer = 1 'default to ongoing
+    Private indexScroll As Integer = 0
+    Private indexPosition As Integer = 0
     'elapsed time computation
     Private WithEvents tmrElapsedTime As New Timer
     Private tmrLastTransaction As New DateTime
@@ -102,27 +103,7 @@ Public Class frmMntTrxApproval
         workgroupId = _workgroupId
         isAdmin = _isAdmin
 
-        Me.adpMachine.Fill(Me.myDataset.MntMachine)
-        Me.adpAreaName.Fill(Me.myDataset.MntArea)
-
-        Me.adpApproverName.Fill(Me.myDataset.SecUser)
-
-        Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
-        Me.adpNickname.Fill(Me.myDataset.SecUser)
-        Me.adpMachineName.Fill(Me.myDataset.MntMachine)
-        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
-
-        Me.adpTransactionDetail.Fill(Me.myDataset.MntTransactionDetail)
-        Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
-        Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
-        Me.adpTransactionUser.Fill(Me.myDataset.MntTransactionUser)
-        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
-        Me.adpUser.Fill(Me.myDataset.SecUser)
-        Me.adpArea.Fill(Me.myDataset.MntArea)
-        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
-        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
-        Me.adpMachineStatus.Fill(Me.myDataset.MntMachineStatus)
-        Me.adpMachinePart.Fill(Me.myDataset.MntMachinePart)
+        RefreshValues()
     End Sub
 
     Private Sub frmMntTrxApproval_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -135,8 +116,6 @@ Public Class frmMntTrxApproval
             isAllowEdit = rowWorkgroup.IsAllowEdit
             isAllowDelete = rowWorkgroup.IsAllowDelete
         End If
-
-        btnView.Enabled = isAllowDelete
 
         Me.bsTransactionHeader.DataSource = Me.myDataset
         Me.bsTransactionHeader.DataMember = dtTransactionHeader.TableName
@@ -229,7 +208,7 @@ Public Class frmMntTrxApproval
     End Sub
 
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvTransactionHeader.CellDoubleClick
-        btnReturn.PerformClick()
+        btnView.PerformClick()
     End Sub
 
     Private Sub dgvTransactionHeader_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvTransactionHeader.DataBindingComplete
@@ -251,8 +230,7 @@ Public Class frmMntTrxApproval
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
-            Me.bsMachine.ResetBindings(False)
-            Me.bsTransactionHeader.ResetBindings(False)
+            RefreshValues()
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -263,25 +241,44 @@ Public Class frmMntTrxApproval
             If dgvTransactionHeader.Rows.Count > 0 Then
                 Dim _lstChkRow As New List(Of Integer)
 
-                For _i = 0 To dgvTransactionHeader.RowCount - 1
+                For _i = 0 To dgvTransactionHeader.Rows.Count - 1
                     If dgvTransactionHeader.Rows(_i).Cells("IsSelectedColumn").Value = True Then
-                        _lstChkRow.Add(_i)
+                        Dim _trxId As Integer = dgvTransactionHeader.Rows(_i).Cells("TrxIdColumn").Value
+                        _lstChkRow.Add(_trxId)
                     End If
                 Next
 
                 If Not _lstChkRow.Count = 0 Then
-                    For Each _row As DataGridViewRow In dgvTransactionHeader.Rows
-                        Dim _isSelected As Boolean = Convert.ToBoolean(_row.Cells("IsSelectedColumn").Value)
-                        
-                        If _isSelected Then
-                            Dim _trxId As Integer = _row.Cells("TrxIdColumn").Value
-                            Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(_trxId)
+                    For Each _id As Integer In _lstChkRow.ToList
+                        Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(_id)
+
+                        If workgroupId = 2 Or workgroupId = 3 Then
+                            _transactionRow.SeniorManagerIsApproved = 1
+                            _transactionRow.SeniorManagerApprovalDate = DateTime.Now
+                            _transactionRow.SeniorManagerId = userId
+                            _transactionRow.RoutingStatusId = 1
+                        ElseIf workgroupId = 4 Then
                             _transactionRow.SeniorEngineerIsApproved = 1
                             _transactionRow.SeniorEngineerApprovalDate = DateTime.Now
                             _transactionRow.SeniorEngineerId = userId
                             _transactionRow.RoutingStatusId = 3
                         End If
                     Next
+                Else
+                    Dim _trxId As Integer = dgvTransactionHeader.CurrentRow.Cells("TrxIdColumn").Value
+                    Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(_trxId)
+
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        _transactionRow.SeniorManagerIsApproved = 1
+                        _transactionRow.SeniorManagerApprovalDate = DateTime.Now
+                        _transactionRow.SeniorManagerId = userId
+                        _transactionRow.RoutingStatusId = 1
+                    ElseIf workgroupId = 4 Then
+                        _transactionRow.SeniorEngineerIsApproved = 1
+                        _transactionRow.SeniorEngineerApprovalDate = DateTime.Now
+                        _transactionRow.SeniorEngineerId = userId
+                        _transactionRow.RoutingStatusId = 3
+                    End If
                 End If
 
                 Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
@@ -295,7 +292,52 @@ Public Class frmMntTrxApproval
     Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
         Try
             If dgvTransactionHeader.Rows.Count > 0 Then
+                Dim _lstChkRow As New List(Of Integer)
 
+                For _i = 0 To dgvTransactionHeader.Rows.Count - 1
+                    If dgvTransactionHeader.Rows(_i).Cells("IsSelectedColumn").Value = True Then
+                        Dim _trxId As Integer = dgvTransactionHeader.Rows(_i).Cells("TrxIdColumn").Value
+                        _lstChkRow.Add(_trxId)
+                    End If
+                Next
+
+                If Not _lstChkRow.Count = 0 Then
+                    For Each _id As Integer In _lstChkRow.ToList
+                        Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(_id)
+
+                        If workgroupId = 2 Or workgroupId = 3 Then
+                            _transactionRow.SeniorManagerIsApproved = 0
+                            _transactionRow.SetSeniorManagerApprovalDateNull()
+                            _transactionRow.SetSeniorManagerIdNull()
+                            _transactionRow.RoutingStatusId = 4
+                        ElseIf workgroupId = 4 Then
+                            _transactionRow.SeniorEngineerIsApproved = 0
+                            _transactionRow.SetSeniorManagerApprovalDateNull()
+                            _transactionRow.SetSeniorEngineerIdNull()
+                            _transactionRow.RoutingStatusId = 5
+                            _transactionRow.TrxStatusId = 2
+                        End If
+                    Next
+                Else
+                    Dim _trxId As Integer = dgvTransactionHeader.CurrentRow.Cells("TrxIdColumn").Value
+                    Dim _transactionRow As MntTransactionHeaderRow = Me.myDataset.MntTransactionHeader.FindByTrxId(_trxId)
+
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        _transactionRow.SeniorManagerIsApproved = 0
+                        _transactionRow.SetSeniorManagerApprovalDateNull()
+                        _transactionRow.SetSeniorManagerIdNull()
+                        _transactionRow.RoutingStatusId = 4
+                    ElseIf workgroupId = 4 Then
+                        _transactionRow.SeniorEngineerIsApproved = 0
+                        _transactionRow.SetSeniorManagerApprovalDateNull()
+                        _transactionRow.SetSeniorEngineerIdNull()
+                        _transactionRow.RoutingStatusId = 5
+                        _transactionRow.TrxStatusId = 2
+                    End If
+                End If
+
+                Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
+                Me.myDataset.AcceptChanges()
             End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -342,11 +384,17 @@ Public Class frmMntTrxApproval
 
     Private Sub trxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles rdApproved.CheckedChanged, rdPending.CheckedChanged
         If rdApproved.Checked = True Then
-            Me.bsTransactionHeader.Filter = String.Format("SeniorEngineerIsApproved = 1")
-            transactionStatusId = 1
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 1")
+            ElseIf workgroupId = 4 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId IN (1,2,3)")
+            End If
         Else
-            Me.bsTransactionHeader.Filter = String.Format("SeniorEngineerIsApproved = 0")
-            transactionStatusId = 2
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 3")
+            ElseIf workgroupId = 4 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 4")
+            End If
         End If
     End Sub
 
@@ -355,6 +403,46 @@ Public Class frmMntTrxApproval
             Me.dgvTransactionHeader(0, k).Value = Me.chkSelectAll.Checked
         Next
         Me.dgvTransactionHeader.EndEdit()
+    End Sub
+
+    Public Sub RefreshValues()
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
+
+        Me.myDataset.EnforceConstraints = False
+        Me.adpMachine.Fill(Me.myDataset.MntMachine)
+        Me.adpAreaName.Fill(Me.myDataset.MntArea)
+
+        Me.adpApproverName.Fill(Me.myDataset.SecUser)
+
+        Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
+        Me.adpNickname.Fill(Me.myDataset.SecUser)
+        Me.adpMachineName.Fill(Me.myDataset.MntMachine)
+        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
+
+        Me.adpTransactionDetail.Fill(Me.myDataset.MntTransactionDetail)
+        Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
+        Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
+        Me.adpTransactionUser.Fill(Me.myDataset.MntTransactionUser)
+        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
+        Me.adpUser.Fill(Me.myDataset.SecUser)
+        Me.adpArea.Fill(Me.myDataset.MntArea)
+        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
+        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
+        Me.adpMachineStatus.Fill(Me.myDataset.MntMachineStatus)
+        Me.adpMachinePart.Fill(Me.myDataset.MntMachinePart)
+        Me.myDataset.EnforceConstraints = True
+
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
+    End Sub
+
+    Private Sub GetScrollingIndex()
+        indexScroll = dgvTransactionHeader.FirstDisplayedCell.RowIndex
+        indexPosition = dgvTransactionHeader.CurrentRow.Index
+    End Sub
+
+    Private Sub SetScrollingIndex()
+        dgvTransactionHeader.FirstDisplayedScrollingRowIndex = indexScroll
+        dgvTransactionHeader.Rows(indexPosition).Selected = True
     End Sub
 
     Private Sub SearchCriteria()
