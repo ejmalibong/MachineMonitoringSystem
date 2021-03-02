@@ -186,11 +186,11 @@ showIt: Return fileLength & suffix
             If table.Rows.Count > 0 Then
                 row = table.NewRow()
 
-                If spName.Equals("ReadSecUserBySectionId") Then
+                If spName.Equals("RedSecUserBySectionId") Then
                     row("UserId") = 0
                     row("UserName") = caption
                     row.ItemArray = New Object() {row("UserId"), row("UserName")}
-                ElseIf spName.Equals("ReadMntArea") Then
+                ElseIf spName.Equals("RedMntArea") Then
                     row("AreaId") = 0
                     row("AreaName") = caption
                     row.ItemArray = New Object() {row("AreaId"), row("AreaName")}

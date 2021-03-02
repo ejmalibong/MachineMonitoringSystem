@@ -8,7 +8,7 @@
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>76e1a10d-fc88-4ddf-a6b0-c8e1ab8385c9</rd:DataSourceID>
+      <rd:DataSourceID>e7119763-c022-4f3c-a6b6-c640bf70c7f2</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -34,8 +34,8 @@
           <DataField>ShiftId</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="StartMachineStatusId">
-          <DataField>StartMachineStatusId</DataField>
+        <Field Name="DowntimeMachineStatusId">
+          <DataField>DowntimeMachineStatusId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="MachineStatusName">
@@ -50,8 +50,8 @@
           <DataField>DatetimeEnded</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="DowntimeElapsedTime">
-          <DataField>DowntimeElapsedTime</DataField>
+        <Field Name="TotalAccumulatedDowntime">
+          <DataField>TotalAccumulatedDowntime</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Nickname">
@@ -62,12 +62,12 @@
           <DataField>MachineName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="MachineCode">
-          <DataField>MachineCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="Problem">
           <DataField>Problem</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ActionTaken">
+          <DataField>ActionTaken</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Image1">
@@ -78,10 +78,6 @@
           <DataField>Image2</DataField>
           <rd:TypeName>System.Byte[]</rd:TypeName>
         </Field>
-        <Field Name="ActionTaken">
-          <DataField>ActionTaken</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="JoNumber">
           <DataField>JoNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -90,10 +86,6 @@
           <DataField>JoRequestor</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="EncodeUserId">
-          <DataField>EncodeUserId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="TrxStatusId">
           <DataField>TrxStatusId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -101,7 +93,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsReport</rd:DataSetName>
-        <rd:SchemaPath>B:\Users BACKUP\NBCP-LT-058\Documents\Visual Studio 2012\Projects\MdMonitoring\Dataset\dsReport.xsd</rd:SchemaPath>
+        <rd:SchemaPath>B:\Users BACKUP\NBCP-LT-058\Documents\Visual Studio 2012\Projects\MachineMonitoringSystem\MachineMonitoringSystem\Dataset\dsReport.xsd</rd:SchemaPath>
         <rd:TableName>FacActivityReport</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -647,7 +639,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DowntimeElapsedTime.Value</Value>
+                                  <Value>=Fields!TotalAccumulatedDowntime.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <Format>H:mm:ss</Format>

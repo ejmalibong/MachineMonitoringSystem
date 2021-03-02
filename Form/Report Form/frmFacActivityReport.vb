@@ -3,15 +3,15 @@ Imports MachineMonitoringSystem.dsReportTableAdapters
 Imports System.Data.SqlClient
 Imports Microsoft.Reporting.WinForms
 
-Public Class frmMntActivityReport
+Public Class frmFacActivityReport
     Private connection As New clsConnection
     Private method As New clsMethod
     Private dbMethod As New clsSqlDbMethod
     Private table As DataTable
 
     Private myDataset As New dsReport
-    Private adpActReport As New MntActivityReportTableAdapter
-    Private dtActReport As New MntActivityReportDataTable
+    Private adpActReport As New FacActivityReportTableAdapter
+    Private dtActReport As New FacActivityReportDataTable
     Private bsActReport As New BindingSource
 
     Private query As String = String.Empty
@@ -20,9 +20,11 @@ Public Class frmMntActivityReport
 
     Private Sub frmMntActivityReport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            Dim _paramsUser(0) As SqlParameter
+            Dim _paramsUser(1) As SqlParameter
             _paramsUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            _paramsUser(0).Value = 2
+            _paramsUser(0).Value = 3
+            _paramsUser(1) = New SqlParameter("@ExcludedWorkgroupId", SqlDbType.Int)
+            _paramsUser(1).Value = 27
 
             Dim _paramsStatus(0) As SqlParameter
             _paramsStatus(0) = New SqlParameter("MachineStatusId", SqlDbType.Int)
@@ -30,10 +32,9 @@ Public Class frmMntActivityReport
 
             method.FillCmbWithCaption("RedSecUserBySectionId", "UserId", "UserName", cmbTechnician, " < All Technician > ", _paramsUser)
             method.FillCmbWithCaption("RedGenTransactionStatus", "TrxStatusId", "TrxStatusName", cmbTrxStatus, " < All Status > ")
-            method.FillCmbWithCaption("RedMntMachineStatus", "MachineStatusId", "MachineStatusName", cmbStatus, " < All Status > ", _paramsStatus)
-            method.FillCmbWithCaption("RedMntArea", "AreaId", "AreaName", cmbArea, " < All Area > ")
+            method.FillCmbWithCaption("RedFacMachineStatus", "MachineStatusId", "MachineStatusName", cmbStatus, " < All Status > ", _paramsStatus)
 
-            Me.adpActReport.Fill(Me.myDataset.MntActivityReport)
+            Me.adpActReport.Fill(Me.myDataset.FacActivityReport)
             Me.bsActReport.DataSource = Me.myDataset
             Me.bsActReport.DataMember = dtActReport.TableName
 
@@ -88,10 +89,6 @@ ShowReport:
                     query += " AND DowntimeMachineStatusId = '" & cmbStatus.SelectedValue & "'"
                 End If
 
-                If Not cmbArea.SelectedValue = 0 Then
-                    query += " AND AreaId = '" & cmbArea.SelectedValue & "'"
-                End If
-
                 If Not cmbTrxStatus.SelectedValue = 0 Then
                     query += " AND TrxStatusId = '" & cmbTrxStatus.SelectedValue & "'"
                 End If
@@ -99,7 +96,7 @@ ShowReport:
                 Me.bsActReport.Filter = String.Format(query)
 
                 If Me.bsActReport.Count > 0 Then
-                    rptViewer.LocalReport.ReportPath = "ReportFile\MntActivityReport.rdlc"
+                    rptViewer.LocalReport.ReportPath = "ReportFile\FacActivityReport.rdlc"
                     rptViewer.LocalReport.DataSources.Clear()
                     rptViewer.LocalReport.DataSources.Add(New ReportDataSource(dtActReport.TableName, Me.bsActReport))
 

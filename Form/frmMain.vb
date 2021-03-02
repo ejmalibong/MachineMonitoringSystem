@@ -84,11 +84,11 @@
     End Sub
 
     Private Sub FacTransactionApprovalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionApprovalToolStripMenuItem.Click
-
+        method.FormLoader(Me, New frmFacTrxApproval(userId, workgroupId, isAdmin))
     End Sub
 
     Private Sub FacTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionConsoleToolStripMenuItem.Click
-
+        method.FormLoader(Me, New frmFacTrxConsole(userId, workgroupId, isAdmin))
     End Sub
 
     'prevent form resizing when double clicked the titlebar or dragged
@@ -137,6 +137,7 @@
         If sectionId = 2 Then
             FacTransactionApprovalToolStripMenuItem.Visible = False 'file
             FacTransactionConsoleToolStripMenuItem.Visible = False 'file
+            FacActivityReportToolStripMenuItem.Visible = False
 
             'technician
             If workgroupId = 5 Or workgroupId = 6 Then
@@ -153,23 +154,28 @@
         ElseIf sectionId = 3 Then
             MntTransactionApprovalToolStripMenuItem.Visible = False 'file
             MntTransactionConsoleToolStripMenuItem.Visible = False 'file
+            MntActivityReportToolStripMenuItem.Visible = False
 
             'technician
             If workgroupId = 9 Or workgroupId = 10 Then
-                'method.FormLoader(Me, New frmFacTrxConsole(userId, workgroupId, isAdmin))
+                method.FormLoader(Me, New frmFacTrxConsole(userId, workgroupId, isAdmin))
                 FacTransactionApprovalToolStripMenuItem.Visible = False
                 MasterlistToolStripMenuItem.Visible = False
                 OptionsToolStripMenuItem.Visible = False
 
                 'senior engineer, engineer
             ElseIf workgroupId = 7 Or workgroupId = 8 Then
-                'method.FormLoader(Me, New frmFacDashboard(userId, workgroupId))
+                method.FormLoader(Me, New frmFacTrxApproval(userId, workgroupId, isAdmin))
             End If
         End If
     End Sub
 
     Private Sub MntActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntActivityReportToolStripMenuItem.Click
         method.FormLoader(Me, New frmMntActivityReport)
+    End Sub
+
+    Private Sub FacActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacActivityReportToolStripMenuItem.Click
+        method.FormLoader(Me, New frmFacActivityReport)
     End Sub
 
 End Class

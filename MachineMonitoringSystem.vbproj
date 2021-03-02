@@ -124,6 +124,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReport.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Form\frmFacTrxApproval.Designer.vb">
+      <DependentUpon>frmFacTrxApproval.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmFacTrxApproval.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\frmFacTrxDetailLog.Designer.vb">
+      <DependentUpon>frmFacTrxDetailLog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmFacTrxDetailLog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\frmFacTrxDetail.Designer.vb">
+      <DependentUpon>frmFacTrxDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmFacTrxDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\frmFacTrxConsole.Designer.vb">
+      <DependentUpon>frmFacTrxConsole.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmFacTrxConsole.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\frmMntTrxApproval.Designer.vb">
       <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
     </Compile>
@@ -160,6 +184,12 @@
     <Compile Include="Form\frmMntTrxDetailLog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\Report Form\frmFacActivityReport.Designer.vb">
+      <DependentUpon>frmFacActivityReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Report Form\frmFacActivityReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\Report Form\frmMntActivityReport.Designer.vb">
       <DependentUpon>frmMntActivityReport.vb</DependentUpon>
     </Compile>
@@ -183,6 +213,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Form\frmFacTrxApproval.resx">
+      <DependentUpon>frmFacTrxApproval.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\frmFacTrxDetailLog.resx">
+      <DependentUpon>frmFacTrxDetailLog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\frmFacTrxDetail.resx">
+      <DependentUpon>frmFacTrxDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\frmFacTrxConsole.resx">
+      <DependentUpon>frmFacTrxConsole.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\frmMntTrxApproval.resx">
       <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
     </EmbeddedResource>
@@ -200,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\frmMntTrxDetailLog.resx">
       <DependentUpon>frmMntTrxDetailLog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Report Form\frmFacActivityReport.resx">
+      <DependentUpon>frmFacActivityReport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\Report Form\frmMntActivityReport.resx">
       <DependentUpon>frmMntActivityReport.vb</DependentUpon>

@@ -41,6 +41,39 @@
             </Mappings>
             <Sources />
           </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="FacActivityReportTableAdapter" GeneratorDataComponentClassName="FacActivityReportTableAdapter" Name="FacActivityReport" UserDataComponentName="FacActivityReportTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="MDMonitoringConnectionString (MySettings)" DbObjectName="MachineMonitoring.dbo.FacActivityReport" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT TrxId, TrxDate, UserId, ShiftId, DowntimeMachineStatusId, MachineStatusName, DatetimeStarted, DatetimeEnded, TotalAccumulatedDowntime, Nickname, MachineName, Problem, ActionTaken, Image1, Image2, JoNumber, JoRequestor, TrxStatusId FROM dbo.FacActivityReport</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="TrxId" DataSetColumn="TrxId" />
+              <Mapping SourceColumn="TrxDate" DataSetColumn="TrxDate" />
+              <Mapping SourceColumn="UserId" DataSetColumn="UserId" />
+              <Mapping SourceColumn="ShiftId" DataSetColumn="ShiftId" />
+              <Mapping SourceColumn="DowntimeMachineStatusId" DataSetColumn="DowntimeMachineStatusId" />
+              <Mapping SourceColumn="MachineStatusName" DataSetColumn="MachineStatusName" />
+              <Mapping SourceColumn="DatetimeStarted" DataSetColumn="DatetimeStarted" />
+              <Mapping SourceColumn="DatetimeEnded" DataSetColumn="DatetimeEnded" />
+              <Mapping SourceColumn="TotalAccumulatedDowntime" DataSetColumn="TotalAccumulatedDowntime" />
+              <Mapping SourceColumn="Nickname" DataSetColumn="Nickname" />
+              <Mapping SourceColumn="MachineName" DataSetColumn="MachineName" />
+              <Mapping SourceColumn="Problem" DataSetColumn="Problem" />
+              <Mapping SourceColumn="ActionTaken" DataSetColumn="ActionTaken" />
+              <Mapping SourceColumn="Image1" DataSetColumn="Image1" />
+              <Mapping SourceColumn="Image2" DataSetColumn="Image2" />
+              <Mapping SourceColumn="JoNumber" DataSetColumn="JoNumber" />
+              <Mapping SourceColumn="JoRequestor" DataSetColumn="JoRequestor" />
+              <Mapping SourceColumn="TrxStatusId" DataSetColumn="TrxStatusId" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
         </Tables>
         <Sources />
       </DataSource>
@@ -49,7 +82,7 @@
   <xs:element name="dsReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsReport" msprop:Generator_UserDSName="dsReport">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="MntActivityReport" msprop:Generator_TableClassName="MntActivityReportDataTable" msprop:Generator_TableVarName="tableMntActivityReport" msprop:Generator_TablePropName="MntActivityReport" msprop:Generator_RowDeletingName="MntActivityReportRowDeleting" msprop:Generator_RowChangingName="MntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="MntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="MntActivityReportRowDeleted" msprop:Generator_UserTableName="MntActivityReport" msprop:Generator_RowChangedName="MntActivityReportRowChanged" msprop:Generator_RowEvArgName="MntActivityReportRowChangeEvent" msprop:Generator_RowClassName="MntActivityReportRow">
+        <xs:element name="MntActivityReport" msprop:Generator_TableClassName="MntActivityReportDataTable" msprop:Generator_TableVarName="tableMntActivityReport" msprop:Generator_RowChangedName="MntActivityReportRowChanged" msprop:Generator_TablePropName="MntActivityReport" msprop:Generator_RowDeletingName="MntActivityReportRowDeleting" msprop:Generator_RowChangingName="MntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="MntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="MntActivityReportRowDeleted" msprop:Generator_RowClassName="MntActivityReportRow" msprop:Generator_UserTableName="MntActivityReport" msprop:Generator_RowEvArgName="MntActivityReportRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="TrxId" msprop:Generator_ColumnVarNameInTable="columnTrxId" msprop:Generator_ColumnPropNameInRow="TrxId" msprop:Generator_ColumnPropNameInTable="TrxIdColumn" msprop:Generator_UserColumnName="TrxId" type="xs:int" />
@@ -134,10 +167,92 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="FacActivityReport" msprop:Generator_TableClassName="FacActivityReportDataTable" msprop:Generator_TableVarName="tableFacActivityReport" msprop:Generator_TablePropName="FacActivityReport" msprop:Generator_RowDeletingName="FacActivityReportRowDeleting" msprop:Generator_RowChangingName="FacActivityReportRowChanging" msprop:Generator_RowEvHandlerName="FacActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="FacActivityReportRowDeleted" msprop:Generator_UserTableName="FacActivityReport" msprop:Generator_RowChangedName="FacActivityReportRowChanged" msprop:Generator_RowEvArgName="FacActivityReportRowChangeEvent" msprop:Generator_RowClassName="FacActivityReportRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TrxId" msprop:Generator_ColumnVarNameInTable="columnTrxId" msprop:Generator_ColumnPropNameInRow="TrxId" msprop:Generator_ColumnPropNameInTable="TrxIdColumn" msprop:Generator_UserColumnName="TrxId" type="xs:int" />
+              <xs:element name="TrxDate" msprop:Generator_ColumnVarNameInTable="columnTrxDate" msprop:Generator_ColumnPropNameInRow="TrxDate" msprop:Generator_ColumnPropNameInTable="TrxDateColumn" msprop:Generator_UserColumnName="TrxDate" type="xs:dateTime" />
+              <xs:element name="UserId" msprop:Generator_ColumnVarNameInTable="columnUserId" msprop:Generator_ColumnPropNameInRow="UserId" msprop:Generator_ColumnPropNameInTable="UserIdColumn" msprop:Generator_UserColumnName="UserId" type="xs:int" minOccurs="0" />
+              <xs:element name="ShiftId" msprop:Generator_ColumnVarNameInTable="columnShiftId" msprop:Generator_ColumnPropNameInRow="ShiftId" msprop:Generator_ColumnPropNameInTable="ShiftIdColumn" msprop:Generator_UserColumnName="ShiftId" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DowntimeMachineStatusId" msprop:Generator_ColumnVarNameInTable="columnDowntimeMachineStatusId" msprop:Generator_ColumnPropNameInRow="DowntimeMachineStatusId" msprop:Generator_ColumnPropNameInTable="DowntimeMachineStatusIdColumn" msprop:Generator_UserColumnName="DowntimeMachineStatusId" type="xs:int" minOccurs="0" />
+              <xs:element name="MachineStatusName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnMachineStatusName" msprop:Generator_ColumnPropNameInRow="MachineStatusName" msprop:Generator_ColumnPropNameInTable="MachineStatusNameColumn" msprop:Generator_UserColumnName="MachineStatusName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="30" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DatetimeStarted" msprop:Generator_ColumnVarNameInTable="columnDatetimeStarted" msprop:Generator_ColumnPropNameInRow="DatetimeStarted" msprop:Generator_ColumnPropNameInTable="DatetimeStartedColumn" msprop:Generator_UserColumnName="DatetimeStarted" type="xs:dateTime" />
+              <xs:element name="DatetimeEnded" msprop:Generator_ColumnVarNameInTable="columnDatetimeEnded" msprop:Generator_ColumnPropNameInRow="DatetimeEnded" msprop:Generator_ColumnPropNameInTable="DatetimeEndedColumn" msprop:Generator_UserColumnName="DatetimeEnded" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TotalAccumulatedDowntime" msprop:Generator_ColumnVarNameInTable="columnTotalAccumulatedDowntime" msprop:Generator_ColumnPropNameInRow="TotalAccumulatedDowntime" msprop:Generator_ColumnPropNameInTable="TotalAccumulatedDowntimeColumn" msprop:Generator_UserColumnName="TotalAccumulatedDowntime" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Nickname" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNickname" msprop:Generator_ColumnPropNameInRow="Nickname" msprop:Generator_ColumnPropNameInTable="NicknameColumn" msprop:Generator_UserColumnName="Nickname" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="MachineName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnMachineName" msprop:Generator_ColumnPropNameInRow="MachineName" msprop:Generator_ColumnPropNameInTable="MachineNameColumn" msprop:Generator_UserColumnName="MachineName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="30" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Problem" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnProblem" msprop:Generator_ColumnPropNameInRow="Problem" msprop:Generator_ColumnPropNameInTable="ProblemColumn" msprop:Generator_UserColumnName="Problem" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ActionTaken" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnActionTaken" msprop:Generator_ColumnPropNameInRow="ActionTaken" msprop:Generator_ColumnPropNameInTable="ActionTakenColumn" msprop:Generator_UserColumnName="ActionTaken" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Image1" msprop:Generator_ColumnVarNameInTable="columnImage1" msprop:Generator_ColumnPropNameInRow="Image1" msprop:Generator_ColumnPropNameInTable="Image1Column" msprop:Generator_UserColumnName="Image1" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="Image2" msprop:Generator_ColumnVarNameInTable="columnImage2" msprop:Generator_ColumnPropNameInRow="Image2" msprop:Generator_ColumnPropNameInTable="Image2Column" msprop:Generator_UserColumnName="Image2" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="JoNumber" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJoNumber" msprop:Generator_ColumnPropNameInRow="JoNumber" msprop:Generator_ColumnPropNameInTable="JoNumberColumn" msprop:Generator_UserColumnName="JoNumber" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="JoRequestor" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJoRequestor" msprop:Generator_ColumnPropNameInRow="JoRequestor" msprop:Generator_ColumnPropNameInTable="JoRequestorColumn" msprop:Generator_UserColumnName="JoRequestor" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TrxStatusId" msprop:Generator_ColumnVarNameInTable="columnTrxStatusId" msprop:Generator_ColumnPropNameInRow="TrxStatusId" msprop:Generator_ColumnPropNameInTable="TrxStatusIdColumn" msprop:Generator_UserColumnName="TrxStatusId" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:MntActivityReport" />
+      <xs:field xpath="mstns:TrxId" />
+    </xs:unique>
+    <xs:unique name="FacActivityReport_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:FacActivityReport" />
       <xs:field xpath="mstns:TrxId" />
     </xs:unique>
   </xs:element>

@@ -1,0 +1,451 @@
+﻿Imports MachineMonitoringSystem.dsMonitoring
+Imports MachineMonitoringSystem.dsMonitoringTableAdapters
+Imports System.Reflection
+Imports System.ComponentModel
+
+Public Class frmFacTrxApproval
+    Private method As New clsMethod
+    Private dictionary As New Dictionary(Of String, Integer)
+    'access control
+    Private isAdmin As Boolean = True
+    Private userId As Integer = 0
+    Private workgroupId As Integer = 0
+    Private isTechnicianManual As Boolean = True
+    Private isDatetimeManual As Boolean = True
+    Private isImageRequired As Boolean = True
+    Private isAllowEdit As Boolean = True
+    Private isAllowDelete As Boolean = True
+    'constants
+    Private machineStatusId As Integer = 1 'default to productive
+    Private indexScroll As Integer = 0
+    Private indexPosition As Integer = 0
+    'elapsed time computation
+    Private WithEvents tmrElapsedTime As New Timer
+    Private tmrLastTransaction As New DateTime
+    Private tmrSpan As TimeSpan = Nothing
+    Private tmrMinutes As Integer = 0
+    Private tmrHours As Integer = 0
+    Private tmrDays As Integer = 0
+    Private dtMachineLastTransaction As New DataTable
+    'paginate the transactionheader
+    Private pageSize As Integer = 50
+    Private WithEvents bsPagedTransactionHeader As BindingSource
+    Private WithEvents myDatatable As BindingList(Of DataTable)
+    'access dataset
+    Private myDataset As New dsMonitoring
+
+    Private WithEvents bsMachine As New BindingSource
+    Private WithEvents bsAreaName As New BindingSource
+
+    Private WithEvents bsTransactionHeader As New BindingSource
+    Private WithEvents bsNickname As New BindingSource
+    Private WithEvents bsMachineName As New BindingSource
+    Private WithEvents bsTransactionStatusName As New BindingSource
+
+    Private WithEvents bsApproverName As New BindingSource
+
+    Private WithEvents bsTransactionDetail As New BindingSource
+    Private WithEvents bsTransactionMachinePart As New BindingSource
+    Private WithEvents bsTransactionSparePart As New BindingSource
+    Private WithEvents bsTransactionUser As New BindingSource
+    Private WithEvents bsArea As New BindingSource
+    Private WithEvents bsMntMachinePart As New BindingSource
+    Private WithEvents bsTechnician As New BindingSource
+
+    Private adpMachine As New FacMachineTableAdapter
+
+    Private adpTransactionHeader As New FacTransactionHeaderTableAdapter
+    Private adpNickname As New SecUserTableAdapter
+    Private adpMachineName As New FacMachineTableAdapter
+    Private adpTransactionStatusName As New GenTransactionStatusTableAdapter
+
+    Private adpApproverName As New SecUserTableAdapter
+
+    Private adpTransactionDetail As New FacTransactionDetailTableAdapter
+    Private adpTransactionMachinePart As New FacTransactionDetailDataTable
+
+    Private adpTransactionUser As New FacTransactionUserTableAdapter
+    Private adpUser As New SecUserTableAdapter
+    Private adpWorkgroup As New SecWorkgroupTableAdapter
+    Private adpTransactionStatus As New GenTransactionStatusTableAdapter
+    Private adpRoutingStatus As New GenRoutingStatusTableAdapter
+    Private adpMachineStatus As New FacMachineStatusTableAdapter
+
+    Private adpTechnician As New SecUserTableAdapter
+    'additional objects
+    'for columns of dgvmachine
+    Private dtMachine As New FacMachineDataTable
+    'for columns of dgvheader
+    Private dtTransactionHeader As New FacTransactionHeaderDataTable
+    Private dtApprover As New SecUserDataTable
+    Private dtNickname As New SecUserDataTable
+    Private dtMachineName As New FacMachineDataTable
+    Private dtTransactionStatusName As New GenTransactionStatusDataTable
+    Private rowWorkgroup As SecWorkgroupRow
+    'for activity column
+    Private dtLastDetail As New DataTable
+    'for updating status of each dgv
+    Private adpTransactionHeaderActivity As New FacTransactionHeaderTableAdapter
+    Private adpMachineStatusColumn As New FacMachineTableAdapter
+    'check all column
+    Private chkSelectAll As New CheckBox
+
+    Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        userId = _userId
+        workgroupId = _workgroupId
+        isAdmin = _isAdmin
+
+        RefreshValues()
+    End Sub
+
+    Private Sub frmMntTrxApproval_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        rowWorkgroup = Me.myDataset.SecWorkgroup.FindByWorkgroupId(workgroupId)
+
+        If Not isAdmin Then
+            isTechnicianManual = rowWorkgroup.IsTechnicianManual
+            isDatetimeManual = rowWorkgroup.IsDatetimeManual
+            isImageRequired = rowWorkgroup.IsImageRequired
+            isAllowEdit = rowWorkgroup.IsAllowEdit
+            isAllowDelete = rowWorkgroup.IsAllowDelete
+        End If
+
+        Me.bsTransactionHeader.DataSource = Me.myDataset
+        Me.bsTransactionHeader.DataMember = dtTransactionHeader.TableName
+        Me.bsTransactionHeader.Sort = "DatetimeEnded DESC, TrxId DESC"
+
+        chkSelectAll = New CheckBox()
+        Dim _rect As Rectangle = Me.dgvTransactionHeader.GetCellDisplayRectangle(0, -1, True)
+        chkSelectAll.Size = New Size(18, 18)
+        _rect.Offset(5, 5)
+        chkSelectAll.Location = _rect.Location
+        Me.dgvTransactionHeader.Controls.Add(chkSelectAll)
+        AddHandler chkSelectAll.CheckedChanged, AddressOf CheckAll
+
+        Me.bsMachineName.DataSource = Me.myDataset
+        Me.bsMachineName.DataMember = dtMachineName.TableName
+
+        Dim _colMachineName As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn()
+        _colMachineName.DataPropertyName = "MachineId"
+        _colMachineName.HeaderText = "Machine"
+        _colMachineName.DataSource = Me.bsMachineName
+        _colMachineName.ValueMember = "MachineId"
+        _colMachineName.DisplayMember = "MachineCode"
+        _colMachineName.Width = 125
+        _colMachineName.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        _colMachineName.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+        _colMachineName.SortMode = DataGridViewColumnSortMode.Automatic
+        dgvTransactionHeader.Columns.Insert(2, _colMachineName)
+
+        Me.bsNickname.DataSource = Me.myDataset
+        Me.bsNickname.DataMember = dtNickname.TableName
+
+        Dim _colNickname As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn()
+        _colNickname.DataPropertyName = "UserId"
+        _colNickname.HeaderText = "Technician"
+        _colNickname.DataSource = Me.bsNickname
+        _colNickname.ValueMember = "UserId"
+        _colNickname.DisplayMember = "Nickname"
+        _colNickname.Width = 99
+        _colNickname.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        _colNickname.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+        _colNickname.SortMode = DataGridViewColumnSortMode.Automatic
+        dgvTransactionHeader.Columns.Insert(8, _colNickname)
+
+        Me.bsApproverName.DataSource = Me.myDataset
+        Me.bsApproverName.DataMember = dtApprover.TableName
+
+        Dim _colApproverName As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn()
+        _colApproverName.DataPropertyName = "SeniorEngineerId"
+        _colApproverName.HeaderText = "Approved By"
+        _colApproverName.DataSource = Me.bsApproverName
+        _colApproverName.ValueMember = "UserId"
+        _colApproverName.DisplayMember = "Nickname"
+        _colApproverName.Width = 99
+        _colApproverName.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        _colApproverName.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+        _colApproverName.SortMode = DataGridViewColumnSortMode.Automatic
+        dgvTransactionHeader.Columns.Insert(10, _colApproverName)
+
+        dgvTransactionHeader.AutoGenerateColumns = False
+        dgvTransactionHeader.DataSource = Me.bsTransactionHeader
+
+        SearchCriteria()
+
+        rdPending.Checked = True
+
+        method.EnableDoubleBuffered(dgvTransactionHeader)
+    End Sub
+
+    Private Sub frmMntTrxConsole_LocationChanged(sender As Object, e As EventArgs) Handles MyBase.LocationChanged
+        method.FormTrap(Me)
+    End Sub
+
+    Private Sub frmMntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode.Equals(Keys.F2) Then
+            btnApprove.PerformClick()
+        ElseIf e.KeyCode.Equals(Keys.F3) Then
+            btnReturn.PerformClick()
+        ElseIf e.KeyCode.Equals(Keys.F5) Then
+            btnRefresh.PerformClick()
+        ElseIf e.KeyCode.Equals(Keys.F8) Then
+            If isAllowDelete Then
+                btnView.PerformClick()
+            End If
+        End If
+    End Sub
+
+    Private Sub frmMntTrxConsole_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        dgvTransactionHeader.Dispose()
+        tmrElapsedTime.Stop()
+    End Sub
+
+    Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvTransactionHeader.CellDoubleClick
+        btnView.PerformClick()
+    End Sub
+
+    Private Sub dgvTransactionHeader_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvTransactionHeader.DataBindingComplete
+        Try
+            dtLastDetail = Me.adpTransactionHeaderActivity.GetLastDetailByMachineId(Nothing)
+
+            For Each _row As DataRow In dtLastDetail.Rows
+                For _i As Integer = 0 To dgvTransactionHeader.Rows.Count - 1
+                    If dgvTransactionHeader.Rows(_i).Cells(1).Value = _row("TrxId") Then
+                        dgvTransactionHeader.Rows(_i).Cells("ActivityColumn").Value = _row("Activity")
+                    End If
+                Next
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
+        Try
+            RefreshValues()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnApprove_Click(sender As Object, e As EventArgs) Handles btnApprove.Click
+        Try
+            If dgvTransactionHeader.Rows.Count > 0 Then
+                Dim _lstChkRow As New List(Of Integer)
+
+                For _i = 0 To dgvTransactionHeader.Rows.Count - 1
+                    If dgvTransactionHeader.Rows(_i).Cells("IsSelectedColumn").Value = True Then
+                        Dim _trxId As Integer = dgvTransactionHeader.Rows(_i).Cells("TrxIdColumn").Value
+                        _lstChkRow.Add(_trxId)
+                    End If
+                Next
+
+                If Not _lstChkRow.Count = 0 Then
+                    For Each _id As Integer In _lstChkRow.ToList
+                        Dim _transactionRow As FacTransactionHeaderRow = Me.myDataset.FacTransactionHeader.FindByTrxId(_id)
+
+                        If workgroupId = 2 Or workgroupId = 3 Then
+                            _transactionRow.SeniorManagerIsApproved = 1
+                            _transactionRow.SeniorManagerApprovalDate = DateTime.Now
+                            _transactionRow.SeniorManagerId = userId
+                            _transactionRow.RoutingStatusId = 1
+                        ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                            _transactionRow.SeniorEngineerIsApproved = 1
+                            _transactionRow.SeniorEngineerApprovalDate = DateTime.Now
+                            _transactionRow.SeniorEngineerId = userId
+                            _transactionRow.RoutingStatusId = 3
+                        End If
+                    Next
+                Else
+                    Dim _trxId As Integer = dgvTransactionHeader.CurrentRow.Cells("TrxIdColumn").Value
+                    Dim _transactionRow As FacTransactionHeaderRow = Me.myDataset.FacTransactionHeader.FindByTrxId(_trxId)
+
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        _transactionRow.SeniorManagerIsApproved = 1
+                        _transactionRow.SeniorManagerApprovalDate = DateTime.Now
+                        _transactionRow.SeniorManagerId = userId
+                        _transactionRow.RoutingStatusId = 1
+                    ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                        _transactionRow.SeniorEngineerIsApproved = 1
+                        _transactionRow.SeniorEngineerApprovalDate = DateTime.Now
+                        _transactionRow.SeniorEngineerId = userId
+                        _transactionRow.RoutingStatusId = 3
+                    End If
+                End If
+
+                Me.adpTransactionHeader.Update(Me.myDataset.FacTransactionHeader)
+                Me.myDataset.AcceptChanges()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
+        Try
+            If dgvTransactionHeader.Rows.Count > 0 Then
+                Dim _lstChkRow As New List(Of Integer)
+
+                For _i = 0 To dgvTransactionHeader.Rows.Count - 1
+                    If dgvTransactionHeader.Rows(_i).Cells("IsSelectedColumn").Value = True Then
+                        Dim _trxId As Integer = dgvTransactionHeader.Rows(_i).Cells("TrxIdColumn").Value
+                        _lstChkRow.Add(_trxId)
+                    End If
+                Next
+
+                If Not _lstChkRow.Count = 0 Then
+                    For Each _id As Integer In _lstChkRow.ToList
+                        Dim _transactionRow As FacTransactionHeaderRow = Me.myDataset.FacTransactionHeader.FindByTrxId(_id)
+
+                        If workgroupId = 2 Or workgroupId = 3 Then
+                            _transactionRow.SeniorManagerIsApproved = 0
+                            _transactionRow.SetSeniorManagerApprovalDateNull()
+                            _transactionRow.SetSeniorManagerIdNull()
+                            _transactionRow.RoutingStatusId = 4
+                        ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                            _transactionRow.SeniorEngineerIsApproved = 0
+                            _transactionRow.SetSeniorManagerApprovalDateNull()
+                            _transactionRow.SetSeniorEngineerIdNull()
+                            _transactionRow.RoutingStatusId = 5
+                            _transactionRow.TrxStatusId = 2
+                        End If
+                    Next
+                Else
+                    Dim _trxId As Integer = dgvTransactionHeader.CurrentRow.Cells("TrxIdColumn").Value
+                    Dim _transactionRow As FacTransactionHeaderRow = Me.myDataset.FacTransactionHeader.FindByTrxId(_trxId)
+
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        _transactionRow.SeniorManagerIsApproved = 0
+                        _transactionRow.SetSeniorManagerApprovalDateNull()
+                        _transactionRow.SetSeniorManagerIdNull()
+                        _transactionRow.RoutingStatusId = 4
+                    ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                        _transactionRow.SeniorEngineerIsApproved = 0
+                        _transactionRow.SetSeniorManagerApprovalDateNull()
+                        _transactionRow.SetSeniorEngineerIdNull()
+                        _transactionRow.RoutingStatusId = 5
+                        _transactionRow.TrxStatusId = 2
+                    End If
+                End If
+
+                Me.adpTransactionHeader.Update(Me.myDataset.FacTransactionHeader)
+                Me.myDataset.AcceptChanges()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
+        Try
+            If Me.dgvTransactionHeader.SelectedRows.Count > 0 Then
+                Dim _trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
+
+                Using frmDetail As New frmFacTrxDetail(userId, workgroupId, isAdmin, isTechnicianManual, isImageRequired, isAllowEdit, isAllowDelete, Me.myDataset, _trxId)
+                    frmDetail.ShowDialog(Me)
+
+                    Me.bsTransactionHeader.EndEdit()
+                    Me.bsMachine.EndEdit()
+
+                    If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                        If Me.myDataset.HasChanges Then
+                            Me.adpTransactionHeader.Update(Me.myDataset.FacTransactionHeader)
+                            Me.adpTransactionDetail.Update(Me.myDataset.FacTransactionDetail)
+                            Me.adpTransactionUser.Update(Me.myDataset.FacTransactionUser)
+                            Me.adpMachine.Update(Me.myDataset.FacMachine)
+                            Me.myDataset.AcceptChanges()
+                        End If
+
+                        Me.bsMachine.ResetBindings(False)
+                        Me.bsTransactionHeader.ResetBindings(False)
+                    Else
+                        Me.bsTransactionHeader.CancelEdit()
+                    End If
+                End Using
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
+    End Sub
+
+    Private Sub trxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles rdApproved.CheckedChanged, rdPending.CheckedChanged
+        If rdApproved.Checked = True Then
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 1")
+            ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId IN (1,2,3)")
+            End If
+        Else
+            If workgroupId = 2 Or workgroupId = 3 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 3")
+            ElseIf workgroupId = 7 Or workgroupId = 8 Then
+                Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 4")
+            End If
+        End If
+    End Sub
+
+    Private Sub CheckAll(ByVal sender As Object, ByVal e As EventArgs)
+        For k As Integer = 0 To Me.dgvTransactionHeader.RowCount - 1
+            Me.dgvTransactionHeader(0, k).Value = Me.chkSelectAll.Checked
+        Next
+        Me.dgvTransactionHeader.EndEdit()
+    End Sub
+
+    Public Sub RefreshValues()
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
+
+        Me.myDataset.EnforceConstraints = False
+        Me.adpMachine.Fill(Me.myDataset.FacMachine)
+
+        Me.adpApproverName.Fill(Me.myDataset.SecUser)
+
+        Me.adpTransactionHeader.Fill(Me.myDataset.FacTransactionHeader)
+        Me.adpNickname.Fill(Me.myDataset.SecUser)
+        Me.adpMachineName.Fill(Me.myDataset.FacMachine)
+        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
+
+        Me.adpTransactionDetail.Fill(Me.myDataset.FacTransactionDetail)
+        Me.adpTransactionUser.Fill(Me.myDataset.FacTransactionUser)
+        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
+        Me.adpUser.Fill(Me.myDataset.SecUser)
+        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
+        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
+        Me.adpMachineStatus.Fill(Me.myDataset.FacMachineStatus)
+        Me.myDataset.EnforceConstraints = True
+
+        If dgvTransactionHeader IsNot Nothing AndAlso dgvTransactionHeader.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
+    End Sub
+
+    Private Sub GetScrollingIndex()
+        indexScroll = dgvTransactionHeader.FirstDisplayedCell.RowIndex
+        indexPosition = dgvTransactionHeader.CurrentRow.Index
+    End Sub
+
+    Private Sub SetScrollingIndex()
+        dgvTransactionHeader.FirstDisplayedScrollingRowIndex = indexScroll
+        dgvTransactionHeader.Rows(indexPosition).Selected = True
+    End Sub
+
+    Private Sub SearchCriteria()
+        dictionary.Add(" Start Date", 1)
+        dictionary.Add(" End Date", 2)
+        dictionary.Add(" Technician", 3)
+        dictionary.Add(" Machine Name", 4)
+        dictionary.Add(" Downtime Status", 5)
+
+        cmbSearchCriteria.DisplayMember = "Key"
+        cmbSearchCriteria.ValueMember = "Value"
+
+        cmbSearchCriteria.DataSource = New BindingSource(dictionary, Nothing)
+    End Sub
+
+End Class
