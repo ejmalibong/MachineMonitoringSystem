@@ -42,10 +42,6 @@ Partial Class frmFacTrxApproval
         Me.lblCriteria = New System.Windows.Forms.Label()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.dgvTransactionHeader = New System.Windows.Forms.DataGridView()
-        Me.grpStatus = New System.Windows.Forms.GroupBox()
-        Me.rdPending = New System.Windows.Forms.RadioButton()
-        Me.rdApproved = New System.Windows.Forms.RadioButton()
-        Me.btnRefresh = New PinkieControls.ButtonXP()
         Me.IsSelectedColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.TrxIdColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ActivityColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -55,6 +51,10 @@ Partial Class frmFacTrxApproval
         Me.ShiftIdColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.SeniorEngineerApprovalDateColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.SeniorEngineerIsApprovedColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.grpStatus = New System.Windows.Forms.GroupBox()
+        Me.rdPending = New System.Windows.Forms.RadioButton()
+        Me.rdApproved = New System.Windows.Forms.RadioButton()
+        Me.btnRefresh = New PinkieControls.ButtonXP()
         Me.grpCriteria.SuspendLayout()
         Me.pnlDateSearch.SuspendLayout()
         CType(Me.dgvTransactionHeader, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -74,7 +74,7 @@ Partial Class frmFacTrxApproval
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(100, 30)
         Me.btnClose.TabIndex = 155
-        Me.btnClose.Text = "  Close"
+        Me.btnClose.Text = "Close"
         '
         'btnView
         '
@@ -250,55 +250,6 @@ Partial Class frmFacTrxApproval
         Me.dgvTransactionHeader.Size = New System.Drawing.Size(1314, 520)
         Me.dgvTransactionHeader.TabIndex = 158
         '
-        'grpStatus
-        '
-        Me.grpStatus.BackColor = System.Drawing.Color.White
-        Me.grpStatus.Controls.Add(Me.rdPending)
-        Me.grpStatus.Controls.Add(Me.rdApproved)
-        Me.grpStatus.Location = New System.Drawing.Point(1, 559)
-        Me.grpStatus.Margin = New System.Windows.Forms.Padding(0)
-        Me.grpStatus.Name = "grpStatus"
-        Me.grpStatus.Padding = New System.Windows.Forms.Padding(0)
-        Me.grpStatus.Size = New System.Drawing.Size(197, 36)
-        Me.grpStatus.TabIndex = 159
-        Me.grpStatus.TabStop = False
-        '
-        'rdPending
-        '
-        Me.rdPending.AutoSize = True
-        Me.rdPending.Location = New System.Drawing.Point(101, 12)
-        Me.rdPending.Name = "rdPending"
-        Me.rdPending.Size = New System.Drawing.Size(76, 18)
-        Me.rdPending.TabIndex = 2
-        Me.rdPending.TabStop = True
-        Me.rdPending.Text = "Pending"
-        Me.rdPending.UseVisualStyleBackColor = True
-        '
-        'rdApproved
-        '
-        Me.rdApproved.AutoSize = True
-        Me.rdApproved.Location = New System.Drawing.Point(10, 12)
-        Me.rdApproved.Name = "rdApproved"
-        Me.rdApproved.Size = New System.Drawing.Size(85, 18)
-        Me.rdApproved.TabIndex = 1
-        Me.rdApproved.TabStop = True
-        Me.rdApproved.Text = "Approved"
-        Me.rdApproved.UseVisualStyleBackColor = True
-        '
-        'btnRefresh
-        '
-        Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnRefresh.DefaultScheme = False
-        Me.btnRefresh.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnRefresh.Font = New System.Drawing.Font("Verdana", 9.0!)
-        Me.btnRefresh.Hint = ""
-        Me.btnRefresh.Location = New System.Drawing.Point(201, 565)
-        Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
-        Me.btnRefresh.TabIndex = 160
-        Me.btnRefresh.Text = "  Refresh"
-        '
         'IsSelectedColumn
         '
         Me.IsSelectedColumn.HeaderText = ""
@@ -378,6 +329,55 @@ Partial Class frmFacTrxApproval
         Me.SeniorEngineerIsApprovedColumn.ReadOnly = True
         Me.SeniorEngineerIsApprovedColumn.Width = 25
         '
+        'grpStatus
+        '
+        Me.grpStatus.BackColor = System.Drawing.Color.White
+        Me.grpStatus.Controls.Add(Me.rdPending)
+        Me.grpStatus.Controls.Add(Me.rdApproved)
+        Me.grpStatus.Location = New System.Drawing.Point(1, 559)
+        Me.grpStatus.Margin = New System.Windows.Forms.Padding(0)
+        Me.grpStatus.Name = "grpStatus"
+        Me.grpStatus.Padding = New System.Windows.Forms.Padding(0)
+        Me.grpStatus.Size = New System.Drawing.Size(197, 36)
+        Me.grpStatus.TabIndex = 159
+        Me.grpStatus.TabStop = False
+        '
+        'rdPending
+        '
+        Me.rdPending.AutoSize = True
+        Me.rdPending.Location = New System.Drawing.Point(101, 12)
+        Me.rdPending.Name = "rdPending"
+        Me.rdPending.Size = New System.Drawing.Size(76, 18)
+        Me.rdPending.TabIndex = 2
+        Me.rdPending.TabStop = True
+        Me.rdPending.Text = "Pending"
+        Me.rdPending.UseVisualStyleBackColor = True
+        '
+        'rdApproved
+        '
+        Me.rdApproved.AutoSize = True
+        Me.rdApproved.Location = New System.Drawing.Point(10, 12)
+        Me.rdApproved.Name = "rdApproved"
+        Me.rdApproved.Size = New System.Drawing.Size(85, 18)
+        Me.rdApproved.TabIndex = 1
+        Me.rdApproved.TabStop = True
+        Me.rdApproved.Text = "Approved"
+        Me.rdApproved.UseVisualStyleBackColor = True
+        '
+        'btnRefresh
+        '
+        Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnRefresh.DefaultScheme = False
+        Me.btnRefresh.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnRefresh.Font = New System.Drawing.Font("Verdana", 9.0!)
+        Me.btnRefresh.Hint = ""
+        Me.btnRefresh.Location = New System.Drawing.Point(201, 565)
+        Me.btnRefresh.Name = "btnRefresh"
+        Me.btnRefresh.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
+        Me.btnRefresh.TabIndex = 160
+        Me.btnRefresh.Text = "Refresh"
+        '
         'frmFacTrxApproval
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -403,7 +403,7 @@ Partial Class frmFacTrxApproval
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Transaction Console"
+        Me.Text = "Transaction Approval"
         Me.grpCriteria.ResumeLayout(False)
         Me.pnlDateSearch.ResumeLayout(False)
         Me.pnlDateSearch.PerformLayout()

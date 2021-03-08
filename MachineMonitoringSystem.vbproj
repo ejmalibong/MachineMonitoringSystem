@@ -13,18 +13,19 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>B:\Users BACKUP\NBCP-LT-058\Desktop\Scan\</PublishUrl>
+    <PublishUrl>X:\EJ\Machine Monitoring System\Published\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <UpdateUrl>\\nbcp-db-001\t%24\EJ\Machine Monitoring System\Published\</UpdateUrl>
+    <ApplicationRevision>7</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -73,6 +74,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\SysIcon1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
@@ -213,6 +217,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SysIcon2.png" />
+    <None Include="Resources\SysIcon2.ico" />
+    <None Include="Resources\SysIcon1.png" />
+    <None Include="Resources\SysIcon1.ico" />
     <EmbeddedResource Include="Form\frmFacTrxApproval.resx">
       <DependentUpon>frmFacTrxApproval.vb</DependentUpon>
     </EmbeddedResource>
@@ -255,6 +263,7 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="Database\machinemonitoring.sql" />
     <Content Include="ReportFile\FacActivityReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -20201,208 +20201,210 @@ Namespace dsMonitoringTableAdapters
             Me._adapter.TableMappings.Add(tableMapping)
             Me._adapter.DeleteCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.DeleteCommand.Connection = Me.Connection
-            Me._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[MntTransactionHeader] WHERE (([TrxId] = @Original_TrxId) AND ("& _ 
-                "[LockId] = @Original_LockId))"
+            Me._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[MntTransactionHeader] WHERE (([TrxId] = @Original_TrxId) AND (" & _
+                "(@IsNull_LockId = 1 AND [LockId] IS NULL) OR ([LockId] = @Original_LockId)))"
             Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_TrxId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_LockId", Global.System.Data.SqlDbType.Timestamp, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_TrxId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Original, False, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_LockId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, True, Nothing, "", "", ""))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_LockId", Global.System.Data.SqlDbType.Timestamp, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, False, Nothing, "", "", ""))
             Me._adapter.InsertCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.InsertCommand.Connection = Me.Connection
-            Me._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[MntTransactionHeader] ([TrxDate], [MachineId], [AreaId], [Tota"& _ 
-                "lAccumulatedRuntime], [DatetimeStarted], [DowntimeMachineStatusId], [DatetimeEnd"& _ 
-                "ed], [TotalAccumulatedDowntime], [Problem], [ActionTaken], [Image], [ImageName],"& _ 
-                " [FileAttachment], [FileName], [JoNumber], [JoRequestor], [SeniorManagerIsApprov"& _ 
-                "ed], [SeniorManagerApprovalDate], [SeniorManagerId], [SeniorManagerRemarks], [Se"& _ 
-                "niorEngineerIsApproved], [SeniorEngineerApprovalDate], [SeniorEngineerId], [Seni"& _ 
-                "orEngineerRemarks], [UserId], [ShiftId], [EncodeUserId], [TrxStatusId], [Routing"& _ 
-                "StatusId]) VALUES (@TrxDate, @MachineId, @AreaId, @TotalAccumulatedRuntime, @Dat"& _ 
-                "etimeStarted, @DowntimeMachineStatusId, @DatetimeEnded, @TotalAccumulatedDowntim"& _ 
-                "e, @Problem, @ActionTaken, @Image, @ImageName, @FileAttachment, @FileName, @JoNu"& _ 
-                "mber, @JoRequestor, @SeniorManagerIsApproved, @SeniorManagerApprovalDate, @Senio"& _ 
-                "rManagerId, @SeniorManagerRemarks, @SeniorEngineerIsApproved, @SeniorEngineerApp"& _ 
-                "rovalDate, @SeniorEngineerId, @SeniorEngineerRemarks, @UserId, @ShiftId, @Encode"& _ 
-                "UserId, @TrxStatusId, @RoutingStatusId);"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT TrxId, TrxDate, MachineId, Area"& _ 
-                "Id, TotalAccumulatedRuntime, DatetimeStarted, DowntimeMachineStatusId, DatetimeE"& _ 
-                "nded, TotalAccumulatedDowntime, Problem, ActionTaken, Image, ImageName, FileAtta"& _ 
-                "chment, FileName, JoNumber, JoRequestor, SeniorManagerIsApproved, SeniorManagerA"& _ 
-                "pprovalDate, SeniorManagerId, SeniorManagerRemarks, SeniorEngineerIsApproved, Se"& _ 
-                "niorEngineerApprovalDate, SeniorEngineerId, SeniorEngineerRemarks, UserId, Shift"& _ 
-                "Id, EncodeUserId, TrxStatusId, RoutingStatusId, LockId FROM MntTransactionHeader"& _ 
+            Me._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[MntTransactionHeader] ([TrxDate], [MachineId], [AreaId], [Tota" & _
+                "lAccumulatedRuntime], [DatetimeStarted], [DowntimeMachineStatusId], [DatetimeEnd" & _
+                "ed], [TotalAccumulatedDowntime], [Problem], [ActionTaken], [Image], [ImageName]," & _
+                " [FileAttachment], [FileName], [JoNumber], [JoRequestor], [SeniorManagerIsApprov" & _
+                "ed], [SeniorManagerApprovalDate], [SeniorManagerId], [SeniorManagerRemarks], [Se" & _
+                "niorEngineerIsApproved], [SeniorEngineerApprovalDate], [SeniorEngineerId], [Seni" & _
+                "orEngineerRemarks], [UserId], [ShiftId], [EncodeUserId], [TrxStatusId], [Routing" & _
+                "StatusId]) VALUES (@TrxDate, @MachineId, @AreaId, @TotalAccumulatedRuntime, @Dat" & _
+                "etimeStarted, @DowntimeMachineStatusId, @DatetimeEnded, @TotalAccumulatedDowntim" & _
+                "e, @Problem, @ActionTaken, @Image, @ImageName, @FileAttachment, @FileName, @JoNu" & _
+                "mber, @JoRequestor, @SeniorManagerIsApproved, @SeniorManagerApprovalDate, @Senio" & _
+                "rManagerId, @SeniorManagerRemarks, @SeniorEngineerIsApproved, @SeniorEngineerApp" & _
+                "rovalDate, @SeniorEngineerId, @SeniorEngineerRemarks, @UserId, @ShiftId, @Encode" & _
+                "UserId, @TrxStatusId, @RoutingStatusId);" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "SELECT TrxId, TrxDate, MachineId, Area" & _
+                "Id, TotalAccumulatedRuntime, DatetimeStarted, DowntimeMachineStatusId, DatetimeE" & _
+                "nded, TotalAccumulatedDowntime, Problem, ActionTaken, Image, ImageName, FileAtta" & _
+                "chment, FileName, JoNumber, JoRequestor, SeniorManagerIsApproved, SeniorManagerA" & _
+                "pprovalDate, SeniorManagerId, SeniorManagerRemarks, SeniorEngineerIsApproved, Se" & _
+                "niorEngineerApprovalDate, SeniorEngineerId, SeniorEngineerRemarks, UserId, Shift" & _
+                "Id, EncodeUserId, TrxStatusId, RoutingStatusId, LockId FROM MntTransactionHeader" & _
                 " WHERE (TrxId = SCOPE_IDENTITY())"
             Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "MachineId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@AreaId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "AreaId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedRuntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedRuntime", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeStarted", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeStarted", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DowntimeMachineStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DowntimeMachineStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeEnded", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeEnded", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedDowntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedDowntime", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Problem", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Problem", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ActionTaken", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ActionTaken", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Image", Global.System.Data.SqlDbType.Image, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Image", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ImageName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ImageName", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileAttachment", Global.System.Data.SqlDbType.VarBinary, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileAttachment", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileName", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoNumber", Global.System.Data.SqlDbType.NChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoNumber", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoRequestor", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoRequestor", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerIsApproved", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerApprovalDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerRemarks", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerIsApproved", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerApprovalDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerRemarks", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@UserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "UserId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ShiftId", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ShiftId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@EncodeUserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "EncodeUserId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RoutingStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "RoutingStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "MachineId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@AreaId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "AreaId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedRuntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedRuntime", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeStarted", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeStarted", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DowntimeMachineStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DowntimeMachineStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeEnded", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeEnded", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedDowntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedDowntime", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Problem", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Problem", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ActionTaken", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ActionTaken", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Image", Global.System.Data.SqlDbType.Image, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Image", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ImageName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ImageName", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileAttachment", Global.System.Data.SqlDbType.VarBinary, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileAttachment", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileName", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoNumber", Global.System.Data.SqlDbType.NChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoNumber", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoRequestor", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoRequestor", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerIsApproved", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerApprovalDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerRemarks", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerIsApproved", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerApprovalDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerRemarks", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@UserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "UserId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ShiftId", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ShiftId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@EncodeUserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "EncodeUserId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RoutingStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "RoutingStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
             Me._adapter.UpdateCommand = New Global.System.Data.SqlClient.SqlCommand()
             Me._adapter.UpdateCommand.Connection = Me.Connection
-            Me._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[MntTransactionHeader] SET [TrxDate] = @TrxDate, [MachineId] = @Mach"& _ 
-                "ineId, [AreaId] = @AreaId, [TotalAccumulatedRuntime] = @TotalAccumulatedRuntime,"& _ 
-                " [DatetimeStarted] = @DatetimeStarted, [DowntimeMachineStatusId] = @DowntimeMach"& _ 
-                "ineStatusId, [DatetimeEnded] = @DatetimeEnded, [TotalAccumulatedDowntime] = @Tot"& _ 
-                "alAccumulatedDowntime, [Problem] = @Problem, [ActionTaken] = @ActionTaken, [Imag"& _ 
-                "e] = @Image, [ImageName] = @ImageName, [FileAttachment] = @FileAttachment, [File"& _ 
-                "Name] = @FileName, [JoNumber] = @JoNumber, [JoRequestor] = @JoRequestor, [Senior"& _ 
-                "ManagerIsApproved] = @SeniorManagerIsApproved, [SeniorManagerApprovalDate] = @Se"& _ 
-                "niorManagerApprovalDate, [SeniorManagerId] = @SeniorManagerId, [SeniorManagerRem"& _ 
-                "arks] = @SeniorManagerRemarks, [SeniorEngineerIsApproved] = @SeniorEngineerIsApp"& _ 
-                "roved, [SeniorEngineerApprovalDate] = @SeniorEngineerApprovalDate, [SeniorEngine"& _ 
-                "erId] = @SeniorEngineerId, [SeniorEngineerRemarks] = @SeniorEngineerRemarks, [Us"& _ 
-                "erId] = @UserId, [ShiftId] = @ShiftId, [EncodeUserId] = @EncodeUserId, [TrxStatu"& _ 
-                "sId] = @TrxStatusId, [RoutingStatusId] = @RoutingStatusId WHERE (([TrxId] = @Ori"& _ 
-                "ginal_TrxId) AND ([LockId] = @Original_LockId));"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"SELECT TrxId, TrxDate, Machine"& _ 
-                "Id, AreaId, TotalAccumulatedRuntime, DatetimeStarted, DowntimeMachineStatusId, D"& _ 
-                "atetimeEnded, TotalAccumulatedDowntime, Problem, ActionTaken, Image, ImageName, "& _ 
-                "FileAttachment, FileName, JoNumber, JoRequestor, SeniorManagerIsApproved, Senior"& _ 
-                "ManagerApprovalDate, SeniorManagerId, SeniorManagerRemarks, SeniorEngineerIsAppr"& _ 
-                "oved, SeniorEngineerApprovalDate, SeniorEngineerId, SeniorEngineerRemarks, UserI"& _ 
-                "d, ShiftId, EncodeUserId, TrxStatusId, RoutingStatusId, LockId FROM MntTransacti"& _ 
-                "onHeader WHERE (TrxId = @TrxId)"
+            Me._adapter.UpdateCommand.CommandText = "UPDATE [dbo].[MntTransactionHeader] SET [TrxDate] = @TrxDate, [MachineId] = @Mach" & _
+                "ineId, [AreaId] = @AreaId, [TotalAccumulatedRuntime] = @TotalAccumulatedRuntime," & _
+                " [DatetimeStarted] = @DatetimeStarted, [DowntimeMachineStatusId] = @DowntimeMach" & _
+                "ineStatusId, [DatetimeEnded] = @DatetimeEnded, [TotalAccumulatedDowntime] = @Tot" & _
+                "alAccumulatedDowntime, [Problem] = @Problem, [ActionTaken] = @ActionTaken, [Imag" & _
+                "e] = @Image, [ImageName] = @ImageName, [FileAttachment] = @FileAttachment, [File" & _
+                "Name] = @FileName, [JoNumber] = @JoNumber, [JoRequestor] = @JoRequestor, [Senior" & _
+                "ManagerIsApproved] = @SeniorManagerIsApproved, [SeniorManagerApprovalDate] = @Se" & _
+                "niorManagerApprovalDate, [SeniorManagerId] = @SeniorManagerId, [SeniorManagerRem" & _
+                "arks] = @SeniorManagerRemarks, [SeniorEngineerIsApproved] = @SeniorEngineerIsApp" & _
+                "roved, [SeniorEngineerApprovalDate] = @SeniorEngineerApprovalDate, [SeniorEngine" & _
+                "erId] = @SeniorEngineerId, [SeniorEngineerRemarks] = @SeniorEngineerRemarks, [Us" & _
+                "erId] = @UserId, [ShiftId] = @ShiftId, [EncodeUserId] = @EncodeUserId, [TrxStatu" & _
+                "sId] = @TrxStatusId, [RoutingStatusId] = @RoutingStatusId WHERE (([TrxId] = @Ori" & _
+                "ginal_TrxId) AND ((@IsNull_LockId = 1 AND [LockId] IS NULL) OR ([LockId] = @Orig" & _
+                "inal_LockId)));" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "SELECT TrxId, TrxDate, MachineId, AreaId, TotalAccumulatedRunti" & _
+                "me, DatetimeStarted, DowntimeMachineStatusId, DatetimeEnded, TotalAccumulatedDow" & _
+                "ntime, Problem, ActionTaken, Image, ImageName, FileAttachment, FileName, JoNumbe" & _
+                "r, JoRequestor, SeniorManagerIsApproved, SeniorManagerApprovalDate, SeniorManage" & _
+                "rId, SeniorManagerRemarks, SeniorEngineerIsApproved, SeniorEngineerApprovalDate," & _
+                " SeniorEngineerId, SeniorEngineerRemarks, UserId, ShiftId, EncodeUserId, TrxStat" & _
+                "usId, RoutingStatusId, LockId FROM MntTransactionHeader WHERE (TrxId = @TrxId)"
             Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "MachineId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@AreaId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "AreaId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedRuntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedRuntime", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeStarted", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeStarted", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DowntimeMachineStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DowntimeMachineStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeEnded", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeEnded", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedDowntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedDowntime", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Problem", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Problem", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ActionTaken", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ActionTaken", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Image", Global.System.Data.SqlDbType.Image, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Image", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ImageName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ImageName", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileAttachment", Global.System.Data.SqlDbType.VarBinary, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileAttachment", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileName", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoNumber", Global.System.Data.SqlDbType.NChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoNumber", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoRequestor", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoRequestor", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerIsApproved", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerApprovalDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerRemarks", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerIsApproved", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerApprovalDate", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerRemarks", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@UserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "UserId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ShiftId", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ShiftId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@EncodeUserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "EncodeUserId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RoutingStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "RoutingStatusId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_TrxId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_LockId", Global.System.Data.SqlDbType.Timestamp, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, false, Nothing, "", "", ""))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "MachineId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@AreaId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "AreaId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedRuntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedRuntime", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeStarted", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeStarted", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DowntimeMachineStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DowntimeMachineStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DatetimeEnded", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "DatetimeEnded", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TotalAccumulatedDowntime", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TotalAccumulatedDowntime", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Problem", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Problem", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ActionTaken", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ActionTaken", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Image", Global.System.Data.SqlDbType.Image, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "Image", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ImageName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ImageName", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileAttachment", Global.System.Data.SqlDbType.VarBinary, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileAttachment", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@FileName", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "FileName", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoNumber", Global.System.Data.SqlDbType.NChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoNumber", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@JoRequestor", Global.System.Data.SqlDbType.NVarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "JoRequestor", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerIsApproved", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerApprovalDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorManagerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorManagerRemarks", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerIsApproved", Global.System.Data.SqlDbType.Bit, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerIsApproved", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerApprovalDate", Global.System.Data.SqlDbType.DateTime2, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerApprovalDate", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@SeniorEngineerRemarks", Global.System.Data.SqlDbType.VarChar, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "SeniorEngineerRemarks", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@UserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "UserId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ShiftId", Global.System.Data.SqlDbType.[Char], 0, Global.System.Data.ParameterDirection.Input, 0, 0, "ShiftId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@EncodeUserId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "EncodeUserId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RoutingStatusId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "RoutingStatusId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_TrxId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Original, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@IsNull_LockId", Global.System.Data.SqlDbType.Int, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, True, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@Original_LockId", Global.System.Data.SqlDbType.Timestamp, 0, Global.System.Data.ParameterDirection.Input, 0, 0, "LockId", Global.System.Data.DataRowVersion.Original, False, Nothing, "", "", ""))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 0, 0, "TrxId", Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
         End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")> _
         Private Sub InitConnection()
             Me._connection = New Global.System.Data.SqlClient.SqlConnection()
             Me._connection.ConnectionString = Global.MachineMonitoringSystem.My.MySettings.Default.MDMonitoringConnectionString
         End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")> _
         Private Sub InitCommandCollection()
             Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(2) {}
             Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT TrxId, TrxDate, MachineId, AreaId, TotalAccumulatedRuntime, DatetimeStarte"& _ 
-                "d, DowntimeMachineStatusId, DatetimeEnded, TotalAccumulatedDowntime, Problem, Ac"& _ 
-                "tionTaken, Image, ImageName, FileAttachment, FileName, JoNumber, JoRequestor, Se"& _ 
-                "niorManagerIsApproved, SeniorManagerApprovalDate, SeniorManagerId, SeniorManager"& _ 
-                "Remarks, SeniorEngineerIsApproved, SeniorEngineerApprovalDate, SeniorEngineerId,"& _ 
-                " SeniorEngineerRemarks, UserId, ShiftId, EncodeUserId, TrxStatusId, RoutingStatu"& _ 
+            Me._commandCollection(0).CommandText = "SELECT TrxId, TrxDate, MachineId, AreaId, TotalAccumulatedRuntime, DatetimeStarte" & _
+                "d, DowntimeMachineStatusId, DatetimeEnded, TotalAccumulatedDowntime, Problem, Ac" & _
+                "tionTaken, Image, ImageName, FileAttachment, FileName, JoNumber, JoRequestor, Se" & _
+                "niorManagerIsApproved, SeniorManagerApprovalDate, SeniorManagerId, SeniorManager" & _
+                "Remarks, SeniorEngineerIsApproved, SeniorEngineerApprovalDate, SeniorEngineerId," & _
+                " SeniorEngineerRemarks, UserId, ShiftId, EncodeUserId, TrxStatusId, RoutingStatu" & _
                 "sId, LockId FROM dbo.MntTransactionHeader"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
             Me._commandCollection(1) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(1).Connection = Me.Connection
             Me._commandCollection(1).CommandText = "dbo.RedMntTransactionHeaderByTrxId"
             Me._commandCollection(1).CommandType = Global.System.Data.CommandType.StoredProcedure
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RETURN_VALUE", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.ReturnValue, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RETURN_VALUE", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.ReturnValue, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._commandCollection(1).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
             Me._commandCollection(2) = New Global.System.Data.SqlClient.SqlCommand()
             Me._commandCollection(2).Connection = Me.Connection
             Me._commandCollection(2).CommandText = "dbo.RedMntTransactionHeaderLastDetail"
             Me._commandCollection(2).CommandType = Global.System.Data.CommandType.StoredProcedure
-            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RETURN_VALUE", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.ReturnValue, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
-            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RETURN_VALUE", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.ReturnValue, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
+            Me._commandCollection(2).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, False, Nothing, "", "", ""))
         End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, true)>  _
-        Public Overloads Overridable Function Fill(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, True)> _
+        Public Overridable Overloads Function Fill(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable) As Integer
             Me.Adapter.SelectCommand = Me.CommandCollection(0)
-            If (Me.ClearBeforeFill = true) Then
-                dataTable.Clear
+            If (Me.ClearBeforeFill = True) Then
+                dataTable.Clear()
             End If
             Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
             Return returnValue
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], true)>  _
-        Public Overloads Overridable Function GetData() As dsMonitoring.MntTransactionHeaderDataTable
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], True)> _
+        Public Overridable Overloads Function GetData() As dsMonitoring.MntTransactionHeaderDataTable
             Me.Adapter.SelectCommand = Me.CommandCollection(0)
             Dim dataTable As dsMonitoring.MntTransactionHeaderDataTable = New dsMonitoring.MntTransactionHeaderDataTable()
             Me.Adapter.Fill(dataTable)
             Return dataTable
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
-        Public Overloads Overridable Function FillByTrxId(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable, ByVal TrxId As Global.System.Nullable(Of Integer)) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, False)> _
+        Public Overridable Overloads Function FillByTrxId(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable, ByVal TrxId As Global.System.Nullable(Of Integer)) As Integer
             Me.Adapter.SelectCommand = Me.CommandCollection(1)
-            If (TrxId.HasValue = true) Then
-                Me.Adapter.SelectCommand.Parameters(1).Value = CType(TrxId.Value,Integer)
+            If (TrxId.HasValue = True) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(TrxId.Value, Integer)
             Else
                 Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
-            If (Me.ClearBeforeFill = true) Then
-                dataTable.Clear
+            If (Me.ClearBeforeFill = True) Then
+                dataTable.Clear()
             End If
             Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
             Return returnValue
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], false)>  _
-        Public Overloads Overridable Function GetDataByTrxId(ByVal TrxId As Global.System.Nullable(Of Integer)) As dsMonitoring.MntTransactionHeaderDataTable
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], False)> _
+        Public Overridable Overloads Function GetDataByTrxId(ByVal TrxId As Global.System.Nullable(Of Integer)) As dsMonitoring.MntTransactionHeaderDataTable
             Me.Adapter.SelectCommand = Me.CommandCollection(1)
-            If (TrxId.HasValue = true) Then
-                Me.Adapter.SelectCommand.Parameters(1).Value = CType(TrxId.Value,Integer)
+            If (TrxId.HasValue = True) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(TrxId.Value, Integer)
             Else
                 Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
@@ -20410,33 +20412,33 @@ Namespace dsMonitoringTableAdapters
             Me.Adapter.Fill(dataTable)
             Return dataTable
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
-        Public Overloads Overridable Function FillLastDetailByMachineId(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable, ByVal MachineId As Global.System.Nullable(Of Integer)) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, False)> _
+        Public Overridable Overloads Function FillLastDetailByMachineId(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable, ByVal MachineId As Global.System.Nullable(Of Integer)) As Integer
             Me.Adapter.SelectCommand = Me.CommandCollection(2)
-            If (MachineId.HasValue = true) Then
-                Me.Adapter.SelectCommand.Parameters(1).Value = CType(MachineId.Value,Integer)
+            If (MachineId.HasValue = True) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(MachineId.Value, Integer)
             Else
                 Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
-            If (Me.ClearBeforeFill = true) Then
-                dataTable.Clear
+            If (Me.ClearBeforeFill = True) Then
+                dataTable.Clear()
             End If
             Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
             Return returnValue
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], false)>  _
-        Public Overloads Overridable Function GetLastDetailByMachineId(ByVal MachineId As Global.System.Nullable(Of Integer)) As dsMonitoring.MntTransactionHeaderDataTable
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], False)> _
+        Public Overridable Overloads Function GetLastDetailByMachineId(ByVal MachineId As Global.System.Nullable(Of Integer)) As dsMonitoring.MntTransactionHeaderDataTable
             Me.Adapter.SelectCommand = Me.CommandCollection(2)
-            If (MachineId.HasValue = true) Then
-                Me.Adapter.SelectCommand.Parameters(1).Value = CType(MachineId.Value,Integer)
+            If (MachineId.HasValue = True) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(MachineId.Value, Integer)
             Else
                 Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
@@ -20444,391 +20446,395 @@ Namespace dsMonitoringTableAdapters
             Me.Adapter.Fill(dataTable)
             Return dataTable
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")> _
+        Public Overridable Overloads Function Update(ByVal dataTable As dsMonitoring.MntTransactionHeaderDataTable) As Integer
             Return Me.Adapter.Update(dataTable)
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataSet As dsMonitoring) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")> _
+        Public Overridable Overloads Function Update(ByVal dataSet As dsMonitoring) As Integer
             Return Me.Adapter.Update(dataSet, "MntTransactionHeader")
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataRow As Global.System.Data.DataRow) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")> _
+        Public Overridable Overloads Function Update(ByVal dataRow As Global.System.Data.DataRow) As Integer
             Return Me.Adapter.Update(New Global.System.Data.DataRow() {dataRow})
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataRows() As Global.System.Data.DataRow) As Integer
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")> _
+        Public Overridable Overloads Function Update(ByVal dataRows() As Global.System.Data.DataRow) As Integer
             Return Me.Adapter.Update(dataRows)
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
-        Public Overloads Overridable Function Delete(ByVal Original_TrxId As Integer, ByVal Original_LockId() As Byte) As Integer
-            Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_TrxId,Integer)
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, True)> _
+        Public Overridable Overloads Function Delete(ByVal Original_TrxId As Integer, ByVal Original_LockId() As Byte) As Integer
+            Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_TrxId, Integer)
             If (Original_LockId Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_LockId")
+                Me.Adapter.DeleteCommand.Parameters(1).Value = CType(1, Object)
+                Me.Adapter.DeleteCommand.Parameters(2).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_LockId,Byte())
+                Me.Adapter.DeleteCommand.Parameters(1).Value = CType(0, Object)
+                Me.Adapter.DeleteCommand.Parameters(2).Value = CType(Original_LockId, Byte())
             End If
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
-            If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+            If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open) _
                         <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.DeleteCommand.Connection.Open
+                Me.Adapter.DeleteCommand.Connection.Open()
             End If
-            Try 
+            Try
                 Dim returnValue As Integer = Me.Adapter.DeleteCommand.ExecuteNonQuery
                 Return returnValue
             Finally
                 If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.DeleteCommand.Connection.Close
+                    Me.Adapter.DeleteCommand.Connection.Close()
                 End If
             End Try
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
-        Public Overloads Overridable Function Insert( _
-                    ByVal TrxDate As Date,  _
-                    ByVal MachineId As Global.System.Nullable(Of Integer),  _
-                    ByVal AreaId As Integer,  _
-                    ByVal TotalAccumulatedRuntime As String,  _
-                    ByVal DatetimeStarted As Date,  _
-                    ByVal DowntimeMachineStatusId As Global.System.Nullable(Of Integer),  _
-                    ByVal DatetimeEnded As Global.System.Nullable(Of Date),  _
-                    ByVal TotalAccumulatedDowntime As String,  _
-                    ByVal Problem As String,  _
-                    ByVal ActionTaken As String,  _
-                    ByVal Image() As Byte,  _
-                    ByVal ImageName As String,  _
-                    ByVal FileAttachment() As Byte,  _
-                    ByVal FileName As String,  _
-                    ByVal JoNumber As String,  _
-                    ByVal JoRequestor As String,  _
-                    ByVal SeniorManagerIsApproved As Boolean,  _
-                    ByVal SeniorManagerApprovalDate As Global.System.Nullable(Of Date),  _
-                    ByVal SeniorManagerId As Global.System.Nullable(Of Integer),  _
-                    ByVal SeniorManagerRemarks As String,  _
-                    ByVal SeniorEngineerIsApproved As Boolean,  _
-                    ByVal SeniorEngineerApprovalDate As Global.System.Nullable(Of Date),  _
-                    ByVal SeniorEngineerId As Global.System.Nullable(Of Integer),  _
-                    ByVal SeniorEngineerRemarks As String,  _
-                    ByVal UserId As Global.System.Nullable(Of Integer),  _
-                    ByVal ShiftId As String,  _
-                    ByVal EncodeUserId As Integer,  _
-                    ByVal TrxStatusId As Integer,  _
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, True)> _
+        Public Overridable Overloads Function Insert( _
+                    ByVal TrxDate As Date, _
+                    ByVal MachineId As Global.System.Nullable(Of Integer), _
+                    ByVal AreaId As Integer, _
+                    ByVal TotalAccumulatedRuntime As String, _
+                    ByVal DatetimeStarted As Date, _
+                    ByVal DowntimeMachineStatusId As Global.System.Nullable(Of Integer), _
+                    ByVal DatetimeEnded As Global.System.Nullable(Of Date), _
+                    ByVal TotalAccumulatedDowntime As String, _
+                    ByVal Problem As String, _
+                    ByVal ActionTaken As String, _
+                    ByVal Image() As Byte, _
+                    ByVal ImageName As String, _
+                    ByVal FileAttachment() As Byte, _
+                    ByVal FileName As String, _
+                    ByVal JoNumber As String, _
+                    ByVal JoRequestor As String, _
+                    ByVal SeniorManagerIsApproved As Boolean, _
+                    ByVal SeniorManagerApprovalDate As Global.System.Nullable(Of Date), _
+                    ByVal SeniorManagerId As Global.System.Nullable(Of Integer), _
+                    ByVal SeniorManagerRemarks As String, _
+                    ByVal SeniorEngineerIsApproved As Boolean, _
+                    ByVal SeniorEngineerApprovalDate As Global.System.Nullable(Of Date), _
+                    ByVal SeniorEngineerId As Global.System.Nullable(Of Integer), _
+                    ByVal SeniorEngineerRemarks As String, _
+                    ByVal UserId As Global.System.Nullable(Of Integer), _
+                    ByVal ShiftId As String, _
+                    ByVal EncodeUserId As Integer, _
+                    ByVal TrxStatusId As Integer, _
                     ByVal RoutingStatusId As Integer) As Integer
-            Me.Adapter.InsertCommand.Parameters(0).Value = CType(TrxDate,Date)
-            If (MachineId.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(1).Value = CType(MachineId.Value,Integer)
+            Me.Adapter.InsertCommand.Parameters(0).Value = CType(TrxDate, Date)
+            If (MachineId.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(1).Value = CType(MachineId.Value, Integer)
             Else
                 Me.Adapter.InsertCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.InsertCommand.Parameters(2).Value = CType(AreaId,Integer)
+            Me.Adapter.InsertCommand.Parameters(2).Value = CType(AreaId, Integer)
             If (TotalAccumulatedRuntime Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(3).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(3).Value = CType(TotalAccumulatedRuntime,String)
+                Me.Adapter.InsertCommand.Parameters(3).Value = CType(TotalAccumulatedRuntime, String)
             End If
-            Me.Adapter.InsertCommand.Parameters(4).Value = CType(DatetimeStarted,Date)
-            If (DowntimeMachineStatusId.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(5).Value = CType(DowntimeMachineStatusId.Value,Integer)
+            Me.Adapter.InsertCommand.Parameters(4).Value = CType(DatetimeStarted, Date)
+            If (DowntimeMachineStatusId.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(5).Value = CType(DowntimeMachineStatusId.Value, Integer)
             Else
                 Me.Adapter.InsertCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
-            If (DatetimeEnded.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(6).Value = CType(DatetimeEnded.Value,Date)
+            If (DatetimeEnded.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(6).Value = CType(DatetimeEnded.Value, Date)
             Else
                 Me.Adapter.InsertCommand.Parameters(6).Value = Global.System.DBNull.Value
             End If
             If (TotalAccumulatedDowntime Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(7).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(7).Value = CType(TotalAccumulatedDowntime,String)
+                Me.Adapter.InsertCommand.Parameters(7).Value = CType(TotalAccumulatedDowntime, String)
             End If
             If (Problem Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(8).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(8).Value = CType(Problem,String)
+                Me.Adapter.InsertCommand.Parameters(8).Value = CType(Problem, String)
             End If
             If (ActionTaken Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(9).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(9).Value = CType(ActionTaken,String)
+                Me.Adapter.InsertCommand.Parameters(9).Value = CType(ActionTaken, String)
             End If
             If (Image Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(10).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(10).Value = CType(Image,Byte())
+                Me.Adapter.InsertCommand.Parameters(10).Value = CType(Image, Byte())
             End If
             If (ImageName Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(11).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(11).Value = CType(ImageName,String)
+                Me.Adapter.InsertCommand.Parameters(11).Value = CType(ImageName, String)
             End If
             If (FileAttachment Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(12).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(12).Value = CType(FileAttachment,Byte())
+                Me.Adapter.InsertCommand.Parameters(12).Value = CType(FileAttachment, Byte())
             End If
             If (FileName Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(13).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(13).Value = CType(FileName,String)
+                Me.Adapter.InsertCommand.Parameters(13).Value = CType(FileName, String)
             End If
             If (JoNumber Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(14).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(14).Value = CType(JoNumber,String)
+                Me.Adapter.InsertCommand.Parameters(14).Value = CType(JoNumber, String)
             End If
             If (JoRequestor Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(15).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(15).Value = CType(JoRequestor,String)
+                Me.Adapter.InsertCommand.Parameters(15).Value = CType(JoRequestor, String)
             End If
-            Me.Adapter.InsertCommand.Parameters(16).Value = CType(SeniorManagerIsApproved,Boolean)
-            If (SeniorManagerApprovalDate.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(17).Value = CType(SeniorManagerApprovalDate.Value,Date)
+            Me.Adapter.InsertCommand.Parameters(16).Value = CType(SeniorManagerIsApproved, Boolean)
+            If (SeniorManagerApprovalDate.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(17).Value = CType(SeniorManagerApprovalDate.Value, Date)
             Else
                 Me.Adapter.InsertCommand.Parameters(17).Value = Global.System.DBNull.Value
             End If
-            If (SeniorManagerId.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(18).Value = CType(SeniorManagerId.Value,Integer)
+            If (SeniorManagerId.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(18).Value = CType(SeniorManagerId.Value, Integer)
             Else
                 Me.Adapter.InsertCommand.Parameters(18).Value = Global.System.DBNull.Value
             End If
             If (SeniorManagerRemarks Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(19).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(19).Value = CType(SeniorManagerRemarks,String)
+                Me.Adapter.InsertCommand.Parameters(19).Value = CType(SeniorManagerRemarks, String)
             End If
-            Me.Adapter.InsertCommand.Parameters(20).Value = CType(SeniorEngineerIsApproved,Boolean)
-            If (SeniorEngineerApprovalDate.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(21).Value = CType(SeniorEngineerApprovalDate.Value,Date)
+            Me.Adapter.InsertCommand.Parameters(20).Value = CType(SeniorEngineerIsApproved, Boolean)
+            If (SeniorEngineerApprovalDate.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(21).Value = CType(SeniorEngineerApprovalDate.Value, Date)
             Else
                 Me.Adapter.InsertCommand.Parameters(21).Value = Global.System.DBNull.Value
             End If
-            If (SeniorEngineerId.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(22).Value = CType(SeniorEngineerId.Value,Integer)
+            If (SeniorEngineerId.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(22).Value = CType(SeniorEngineerId.Value, Integer)
             Else
                 Me.Adapter.InsertCommand.Parameters(22).Value = Global.System.DBNull.Value
             End If
             If (SeniorEngineerRemarks Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(23).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(23).Value = CType(SeniorEngineerRemarks,String)
+                Me.Adapter.InsertCommand.Parameters(23).Value = CType(SeniorEngineerRemarks, String)
             End If
-            If (UserId.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(24).Value = CType(UserId.Value,Integer)
+            If (UserId.HasValue = True) Then
+                Me.Adapter.InsertCommand.Parameters(24).Value = CType(UserId.Value, Integer)
             Else
                 Me.Adapter.InsertCommand.Parameters(24).Value = Global.System.DBNull.Value
             End If
             If (ShiftId Is Nothing) Then
                 Me.Adapter.InsertCommand.Parameters(25).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.InsertCommand.Parameters(25).Value = CType(ShiftId,String)
+                Me.Adapter.InsertCommand.Parameters(25).Value = CType(ShiftId, String)
             End If
-            Me.Adapter.InsertCommand.Parameters(26).Value = CType(EncodeUserId,Integer)
-            Me.Adapter.InsertCommand.Parameters(27).Value = CType(TrxStatusId,Integer)
-            Me.Adapter.InsertCommand.Parameters(28).Value = CType(RoutingStatusId,Integer)
+            Me.Adapter.InsertCommand.Parameters(26).Value = CType(EncodeUserId, Integer)
+            Me.Adapter.InsertCommand.Parameters(27).Value = CType(TrxStatusId, Integer)
+            Me.Adapter.InsertCommand.Parameters(28).Value = CType(RoutingStatusId, Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
-            If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+            If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open) _
                         <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.InsertCommand.Connection.Open
+                Me.Adapter.InsertCommand.Connection.Open()
             End If
-            Try 
+            Try
                 Dim returnValue As Integer = Me.Adapter.InsertCommand.ExecuteNonQuery
                 Return returnValue
             Finally
                 If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.InsertCommand.Connection.Close
+                    Me.Adapter.InsertCommand.Connection.Close()
                 End If
             End Try
         End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update( _
-                    ByVal TrxDate As Date,  _
-                    ByVal MachineId As Global.System.Nullable(Of Integer),  _
-                    ByVal AreaId As Integer,  _
-                    ByVal TotalAccumulatedRuntime As String,  _
-                    ByVal DatetimeStarted As Date,  _
-                    ByVal DowntimeMachineStatusId As Global.System.Nullable(Of Integer),  _
-                    ByVal DatetimeEnded As Global.System.Nullable(Of Date),  _
-                    ByVal TotalAccumulatedDowntime As String,  _
-                    ByVal Problem As String,  _
-                    ByVal ActionTaken As String,  _
-                    ByVal Image() As Byte,  _
-                    ByVal ImageName As String,  _
-                    ByVal FileAttachment() As Byte,  _
-                    ByVal FileName As String,  _
-                    ByVal JoNumber As String,  _
-                    ByVal JoRequestor As String,  _
-                    ByVal SeniorManagerIsApproved As Boolean,  _
-                    ByVal SeniorManagerApprovalDate As Global.System.Nullable(Of Date),  _
-                    ByVal SeniorManagerId As Global.System.Nullable(Of Integer),  _
-                    ByVal SeniorManagerRemarks As String,  _
-                    ByVal SeniorEngineerIsApproved As Boolean,  _
-                    ByVal SeniorEngineerApprovalDate As Global.System.Nullable(Of Date),  _
-                    ByVal SeniorEngineerId As Global.System.Nullable(Of Integer),  _
-                    ByVal SeniorEngineerRemarks As String,  _
-                    ByVal UserId As Global.System.Nullable(Of Integer),  _
-                    ByVal ShiftId As String,  _
-                    ByVal EncodeUserId As Integer,  _
-                    ByVal TrxStatusId As Integer,  _
-                    ByVal RoutingStatusId As Integer,  _
-                    ByVal Original_TrxId As Integer,  _
-                    ByVal Original_LockId() As Byte,  _
+
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"), _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, True)> _
+        Public Overridable Overloads Function Update( _
+                    ByVal TrxDate As Date, _
+                    ByVal MachineId As Global.System.Nullable(Of Integer), _
+                    ByVal AreaId As Integer, _
+                    ByVal TotalAccumulatedRuntime As String, _
+                    ByVal DatetimeStarted As Date, _
+                    ByVal DowntimeMachineStatusId As Global.System.Nullable(Of Integer), _
+                    ByVal DatetimeEnded As Global.System.Nullable(Of Date), _
+                    ByVal TotalAccumulatedDowntime As String, _
+                    ByVal Problem As String, _
+                    ByVal ActionTaken As String, _
+                    ByVal Image() As Byte, _
+                    ByVal ImageName As String, _
+                    ByVal FileAttachment() As Byte, _
+                    ByVal FileName As String, _
+                    ByVal JoNumber As String, _
+                    ByVal JoRequestor As String, _
+                    ByVal SeniorManagerIsApproved As Boolean, _
+                    ByVal SeniorManagerApprovalDate As Global.System.Nullable(Of Date), _
+                    ByVal SeniorManagerId As Global.System.Nullable(Of Integer), _
+                    ByVal SeniorManagerRemarks As String, _
+                    ByVal SeniorEngineerIsApproved As Boolean, _
+                    ByVal SeniorEngineerApprovalDate As Global.System.Nullable(Of Date), _
+                    ByVal SeniorEngineerId As Global.System.Nullable(Of Integer), _
+                    ByVal SeniorEngineerRemarks As String, _
+                    ByVal UserId As Global.System.Nullable(Of Integer), _
+                    ByVal ShiftId As String, _
+                    ByVal EncodeUserId As Integer, _
+                    ByVal TrxStatusId As Integer, _
+                    ByVal RoutingStatusId As Integer, _
+                    ByVal Original_TrxId As Integer, _
+                    ByVal Original_LockId() As Byte, _
                     ByVal TrxId As Integer) As Integer
-            Me.Adapter.UpdateCommand.Parameters(0).Value = CType(TrxDate,Date)
-            If (MachineId.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(1).Value = CType(MachineId.Value,Integer)
+            Me.Adapter.UpdateCommand.Parameters(0).Value = CType(TrxDate, Date)
+            If (MachineId.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(1).Value = CType(MachineId.Value, Integer)
             Else
                 Me.Adapter.UpdateCommand.Parameters(1).Value = Global.System.DBNull.Value
             End If
-            Me.Adapter.UpdateCommand.Parameters(2).Value = CType(AreaId,Integer)
+            Me.Adapter.UpdateCommand.Parameters(2).Value = CType(AreaId, Integer)
             If (TotalAccumulatedRuntime Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(3).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(3).Value = CType(TotalAccumulatedRuntime,String)
+                Me.Adapter.UpdateCommand.Parameters(3).Value = CType(TotalAccumulatedRuntime, String)
             End If
-            Me.Adapter.UpdateCommand.Parameters(4).Value = CType(DatetimeStarted,Date)
-            If (DowntimeMachineStatusId.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(5).Value = CType(DowntimeMachineStatusId.Value,Integer)
+            Me.Adapter.UpdateCommand.Parameters(4).Value = CType(DatetimeStarted, Date)
+            If (DowntimeMachineStatusId.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(5).Value = CType(DowntimeMachineStatusId.Value, Integer)
             Else
                 Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
             End If
-            If (DatetimeEnded.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(6).Value = CType(DatetimeEnded.Value,Date)
+            If (DatetimeEnded.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(6).Value = CType(DatetimeEnded.Value, Date)
             Else
                 Me.Adapter.UpdateCommand.Parameters(6).Value = Global.System.DBNull.Value
             End If
             If (TotalAccumulatedDowntime Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(7).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(TotalAccumulatedDowntime,String)
+                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(TotalAccumulatedDowntime, String)
             End If
             If (Problem Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(8).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Problem,String)
+                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Problem, String)
             End If
             If (ActionTaken Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(9).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(ActionTaken,String)
+                Me.Adapter.UpdateCommand.Parameters(9).Value = CType(ActionTaken, String)
             End If
             If (Image Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(10).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Image,Byte())
+                Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Image, Byte())
             End If
             If (ImageName Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(11).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(ImageName,String)
+                Me.Adapter.UpdateCommand.Parameters(11).Value = CType(ImageName, String)
             End If
             If (FileAttachment Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(12).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(FileAttachment,Byte())
+                Me.Adapter.UpdateCommand.Parameters(12).Value = CType(FileAttachment, Byte())
             End If
             If (FileName Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(13).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(FileName,String)
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(FileName, String)
             End If
             If (JoNumber Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(JoNumber,String)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(JoNumber, String)
             End If
             If (JoRequestor Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(15).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(JoRequestor,String)
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(JoRequestor, String)
             End If
-            Me.Adapter.UpdateCommand.Parameters(16).Value = CType(SeniorManagerIsApproved,Boolean)
-            If (SeniorManagerApprovalDate.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(SeniorManagerApprovalDate.Value,Date)
+            Me.Adapter.UpdateCommand.Parameters(16).Value = CType(SeniorManagerIsApproved, Boolean)
+            If (SeniorManagerApprovalDate.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(17).Value = CType(SeniorManagerApprovalDate.Value, Date)
             Else
                 Me.Adapter.UpdateCommand.Parameters(17).Value = Global.System.DBNull.Value
             End If
-            If (SeniorManagerId.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(SeniorManagerId.Value,Integer)
+            If (SeniorManagerId.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(18).Value = CType(SeniorManagerId.Value, Integer)
             Else
                 Me.Adapter.UpdateCommand.Parameters(18).Value = Global.System.DBNull.Value
             End If
             If (SeniorManagerRemarks Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(19).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(SeniorManagerRemarks,String)
+                Me.Adapter.UpdateCommand.Parameters(19).Value = CType(SeniorManagerRemarks, String)
             End If
-            Me.Adapter.UpdateCommand.Parameters(20).Value = CType(SeniorEngineerIsApproved,Boolean)
-            If (SeniorEngineerApprovalDate.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(SeniorEngineerApprovalDate.Value,Date)
+            Me.Adapter.UpdateCommand.Parameters(20).Value = CType(SeniorEngineerIsApproved, Boolean)
+            If (SeniorEngineerApprovalDate.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(21).Value = CType(SeniorEngineerApprovalDate.Value, Date)
             Else
                 Me.Adapter.UpdateCommand.Parameters(21).Value = Global.System.DBNull.Value
             End If
-            If (SeniorEngineerId.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(22).Value = CType(SeniorEngineerId.Value,Integer)
+            If (SeniorEngineerId.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(22).Value = CType(SeniorEngineerId.Value, Integer)
             Else
                 Me.Adapter.UpdateCommand.Parameters(22).Value = Global.System.DBNull.Value
             End If
             If (SeniorEngineerRemarks Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(23).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(23).Value = CType(SeniorEngineerRemarks,String)
+                Me.Adapter.UpdateCommand.Parameters(23).Value = CType(SeniorEngineerRemarks, String)
             End If
-            If (UserId.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(24).Value = CType(UserId.Value,Integer)
+            If (UserId.HasValue = True) Then
+                Me.Adapter.UpdateCommand.Parameters(24).Value = CType(UserId.Value, Integer)
             Else
                 Me.Adapter.UpdateCommand.Parameters(24).Value = Global.System.DBNull.Value
             End If
             If (ShiftId Is Nothing) Then
                 Me.Adapter.UpdateCommand.Parameters(25).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(25).Value = CType(ShiftId,String)
+                Me.Adapter.UpdateCommand.Parameters(25).Value = CType(ShiftId, String)
             End If
-            Me.Adapter.UpdateCommand.Parameters(26).Value = CType(EncodeUserId,Integer)
-            Me.Adapter.UpdateCommand.Parameters(27).Value = CType(TrxStatusId,Integer)
-            Me.Adapter.UpdateCommand.Parameters(28).Value = CType(RoutingStatusId,Integer)
-            Me.Adapter.UpdateCommand.Parameters(29).Value = CType(Original_TrxId,Integer)
+            Me.Adapter.UpdateCommand.Parameters(26).Value = CType(EncodeUserId, Integer)
+            Me.Adapter.UpdateCommand.Parameters(27).Value = CType(TrxStatusId, Integer)
+            Me.Adapter.UpdateCommand.Parameters(28).Value = CType(RoutingStatusId, Integer)
+            Me.Adapter.UpdateCommand.Parameters(29).Value = CType(Original_TrxId, Integer)
             If (Original_LockId Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_LockId")
+                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(1, Object)
+                Me.Adapter.UpdateCommand.Parameters(31).Value = Global.System.DBNull.Value
             Else
-                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(Original_LockId,Byte())
+                Me.Adapter.UpdateCommand.Parameters(30).Value = CType(0, Object)
+                Me.Adapter.UpdateCommand.Parameters(31).Value = CType(Original_LockId, Byte())
             End If
-            Me.Adapter.UpdateCommand.Parameters(31).Value = CType(TrxId,Integer)
+            Me.Adapter.UpdateCommand.Parameters(32).Value = CType(TrxId, Integer)
             Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
-            If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+            If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open) _
                         <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.UpdateCommand.Connection.Open
+                Me.Adapter.UpdateCommand.Connection.Open()
             End If
-            Try 
+            Try
                 Dim returnValue As Integer = Me.Adapter.UpdateCommand.ExecuteNonQuery
                 Return returnValue
             Finally
                 If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.UpdateCommand.Connection.Close
+                    Me.Adapter.UpdateCommand.Connection.Close()
                 End If
             End Try
         End Function

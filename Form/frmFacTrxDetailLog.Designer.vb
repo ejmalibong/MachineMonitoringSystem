@@ -127,7 +127,7 @@ Partial Class frmFacTrxDetailLog
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
         Me.btnCancel.TabIndex = 8
         Me.btnCancel.TabStop = False
-        Me.btnCancel.Text = "  Cancel"
+        Me.btnCancel.Text = "Cancel"
         '
         'btnSave
         '
@@ -143,7 +143,7 @@ Partial Class frmFacTrxDetailLog
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
         Me.btnSave.TabIndex = 7
         Me.btnSave.TabStop = False
-        Me.btnSave.Text = "  Save"
+        Me.btnSave.Text = "Save"
         '
         'txtTrxDetailId
         '
@@ -280,7 +280,7 @@ Partial Class frmFacTrxDetailLog
         Me.txtTrxDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtTrxDate.UseCompatibleTextRendering = True
         '
-        'frmMntTrxDetailLog
+        'frmFacTrxDetailLog
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
@@ -310,7 +310,7 @@ Partial Class frmFacTrxDetailLog
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "frmMntTrxDetailLog"
+        Me.Name = "frmFacTrxDetailLog"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

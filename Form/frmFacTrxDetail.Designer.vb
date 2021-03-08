@@ -475,7 +475,7 @@ Partial Class frmFacTrxDetail
         Me.btnClose.Size = New System.Drawing.Size(100, 30)
         Me.btnClose.TabIndex = 253
         Me.btnClose.TabStop = False
-        Me.btnClose.Text = "  Close"
+        Me.btnClose.Text = "Close"
         '
         'btnDelete
         '
@@ -491,7 +491,7 @@ Partial Class frmFacTrxDetail
         Me.btnDelete.Size = New System.Drawing.Size(100, 30)
         Me.btnDelete.TabIndex = 252
         Me.btnDelete.TabStop = False
-        Me.btnDelete.Text = "  Delete"
+        Me.btnDelete.Text = "Delete"
         '
         'btnCancel
         '
@@ -507,7 +507,7 @@ Partial Class frmFacTrxDetail
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
         Me.btnCancel.TabIndex = 251
         Me.btnCancel.TabStop = False
-        Me.btnCancel.Text = "  Cancel"
+        Me.btnCancel.Text = "Cancel"
         '
         'btnSave
         '
@@ -523,7 +523,7 @@ Partial Class frmFacTrxDetail
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
         Me.btnSave.TabIndex = 250
         Me.btnSave.TabStop = False
-        Me.btnSave.Text = "  Save"
+        Me.btnSave.Text = "Save"
         '
         'lblImageAttachment
         '
@@ -1367,7 +1367,7 @@ Partial Class frmFacTrxDetail
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = " Transaction Details"
+        Me.Text = "Transaction Details"
         CType(Me.picImgAttachment1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlImage.ResumeLayout(False)
         CType(Me.picImgAttachment2, System.ComponentModel.ISupportInitialize).EndInit()

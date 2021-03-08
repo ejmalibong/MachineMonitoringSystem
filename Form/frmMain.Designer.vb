@@ -23,6 +23,7 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.mnuMain = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntTransactionApprovalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -34,8 +35,8 @@ Partial Class frmMain
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FacActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MasterlistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DatetimeToolStripMenuItem = New System.Windows.Forms.ToolStripLabel()
         Me.UserItemToolStripMenuItem = New System.Windows.Forms.ToolStripLabel()
@@ -44,7 +45,6 @@ Partial Class frmMain
         Me.DepartmentToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
-        Me.FacActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -52,7 +52,7 @@ Partial Class frmMain
         'mnuMain
         '
         Me.mnuMain.BackColor = System.Drawing.Color.White
-        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MasterlistToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.WindowToolStripMenuItem, Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem})
+        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MasterlistToolStripMenuItem, Me.WindowToolStripMenuItem, Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem})
         Me.mnuMain.Location = New System.Drawing.Point(0, 0)
         Me.mnuMain.MdiWindowListItem = Me.WindowToolStripMenuItem
         Me.mnuMain.Name = "mnuMain"
@@ -120,17 +120,17 @@ Partial Class frmMain
         Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
+        'FacActivityReportToolStripMenuItem
+        '
+        Me.FacActivityReportToolStripMenuItem.Name = "FacActivityReportToolStripMenuItem"
+        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FacActivityReportToolStripMenuItem.Text = "Activity Report"
+        '
         'MasterlistToolStripMenuItem
         '
         Me.MasterlistToolStripMenuItem.Name = "MasterlistToolStripMenuItem"
         Me.MasterlistToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
         Me.MasterlistToolStripMenuItem.Text = "Masterlist"
-        '
-        'OptionsToolStripMenuItem
-        '
-        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
-        Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'WindowToolStripMenuItem
         '
@@ -189,12 +189,6 @@ Partial Class frmMain
         'tmrMain
         '
         '
-        'FacActivityReportToolStripMenuItem
-        '
-        Me.FacActivityReportToolStripMenuItem.Name = "FacActivityReportToolStripMenuItem"
-        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.FacActivityReportToolStripMenuItem.Text = "Activity Report"
-        '
         'frmMain
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -204,6 +198,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.mnuMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.IsMdiContainer = True
         Me.MainMenuStrip = Me.mnuMain
         Me.Name = "frmMain"
@@ -224,7 +219,6 @@ Partial Class frmMain
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MasterlistToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents WindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UsernameToolStripMenuItem As System.Windows.Forms.ToolStripLabel
     Friend WithEvents UserItemToolStripMenuItem As System.Windows.Forms.ToolStripLabel

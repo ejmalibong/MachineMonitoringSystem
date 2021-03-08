@@ -128,9 +128,11 @@
         If workgroupId.Equals(1) Or workgroupId.Equals(2) Or workgroupId.Equals(3) Or workgroupId.Equals(13) Or workgroupId.Equals(14) Then
             MntTransactionApprovalToolStripMenuItem.Text = "Maintenance Transaction Approval"
             MntTransactionConsoleToolStripMenuItem.Text = "Maintenance Transaction Console"
+            MntActivityReportToolStripMenuItem.Text = "Maintenance Activity Report"
 
             FacTransactionApprovalToolStripMenuItem.Text = "Facility Transaction Approval"
             FacTransactionConsoleToolStripMenuItem.Text = "Facility Transaction Console"
+            FacActivityReportToolStripMenuItem.Text = "Facility Activity Report"
         End If
 
         'maintenance
@@ -144,7 +146,7 @@
                 method.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin))
                 MntTransactionApprovalToolStripMenuItem.Visible = False
                 MasterlistToolStripMenuItem.Visible = False
-                OptionsToolStripMenuItem.Visible = False
+                'OptionsToolStripMenuItem.Visible = False
                 'senior engineer
             ElseIf workgroupId = 4 Then
                 method.FormLoader(Me, New frmMntTrxApproval(userId, workgroupId, isAdmin))
@@ -161,7 +163,7 @@
                 method.FormLoader(Me, New frmFacTrxConsole(userId, workgroupId, isAdmin))
                 FacTransactionApprovalToolStripMenuItem.Visible = False
                 MasterlistToolStripMenuItem.Visible = False
-                OptionsToolStripMenuItem.Visible = False
+                'OptionsToolStripMenuItem.Visible = False
 
                 'senior engineer, engineer
             ElseIf workgroupId = 7 Or workgroupId = 8 Then

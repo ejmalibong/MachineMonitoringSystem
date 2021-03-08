@@ -81,7 +81,6 @@ Public Class frmFacTrxConsole
     Private adpTransactionHeaderActivity As New FacTransactionHeaderTableAdapter
     Private adpMachineStatusColumn As New FacMachineTableAdapter
 
-    Private WithEvents tmrRefresh As New Timer
     Private counter As Integer = 0
 
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
@@ -192,6 +191,8 @@ Public Class frmFacTrxConsole
 
         method.EnableDoubleBuffered(dgvMachine)
         method.EnableDoubleBuffered(dgvTransactionHeader)
+
+        tmrElapsedTime.Interval = 1000 '1 second
     End Sub
 
     Private Sub frmFacTrxConsole_LocationChanged(sender As Object, e As EventArgs) Handles MyBase.LocationChanged
@@ -274,13 +275,13 @@ Public Class frmFacTrxConsole
                 End If
             Next
 
-            'counter = counter + 1
+            counter = counter + 1
 
-            ''3 minutes
-            'If counter = 18000 Then
-            '    RefreshValues()
-            '    counter = 0
-            'End If
+            '5 minutes
+            If counter = 300 Then
+                RefreshValues()
+                counter = 0
+            End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -469,10 +470,10 @@ Public Class frmFacTrxConsole
 
     Private Sub SearchCriteria()
         dictionary.Add(" Start Date", 1)
-        dictionary.Add(" End Date", 2)
-        dictionary.Add(" Technician", 3)
-        dictionary.Add(" Machine Name", 4)
-        dictionary.Add(" Downtime Status", 5)
+        'dictionary.Add(" End Date", 2)
+        'dictionary.Add(" Technician", 3)
+        'dictionary.Add(" Machine Name", 4)
+        'dictionary.Add(" Downtime Status", 5)
 
         cmbSearchCriteria.DisplayMember = "Key"
         cmbSearchCriteria.ValueMember = "Value"
@@ -486,4 +487,33 @@ Public Class frmFacTrxConsole
     '    Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator)
     'End Sub
 
+    Private Sub btnSearchDate_Click(sender As Object, e As EventArgs) Handles btnSearchDate.Click
+        Try
+            If dtpFrom.Value > dtpTo.Value Then
+                MessageBox.Show("Invalid date range.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ElseIf dtpFrom.Value.Equals(dtpTo.Value) Then
+                If transactionStatusId = 3 Then
+                    Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND TrxStatusId IN (1,2)")
+                Else
+                    Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND TrxStatusId = '{0}'", transactionStatusId)
+                End If
+            Else
+                If transactionStatusId = 3 Then
+                    Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND TrxStatusId IN (1,2)")
+                Else
+                    Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND TrxStatusId = '{0}'", transactionStatusId)
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnResetDate_Click(sender As Object, e As EventArgs) Handles btnResetDate.Click
+        Try
+            Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = '{0}'", transactionStatusId)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class

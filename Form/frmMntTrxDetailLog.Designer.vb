@@ -127,7 +127,7 @@ Partial Class frmMntTrxDetailLog
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
         Me.btnCancel.TabIndex = 8
         Me.btnCancel.TabStop = False
-        Me.btnCancel.Text = "  Cancel"
+        Me.btnCancel.Text = "Cancel"
         '
         'btnSave
         '
@@ -143,7 +143,7 @@ Partial Class frmMntTrxDetailLog
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
         Me.btnSave.TabIndex = 7
         Me.btnSave.TabStop = False
-        Me.btnSave.Text = "  Save"
+        Me.btnSave.Text = "Save"
         '
         'txtTrxDetailId
         '

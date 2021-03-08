@@ -22,10 +22,10 @@ Partial Class frmMntTrxDetail
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.lblRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.txtDowntimeAccumulated = New System.Windows.Forms.Label()
@@ -571,7 +571,7 @@ Partial Class frmMntTrxDetail
         Me.btnClose.Size = New System.Drawing.Size(100, 30)
         Me.btnClose.TabIndex = 253
         Me.btnClose.TabStop = False
-        Me.btnClose.Text = "  Close"
+        Me.btnClose.Text = "Close"
         '
         'btnDelete
         '
@@ -587,7 +587,7 @@ Partial Class frmMntTrxDetail
         Me.btnDelete.Size = New System.Drawing.Size(100, 30)
         Me.btnDelete.TabIndex = 252
         Me.btnDelete.TabStop = False
-        Me.btnDelete.Text = "  Delete"
+        Me.btnDelete.Text = "Delete"
         '
         'btnCancel
         '
@@ -603,7 +603,7 @@ Partial Class frmMntTrxDetail
         Me.btnCancel.Size = New System.Drawing.Size(100, 30)
         Me.btnCancel.TabIndex = 251
         Me.btnCancel.TabStop = False
-        Me.btnCancel.Text = "  Cancel"
+        Me.btnCancel.Text = "Cancel"
         '
         'btnSave
         '
@@ -619,7 +619,7 @@ Partial Class frmMntTrxDetail
         Me.btnSave.Size = New System.Drawing.Size(100, 30)
         Me.btnSave.TabIndex = 250
         Me.btnSave.TabStop = False
-        Me.btnSave.Text = "  Save"
+        Me.btnSave.Text = "Save"
         '
         'lblImageAttachment
         '
@@ -750,8 +750,8 @@ Partial Class frmMntTrxDetail
         '
         Me.UserNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.UserNameColumn.DataPropertyName = "UserName"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.UserNameColumn.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.UserNameColumn.DefaultCellStyle = DataGridViewCellStyle5
         Me.UserNameColumn.HeaderText = "NickName"
         Me.UserNameColumn.Name = "UserNameColumn"
         Me.UserNameColumn.ReadOnly = True
@@ -772,7 +772,7 @@ Partial Class frmMntTrxDetail
         Me.btnReturn.Size = New System.Drawing.Size(100, 30)
         Me.btnReturn.TabIndex = 277
         Me.btnReturn.TabStop = False
-        Me.btnReturn.Text = " Return"
+        Me.btnReturn.Text = "Return"
         '
         'btnApprove
         '
@@ -788,7 +788,7 @@ Partial Class frmMntTrxDetail
         Me.btnApprove.Size = New System.Drawing.Size(100, 30)
         Me.btnApprove.TabIndex = 276
         Me.btnApprove.TabStop = False
-        Me.btnApprove.Text = " Approve"
+        Me.btnApprove.Text = "Approve"
         '
         'cmbRoutingStatus
         '
@@ -1145,13 +1145,13 @@ Partial Class frmMntTrxDetail
         Me.dgvDetail.AllowUserToDeleteRows = False
         Me.dgvDetail.AllowUserToResizeColumns = False
         Me.dgvDetail.AllowUserToResizeRows = False
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Verdana", 8.5!)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Verdana", 8.5!)
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TrxDetailIdColumn, Me.TrxIdColumn, Me.TrxDateColumn, Me.ShiftIdColumn, Me.TrxFromColumn, Me.TrxToColumn, Me.ElapsedTimeColumn})
@@ -1192,8 +1192,8 @@ Partial Class frmMntTrxDetail
         'ShiftIdColumn
         '
         Me.ShiftIdColumn.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ShiftIdColumn.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ShiftIdColumn.DefaultCellStyle = DataGridViewCellStyle7
         Me.ShiftIdColumn.HeaderText = "Shift"
         Me.ShiftIdColumn.Name = "ShiftIdColumn"
         Me.ShiftIdColumn.ReadOnly = True
@@ -1224,8 +1224,8 @@ Partial Class frmMntTrxDetail
         'ElapsedTimeColumn
         '
         Me.ElapsedTimeColumn.DataPropertyName = "ElapsedTime"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ElapsedTimeColumn.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ElapsedTimeColumn.DefaultCellStyle = DataGridViewCellStyle8
         Me.ElapsedTimeColumn.HeaderText = "Downtime"
         Me.ElapsedTimeColumn.Name = "ElapsedTimeColumn"
         Me.ElapsedTimeColumn.ReadOnly = True
@@ -1316,7 +1316,7 @@ Partial Class frmMntTrxDetail
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = " Transaction Details"
+        Me.Text = "Transaction Details"
         CType(Me.picImgAttachment, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlImage.ResumeLayout(False)
         CType(Me.dgvPic, System.ComponentModel.ISupportInitialize).EndInit()

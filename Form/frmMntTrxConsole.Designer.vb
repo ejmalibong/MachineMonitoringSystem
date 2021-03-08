@@ -94,7 +94,7 @@ Partial Class frmMntTrxConsole
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(100, 30)
         Me.btnClose.TabIndex = 155
-        Me.btnClose.Text = "  Close"
+        Me.btnClose.Text = "Close"
         '
         'btnDelete
         '
@@ -109,7 +109,7 @@ Partial Class frmMntTrxConsole
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(100, 30)
         Me.btnDelete.TabIndex = 154
-        Me.btnDelete.Text = "  Delete"
+        Me.btnDelete.Text = "Delete"
         '
         'btnEdit
         '
@@ -124,7 +124,7 @@ Partial Class frmMntTrxConsole
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnEdit.Size = New System.Drawing.Size(100, 30)
         Me.btnEdit.TabIndex = 153
-        Me.btnEdit.Text = "  Edit"
+        Me.btnEdit.Text = "Edit"
         '
         'btnCreate
         '
@@ -139,7 +139,7 @@ Partial Class frmMntTrxConsole
         Me.btnCreate.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnCreate.Size = New System.Drawing.Size(100, 30)
         Me.btnCreate.TabIndex = 152
-        Me.btnCreate.Text = " Create"
+        Me.btnCreate.Text = "Create"
         '
         'dgvMachine
         '
@@ -533,7 +533,7 @@ Partial Class frmMntTrxConsole
         Me.btnRefresh.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
         Me.btnRefresh.TabIndex = 160
-        Me.btnRefresh.Text = "  Refresh"
+        Me.btnRefresh.Text = "Refresh"
         '
         'frmMntTrxConsole
         '

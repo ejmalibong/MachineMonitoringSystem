@@ -93,6 +93,10 @@ Public Class frmMntTrxApproval
     'check all column
     Private chkSelectAll As New CheckBox
 
+    Private WithEvents tmrRefresh As New Timer
+    Private counter As Integer = 0
+    Private routingStatusId As Integer = 0
+
     Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -182,6 +186,8 @@ Public Class frmMntTrxApproval
         rdPending.Checked = True
 
         method.EnableDoubleBuffered(dgvTransactionHeader)
+
+        tmrRefresh.Interval = 1000 '1 second
     End Sub
 
     Private Sub frmMntTrxConsole_LocationChanged(sender As Object, e As EventArgs) Handles MyBase.LocationChanged
@@ -204,7 +210,7 @@ Public Class frmMntTrxApproval
 
     Private Sub frmMntTrxConsole_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvTransactionHeader.Dispose()
-        tmrElapsedTime.Stop()
+        tmrRefresh.Stop()
     End Sub
 
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvTransactionHeader.CellDoubleClick
@@ -223,9 +229,20 @@ Public Class frmMntTrxApproval
                 Next
             Next
 
+            tmrRefresh.Start()
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub tmrRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRefresh.Tick
+        counter = counter + 1
+
+        '5 minutes
+        If counter = 300 Then
+            RefreshValues()
+            counter = 0
+        End If
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
@@ -384,16 +401,24 @@ Public Class frmMntTrxApproval
 
     Private Sub trxStatus_CheckedChanged(sender As Object, e As EventArgs) Handles rdApproved.CheckedChanged, rdPending.CheckedChanged
         If rdApproved.Checked = True Then
+            'sr manager, engg manager
             If workgroupId = 2 Or workgroupId = 3 Then
                 Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 1")
+                routingStatusId = 1
+                'senior engineer, supervisor
             ElseIf workgroupId = 4 Then
                 Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId IN (1,2,3)")
+                routingStatusId = 3
             End If
         Else
+            'sr manager, engg manager
             If workgroupId = 2 Or workgroupId = 3 Then
                 Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 3")
+                routingStatusId = 3
+                'senior engineer, supervisor
             ElseIf workgroupId = 4 Then
                 Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 4")
+                routingStatusId = 4
             End If
         End If
     End Sub
@@ -447,15 +472,89 @@ Public Class frmMntTrxApproval
 
     Private Sub SearchCriteria()
         dictionary.Add(" Start Date", 1)
-        dictionary.Add(" End Date", 2)
-        dictionary.Add(" Technician", 3)
-        dictionary.Add(" Machine Name", 4)
-        dictionary.Add(" Downtime Status", 5)
+        'dictionary.Add(" End Date", 2)
+        'dictionary.Add(" Technician", 3)
+        'dictionary.Add(" Machine Name", 4)
+        'dictionary.Add(" Downtime Status", 5)
 
         cmbSearchCriteria.DisplayMember = "Key"
         cmbSearchCriteria.ValueMember = "Value"
 
         cmbSearchCriteria.DataSource = New BindingSource(dictionary, Nothing)
+    End Sub
+
+    Private Sub btnSearchDate_Click(sender As Object, e As EventArgs) Handles btnSearchDate.Click
+        Try
+            If dtpFrom.Value > dtpTo.Value Then
+                MessageBox.Show("Invalid date range.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ElseIf dtpFrom.Value.Equals(dtpTo.Value) Then
+                If rdPending.Checked = True Then
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        'sr mngr, mngr
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND RoutingStatusId = 3")
+                        'senior engineer, supervisor
+                    ElseIf workgroupId = 4 Then
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND RoutingStatusId = 4")
+                    End If
+                Else
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        'sr mngr, mngr
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND RoutingStatusId = 1")
+                        'senior engineer, supervisor
+                    ElseIf workgroupId = 4 Then
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpFrom.Value, False) + "' AND RoutingStatusId IN (1,2,3)")
+                    End If
+                End If
+            Else
+                If rdPending.Checked = True Then
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        'sr mngr, mngr
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND RoutingStatusId = 3")
+                        'senior engineer, supervisor
+                    ElseIf workgroupId = 4 Then
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND RoutingStatusId = 4")
+                    End If
+                Else
+                    If workgroupId = 2 Or workgroupId = 3 Then
+                        'sr mngr, mngr
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND RoutingStatusId = 1")
+                        'senior engineer, supervisor
+                    ElseIf workgroupId = 4 Then
+                        Me.bsTransactionHeader.Filter = String.Format("DatetimeStarted >= '" + method.FormatDate(dtpFrom.Value, True) + "' AND DatetimeStarted < '" + method.FormatDate(dtpTo.Value, False) + "' AND RoutingStatusId IN (1,2,3)")
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnResetDate_Click(sender As Object, e As EventArgs) Handles btnResetDate.Click
+        Try
+            If rdApproved.Checked = True Then
+                'sr manager, engg manager
+                If workgroupId = 2 Or workgroupId = 3 Then
+                    Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 1")
+                    routingStatusId = 1
+                    'senior engineer, supervisor
+                ElseIf workgroupId = 4 Then
+                    Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId IN (1,2,3)")
+                    routingStatusId = 3
+                End If
+            Else
+                'sr manager, engg manager
+                If workgroupId = 2 Or workgroupId = 3 Then
+                    Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 3")
+                    routingStatusId = 3
+                    'senior engineer, supervisor
+                ElseIf workgroupId = 4 Then
+                    Me.bsTransactionHeader.Filter = String.Format("RoutingStatusId = 4")
+                    routingStatusId = 4
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 End Class
