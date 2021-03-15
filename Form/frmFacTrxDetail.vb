@@ -1075,7 +1075,7 @@ Public Class frmFacTrxDetail
                         Dim _myEncoderParameters As New EncoderParameters(1)
 
                         'save the bitmap as a JPG file with zero quality level compression
-                        Dim _myEncoderParameter = New EncoderParameter(_myEncoder, 10L)
+                        Dim _myEncoderParameter = New EncoderParameter(_myEncoder, 15L)
                         _myEncoderParameters.Param(0) = _myEncoderParameter
                         bmp.Save(_mStream, _jpgEncoder, _myEncoderParameters)
 

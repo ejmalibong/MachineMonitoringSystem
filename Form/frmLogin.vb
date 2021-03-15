@@ -29,6 +29,9 @@ Public Class frmLogin
         'sir clark
         'txtEmployeeId.Text = "1709-006"
 
+        'sir mon
+        'txtEmployeeId.Text = "1506-001"
+
         'sir emman
         'txtEmployeeId.Text = "1701-066"
 

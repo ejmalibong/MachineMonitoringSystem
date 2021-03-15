@@ -44,6 +44,7 @@ Partial Class frmMain
         Me.stsMain = New System.Windows.Forms.StatusStrip()
         Me.DepartmentToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
@@ -167,7 +168,7 @@ Partial Class frmMain
         'stsMain
         '
         Me.stsMain.BackColor = System.Drawing.Color.White
-        Me.stsMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DepartmentToolStripStatusLabel, Me.SectionToolStripStatusLabel})
+        Me.stsMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DepartmentToolStripStatusLabel, Me.SectionToolStripStatusLabel, Me.StatusLabel})
         Me.stsMain.Location = New System.Drawing.Point(0, 239)
         Me.stsMain.Name = "stsMain"
         Me.stsMain.Size = New System.Drawing.Size(684, 22)
@@ -185,6 +186,16 @@ Partial Class frmMain
         Me.SectionToolStripStatusLabel.Name = "SectionToolStripStatusLabel"
         Me.SectionToolStripStatusLabel.Size = New System.Drawing.Size(46, 17)
         Me.SectionToolStripStatusLabel.Text = "Section"
+        '
+        'StatusLabel
+        '
+        Me.StatusLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.StatusLabel.Name = "StatusLabel"
+        Me.StatusLabel.Size = New System.Drawing.Size(553, 17)
+        Me.StatusLabel.Spring = True
+        Me.StatusLabel.Text = "Status"
+        Me.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.StatusLabel.Visible = False
         '
         'tmrMain
         '
@@ -234,4 +245,5 @@ Partial Class frmMain
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntActivityReportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents FacActivityReportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Public WithEvents StatusLabel As System.Windows.Forms.ToolStripStatusLabel
 End Class

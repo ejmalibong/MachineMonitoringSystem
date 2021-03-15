@@ -80,7 +80,7 @@
     End Sub
 
     Private Sub MntTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntTransactionConsoleToolStripMenuItem.Click
-        method.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin))
+        method.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin, StatusLabel))
     End Sub
 
     Private Sub FacTransactionApprovalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionApprovalToolStripMenuItem.Click
@@ -143,7 +143,7 @@
 
             'technician
             If workgroupId = 5 Or workgroupId = 6 Then
-                method.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin))
+                method.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin, StatusLabel))
                 MntTransactionApprovalToolStripMenuItem.Visible = False
                 MasterlistToolStripMenuItem.Visible = False
                 'OptionsToolStripMenuItem.Visible = False

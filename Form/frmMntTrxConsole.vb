@@ -2,6 +2,9 @@
 Imports MachineMonitoringSystem.dsMonitoringTableAdapters
 Imports System.Reflection
 Imports System.ComponentModel
+Imports System.Threading.Timer
+Imports System.Runtime.Remoting.Messaging
+Imports System.Threading
 
 Public Class frmMntTrxConsole
     Private method As New clsMethod
@@ -21,7 +24,7 @@ Public Class frmMntTrxConsole
     Private indexScroll As Integer = 0
     Private indexPosition As Integer = 0
     'elapsed time computation
-    Private WithEvents tmrElapsedTime As New Timer
+    Private WithEvents tmrElapsedTime As New System.Windows.Forms.Timer
     Private tmrLastTransaction As New DateTime
     Private tmrSpan As TimeSpan = Nothing
     Private tmrMinutes As Integer = 0
@@ -88,8 +91,12 @@ Public Class frmMntTrxConsole
     Private adpMachineStatusColumn As New MntMachineTableAdapter
 
     Private counter As Integer = 0
+    Private isWorking As Boolean = False
+    Private status As ToolStripStatusLabel
 
-    Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
+    'Private refreshSeconds As Integer = 15
+
+    Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean, ByVal _status As ToolStripStatusLabel)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -98,8 +105,33 @@ Public Class frmMntTrxConsole
         userId = _userId
         workgroupId = _workgroupId
         isAdmin = _isAdmin
+        status = _status
 
-        RefreshValues()
+        'RefreshValues()
+
+        'Me.myDataset.EnforceConstraints = False
+        'Me.adpMachine.Fill(Me.myDataset.MntMachine)
+        'Me.adpAreaName.Fill(Me.myDataset.MntArea)
+
+        Me.adpTransactionHeader.FillByTrxId(Me.myDataset.MntTransactionHeader, Nothing)
+        'Me.adpTransactionHeader.Fill(Me.myDataset.MntTransactionHeader)
+        'Me.adpNickname.Fill(Me.myDataset.SecUser)
+        'Me.adpMachineName.Fill(Me.myDataset.MntMachine)
+        'Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
+
+        'Me.adpTransactionDetail.Fill(Me.myDataset.MntTransactionDetail)
+        'Me.adpTransactionMachinePart.Fill(Me.myDataset.MntTransactionMachinePart)
+        'Me.adpTransactionSparePart.Fill(Me.myDataset.MntTransactionSparePart)
+        'Me.adpTransactionUser.Fill(Me.myDataset.MntTransactionUser)
+
+        'Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
+        'Me.adpUser.Fill(Me.myDataset.SecUser)
+        'Me.adpArea.Fill(Me.myDataset.MntArea)
+        'Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
+        'Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
+        'Me.adpMachineStatus.Fill(Me.myDataset.MntMachineStatus)
+        'Me.adpMachinePart.Fill(Me.myDataset.MntMachinePart)
+        'Me.myDataset.EnforceConstraints = True
     End Sub
 
     Private Sub frmMntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -190,15 +222,12 @@ Public Class frmMntTrxConsole
 
         dgvTransactionHeader.AutoGenerateColumns = False
         dgvTransactionHeader.DataSource = Me.bsTransactionHeader
+
         'Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator)
 
         SearchCriteria()
 
         rdOngoing.Checked = True
-
-        'tmrRefresh.Start()
-        'tmrRefresh.Interval = 1000
-        'AddHandler tmrRefresh.Tick, AddressOf tmrRefresh_Tick
 
         method.EnableDoubleBuffered(dgvMachine)
         method.EnableDoubleBuffered(dgvTransactionHeader)
@@ -220,16 +249,15 @@ Public Class frmMntTrxConsole
     '    bsPagedTransactionHeader = New BindingSource()
     '    myDatatable = New BindingList(Of DataTable)()
 
-    '    _dataTable.DefaultView.Sort = "TrxId DESC, DatetimeEnded DESC"
-    '    'If Not _transactionStatusId = 3 Then
-    '    '    _dataTable.DefaultView.RowFilter = String.Format("TrxStatusId = '{0}'", _transactionStatusId)
-    '    'End If
+    '    _dataTable.DefaultView.Sort = "DatetimeStarted DESC, TrxId DESC"
+    '    If Not transactionStatusId = 3 Then
+    '        _dataTable.DefaultView.RowFilter = String.Format("TrxStatusId = '{0}'", transactionStatusId)
+    '    End If
     '    _dataTable = _dataTable.DefaultView.ToTable
 
     '    For Each _dataRow As DataRow In _dataTable.Rows
     '        If _counter = 1 Then
     '            _dt = _dataTable.Clone()
-
     '            myDatatable.Add(_dt)
     '        End If
 
@@ -241,7 +269,7 @@ Public Class frmMntTrxConsole
     '    Next
 
     '    _bindingNavigator.BindingSource = bsPagedTransactionHeader
-    '    bsPagedTransactionHeader.DataSource = myDatatable
+    '    Me.bsPagedTransactionHeader.DataSource = myDatatable
     'End Sub
 
     'Private Sub bs_PositionChanged(ByVal sender As Object, ByVal e As EventArgs) Handles bsPagedTransactionHeader.PositionChanged
@@ -353,13 +381,18 @@ Public Class frmMntTrxConsole
                     End If
                 End If
             Next
-            counter = counter + 1
+            'counter = counter + 1
 
             '5 minutes
-            If counter = 300 Then
-                RefreshValues()
-                counter = 0
-            End If
+            'If counter = 300 Then
+            '    RefreshValues()
+            '    counter = 0
+            'End If
+
+            'If counter = 60 Then
+            '    RefreshValues()
+            '    counter = 0
+            'End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -436,17 +469,27 @@ Public Class frmMntTrxConsole
 
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Try
-            If Me.dgvTransactionHeader.SelectedRows.Count > 0 Then
+            If Me.dgvTransactionHeader.Rows.Count > 0 Then
                 Dim _trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
                 Using frmDetail As New frmMntTrxDetail(userId, workgroupId, isAdmin, isTechnicianManual, isImageRequired, isAllowEdit, isAllowDelete, Me.myDataset, _trxId)
                     frmDetail.ShowDialog(Me)
 
-                    Me.bsTransactionHeader.EndEdit()
-                    Me.bsMachine.EndEdit()
+                    'Me.bsTransactionHeader.EndEdit()
+                    'Me.bsMachine.EndEdit()
 
                     If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
                         If Me.myDataset.HasChanges Then
+                            'If Not isWorking Then
+                            '    isWorking = True
+                            '    'dgvTransactionHeader.DataSource = Nothing
+                            '    Dim _thread As Thread = New Thread(New ThreadStart(AddressOf UpdateTableAdapters))
+                            '    _thread.Start()
+                            'Else
+                            '    status.Visible = True
+                            '    status.Text = "Transaction still refreshing..."
+                            'End If
+
                             Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
                             Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
                             Me.adpTransactionMachinePart.Update(Me.myDataset.MntTransactionMachinePart)
@@ -470,6 +513,37 @@ Public Class frmMntTrxConsole
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    Private Sub UpdateTableAdapters()
+        status.Visible = True
+        status.Text = "Refreshing transaction list..."
+
+        'Me.BeginInvoke(Updatess)
+
+        Updates()
+
+        'BindDataSetToDataGrid()
+
+        status.Text = "Transaction list updated"
+        status.Visible = False
+
+        isWorking = False
+    End Sub
+
+    Private Sub Updates()
+        Me.adpTransactionHeader.Update(Me.myDataset.MntTransactionHeader)
+        Me.adpTransactionDetail.Update(Me.myDataset.MntTransactionDetail)
+        Me.adpTransactionMachinePart.Update(Me.myDataset.MntTransactionMachinePart)
+        Me.adpTransactionSparePart.Update(Me.myDataset.MntTransactionSparePart)
+        Me.adpTransactionUser.Update(Me.myDataset.MntTransactionUser)
+        Me.adpMachine.Update(Me.myDataset.MntMachine)
+        Me.myDataset.AcceptChanges()
+    End Sub
+
+    'Private Sub BindDataSetToDataGrid()
+    '    dgvTransactionHeader.AutoGenerateColumns = False
+    '    dgvTransactionHeader.DataSource = Me.bsTransactionHeader
+    'End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
@@ -523,6 +597,7 @@ Public Class frmMntTrxConsole
             Me.bsTransactionHeader.Filter = String.Format("TrxStatusId = 2")
             transactionStatusId = 2
         End If
+        'Me.SetPagedDataSource(Me.myDataset.MntTransactionHeader, bindingNavigator)
     End Sub
 
     Public Sub RefreshValues()
@@ -612,4 +687,7 @@ Public Class frmMntTrxConsole
         End Try
     End Sub
 
+    Private Sub dgvTransactionHeader_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvTransactionHeader.DataError
+        e.Cancel = False
+    End Sub
 End Class

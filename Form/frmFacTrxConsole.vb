@@ -93,7 +93,25 @@ Public Class frmFacTrxConsole
         workgroupId = _workgroupId
         isAdmin = _isAdmin
 
-        RefreshValues()
+        'RefreshValues()
+
+        Me.myDataset.EnforceConstraints = False
+        Me.adpMachine.Fill(Me.myDataset.FacMachine)
+        Me.adpFloor.Fill(Me.myDataset.FacFloor)
+
+        Me.adpTransactionHeader.Fill(Me.myDataset.FacTransactionHeader)
+        Me.adpNickname.Fill(Me.myDataset.SecUser)
+        Me.adpMachineName.Fill(Me.myDataset.FacMachine)
+        Me.adpTransactionStatusName.Fill(Me.myDataset.GenTransactionStatus)
+
+        Me.adpTransactionDetail.Fill(Me.myDataset.FacTransactionDetail)
+        Me.adpTransactionUser.Fill(Me.myDataset.FacTransactionUser)
+        Me.adpWorkgroup.Fill(Me.myDataset.SecWorkgroup)
+        Me.adpUser.Fill(Me.myDataset.SecUser)
+        Me.adpTransactionStatus.Fill(Me.myDataset.GenTransactionStatus)
+        Me.adpRoutingStatus.Fill(Me.myDataset.GenRoutingStatus)
+        Me.adpMachineStatus.Fill(Me.myDataset.FacMachineStatus)
+        Me.myDataset.EnforceConstraints = True
     End Sub
 
     Private Sub frmFacTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -275,13 +293,13 @@ Public Class frmFacTrxConsole
                 End If
             Next
 
-            counter = counter + 1
+            'counter = counter + 1
 
-            '5 minutes
-            If counter = 300 Then
-                RefreshValues()
-                counter = 0
-            End If
+            ''5 minutes
+            'If counter = 300 Then
+            '    RefreshValues()
+            '    counter = 0
+            'End If
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

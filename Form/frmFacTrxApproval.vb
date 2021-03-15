@@ -226,21 +226,21 @@ Public Class frmFacTrxApproval
                 Next
             Next
 
-            tmrRefresh.Start()
+            'tmrRefresh.Start()
         Catch ex As Exception
             MessageBox.Show(ex.Message, method.SetExcpTitle(ex), MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub tmrRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRefresh.Tick
-        counter = counter + 1
+    'Private Sub tmrRefresh_Tick(sender As Object, e As EventArgs) Handles tmrRefresh.Tick
+    '    counter = counter + 1
 
-        '5 minutes
-        If counter = 300 Then
-            RefreshValues()
-            counter = 0
-        End If
-    End Sub
+    '    '5 minutes
+    '    If counter = 300 Then
+    '        RefreshValues()
+    '        counter = 0
+    '    End If
+    'End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
