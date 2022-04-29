@@ -2,14 +2,15 @@
 <xs:schema id="dsReport" targetNamespace="http://tempuri.org/dsReport.xsd" xmlns:mstns="http://tempuri.org/dsReport.xsd" xmlns="http://tempuri.org/dsReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
   <xs:annotation>
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
-      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="MachineMonitoringConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="MachineMonitoringConnectionString (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MachineMonitoringSystem.My.MySettings.GlobalReference.Default.MachineMonitoringConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="MachineMonitoringConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="MachineMonitoringConnectionString (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MachineMonitoringSystem.My.MySettings.GlobalReference.Default.MachineMonitoringConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="MachineMonitoringConnectionString1" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="MachineMonitoringConnectionString1 (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MachineMonitoringSystem.My.MySettings.GlobalReference.Default.MachineMonitoringConnectionString1" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RptMntActivityReportTableAdapter" GeneratorDataComponentClassName="RptMntActivityReportTableAdapter" Name="RptMntActivityReport" UserDataComponentName="RptMntActivityReportTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="MachineMonitoringConnectionString (MySettings)" DbObjectName="MachineMonitoring.dbo.RptMntActivityReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="MachineMonitoringConnectionString1 (MySettings)" DbObjectName="MachineMonitoring.dbo.RptMntActivityReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                     <CommandText>dbo.RptMntActivityReport</CommandText>
@@ -43,7 +44,10 @@
               <Mapping SourceColumn="MachineSubStatusName" DataSetColumn="MachineSubStatusName" />
               <Mapping SourceColumn="JigId" DataSetColumn="JigId" />
               <Mapping SourceColumn="JigName" DataSetColumn="JigName" />
+              <Mapping SourceColumn="DowntimeJigStatusId" DataSetColumn="DowntimeJigStatusId" />
               <Mapping SourceColumn="JigStatusName" DataSetColumn="JigStatusName" />
+              <Mapping SourceColumn="DowntimeJigSubStatusId" DataSetColumn="DowntimeJigSubStatusId" />
+              <Mapping SourceColumn="JigSubStatusName" DataSetColumn="JigSubStatusName" />
               <Mapping SourceColumn="DatetimeStarted" DataSetColumn="DatetimeStarted" />
               <Mapping SourceColumn="DatetimeEnded" DataSetColumn="DatetimeEnded" />
               <Mapping SourceColumn="TotalAccumulatedDowntime" DataSetColumn="TotalAccumulatedDowntime" />
@@ -68,7 +72,7 @@
   <xs:element name="dsReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsReport" msprop:Generator_UserDSName="dsReport">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="RptMntActivityReport" msprop:Generator_TableClassName="RptMntActivityReportDataTable" msprop:Generator_TableVarName="tableRptMntActivityReport" msprop:Generator_RowChangedName="RptMntActivityReportRowChanged" msprop:Generator_TablePropName="RptMntActivityReport" msprop:Generator_RowDeletingName="RptMntActivityReportRowDeleting" msprop:Generator_RowChangingName="RptMntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="RptMntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="RptMntActivityReportRowDeleted" msprop:Generator_RowClassName="RptMntActivityReportRow" msprop:Generator_UserTableName="RptMntActivityReport" msprop:Generator_RowEvArgName="RptMntActivityReportRowChangeEvent">
+        <xs:element name="RptMntActivityReport" msprop:Generator_TableClassName="RptMntActivityReportDataTable" msprop:Generator_TableVarName="tableRptMntActivityReport" msprop:Generator_TablePropName="RptMntActivityReport" msprop:Generator_RowDeletingName="RptMntActivityReportRowDeleting" msprop:Generator_RowChangingName="RptMntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="RptMntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="RptMntActivityReportRowDeleted" msprop:Generator_UserTableName="RptMntActivityReport" msprop:Generator_RowChangedName="RptMntActivityReportRowChanged" msprop:Generator_RowEvArgName="RptMntActivityReportRowChangeEvent" msprop:Generator_RowClassName="RptMntActivityReportRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="TrxDate" msprop:Generator_ColumnVarNameInTable="columnTrxDate" msprop:Generator_ColumnPropNameInRow="TrxDate" msprop:Generator_ColumnPropNameInTable="TrxDateColumn" msprop:Generator_UserColumnName="TrxDate" type="xs:dateTime" />
@@ -83,7 +87,7 @@
               <xs:element name="AreaName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnAreaName" msprop:Generator_ColumnPropNameInRow="AreaName" msprop:Generator_ColumnPropNameInTable="AreaNameColumn" msprop:Generator_UserColumnName="AreaName" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
-                    <xs:maxLength value="20" />
+                    <xs:maxLength value="40" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
@@ -119,10 +123,19 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+              <xs:element name="DowntimeJigStatusId" msprop:Generator_ColumnVarNameInTable="columnDowntimeJigStatusId" msprop:Generator_ColumnPropNameInRow="DowntimeJigStatusId" msprop:Generator_ColumnPropNameInTable="DowntimeJigStatusIdColumn" msprop:Generator_UserColumnName="DowntimeJigStatusId" type="xs:int" minOccurs="0" />
               <xs:element name="JigStatusName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJigStatusName" msprop:Generator_ColumnPropNameInRow="JigStatusName" msprop:Generator_ColumnPropNameInTable="JigStatusNameColumn" msprop:Generator_UserColumnName="JigStatusName" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DowntimeJigSubStatusId" msprop:Generator_ColumnVarNameInTable="columnDowntimeJigSubStatusId" msprop:Generator_ColumnPropNameInRow="DowntimeJigSubStatusId" msprop:Generator_ColumnPropNameInTable="DowntimeJigSubStatusIdColumn" msprop:Generator_UserColumnName="DowntimeJigSubStatusId" type="xs:int" minOccurs="0" />
+              <xs:element name="JigSubStatusName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJigSubStatusName" msprop:Generator_ColumnPropNameInRow="JigSubStatusName" msprop:Generator_ColumnPropNameInTable="JigSubStatusNameColumn" msprop:Generator_UserColumnName="JigSubStatusName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>

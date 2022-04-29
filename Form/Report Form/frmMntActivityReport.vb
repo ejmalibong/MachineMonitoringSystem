@@ -1,79 +1,71 @@
 ﻿Imports System.Data.SqlClient
-Imports Microsoft.Reporting.WinForms
 Imports BlackCoffeeLibrary
 Imports MachineMonitoringSystem.dsReport
 Imports MachineMonitoringSystem.dsReportTableAdapters
+Imports Microsoft.Reporting.WinForms
 
 Public Class frmMntActivityReport
     Private connection As New clsConnection
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dbMain As New Main
 
-    Private dsReport As New dsReport
-    Private adpActivityReport As New RptMntActivityReportTableAdapter
-    Private dtActivityReport As New RptMntActivityReportDataTable
+    'Private dsReport As New dsReport
+    'Private adpActivityReport As New RptMntActivityReportTableAdapter
+    'Private dtActivityReport As New RptMntActivityReportDataTable
     Private bsActivityReport As New BindingSource
 
     Private shift As Char = String.Empty
 
     Private Sub frmMntActivityReport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            Dim _prmTechnician(0) As SqlParameter
-            _prmTechnician(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            _prmTechnician(0).Value = 2
-
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbUserName, "< All > ", _prmTechnician)
+            Dim prmTechnician(0) As SqlParameter
+            prmTechnician(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmTechnician(0).Value = 2
+            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbUserName, "< All > ", prmTechnician)
+            AddHandler cmbUserName.Validated, AddressOf cmbUserName_Validated
 
             rdBoth.Checked = True
 
-            Dim _prmArea(0) As SqlParameter
-            _prmArea(0) = New SqlParameter("@AreaId", SqlDbType.Int)
-            _prmArea(0).Value = Nothing
+            Dim prmArea(0) As SqlParameter
+            prmArea(0) = New SqlParameter("@AreaId", SqlDbType.Int)
+            prmArea(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< All > ", prmArea)
+            AddHandler cmbArea.Validated, AddressOf cmbArea_Validated
 
-            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< All > ", _prmArea)
+            Dim prmTrxStatus(0) As SqlParameter
+            prmTrxStatus(0) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+            prmTrxStatus(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdGenTransactionStatus", CommandType.StoredProcedure, "TrxStatusId", "TrxStatusName", cmbTransactionStatus, "< All > ", prmTrxStatus)
 
-            Dim _prmTransactionStatus(0) As SqlParameter
-            _prmTransactionStatus(0) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-            _prmTransactionStatus(0).Value = Nothing
+            Dim prMachineStatus(0) As SqlParameter
+            prMachineStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+            prMachineStatus(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbMachineDowntimeStatus, "< All > ", prMachineStatus)
 
-            dbMethod.FillCmbWithCaption("RdGenTransactionStatus", CommandType.StoredProcedure, "TrxStatusId", "TrxStatusName", cmbTransactionStatus, "< All > ", _prmTransactionStatus)
+            Dim prmMachine(0) As SqlParameter
+            prmMachine(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+            prmMachine(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachine, "< All > ", prmMachine)
+            AddHandler cmbMachine.Validated, AddressOf cmbMachine_Validated
 
-            Dim _prMachineStatus(0) As SqlParameter
-            _prMachineStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-            _prMachineStatus(0).Value = Nothing
+            Dim prmJigStatus(0) As SqlParameter
+            prmJigStatus(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+            prmJigStatus(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbJigDowntimeStatus, "< All > ", prmJigStatus)
 
-            dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbMachineDowntimeStatus, "< All > ", _prMachineStatus)
-
-            Dim _prmMachine(0) As SqlParameter
-            _prmMachine(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            _prmMachine(0).Value = Nothing
-
-            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachine, "< All > ", _prmMachine)
-
-            Dim _prmJigStatus(0) As SqlParameter
-            _prmJigStatus(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-            _prmJigStatus(0).Value = Nothing
-
-            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbJigDowntimeStatus, "< All > ", _prmJigStatus)
-
-            Dim _prmJig(0) As SqlParameter
-            _prmJig(0) = New SqlParameter("@JigId", SqlDbType.Int)
-            _prmJig(0).Value = Nothing
-
-            dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigName", cmbJig, "< All > ", _prmJig)
+            Dim prmJig(0) As SqlParameter
+            prmJig(0) = New SqlParameter("@JigId", SqlDbType.Int)
+            prmJig(0).Value = Nothing
+            dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJig, "< All > ", prmJig)
+            AddHandler cmbJig.Validated, AddressOf cmbJig_Validated
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    'Private Sub frmMntActivityReport_LocationChanged(sender As Object, e As EventArgs) Handles Me.LocationChanged
-    '    dbMain.FormTrap(Me)
-    'End Sub
-
     Private Sub frmMntActivityReport_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode.Equals(Keys.Enter) Then
-            Me.SelectNextControl(Me.ActiveControl, True, True, True, True)
-        ElseIf e.KeyCode.Equals(Keys.F10) Then
+        If e.KeyCode.Equals(Keys.F10) Then
+            e.Handled = True
             btnGenerate.PerformClick()
         End If
     End Sub
@@ -92,7 +84,7 @@ Public Class frmMntActivityReport
         End Try
     End Sub
 
-    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+    Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         dtpStartDate.Value = CDate(dbMethod.GetServerDate).Date
         dtpEndDate.Value = CDate(dbMethod.GetServerDate).Date
         cmbUserName.SelectedValue = 0
@@ -110,12 +102,30 @@ Public Class frmMntActivityReport
     End Sub
 
     Private Sub GenerateReport()
-        Me.adpActivityReport.Fill(Me.dsReport.RptMntActivityReport, dbMain.FormatDate(dtpStartDate.Value.Date, True), dbMain.FormatDate(dtpEndDate.Value.Date, False), _
-                                  GetShift, GetArea, GetTransactionStatus, GetDowntimeMachineStatus, GetMachine, GetDowntimeJigStatus, GetJig, GetUserName)
+        Dim prmRpt(9) As SqlParameter
+        prmRpt(0) = New SqlParameter("@StartDate", SqlDbType.Date)
+        prmRpt(0).Value = dbMain.FormatDate(dtpStartDate.Value.Date, True)
+        prmRpt(1) = New SqlParameter("@EndDate", SqlDbType.Date)
+        prmRpt(1).Value = dbMain.FormatDate(dtpEndDate.Value.Date, False)
+        prmRpt(2) = New SqlParameter("@ShiftId", SqlDbType.Char)
+        prmRpt(2).Value = GetShift()
+        prmRpt(3) = New SqlParameter("@AreaId", SqlDbType.Int)
+        prmRpt(3).Value = GetArea()
+        prmRpt(4) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+        prmRpt(4).Value = GetTransactionStatus()
+        prmRpt(5) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
+        prmRpt(5).Value = GetDowntimeMachineStatus()
+        prmRpt(6) = New SqlParameter("@MachineId", SqlDbType.Int)
+        prmRpt(6).Value = GetMachine()
+        prmRpt(7) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
+        prmRpt(7).Value = GetDowntimeJigStatus()
+        prmRpt(8) = New SqlParameter("@JigId", SqlDbType.Int)
+        prmRpt(8).Value = GetJig()
+        prmRpt(9) = New SqlParameter("@UserId", SqlDbType.Int)
+        prmRpt(9).Value = GetUserName()
 
-        Me.bsActivityReport.DataSource = Me.dsReport
-        Me.bsActivityReport.DataMember = dtActivityReport.TableName
-        Me.bsActivityReport.ResetBindings(True)
+        Dim dtReport As New DataTable
+        dtReport = dbMethod.FillDataTable("RptMntActivityReport", CommandType.StoredProcedure, prmRpt)
 
         If Not rdBoth.Checked = True Then
             If rdDay.Checked = True Then
@@ -127,16 +137,16 @@ Public Class frmMntActivityReport
             shift = "B"
         End If
 
-        If Me.bsActivityReport.Count > 0 Then
+        If dtReport.Rows.Count > 0 Then
             rptViewer.LocalReport.ReportPath = "ReportFile\MntActivityReport.rdlc"
             rptViewer.LocalReport.DataSources.Clear()
-            rptViewer.LocalReport.DataSources.Add(New ReportDataSource(dtActivityReport.TableName, Me.bsActivityReport))
+            rptViewer.LocalReport.DataSources.Add(New ReportDataSource("RptMntActivityReport", dtReport))
 
-            Dim _rptParam As New ReportParameterCollection
-            _rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("StartDate", dtpStartDate.Value.Date.ToString("MMMM dd, yyyy")))
-            _rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("EndDate", dtpEndDate.Value.Date.ToString("MMMM dd, yyyy")))
-            _rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("Shift", shift))
-            rptViewer.LocalReport.SetParameters(_rptParam)
+            Dim rptParam As New ReportParameterCollection
+            rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("StartDate", dtpStartDate.Value.Date.ToString("MMMM dd, yyyy")))
+            rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("EndDate", dtpEndDate.Value.Date.ToString("MMMM dd, yyyy")))
+            rptParam.Add(New Microsoft.Reporting.WinForms.ReportParameter("Shift", shift))
+            rptViewer.LocalReport.SetParameters(rptParam)
 
             rptViewer.SetDisplayMode(DisplayMode.PrintLayout)
             rptViewer.ZoomMode = ZoomMode.PageWidth
@@ -215,57 +225,33 @@ Public Class frmMntActivityReport
         End If
     End Function
 
-    Private Sub cmbUserName_Validated(sender As Object, e As EventArgs) Handles cmbUserName.Validated
+    Private Sub cmbUserName_Validated(sender As Object, e As EventArgs)
         Try
-            If cmbUserName.Text.Trim.Length = 0 Then
-                cmbUserName.SelectedValue = 0
-            End If
-
-            If cmbUserName.SelectedValue = 0 Then
-                cmbUserName.SelectedValue = 0
-            End If
+            If cmbUserName.SelectedValue = 0 Then cmbUserName.SelectedValue = 0
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub cmbArea_Validated(sender As Object, e As EventArgs) Handles cmbArea.Validated
+    Private Sub cmbArea_Validated(sender As Object, e As EventArgs)
         Try
-            If cmbArea.Text.Trim.Length = 0 Then
-                cmbArea.SelectedValue = 0
-            End If
-
-            If cmbArea.SelectedValue = 0 Then
-                cmbArea.SelectedValue = 0
-            End If
+            If cmbArea.SelectedValue = 0 Then cmbArea.SelectedValue = 0
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub cmbMachine_Validated(sender As Object, e As EventArgs) Handles cmbMachine.Validated
+    Private Sub cmbMachine_Validated(sender As Object, e As EventArgs)
         Try
-            If cmbMachine.Text.Trim.Length = 0 Then
-                cmbMachine.SelectedValue = 0
-            End If
-
-            If cmbMachine.SelectedValue = 0 Then
-                cmbMachine.SelectedValue = 0
-            End If
+            If cmbMachine.SelectedValue = 0 Then cmbMachine.SelectedValue = 0
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub cmbJig_Validated(sender As Object, e As EventArgs) Handles cmbJig.Validated
+    Private Sub cmbJig_Validated(sender As Object, e As EventArgs)
         Try
-            If cmbJig.Text.Trim.Length = 0 Then
-                cmbJig.SelectedValue = 0
-            End If
-
-            If cmbJig.SelectedValue = 0 Then
-                cmbJig.SelectedValue = 0
-            End If
+            If cmbJig.SelectedValue = 0 Then cmbJig.SelectedValue = 0
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

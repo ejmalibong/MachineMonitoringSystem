@@ -23,19 +23,19 @@ Partial Class frmMntTrxConsole
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle39 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle40 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle41 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle42 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle43 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle44 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle45 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle46 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMntTrxConsole))
-        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle47 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle48 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
@@ -97,6 +97,10 @@ Partial Class frmMntTrxConsole
         Me.tmrElapsedTime = New System.Windows.Forms.Timer(Me.components)
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommonTxt = New System.Windows.Forms.TextBox()
+        Me.cmsConsole = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.MachineRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.JigRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OthersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.dgvMachine, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -108,6 +112,7 @@ Partial Class frmMntTrxConsole
         Me.pnlSearchByDate.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByText.SuspendLayout()
+        Me.cmsConsole.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnClose
@@ -179,13 +184,13 @@ Partial Class frmMntTrxConsole
         Me.dgvMachine.AllowUserToDeleteRows = False
         Me.dgvMachine.AllowUserToResizeColumns = False
         Me.dgvMachine.AllowUserToResizeRows = False
-        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle25.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle25.Font = New System.Drawing.Font("Verdana", 9.0!)
-        DataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvMachine.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle37.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle37.Font = New System.Drawing.Font("Verdana", 9.0!)
+        DataGridViewCellStyle37.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle37.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle37.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvMachine.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle37
         Me.dgvMachine.ColumnHeadersHeight = 25
         Me.dgvMachine.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvMachine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColAreaName, Me.ColMachineStatusId, Me.ColMachineLastTransaction, Me.ColMachineElapsedTime})
@@ -213,8 +218,8 @@ Partial Class frmMntTrxConsole
         'ColMachineName
         '
         Me.ColMachineName.DataPropertyName = "MachineName"
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColMachineName.DefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColMachineName.DefaultCellStyle = DataGridViewCellStyle38
         Me.ColMachineName.HeaderText = "Machine"
         Me.ColMachineName.Name = "ColMachineName"
         Me.ColMachineName.ReadOnly = True
@@ -223,8 +228,8 @@ Partial Class frmMntTrxConsole
         'ColAreaName
         '
         Me.ColAreaName.DataPropertyName = "AreaName"
-        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColAreaName.DefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColAreaName.DefaultCellStyle = DataGridViewCellStyle39
         Me.ColAreaName.HeaderText = "Area"
         Me.ColAreaName.Name = "ColAreaName"
         Me.ColAreaName.ReadOnly = True
@@ -240,9 +245,9 @@ Partial Class frmMntTrxConsole
         'ColMachineLastTransaction
         '
         Me.ColMachineLastTransaction.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle28.Format = "G"
-        DataGridViewCellStyle28.NullValue = Nothing
-        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle28
+        DataGridViewCellStyle40.Format = "G"
+        DataGridViewCellStyle40.NullValue = Nothing
+        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle40
         Me.ColMachineLastTransaction.HeaderText = "Last Transaction"
         Me.ColMachineLastTransaction.Name = "ColMachineLastTransaction"
         Me.ColMachineLastTransaction.ReadOnly = True
@@ -250,9 +255,9 @@ Partial Class frmMntTrxConsole
         '
         'ColMachineElapsedTime
         '
-        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle29.NullValue = Nothing
-        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle29
+        DataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle41.NullValue = Nothing
+        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle41
         Me.ColMachineElapsedTime.HeaderText = "Time"
         Me.ColMachineElapsedTime.Name = "ColMachineElapsedTime"
         Me.ColMachineElapsedTime.ReadOnly = True
@@ -266,13 +271,13 @@ Partial Class frmMntTrxConsole
         Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle30.Font = New System.Drawing.Font("Verdana", 9.0!)
-        DataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle30
+        DataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle42.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle42.Font = New System.Drawing.Font("Verdana", 9.0!)
+        DataGridViewCellStyle42.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle42.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle42.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle42
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxId, Me.ColTechnician, Me.ColShiftId, Me.ColMachineName2, Me.ColDatetimeStarted, Me.ColActivity, Me.ColDatetimeEnded, Me.ColTotalAccumulatedTime, Me.ColRoutingStatusName})
@@ -305,8 +310,8 @@ Partial Class frmMntTrxConsole
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle31
+        DataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle43
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -323,8 +328,8 @@ Partial Class frmMntTrxConsole
         'ColDatetimeStarted
         '
         Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
-        DataGridViewCellStyle32.Format = "g"
-        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle32
+        DataGridViewCellStyle44.Format = "g"
+        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle44
         Me.ColDatetimeStarted.HeaderText = "Start"
         Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
         Me.ColDatetimeStarted.ReadOnly = True
@@ -340,9 +345,9 @@ Partial Class frmMntTrxConsole
         'ColDatetimeEnded
         '
         Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
-        DataGridViewCellStyle33.Format = "g"
-        DataGridViewCellStyle33.NullValue = Nothing
-        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle33
+        DataGridViewCellStyle45.Format = "g"
+        DataGridViewCellStyle45.NullValue = Nothing
+        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle45
         Me.ColDatetimeEnded.HeaderText = "End"
         Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
         Me.ColDatetimeEnded.ReadOnly = True
@@ -351,8 +356,8 @@ Partial Class frmMntTrxConsole
         'ColTotalAccumulatedTime
         '
         Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
-        DataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle34
+        DataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle46
         Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
         Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
         Me.ColTotalAccumulatedTime.ReadOnly = True
@@ -452,6 +457,7 @@ Partial Class frmMntTrxConsole
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -540,13 +546,13 @@ Partial Class frmMntTrxConsole
         Me.dgvJig.AllowUserToDeleteRows = False
         Me.dgvJig.AllowUserToResizeColumns = False
         Me.dgvJig.AllowUserToResizeRows = False
-        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle35.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle35.Font = New System.Drawing.Font("Verdana", 9.0!)
-        DataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvJig.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle35
+        DataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle47.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle47.Font = New System.Drawing.Font("Verdana", 9.0!)
+        DataGridViewCellStyle47.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle47.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle47.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvJig.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle47
         Me.dgvJig.ColumnHeadersHeight = 25
         Me.dgvJig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvJig.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJig, Me.ColJigCompleteName, Me.ColJigAreaName, Me.ColJigStatusId, Me.ColJigModelId, Me.ColJigExtensionId, Me.ColJigLastTransaction, Me.ColJigElapsedTime})
@@ -620,8 +626,8 @@ Partial Class frmMntTrxConsole
         '
         'ColJigElapsedTime
         '
-        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColJigElapsedTime.DefaultCellStyle = DataGridViewCellStyle36
+        DataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColJigElapsedTime.DefaultCellStyle = DataGridViewCellStyle48
         Me.ColJigElapsedTime.HeaderText = "Time"
         Me.ColJigElapsedTime.Name = "ColJigElapsedTime"
         Me.ColJigElapsedTime.ReadOnly = True
@@ -789,6 +795,30 @@ Partial Class frmMntTrxConsole
         Me.txtCommonTxt.Size = New System.Drawing.Size(316, 21)
         Me.txtCommonTxt.TabIndex = 543
         '
+        'cmsConsole
+        '
+        Me.cmsConsole.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MachineRelatedToolStripMenuItem, Me.JigRelatedToolStripMenuItem, Me.OthersToolStripMenuItem})
+        Me.cmsConsole.Name = "cmsConsole"
+        Me.cmsConsole.Size = New System.Drawing.Size(181, 92)
+        '
+        'MachineRelatedToolStripMenuItem
+        '
+        Me.MachineRelatedToolStripMenuItem.Name = "MachineRelatedToolStripMenuItem"
+        Me.MachineRelatedToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MachineRelatedToolStripMenuItem.Text = "Machine-Related"
+        '
+        'JigRelatedToolStripMenuItem
+        '
+        Me.JigRelatedToolStripMenuItem.Name = "JigRelatedToolStripMenuItem"
+        Me.JigRelatedToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.JigRelatedToolStripMenuItem.Text = "Jig-Related"
+        '
+        'OthersToolStripMenuItem
+        '
+        Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
+        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OthersToolStripMenuItem.Text = "Others"
+        '
         'frmMntTrxConsole
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -816,6 +846,9 @@ Partial Class frmMntTrxConsole
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Verdana", 9.0!)
         Me.Name = "frmMntTrxConsole"
+        Me.ShowIcon = False
+        Me.ShowInTaskbar = False
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Transaction Console"
         CType(Me.dgvMachine, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).EndInit()
@@ -831,6 +864,7 @@ Partial Class frmMntTrxConsole
         Me.pnlSearchByCmb.ResumeLayout(False)
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
+        Me.cmsConsole.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -896,4 +930,8 @@ Partial Class frmMntTrxConsole
     Friend WithEvents cmbCommonCmb As SergeUtils.EasyCompletionComboBox
     Friend WithEvents pnlSearchByText As System.Windows.Forms.Panel
     Friend WithEvents txtCommonTxt As System.Windows.Forms.TextBox
+    Friend WithEvents cmsConsole As ContextMenuStrip
+    Friend WithEvents MachineRelatedToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents JigRelatedToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OthersToolStripMenuItem As ToolStripMenuItem
 End Class

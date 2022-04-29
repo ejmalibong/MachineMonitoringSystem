@@ -1,8 +1,7 @@
-﻿Imports System
+﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 Imports MachineMonitoringSystem.dsMonitoring
 Imports MachineMonitoringSystem.dsMonitoringTableAdapters
-Imports System.Data.SqlClient
 
 Public Class frmMntJig
     Private connection As New clsConnection
@@ -724,7 +723,6 @@ Public Class frmMntJig
                 dgvList.CurrentRow.Cells("ColIsActive").ReadOnly = False
 
                 isEditMode = True
-
             Else
                 btnAddSave.Text = " Add"
                 btnAddSave.Image = MachineMonitoringSystem.My.Resources.Create_16_x_16

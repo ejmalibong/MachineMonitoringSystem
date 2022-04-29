@@ -1,4 +1,2 @@
-﻿
-
-Partial Public Class dsMonitoring
+﻿Partial Public Class dsMonitoring
 End Class

@@ -1,6 +1,4 @@
-﻿Imports System.Data
-Imports System.Data.SqlClient
-Imports System.Configuration
+﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 Imports MachineMonitoringSystem.dsMonitoring
 Imports MachineMonitoringSystem.dsMonitoringTableAdapters
@@ -11,7 +9,6 @@ Public Class frmMntTrxConsole
     Private dbMain As New Main
 
     Private dsMonitoring As New dsMonitoring
-
     Private adpTransactionHeader As New MntTransactionHeaderTableAdapter
     Private adpMachine As New MntMachineTableAdapter
     Private adpJig As New MntJigTableAdapter
@@ -67,9 +64,9 @@ Public Class frmMntTrxConsole
     Private tmrJigHours As Integer = 0
     Private tmrJigDays As Integer = 0
 
-    Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 2} 'sv, asv, sr mngr
+    Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 35, 2} 'sv, asv, sr mngr
 
-    Public Sub New(ByVal _userId As Integer, ByVal _workgroupId As Integer, ByVal _isAdmin As Boolean)
+    Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -81,6 +78,9 @@ Public Class frmMntTrxConsole
     End Sub
 
     Private Sub frmMntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SearchCriteria()
+        TransactionStatus()
+
         cmbStatus.SelectedValue = 1
 
         pageIndex = 0
@@ -89,9 +89,6 @@ Public Class frmMntTrxConsole
 
         BindJig()
         BindMachine()
-
-        SearchCriteria()
-        TransactionStatus()
 
         dbMain.EnableDoubleBuffered(dgvMachine)
         dbMain.EnableDoubleBuffered(dgvList)
@@ -245,15 +242,52 @@ Public Class frmMntTrxConsole
 
     Private Sub btnCreate_Click(sender As Object, e As EventArgs) Handles btnCreate.Click
         Try
-            Using frmDetail As New frmMntTrxDetail(Me.dsMonitoring, userId, workgroupId, isAdmin)
-                frmDetail.ShowDialog(Me)
+            cmsConsole.Show(btnCreate, New Point(0, 0))
+            MachineRelatedToolStripMenuItem.Select()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
+    Private Sub MachineRelatedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MachineRelatedToolStripMenuItem.Click
+        Try
+            Using frmDetail As New frmMntTrxDetailMch(userId, workgroupId, isAdmin)
+                frmDetail.ShowDialog(Me)
                 If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
                     RefreshList()
                     BindJig()
                     BindMachine()
                 End If
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
+    Private Sub JigRelatedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles JigRelatedToolStripMenuItem.Click
+        Try
+            Using frmDetail As New frmMntTrxDetailJig(userId, workgroupId, isAdmin)
+                frmDetail.ShowDialog(Me)
+                If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                    RefreshList()
+                    BindJig()
+                    BindMachine()
+                End If
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub OthersToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OthersToolStripMenuItem.Click
+        Try
+            Using frmDetail As New frmMntTrxDetailOth(userId, workgroupId, isAdmin)
+                frmDetail.ShowDialog(Me)
+                If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                    RefreshList()
+                    BindJig()
+                    BindMachine()
+                End If
             End Using
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -263,18 +297,37 @@ Public Class frmMntTrxConsole
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Try
             If Me.dgvList.Rows.Count > 0 Then
-                Dim _trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
+                Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
-                Using frmDetail As New frmMntTrxDetail(Me.dsMonitoring, userId, workgroupId, isAdmin, _trxId)
-                    frmDetail.ShowDialog(Me)
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                    Using frmDetail As New frmMntTrxDetailMch(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            RefreshList()
+                            BindJig()
+                            BindMachine()
+                        End If
+                    End Using
 
-                    If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-                        RefreshList()
-                        BindJig()
-                        BindMachine()
-                    End If
-
-                End Using
+                ElseIf Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId") Is DBNull.Value Then
+                    Using frmDetail As New frmMntTrxDetailJig(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            RefreshList()
+                            BindJig()
+                            BindMachine()
+                        End If
+                    End Using
+                Else
+                    Using frmDetail As New frmMntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            RefreshList()
+                            BindJig()
+                            BindMachine()
+                        End If
+                    End Using
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -284,32 +337,32 @@ Public Class frmMntTrxConsole
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
             If isAdmin Or superiorWorkgroupId.Contains(workgroupId) Then
-                Dim _trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
-                Dim _trxStatusId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId")
-                Dim _question = String.Format("Are you sure you want to delete this record?")
+                Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
+                Dim trxStatusId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId")
+                Dim question = String.Format("Are you sure you want to delete this record?")
 
-                If MessageBox.Show(_question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    If _trxStatusId = 2 Then
+                If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                    If trxStatusId = 2 Then
                         If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
-                            Dim _prmMachineStatus(2) As SqlParameter
-                            _prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                            _prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
-                            _prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-                            _prmMachineStatus(1).Value = 1
-                            _prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-                            _prmMachineStatus(2).Value = 1
+                            Dim prmMachineStatus(2) As SqlParameter
+                            prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                            prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
+                            prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                            prmMachineStatus(1).Value = 1
+                            prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                            prmMachineStatus(2).Value = 1
 
-                            dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, _prmMachineStatus)
+                            dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
                         End If
 
                         If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId") Is DBNull.Value Then
-                            Dim _prmJigStatus(1) As SqlParameter
-                            _prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                            _prmJigStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId")
-                            _prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                            _prmJigStatus(1).Value = 1
+                            Dim prmJigStatus(1) As SqlParameter
+                            prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                            prmJigStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId")
+                            prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                            prmJigStatus(1).Value = 1
 
-                            dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, _prmJigStatus)
+                            dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
                         End If
                     End If
 
@@ -364,7 +417,6 @@ Public Class frmMntTrxConsole
 
     Private Sub BindingNavigatorMoveLastItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveLastItem.Click
         pageIndex = pageCount - 1
-
         BindPageTransaction()
     End Sub
 
@@ -641,7 +693,6 @@ Public Class frmMntTrxConsole
                 ElseIf cmbStatus.SelectedValue = 7 Then 'all records
                     Me.adpTransactionHeader.FillMntTransactionHeaderByRoutingStatusIdJoRequestor(Me.dsMonitoring.MntTransactionHeader, pageIndex, pageSize, totalCount, Nothing, txtCommonTxt.Text.Trim)
                 End If
-
             Else
                 If cmbStatus.SelectedValue = 1 Then 'on-going activity
                     Me.adpTransactionHeader.FillMntTransactionHeaderByRoutingStatusId(Me.dsMonitoring.MntTransactionHeader, pageIndex, pageSize, totalCount, 5)
@@ -797,9 +848,9 @@ Public Class frmMntTrxConsole
     Private Sub TransactionStatus()
         dictStatus.Add(" On-going Activity", 1)
         dictStatus.Add(" Done", 2)
-        dictStatus.Add(" For approval of Senior Manager", 3)
-        dictStatus.Add(" For approval of Supervisor", 4)
-        dictStatus.Add(" For approval of Asst. Supervisor", 5)
+        dictStatus.Add(" For approval of Superior 1", 3)
+        dictStatus.Add(" For approval of Superior 2", 4)
+        dictStatus.Add(" For approval of Superior 3", 5)
         dictStatus.Add(" Completed", 6)
         dictStatus.Add(" All Records", 7)
         cmbStatus.DisplayMember = "Key"

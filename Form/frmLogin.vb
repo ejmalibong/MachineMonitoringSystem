@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
-Imports BlackCoffeeLibrary
 Imports System.Deployment.Application
+Imports BlackCoffeeLibrary
 
 Public Class frmLogin
     Private connection As New clsConnection
@@ -22,43 +22,31 @@ Public Class frmLogin
     Dim imgHide As Image = My.Resources.Password_Hide
 
     Private Sub Login_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'sir alvin
-        'txtEmployeeId.Text = "1705-025"
+        If MachineMonitoringSystem.My.Settings.IsDebug = True Then
+            'sir alvin
+            'txtEmployeeId.Text = "1705-025"
+            'txtPassword.Text = "aranes"
 
-        'sir clark
-        'txtEmployeeId.Text = "1709-006"
+            'sir mon
+            'txtEmployeeId.Text = "1506-001"
+            'txtPassword.Text = "bayani"
 
-        ''sir mon
-        'txtEmployeeId.Text = "1506-001"
-        'txtPassword.Text = "bayani"
+            'sir emman
+            'txtEmployeeId.Text = "1701-066"
+            'txtPassword.Text = "sandoval"
 
-        ''sir emman
-        'txtEmployeeId.Text = "1701-066"
-        'txtPassword.Text = "sandoval"
+            'sir harry
+            txtEmployeeId.Text = "1807-002"
+            txtPassword.Text = "tanega"
 
-        ''sir harry
-        'txtEmployeeId.Text = "1807-002"
-        'txtPassword.Text = "tanega"
+            ''sys admin
+            'txtEmployeeId.Text = "XXXX-XX"
+            'txtPassword.Text = "Adm1nAcc3ss"
 
-        'sir noriel
-        'txtEmployeeId.Text = "1901-033"
-
-        'sir jhon
-        'txtEmployeeId.Text = "1811-031"
-
-        'sir tony
-        'txtEmployeeId.Text = "1605-002"
-
-        'mam liza
-        'txtEmployeeId.Text = "2009-015"
-
-        'me
-        'txtEmployeeId.Text = "2009-002"
-        'txtPassword.Text = "malibong"
-
-        ''karlin
-        'txtEmployeeId.Text = "2106-020"
-        'txtPassword.Text = "tano"
+            ''ej
+            'txtEmployeeId.Text = "2009-002"
+            'txtPassword.Text = "malibong"
+        End If
 
         picPassword.Image = imgHide
         txtPassword.UseSystemPasswordChar = True
@@ -98,43 +86,44 @@ Public Class frmLogin
                 Return
             End If
 
-            Dim _count1 As Integer = 0
-            Dim _prm1(1) As SqlParameter
-            _prm1(0) = New SqlParameter("@EmployeeId", SqlDbType.NVarChar)
-            _prm1(0).Value = txtEmployeeId.Text.Trim
-            _prm1(1) = New SqlParameter("@Password", SqlDbType.NVarChar)
-            _prm1(1).Value = txtPassword.Text.Trim
+            Dim countId As Integer = 0
+            Dim prmCountId(1) As SqlParameter
+            prmCountId(0) = New SqlParameter("@EmployeeId", SqlDbType.NVarChar)
+            prmCountId(0).Value = txtEmployeeId.Text.Trim
+            prmCountId(1) = New SqlParameter("@Password", SqlDbType.NVarChar)
+            prmCountId(1).Value = txtPassword.Text.Trim
 
             'use latin1 general collation for case-sensitive password
-            _count1 = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE TRIM(EmployeeId) COLLATE Latin1_General_CS_AS = @EmployeeId AND " & _
-                                             "TRIM(Password) COLLATE Latin1_General_CS_AS = @Password", CommandType.Text, _prm1)
+            countId = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE TRIM(EmployeeId) COLLATE Latin1_General_CS_AS = @EmployeeId AND " &
+                                             "TRIM(Password) COLLATE Latin1_General_CS_AS = @Password", CommandType.Text, prmCountId)
 
-            If _count1 > 0 Then
-                Dim _prm2(1) As SqlParameter
-                _prm2(0) = New SqlParameter("@EmployeeId", SqlDbType.NVarChar)
-                _prm2(0).Value = txtEmployeeId.Text.Trim
-                _prm2(1) = New SqlParameter("@Password", SqlDbType.NVarChar)
-                _prm2(1).Value = txtPassword.Text.Trim
+            If countId > 0 Then
+                Dim prmUser(1) As SqlParameter
+                prmUser(0) = New SqlParameter("@EmployeeId", SqlDbType.NVarChar)
+                prmUser(0).Value = txtEmployeeId.Text.Trim
+                prmUser(1) = New SqlParameter("@Password", SqlDbType.NVarChar)
+                prmUser(1).Value = txtPassword.Text.Trim
 
-                Dim _reader As IDataReader = dbMethod.ExecuteReader("RdSecUser", CommandType.StoredProcedure, _prm2)
+                Dim rdrUser As IDataReader = dbMethod.ExecuteReader("RdSecUser", CommandType.StoredProcedure, prmUser)
 
-                While _reader.Read
-                    userId = _reader.Item("UserId")
-                    userName = _reader.Item("UserName").ToString.Trim
-                    departmentId = _reader.Item("DepartmentId")
-                    departmentName = _reader.Item("DepartmentName").ToString.Trim
-                    sectionId = _reader.Item("SectionId")
-                    sectionName = _reader.Item("SectionName").ToString.Trim
-                    workgroupId = _reader.Item("WorkgroupId")
-                    workgroupName = _reader.Item("WorkgroupName").ToString.Trim
-                    isAdmin = _reader.Item("IsAdmin")
+                While rdrUser.Read
+                    userId = rdrUser.Item("UserId")
+                    userName = rdrUser.Item("UserName").ToString.Trim
+                    departmentId = rdrUser.Item("DepartmentId")
+                    departmentName = rdrUser.Item("DepartmentName").ToString.Trim
+                    sectionId = rdrUser.Item("SectionId")
+                    sectionName = rdrUser.Item("SectionName").ToString.Trim
+                    workgroupId = rdrUser.Item("WorkgroupId")
+                    workgroupName = rdrUser.Item("WorkgroupName").ToString.Trim
+                    isAdmin = rdrUser.Item("IsAdmin")
                 End While
-                _reader.Close()
+                rdrUser.Close()
 
                 Me.Hide()
-                Dim _frmMain As New frmMain(userId, userName, departmentId, departmentName, sectionId, sectionName, workgroupId, workgroupName, isAdmin)
-                _frmMain.Show()
+                Dim frmMain As New frmMain(userId, userName, departmentId, departmentName, sectionId, sectionName, workgroupId, workgroupName, isAdmin)
+                frmMain.Show()
                 txtEmployeeId.Clear()
+                txtPassword.Clear()
             Else
                 MessageBox.Show("Incorrect employee ID or password.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 txtPassword.Clear()

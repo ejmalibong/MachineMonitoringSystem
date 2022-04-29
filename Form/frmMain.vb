@@ -1,11 +1,13 @@
-﻿Imports System.Data.SqlClient
-Imports BlackCoffeeLibrary
+﻿Imports System.Configuration
+Imports System.Data.SqlClient
 Imports System.Deployment.Application
+Imports BlackCoffeeLibrary
 
 Public Class frmMain
     Private connection As New clsConnection
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dbMain As New Main
+    Private impersonation As New UserImpersonation.UserImpersonation
 
     Private userId As Integer = 0
     Private userName As String = String.Empty
@@ -17,9 +19,8 @@ Public Class frmMain
     Private departmentName As String = String.Empty
     Private isAdmin As Boolean = False
 
-    Public Sub New(ByVal _userId As Integer, ByVal _userName As String, ByVal _departmentId As Integer, ByVal _departmentName As String, _
-                   ByVal _sectionId As Integer, ByVal _sectionName As String, ByVal _workgroupId As Integer, ByVal _workgroupName As String, _
-                   ByVal _isAdmin As Boolean)
+    Public Sub New(_userId As Integer, _userName As String, _departmentId As Integer, _departmentName As String, _sectionId As Integer,
+                   _sectionName As String, _workgroupId As Integer, _workgroupName As String, _isAdmin As Boolean)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -36,20 +37,20 @@ Public Class frmMain
         isAdmin = _isAdmin
 
         UsernameToolStripMenuItem.Text = "  " & StrConv(userName, VbStrConv.ProperCase)
+        UserItemToolStripMenuItem.Text = workgroupName
 
         If departmentName.Equals(sectionName) Then
             DepartmentToolStripStatusLabel.Text = departmentName
             SectionToolStripStatusLabel.Text = String.Empty
-            UserItemToolStripMenuItem.Text = workgroupName
+            SectionToolStripStatusLabel.BorderSides = ToolStripStatusLabelBorderSides.None
         Else
             If String.IsNullOrEmpty(sectionName) Then
                 DepartmentToolStripStatusLabel.Text = departmentName
                 SectionToolStripStatusLabel.Text = String.Empty
-                UserItemToolStripMenuItem.Text = workgroupName
+                SectionToolStripStatusLabel.BorderSides = ToolStripStatusLabelBorderSides.None
             Else
                 DepartmentToolStripStatusLabel.Text = departmentName
                 SectionToolStripStatusLabel.Text = sectionName
-                UserItemToolStripMenuItem.Text = sectionName & " " & workgroupName
             End If
         End If
 
@@ -63,16 +64,14 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        tmrMain.Start()
+
         'disable the resize or maximize button of the form if the form is maximized, then enable if the form is minimized
         AddHandler Me.SizeChanged, AddressOf frmMain_SizeEventHandler
-
         Me.MaximizeBox = False
-
-        tmrMain.Start()
     End Sub
 
     Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        tmrMain.Stop()
         Application.Exit()
     End Sub
 
@@ -81,10 +80,12 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_MdiChildActivate(sender As Object, e As EventArgs) Handles MyBase.MdiChildActivate
-        Dim _frm As Form = Me.ActiveMdiChild
+        Dim activeForm As Form = Me.ActiveMdiChild
 
-        If Not _frm Is Nothing Then
-            Me.Text = "Machine Monitoring System - " & _frm.Text & ""
+        If Not activeForm Is Nothing Then
+            Me.Text = "Machine Monitoring System - " & activeForm.Text & ""
+        Else
+            Me.Text = "Machine Monitoring System"
         End If
     End Sub
 
@@ -123,58 +124,27 @@ Public Class frmMain
         dbMain.FormLoader(Me, New frmSecUser(sectionId, departmentId, isAdmin))
     End Sub
 
-    Private Sub GetWorkgroupAccess(ByVal _workgroupdId As Integer, ByVal _sectionId As Integer)
-        Select Case _sectionId
-            Case 1 'manager level
-                MntTransactionConsoleToolStripMenuItem.Text = "Maintenance Transaction Console"
-                MntTransactionApprovalToolStripMenuItem.Text = "Maintenance Transaction Approval"
-                FacTransactionConsoleToolStripMenuItem.Text = "Facility Transaction Console"
-                FacTransactionApprovalToolStripMenuItem.Text = "Facility Transaction Approval"
-                MntActivityReportToolStripMenuItem.Text = "Maintenance Activity Report"
-                FacActivityReportToolStripMenuItem.Text = "Facility Activity Report"
+    Private Sub GetWorkgroupAccess(wgroupId As Integer, sectId As Integer)
+        Select Case sectId
+            Case 1 'manager, sys admin
 
             Case 2 'maintenance
-                FacTransactionConsoleToolStripMenuItem.Visible = False
-                FacTransactionApprovalToolStripMenuItem.Visible = False
-                FacActivityReportToolStripMenuItem.Visible = False
-
-                'dbMain.FormLoader(Me, New frmMntMachine)
-
-                Select Case _workgroupdId
-                    Case 30 'sv
+                Select Case wgroupId
+                    Case 29, 30, 35 'asv, sv, asm
                         dbMain.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin), True)
 
-                    Case 29 'asv
-                        dbMain.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin), True)
-
-                    Case Else 'technician, maintenance assistant
-                        MntTransactionApprovalToolStripMenuItem.Enabled = False
-                        SecUserToolStripMenuItem.Enabled = False
-
-                        dbMain.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin), True)
-                End Select
-
-            Case 3 'facility
-                MntTransactionConsoleToolStripMenuItem.Visible = False
-                MntTransactionApprovalToolStripMenuItem.Visible = False
-                MntActivityReportToolStripMenuItem.Visible = False
-
-                Select Case _workgroupdId
-                    Case 10 'technician
-                        FacTransactionApprovalToolStripMenuItem.Visible = False
+                    Case Else 'technician, maintenance assistant, sr technician
+                        MntTransactionApprovalToolStripMenuItem.Visible = False
                         SecUserToolStripMenuItem.Visible = False
-                        MasterToolStripSeparator2.Visible = False
+                        MntModelExtensionSeparator.Visible = False
+
+                        dbMain.FormLoader(Me, New frmMntTrxConsole(userId, workgroupId, isAdmin), True)
                 End Select
 
             Case 4 'it
-                MntTransactionConsoleToolStripMenuItem.Text = "Maintenance Transaction Console"
-                MntTransactionApprovalToolStripMenuItem.Text = "Maintenance Transaction Approval"
 
-                FacTransactionConsoleToolStripMenuItem.Text = "Facility Transaction Console"
-                FacTransactionApprovalToolStripMenuItem.Text = "Facility Transaction Approval"
-
-                MntActivityReportToolStripMenuItem.Text = "Maintenance Activity Report"
-                FacActivityReportToolStripMenuItem.Text = "Facility Activity Report"
+            Case Else
+                Application.Exit()
 
         End Select
     End Sub
@@ -210,5 +180,6 @@ Public Class frmMain
             Me.MaximizeBox = False
         End If
     End Sub
+
 
 End Class

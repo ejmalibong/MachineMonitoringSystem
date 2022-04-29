@@ -1,5 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports BlackCoffeeLibrary
+﻿Imports BlackCoffeeLibrary
 Imports MachineMonitoringSystem.dsMonitoring
 Imports MachineMonitoringSystem.dsMonitoringTableAdapters
 

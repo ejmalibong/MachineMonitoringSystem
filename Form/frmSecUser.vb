@@ -1,8 +1,7 @@
-﻿Imports System
+﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 Imports MachineMonitoringSystem.dsMonitoring
 Imports MachineMonitoringSystem.dsMonitoringTableAdapters
-Imports System.Data.SqlClient
 
 Public Class frmSecUser
     Private connection As New clsConnection
@@ -688,7 +687,6 @@ Public Class frmSecUser
                 Next
 
                 isEditMode = True
-
             Else
                 btnAddSave.Text = " Add"
                 btnAddSave.Image = MachineMonitoringSystem.My.Resources.Create_16_x_16

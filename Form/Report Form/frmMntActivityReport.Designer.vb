@@ -31,7 +31,7 @@ Partial Class frmMntActivityReport
         Me.cmbJig = New SergeUtils.EasyCompletionComboBox()
         Me.lblMachine = New System.Windows.Forms.Label()
         Me.cmbMachine = New SergeUtils.EasyCompletionComboBox()
-        Me.btnClear = New PinkieControls.ButtonXP()
+        Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnGenerate = New PinkieControls.ButtonXP()
         Me.lblTransactionStatus = New System.Windows.Forms.Label()
@@ -64,7 +64,7 @@ Partial Class frmMntActivityReport
         Me.pnlLeft.Controls.Add(Me.cmbJig)
         Me.pnlLeft.Controls.Add(Me.lblMachine)
         Me.pnlLeft.Controls.Add(Me.cmbMachine)
-        Me.pnlLeft.Controls.Add(Me.btnClear)
+        Me.pnlLeft.Controls.Add(Me.btnReset)
         Me.pnlLeft.Controls.Add(Me.btnClose)
         Me.pnlLeft.Controls.Add(Me.btnGenerate)
         Me.pnlLeft.Controls.Add(Me.lblTransactionStatus)
@@ -130,9 +130,9 @@ Partial Class frmMntActivityReport
         Me.lblJig.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.lblJig.Location = New System.Drawing.Point(4, 409)
         Me.lblJig.Name = "lblJig"
-        Me.lblJig.Size = New System.Drawing.Size(22, 13)
+        Me.lblJig.Size = New System.Drawing.Size(59, 13)
         Me.lblJig.TabIndex = 159
-        Me.lblJig.Text = "Jig"
+        Me.lblJig.Text = "Jig Name"
         '
         'cmbJig
         '
@@ -149,9 +149,9 @@ Partial Class frmMntActivityReport
         Me.lblMachine.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.lblMachine.Location = New System.Drawing.Point(4, 323)
         Me.lblMachine.Name = "lblMachine"
-        Me.lblMachine.Size = New System.Drawing.Size(53, 13)
+        Me.lblMachine.Size = New System.Drawing.Size(90, 13)
         Me.lblMachine.TabIndex = 157
-        Me.lblMachine.Text = "Machine"
+        Me.lblMachine.Text = "Machine Name"
         '
         'cmbMachine
         '
@@ -162,21 +162,21 @@ Partial Class frmMntActivityReport
         Me.cmbMachine.Size = New System.Drawing.Size(196, 21)
         Me.cmbMachine.TabIndex = 7
         '
-        'btnClear
+        'btnReset
         '
-        Me.btnClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
-        Me.btnClear.DefaultScheme = False
-        Me.btnClear.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnClear.Font = New System.Drawing.Font("Verdana", 9.0!)
-        Me.btnClear.Hint = ""
-        Me.btnClear.Location = New System.Drawing.Point(11, 504)
-        Me.btnClear.Name = "btnClear"
-        Me.btnClear.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnClear.Size = New System.Drawing.Size(187, 35)
-        Me.btnClear.TabIndex = 155
-        Me.btnClear.TabStop = False
-        Me.btnClear.Text = "Clear Filter"
+        Me.btnReset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnReset.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
+        Me.btnReset.DefaultScheme = False
+        Me.btnReset.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnReset.Font = New System.Drawing.Font("Verdana", 9.0!)
+        Me.btnReset.Hint = ""
+        Me.btnReset.Location = New System.Drawing.Point(11, 504)
+        Me.btnReset.Name = "btnReset"
+        Me.btnReset.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnReset.Size = New System.Drawing.Size(187, 35)
+        Me.btnReset.TabIndex = 155
+        Me.btnReset.TabStop = False
+        Me.btnReset.Text = "Reset"
         '
         'btnClose
         '
@@ -421,7 +421,7 @@ Partial Class frmMntActivityReport
     Friend WithEvents rdBoth As System.Windows.Forms.RadioButton
     Friend WithEvents rdDay As System.Windows.Forms.RadioButton
     Friend WithEvents rdNight As System.Windows.Forms.RadioButton
-    Friend WithEvents btnClear As PinkieControls.ButtonXP
+    Friend WithEvents btnReset As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
     Friend WithEvents btnGenerate As PinkieControls.ButtonXP
     Friend WithEvents rptViewer As Microsoft.Reporting.WinForms.ReportViewer

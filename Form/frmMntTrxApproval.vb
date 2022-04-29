@@ -1,8 +1,4 @@
-﻿Imports MachineMonitoringSystem.dsMonitoring
-Imports MachineMonitoringSystem.dsMonitoringTableAdapters
-Imports System.Reflection
-Imports System.ComponentModel
-Imports BlackCoffeeLibrary
+﻿Imports BlackCoffeeLibrary
 
 Public Class frmMntTrxApproval
     Private connection As New clsConnection

@@ -13,7 +13,7 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.20.12\engineering\IT System\Machine Monitoring System\</PublishUrl>
+    <PublishUrl>\\192.168.20.12\Engineering\IT System\Machine Monitoring System\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -26,9 +26,9 @@
     <ProductName>Machine Monitoring System</ProductName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationRevision>38</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>true</UseApplicationTrust>
+    <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -73,7 +73,7 @@
     </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -94,19 +94,27 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BlackCoffeeLibrary, Version=2.0.0.10, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Frameworks\BlackCoffeeLibrary.dll</HintPath>
+    <Reference Include="Be.Windows.Forms.RichTextBoxEx">
+      <HintPath>..\..\..\..\DLL\Be.Windows.Forms.RichTextBoxEx.dll</HintPath>
+    </Reference>
+    <Reference Include="BlackCoffeeLibrary">
+      <HintPath>..\..\..\..\DLL\BlackCoffeeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="PinkieControls">
-      <HintPath>..\..\..\..\Frameworks\PinkieControls.dll</HintPath>
+    <Reference Include="PinkieControls, Version=1.0.1362.15156, Culture=neutral">
+      <HintPath>..\..\..\..\DLL\PinkieControls.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SergeUtils">
-      <HintPath>..\..\..\..\Frameworks\SergeUtils.dll</HintPath>
+      <HintPath>..\..\..\..\DLL\SergeUtils.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -119,6 +127,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="UserImpersonation">
+      <HintPath>..\..\..\..\DLL\UserImpersonation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -134,7 +145,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Class\clsConnection.vb" />
+    <Compile Include="Class\clsImgAttachment.vb" />
+    <Compile Include="Class\clsCsAttachment.vb" />
+    <Compile Include="Class\clsDirectory.vb" />
     <Compile Include="Class\DataGridViewNullableComboBoxColumn.vb" />
     <Compile Include="Dataset\dsMonitoring.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -152,16 +167,22 @@
     <Compile Include="Dataset\dsReport.vb">
       <DependentUpon>dsReport.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmFacTrxDetail.Designer.vb">
-      <DependentUpon>frmFacTrxDetail.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmFacTrxDetail.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Form\frmMntJig.Designer.vb">
       <DependentUpon>frmMntJig.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\frmMntJig.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\frmMntTrxDetailJig.Designer.vb">
+      <DependentUpon>frmMntTrxDetailJig.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmMntTrxDetailJig.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\frmMntTrxDetailOth.Designer.vb">
+      <DependentUpon>frmMntTrxDetailOth.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\frmMntTrxDetailOth.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\frmSecUser.Designer.vb">
@@ -200,10 +221,10 @@
     <Compile Include="Form\frmMntTrxConsole.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetail.Designer.vb">
-      <DependentUpon>frmMntTrxDetail.vb</DependentUpon>
+    <Compile Include="Form\frmMntTrxDetailMch.Designer.vb">
+      <DependentUpon>frmMntTrxDetailMch.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetail.vb">
+    <Compile Include="Form\frmMntTrxDetailMch.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\frmMntTrxDetailLog.Designer.vb">
@@ -222,6 +243,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -233,7 +255,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Settings.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Password-Show.png" />
@@ -612,11 +633,14 @@
     <None Include="Resources\SysIcon2.ico" />
     <None Include="Resources\SysIcon1.png" />
     <None Include="Resources\SysIcon1.ico" />
-    <EmbeddedResource Include="Form\frmFacTrxDetail.resx">
-      <DependentUpon>frmFacTrxDetail.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form\frmMntJig.resx">
       <DependentUpon>frmMntJig.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\frmMntTrxDetailJig.resx">
+      <DependentUpon>frmMntTrxDetailJig.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\frmMntTrxDetailOth.resx">
+      <DependentUpon>frmMntTrxDetailOth.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\frmSecUser.resx">
       <DependentUpon>frmSecUser.vb</DependentUpon>
@@ -636,8 +660,8 @@
     <EmbeddedResource Include="Form\frmMntTrxConsole.resx">
       <DependentUpon>frmMntTrxConsole.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxDetail.resx">
-      <DependentUpon>frmMntTrxDetail.vb</DependentUpon>
+    <EmbeddedResource Include="Form\frmMntTrxDetailMch.resx">
+      <DependentUpon>frmMntTrxDetailMch.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\frmMntTrxDetailLog.resx">
       <DependentUpon>frmMntTrxDetailLog.vb</DependentUpon>
@@ -712,7 +736,51 @@
   <ItemGroup>
     <None Include="Resources\User.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PublishFile Include="Microsoft.ReportViewer.Common">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.ReportViewer.DataVisualization">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.ReportViewer.ProcessingObjectModel">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Microsoft.SqlServer.Types">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

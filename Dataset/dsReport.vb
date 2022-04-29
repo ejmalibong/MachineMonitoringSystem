@@ -1,4 +1,2 @@
-﻿
-
-Partial Public Class dsReport
+﻿Partial Public Class dsReport
 End Class
