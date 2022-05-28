@@ -1,19 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{93190413-11F0-401C-A366-890C90C70425}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>MachineMonitoringSystem.My.MyApplication</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <RootNamespace>MachineMonitoringSystem</RootNamespace>
     <AssemblyName>MachineMonitoringSystem</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.20.12\Engineering\IT System\Machine Monitoring System\</PublishUrl>
+    <TargetFrameworkProfile />
+    <PublishUrl>\\192.168.20.11\Engineering\IT System\Machine Monitoring System\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -26,7 +27,7 @@
     <ProductName>Machine Monitoring System</ProductName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>38</ApplicationRevision>
+    <ApplicationRevision>42</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -121,6 +122,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -145,98 +147,58 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="Class\clsConnection.vb" />
-    <Compile Include="Class\clsImgAttachment.vb" />
-    <Compile Include="Class\clsCsAttachment.vb" />
-    <Compile Include="Class\clsDirectory.vb" />
+    <Compile Include="Class\Connection.vb" />
+    <Compile Include="Class\ImgAttachment.vb" />
+    <Compile Include="Class\CsAttachment.vb" />
+    <Compile Include="Class\Directory.vb" />
     <Compile Include="Class\DataGridViewNullableComboBoxColumn.vb" />
-    <Compile Include="Dataset\dsMonitoring.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsMonitoring.xsd</DependentUpon>
+    <Compile Include="Class\Program.vb" />
+    <Compile Include="Form\Main.Designer.vb">
+      <DependentUpon>Main.vb</DependentUpon>
     </Compile>
-    <Compile Include="Dataset\dsMonitoring.vb">
-      <DependentUpon>dsMonitoring.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Dataset\dsReport.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Dataset\dsReport.vb">
-      <DependentUpon>dsReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmMntJig.Designer.vb">
-      <DependentUpon>frmMntJig.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmMntJig.vb">
+    <Compile Include="Form\Main.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetailJig.Designer.vb">
-      <DependentUpon>frmMntTrxDetailJig.vb</DependentUpon>
+    <Compile Include="Form\Login.Designer.vb">
+      <DependentUpon>Login.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetailJig.vb">
+    <Compile Include="Form\Login.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetailOth.Designer.vb">
-      <DependentUpon>frmMntTrxDetailOth.vb</DependentUpon>
+    <Compile Include="Form\MntTrxActvityLog.Designer.vb">
+      <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMntTrxDetailOth.vb">
+    <Compile Include="Form\MntTrxActvityLog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmSecUser.Designer.vb">
-      <DependentUpon>frmSecUser.vb</DependentUpon>
+    <Compile Include="Form\MntTrxConsole.Designer.vb">
+      <DependentUpon>MntTrxConsole.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmSecUser.vb">
+    <Compile Include="Form\MntTrxConsole.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMntMachine.Designer.vb">
-      <DependentUpon>frmMntMachine.vb</DependentUpon>
+    <Compile Include="Form\MntTrxDetailJig.Designer.vb">
+      <DependentUpon>MntTrxDetailJig.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMntMachine.vb">
+    <Compile Include="Form\MntTrxDetailJig.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMain.Designer.vb">
-      <DependentUpon>frmMain.vb</DependentUpon>
+    <Compile Include="Form\MntTrxDetailMch.Designer.vb">
+      <DependentUpon>MntTrxDetailMch.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMain.vb">
+    <Compile Include="Form\MntTrxDetailMch.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmLogin.Designer.vb">
-      <DependentUpon>frmLogin.vb</DependentUpon>
+    <Compile Include="Form\MntTrxDetailOth.Designer.vb">
+      <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmLogin.vb">
+    <Compile Include="Form\MntTrxDetailOth.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\frmMntTrxApproval.Designer.vb">
-      <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
+    <Compile Include="Form\Report Form\MntActivityReport.Designer.vb">
+      <DependentUpon>MntActivityReport.vb</DependentUpon>
     </Compile>
-    <Compile Include="Form\frmMntTrxApproval.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\frmMntTrxConsole.Designer.vb">
-      <DependentUpon>frmMntTrxConsole.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmMntTrxConsole.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\frmMntTrxDetailMch.Designer.vb">
-      <DependentUpon>frmMntTrxDetailMch.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmMntTrxDetailMch.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\frmMntTrxDetailLog.Designer.vb">
-      <DependentUpon>frmMntTrxDetailLog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\frmMntTrxDetailLog.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\Report Form\frmMntActivityReport.Designer.vb">
-      <DependentUpon>frmMntActivityReport.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\Report Form\frmMntActivityReport.vb">
+    <Compile Include="Form\Report Form\MntActivityReport.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -257,6 +219,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
     <None Include="Resources\Password-Show.png" />
     <None Include="Resources\Password-Hide.png" />
     <None Include="Resources\24x24\Zoom 24 x 24.png" />
@@ -633,41 +597,29 @@
     <None Include="Resources\SysIcon2.ico" />
     <None Include="Resources\SysIcon1.png" />
     <None Include="Resources\SysIcon1.ico" />
-    <EmbeddedResource Include="Form\frmMntJig.resx">
-      <DependentUpon>frmMntJig.vb</DependentUpon>
+    <EmbeddedResource Include="Form\Login.resx">
+      <DependentUpon>Login.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxDetailJig.resx">
-      <DependentUpon>frmMntTrxDetailJig.vb</DependentUpon>
+    <EmbeddedResource Include="Form\Main.resx">
+      <DependentUpon>Main.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxDetailOth.resx">
-      <DependentUpon>frmMntTrxDetailOth.vb</DependentUpon>
+    <EmbeddedResource Include="Form\MntTrxActvityLog.resx">
+      <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmSecUser.resx">
-      <DependentUpon>frmSecUser.vb</DependentUpon>
+    <EmbeddedResource Include="Form\MntTrxConsole.resx">
+      <DependentUpon>MntTrxConsole.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntMachine.resx">
-      <DependentUpon>frmMntMachine.vb</DependentUpon>
+    <EmbeddedResource Include="Form\MntTrxDetailJig.resx">
+      <DependentUpon>MntTrxDetailJig.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmLogin.resx">
-      <DependentUpon>frmLogin.vb</DependentUpon>
+    <EmbeddedResource Include="Form\MntTrxDetailMch.resx">
+      <DependentUpon>MntTrxDetailMch.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMain.resx">
-      <DependentUpon>frmMain.vb</DependentUpon>
+    <EmbeddedResource Include="Form\MntTrxDetailOth.resx">
+      <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxApproval.resx">
-      <DependentUpon>frmMntTrxApproval.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxConsole.resx">
-      <DependentUpon>frmMntTrxConsole.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxDetailMch.resx">
-      <DependentUpon>frmMntTrxDetailMch.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\frmMntTrxDetailLog.resx">
-      <DependentUpon>frmMntTrxDetailLog.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\Report Form\frmMntActivityReport.resx">
-      <DependentUpon>frmMntActivityReport.vb</DependentUpon>
+    <EmbeddedResource Include="Form\Report Form\MntActivityReport.resx">
+      <DependentUpon>MntActivityReport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -675,36 +627,11 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="ReportFile\FacActivityReport.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="ReportFile\MntActivityReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dataset\dsMonitoring.xsc">
-      <DependentUpon>dsMonitoring.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset\dsMonitoring.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsMonitoring.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="Dataset\dsMonitoring.xss">
-      <DependentUpon>dsMonitoring.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset\dsReport.xsc">
-      <DependentUpon>dsReport.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset\dsReport.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsReport.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="Dataset\dsReport.xss">
-      <DependentUpon>dsReport.xsd</DependentUpon>
-    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -781,6 +708,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

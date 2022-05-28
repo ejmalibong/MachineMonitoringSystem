@@ -57,8 +57,8 @@ Namespace My
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=LENOVO-AX3RONG2;Initial Catalog=MachineMonitoring;Persist Security In"& _ 
-            "fo=True;User ID=sa;Password=Nbc12#")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=NBCP-LT-043\SQLEXPRESS;Initial Catalog=MachineMonitoring;Persist Secu"& _ 
+            "rity Info=True;User ID=sa;Password=Nbc12#")>  _
         Public ReadOnly Property MachineMonitoringConnectionString() As String
             Get
                 Return CType(Me("MachineMonitoringConnectionString"),String)
@@ -67,7 +67,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public ReadOnly Property IsDebug() As String
             Get
                 Return CType(Me("IsDebug"),String)
