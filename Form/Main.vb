@@ -105,11 +105,11 @@ Public Class Main
     End Sub
 
     Private Sub MntMachineScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMachineScheduleToolStripMenuItem.Click
-        'dbMain.FormLoader(Me, New MntMchSchedule)
+        dbMain.FormLoader(Me, New MntMchSched(userId))
     End Sub
 
     Private Sub MntJigScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntJigScheduleToolStripMenuItem.Click
-
+        dbMain.FormLoader(Me, New MntJigSched(userId))
     End Sub
 
     Private Sub LogOutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogOutToolStripMenuItem.Click
@@ -135,7 +135,11 @@ Public Class Main
 
     'maintenance
     Private Sub MntMachineToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMachineToolStripMenuItem.Click
-        'dbMain.FormLoader(Me, MntMachine)
+        dbMain.FormLoader(Me, New MntMch(userId))
+    End Sub
+
+    Private Sub MntJigToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntJigToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntJig(userId))
     End Sub
 
     Private Sub SecUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SecUserToolStripMenuItem.Click

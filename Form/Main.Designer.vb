@@ -39,7 +39,7 @@ Partial Class Main
         Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntPmReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MasterlistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MaintenanceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMachineToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMachinePartsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntProcessAreaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -63,7 +63,7 @@ Partial Class Main
         '
         Me.mnuMain.BackColor = System.Drawing.Color.White
         Me.mnuMain.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MasterlistToolStripMenuItem, Me.WindowToolStripMenuItem})
+        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MaintenanceToolStripMenuItem, Me.WindowToolStripMenuItem})
         Me.mnuMain.Location = New System.Drawing.Point(0, 0)
         Me.mnuMain.MdiWindowListItem = Me.WindowToolStripMenuItem
         Me.mnuMain.Name = "mnuMain"
@@ -159,73 +159,81 @@ Partial Class Main
         'MntActivityReportToolStripMenuItem
         '
         Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
-        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'MntPmReportToolStripMenuItem
         '
         Me.MntPmReportToolStripMenuItem.Name = "MntPmReportToolStripMenuItem"
-        Me.MntPmReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntPmReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.MntPmReportToolStripMenuItem.Text = "PM Report"
+        Me.MntPmReportToolStripMenuItem.Visible = False
         '
-        'MasterlistToolStripMenuItem
+        'MaintenanceToolStripMenuItem
         '
-        Me.MasterlistToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntMachineToolStripMenuItem, Me.MntMachinePartsToolStripMenuItem, Me.MntProcessAreaToolStripMenuItem, Me.MntProcessAreaSeparator, Me.MntJigToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.MntModelExtensionSeparator, Me.SecUserToolStripMenuItem})
-        Me.MasterlistToolStripMenuItem.Name = "MasterlistToolStripMenuItem"
-        Me.MasterlistToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
-        Me.MasterlistToolStripMenuItem.Text = "Masterlist"
+        Me.MaintenanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntMachineToolStripMenuItem, Me.MntMachinePartsToolStripMenuItem, Me.MntProcessAreaToolStripMenuItem, Me.MntProcessAreaSeparator, Me.MntJigToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.MntModelExtensionSeparator, Me.SecUserToolStripMenuItem})
+        Me.MaintenanceToolStripMenuItem.Name = "MaintenanceToolStripMenuItem"
+        Me.MaintenanceToolStripMenuItem.Size = New System.Drawing.Size(88, 20)
+        Me.MaintenanceToolStripMenuItem.Text = "Maintenance"
         '
         'MntMachineToolStripMenuItem
         '
         Me.MntMachineToolStripMenuItem.Name = "MntMachineToolStripMenuItem"
-        Me.MntMachineToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntMachineToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntMachineToolStripMenuItem.Text = "Machine"
         '
         'MntMachinePartsToolStripMenuItem
         '
         Me.MntMachinePartsToolStripMenuItem.Name = "MntMachinePartsToolStripMenuItem"
-        Me.MntMachinePartsToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntMachinePartsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntMachinePartsToolStripMenuItem.Text = "Machine Parts"
+        Me.MntMachinePartsToolStripMenuItem.Visible = False
         '
         'MntProcessAreaToolStripMenuItem
         '
         Me.MntProcessAreaToolStripMenuItem.Name = "MntProcessAreaToolStripMenuItem"
-        Me.MntProcessAreaToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntProcessAreaToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntProcessAreaToolStripMenuItem.Text = "Process / Area"
+        Me.MntProcessAreaToolStripMenuItem.Visible = False
         '
         'MntProcessAreaSeparator
         '
         Me.MntProcessAreaSeparator.Name = "MntProcessAreaSeparator"
-        Me.MntProcessAreaSeparator.Size = New System.Drawing.Size(159, 6)
+        Me.MntProcessAreaSeparator.Size = New System.Drawing.Size(177, 6)
+        Me.MntProcessAreaSeparator.Visible = False
         '
         'MntJigToolStripMenuItem
         '
         Me.MntJigToolStripMenuItem.Name = "MntJigToolStripMenuItem"
-        Me.MntJigToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntJigToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntJigToolStripMenuItem.Text = "Jig"
         '
         'MntJigModelToolStripMenuItem
         '
         Me.MntJigModelToolStripMenuItem.Name = "MntJigModelToolStripMenuItem"
-        Me.MntJigModelToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntJigModelToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntJigModelToolStripMenuItem.Text = "Jig Model"
+        Me.MntJigModelToolStripMenuItem.Visible = False
         '
         'MntModelExtensionToolStripMenuItem
         '
         Me.MntModelExtensionToolStripMenuItem.Name = "MntModelExtensionToolStripMenuItem"
-        Me.MntModelExtensionToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.MntModelExtensionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MntModelExtensionToolStripMenuItem.Text = "Model Extension"
+        Me.MntModelExtensionToolStripMenuItem.Visible = False
         '
         'MntModelExtensionSeparator
         '
         Me.MntModelExtensionSeparator.Name = "MntModelExtensionSeparator"
-        Me.MntModelExtensionSeparator.Size = New System.Drawing.Size(159, 6)
+        Me.MntModelExtensionSeparator.Size = New System.Drawing.Size(177, 6)
+        Me.MntModelExtensionSeparator.Visible = False
         '
         'SecUserToolStripMenuItem
         '
         Me.SecUserToolStripMenuItem.Name = "SecUserToolStripMenuItem"
-        Me.SecUserToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.SecUserToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SecUserToolStripMenuItem.Text = "User Profile"
+        Me.SecUserToolStripMenuItem.Visible = False
         '
         'WindowToolStripMenuItem
         '
@@ -312,7 +320,7 @@ Partial Class Main
     Friend WithEvents SectionToolStripStatusLabel As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MasterlistToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MaintenanceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents WindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntTransactionConsoleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntTransactionApprovalToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

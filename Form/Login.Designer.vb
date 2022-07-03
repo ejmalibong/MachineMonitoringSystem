@@ -40,6 +40,7 @@ Partial Class Login
         '
         Me.txtEmployeeId.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEmployeeId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtEmployeeId.Font = New System.Drawing.Font("Segoe UI", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtEmployeeId.Location = New System.Drawing.Point(204, 31)
         Me.txtEmployeeId.MaxLength = 8
@@ -82,6 +83,7 @@ Partial Class Login
         '
         Me.txtPassword.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtPassword.Font = New System.Drawing.Font("Segoe UI", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtPassword.Location = New System.Drawing.Point(204, 84)
         Me.txtPassword.Name = "txtPassword"
@@ -103,7 +105,7 @@ Partial Class Login
         '
         Me.lblEmployeeId.AutoSize = True
         Me.lblEmployeeId.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEmployeeId.Location = New System.Drawing.Point(200, 9)
+        Me.lblEmployeeId.Location = New System.Drawing.Point(200, 8)
         Me.lblEmployeeId.Name = "lblEmployeeId"
         Me.lblEmployeeId.Size = New System.Drawing.Size(86, 19)
         Me.lblEmployeeId.TabIndex = 5
@@ -113,7 +115,7 @@ Partial Class Login
         '
         Me.lblPassword.AutoSize = True
         Me.lblPassword.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPassword.Location = New System.Drawing.Point(200, 62)
+        Me.lblPassword.Location = New System.Drawing.Point(200, 61)
         Me.lblPassword.Name = "lblPassword"
         Me.lblPassword.Size = New System.Drawing.Size(67, 19)
         Me.lblPassword.TabIndex = 6

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntJig
+Partial Class MntMch
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,7 +24,7 @@ Partial Class MntJig
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntJig))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMch))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -50,13 +50,13 @@ Partial Class MntJig
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.ColJigId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigTypeName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
@@ -158,7 +158,7 @@ Partial Class MntJig
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJigId, Me.ColJigCompleteName, Me.ColAreaName, Me.ColJigStatusName, Me.ColJigSubStatusName, Me.ColFrequencyName, Me.ColJigTypeName, Me.ColIsActive})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColAreaName, Me.ColMachineStatusName, Me.ColMachineSubStatusName, Me.ColGroupName, Me.ColFrequencyName, Me.ColIsActive})
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
@@ -227,7 +227,6 @@ Partial Class MntJig
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -355,21 +354,21 @@ Partial Class MntJig
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
         '
-        'ColJigId
+        'ColMachineId
         '
-        Me.ColJigId.DataPropertyName = "JigId"
-        Me.ColJigId.HeaderText = "Jig Id"
-        Me.ColJigId.Name = "ColJigId"
-        Me.ColJigId.ReadOnly = True
-        Me.ColJigId.Visible = False
+        Me.ColMachineId.DataPropertyName = "MachineId"
+        Me.ColMachineId.HeaderText = "Machine ID"
+        Me.ColMachineId.Name = "ColMachineId"
+        Me.ColMachineId.ReadOnly = True
+        Me.ColMachineId.Visible = False
         '
-        'ColJigCompleteName
+        'ColMachineName
         '
-        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
-        Me.ColJigCompleteName.HeaderText = "Jig Name"
-        Me.ColJigCompleteName.Name = "ColJigCompleteName"
-        Me.ColJigCompleteName.ReadOnly = True
-        Me.ColJigCompleteName.Width = 150
+        Me.ColMachineName.DataPropertyName = "MachineName"
+        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.Name = "ColMachineName"
+        Me.ColMachineName.ReadOnly = True
+        Me.ColMachineName.Width = 150
         '
         'ColAreaName
         '
@@ -379,20 +378,28 @@ Partial Class MntJig
         Me.ColAreaName.ReadOnly = True
         Me.ColAreaName.Width = 150
         '
-        'ColJigStatusName
+        'ColMachineStatusName
         '
-        Me.ColJigStatusName.DataPropertyName = "JigStatusName"
-        Me.ColJigStatusName.HeaderText = "Status"
-        Me.ColJigStatusName.Name = "ColJigStatusName"
-        Me.ColJigStatusName.ReadOnly = True
+        Me.ColMachineStatusName.DataPropertyName = "MachineStatusName"
+        Me.ColMachineStatusName.HeaderText = "Status"
+        Me.ColMachineStatusName.Name = "ColMachineStatusName"
+        Me.ColMachineStatusName.ReadOnly = True
         '
-        'ColJigSubStatusName
+        'ColMachineSubStatusName
         '
-        Me.ColJigSubStatusName.DataPropertyName = "JigSubStatusName"
-        Me.ColJigSubStatusName.HeaderText = "Sub-Status"
-        Me.ColJigSubStatusName.Name = "ColJigSubStatusName"
-        Me.ColJigSubStatusName.ReadOnly = True
-        Me.ColJigSubStatusName.Width = 150
+        Me.ColMachineSubStatusName.DataPropertyName = "MachineSubStatusName"
+        Me.ColMachineSubStatusName.HeaderText = "Sub-Status"
+        Me.ColMachineSubStatusName.Name = "ColMachineSubStatusName"
+        Me.ColMachineSubStatusName.ReadOnly = True
+        Me.ColMachineSubStatusName.Width = 150
+        '
+        'ColGroupName
+        '
+        Me.ColGroupName.DataPropertyName = "GroupName"
+        Me.ColGroupName.HeaderText = "Part Group"
+        Me.ColGroupName.Name = "ColGroupName"
+        Me.ColGroupName.ReadOnly = True
+        Me.ColGroupName.Width = 150
         '
         'ColFrequencyName
         '
@@ -400,13 +407,6 @@ Partial Class MntJig
         Me.ColFrequencyName.HeaderText = "PM Frequency"
         Me.ColFrequencyName.Name = "ColFrequencyName"
         Me.ColFrequencyName.ReadOnly = True
-        '
-        'ColJigTypeName
-        '
-        Me.ColJigTypeName.DataPropertyName = "JigTypeName"
-        Me.ColJigTypeName.HeaderText = "Jig Type"
-        Me.ColJigTypeName.Name = "ColJigTypeName"
-        Me.ColJigTypeName.ReadOnly = True
         '
         'ColIsActive
         '
@@ -416,7 +416,7 @@ Partial Class MntJig
         Me.ColIsActive.ReadOnly = True
         Me.ColIsActive.Width = 50
         '
-        'MntJig
+        'MntMch
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -439,12 +439,12 @@ Partial Class MntJig
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntJig"
+        Me.Name = "MntMch"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Jig Masterlist"
+        Me.Text = "Machine Masterlist"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
@@ -482,12 +482,12 @@ Partial Class MntJig
     Friend WithEvents btnEdit As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
-    Friend WithEvents ColJigId As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigCompleteName As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineId As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
     Friend WithEvents ColAreaName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigSubStatusName As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineStatusName As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineSubStatusName As DataGridViewTextBoxColumn
+    Friend WithEvents ColGroupName As DataGridViewTextBoxColumn
     Friend WithEvents ColFrequencyName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigTypeName As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
 End Class

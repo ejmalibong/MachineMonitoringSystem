@@ -1,22 +1,19 @@
 ﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
-Imports MachineMonitoringSystem.dsMonitoring
-Imports MachineMonitoringSystem.dsMonitoringTableAdapters
-Imports MachineMonitoringSystem.dsMonitoring
 
 Public Class SecUser
     Private connection As New Connection
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dbMain As New BlackCoffeeLibrary.Main
 
-    Private dsMonitoring As New Monitoring
-    Private adpUser As New SecUserTableAdapter
-    Private adpSection As New SecSectionTableAdapter
-    Private adpWorkgroup As New SecWorkgroupTableAdapter
+    'Private dsMonitoring As New Monitoring
+    'Private adpUser As New SecUserTableAdapter
+    'Private adpSection As New SecSectionTableAdapter
+    'Private adpWorkgroup As New SecWorkgroupTableAdapter
 
-    Private dtUser As New SecUserDataTable
-    Private dtSection As New SecSectionDataTable
-    Private dtWorkgroup As New SecWorkgroupDataTable
+    'Private dtUser As New SecUserDataTable
+    'Private dtSection As New SecSectionDataTable
+    'Private dtWorkgroup As New SecWorkgroupDataTable
 
     Private WithEvents bsUser As New BindingSource
     Private WithEvents bsSection As New BindingSource
@@ -212,49 +209,49 @@ Public Class SecUser
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
-            If bsUser.Current Is Nothing Then
-                Exit Sub
-            End If
+            'If bsUser.Current Is Nothing Then
+            '    Exit Sub
+            'End If
 
-            Dim currentRow = CType(bsUser.Current, DataRowView).Row
-            Dim state = currentRow.RowState
+            'Dim currentRow = CType(bsUser.Current, DataRowView).Row
+            'Dim state = currentRow.RowState
 
-            Select Case state
-                Case DataRowState.Added
-                    bsUser.RemoveCurrent()
-                Case DataRowState.Deleted
-                    MessageBox.Show("Item is already deleted.", "")
-                Case DataRowState.Detached
-                    bsUser.CancelEdit()
-                Case DataRowState.Modified, DataRowState.Unchanged
-                    If dgvList.SelectedCells.Count > 0 AndAlso dgvList.SelectedCells(0).RowIndex = dgvList.NewRowIndex Then
-                        bsUser.CancelEdit()
-                        Exit Sub
-                    End If
+            'Select Case state
+            '    Case DataRowState.Added
+            '        bsUser.RemoveCurrent()
+            '    Case DataRowState.Deleted
+            '        MessageBox.Show("Item is already deleted.", "")
+            '    Case DataRowState.Detached
+            '        bsUser.CancelEdit()
+            '    Case DataRowState.Modified, DataRowState.Unchanged
+            '        If dgvList.SelectedCells.Count > 0 AndAlso dgvList.SelectedCells(0).RowIndex = dgvList.NewRowIndex Then
+            '            bsUser.CancelEdit()
+            '            Exit Sub
+            '        End If
 
-                    Dim prmCount(0) As SqlParameter
-                    prmCount(0) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmCount(0).Value = CInt(bsUser.Current("UserId"))
+            '        Dim prmCount(0) As SqlParameter
+            '        prmCount(0) = New SqlParameter("@UserId", SqlDbType.Int)
+            '        prmCount(0).Value = CInt(bsUser.Current("UserId"))
 
-                    Dim count As Integer = 0
-                    count = dbMethod.ExecuteScalar("SELECT COUNT(TrxDetailId) FROM dbo.MntTransactionDetail WHERE UserId = @UserId", CommandType.Text, prmCount)
+            '        Dim count As Integer = 0
+            '        count = dbMethod.ExecuteScalar("SELECT COUNT(TrxDetailId) FROM dbo.MntTransactionDetail WHERE UserId = @UserId", CommandType.Text, prmCount)
 
-                    If count > 0 Then
-                        Dim message1 = String.Format("{0} is already included in activities." & Environment.NewLine &
-                                                     "Mark this user as inactive instead?", bsUser.Current("UserName"))
-                        If MessageBox.Show(message1, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                            currentRow.Item("IsActive") = False
-                            adpUser.Update(dsMonitoring.SecUser)
-                        End If
-                    Else
-                        Dim message2 = String.Format("Are you sure you want to delete {0}?", bsUser.Current("UserName"))
-                        If MessageBox.Show(message2, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                            bsUser.RemoveCurrent()
-                            adpUser.Update(dsMonitoring.SecUser)
-                        End If
-                    End If
-                Case Else
-            End Select
+            '        If count > 0 Then
+            '            Dim message1 = String.Format("{0} is already included in activities." & Environment.NewLine &
+            '                                         "Mark this user as inactive instead?", bsUser.Current("UserName"))
+            '            If MessageBox.Show(message1, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+            '                currentRow.Item("IsActive") = False
+            '                adpUser.Update(dsMonitoring.SecUser)
+            '            End If
+            '        Else
+            '            Dim message2 = String.Format("Are you sure you want to delete {0}?", bsUser.Current("UserName"))
+            '            If MessageBox.Show(message2, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+            '                bsUser.RemoveCurrent()
+            '                adpUser.Update(dsMonitoring.SecUser)
+            '            End If
+            '        End If
+            '    Case Else
+            'End Select
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -360,48 +357,48 @@ Public Class SecUser
         Try
             totalCount = 0
 
-            If isFilterByUserName = True Then
-                adpUser.FillSecUserMasterlistByUserName(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin, txtCommon.Text.Trim)
-            ElseIf isFilterBySection = True Then
-                adpUser.FillSecUserMasterlistBySectionId(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue), isAdmin)
-            ElseIf isFilterByWorkgroup = True Then
-                adpUser.FillSecUserMasterlistByWorkgroupId(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin, cmbCommon.SelectedValue)
-            Else
-                adpUser.FillSecUserMasterlist(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin)
-            End If
+            'If isFilterByUserName = True Then
+            '    adpUser.FillSecUserMasterlistByUserName(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin, txtCommon.Text.Trim)
+            'ElseIf isFilterBySection = True Then
+            '    adpUser.FillSecUserMasterlistBySectionId(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue), isAdmin)
+            'ElseIf isFilterByWorkgroup = True Then
+            '    adpUser.FillSecUserMasterlistByWorkgroupId(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin, cmbCommon.SelectedValue)
+            'Else
+            '    adpUser.FillSecUserMasterlist(dsMonitoring.SecUser, pageIndex, pageSize, totalCount, sectionId, isAdmin)
+            'End If
 
-            bsUser.DataSource = dsMonitoring
-            bsUser.DataMember = dtUser.TableName
-            bsUser.ResetBindings(True)
-            dgvList.AutoGenerateColumns = False
-            dgvList.DataSource = bsUser
+            'bsUser.DataSource = dsMonitoring
+            'bsUser.DataMember = dtUser.TableName
+            'bsUser.ResetBindings(True)
+            'dgvList.AutoGenerateColumns = False
+            'dgvList.DataSource = bsUser
 
-            If totalCount Mod pageSize = 0 Then
-                If totalCount = 0 Then
-                    pageCount = (totalCount / pageSize) + 1
-                Else
-                    pageCount = totalCount / pageSize
-                End If
-            Else
-                pageCount = Math.Truncate(totalCount / pageSize) + 1
-            End If
+            'If totalCount Mod pageSize = 0 Then
+            '    If totalCount = 0 Then
+            '        pageCount = (totalCount / pageSize) + 1
+            '    Else
+            '        pageCount = totalCount / pageSize
+            '    End If
+            'Else
+            '    pageCount = Math.Truncate(totalCount / pageSize) + 1
+            'End If
 
-            'current page index and total number of pages
-            txtPageNumber.Text = pageIndex + 1
-            txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
+            ''current page index and total number of pages
+            'txtPageNumber.Text = pageIndex + 1
+            'txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
 
-            'enables pager
-            txtPageNumber.Enabled = True
-            txtTotalPageNumber.Enabled = True
-            BindingNavigatorMoveFirstItem.Enabled = True
-            BindingNavigatorMovePreviousItem.Enabled = True
-            BindingNavigatorMoveNextItem.Enabled = True
-            BindingNavigatorMoveLastItem.Enabled = True
+            ''enables pager
+            'txtPageNumber.Enabled = True
+            'txtTotalPageNumber.Enabled = True
+            'BindingNavigatorMoveFirstItem.Enabled = True
+            'BindingNavigatorMovePreviousItem.Enabled = True
+            'BindingNavigatorMoveNextItem.Enabled = True
+            'BindingNavigatorMoveLastItem.Enabled = True
 
-            For Each column As DataGridViewColumn In dgvList.Columns
-                column.DefaultCellStyle.SelectionBackColor = Color.White
-                column.DefaultCellStyle.SelectionBackColor = Color.Black
-            Next
+            'For Each column As DataGridViewColumn In dgvList.Columns
+            '    column.DefaultCellStyle.SelectionBackColor = Color.White
+            '    column.DefaultCellStyle.SelectionBackColor = Color.Black
+            'Next
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -458,37 +455,37 @@ Public Class SecUser
 
     Private Sub SetupDgv()
         Try
-            adpSection.Fill(dsMonitoring.SecSection)
-            bsSection.DataSource = dsMonitoring
-            bsSection.DataMember = dtSection.TableName
-            bsSection.ResetBindings(True)
+            'adpSection.Fill(dsMonitoring.SecSection)
+            'bsSection.DataSource = dsMonitoring
+            'bsSection.DataMember = dtSection.TableName
+            'bsSection.ResetBindings(True)
 
-            Dim colSection As DataGridViewComboBoxColumn = DirectCast(dgvList.Columns("ColSection"), DataGridViewComboBoxColumn)
-            colSection.ValueMember = "SectionId"
-            colSection.DisplayMember = "SectionName"
-            colSection.DataSource = bsSection
-            colSection.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
-            colSection.DisplayStyleForCurrentCellOnly = False
+            'Dim colSection As DataGridViewComboBoxColumn = DirectCast(dgvList.Columns("ColSection"), DataGridViewComboBoxColumn)
+            'colSection.ValueMember = "SectionId"
+            'colSection.DisplayMember = "SectionName"
+            'colSection.DataSource = bsSection
+            'colSection.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+            'colSection.DisplayStyleForCurrentCellOnly = False
 
-            adpWorkgroup.Fill(dsMonitoring.SecWorkgroup)
-            bsWorkgroup.DataSource = dsMonitoring
-            bsWorkgroup.DataMember = dtWorkgroup.TableName
-            bsWorkgroup.ResetBindings(True)
+            'adpWorkgroup.Fill(dsMonitoring.SecWorkgroup)
+            'bsWorkgroup.DataSource = dsMonitoring
+            'bsWorkgroup.DataMember = dtWorkgroup.TableName
+            'bsWorkgroup.ResetBindings(True)
 
-            Dim colWorkgroup As DataGridViewComboBoxColumn = DirectCast(dgvList.Columns("ColWorkgroup"), DataGridViewComboBoxColumn)
-            colWorkgroup.ValueMember = "WorkgroupId"
-            colWorkgroup.DisplayMember = "WorkgroupName"
-            colWorkgroup.DataSource = bsWorkgroup
-            colWorkgroup.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
-            colWorkgroup.DisplayStyleForCurrentCellOnly = False
+            'Dim colWorkgroup As DataGridViewComboBoxColumn = DirectCast(dgvList.Columns("ColWorkgroup"), DataGridViewComboBoxColumn)
+            'colWorkgroup.ValueMember = "WorkgroupId"
+            'colWorkgroup.DisplayMember = "WorkgroupName"
+            'colWorkgroup.DataSource = bsWorkgroup
+            'colWorkgroup.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+            'colWorkgroup.DisplayStyleForCurrentCellOnly = False
 
-            dgvList.Columns("ColUserName").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-            dgvList.Columns("ColWorkgroup").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            'dgvList.Columns("ColUserName").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            'dgvList.Columns("ColWorkgroup").AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 
-            For Each column As DataGridViewColumn In dgvList.Columns
-                column.DefaultCellStyle.SelectionBackColor = Color.White
-                column.DefaultCellStyle.SelectionBackColor = Color.Black
-            Next
+            'For Each column As DataGridViewColumn In dgvList.Columns
+            '    column.DefaultCellStyle.SelectionBackColor = Color.White
+            '    column.DefaultCellStyle.SelectionBackColor = Color.Black
+            'Next
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

@@ -160,7 +160,7 @@ Public Class MntTrxDetailOth
                 DisableForm(True)
                 Me.ActiveControl = cmbArea
             Else
-                Me.Text = "Activity No. " & trxId & ""
+                Me.Text = "Activity No. " & trxId
 
                 For Each row As DataRow In dtTrxHeader.Rows
                     'transaction header
@@ -228,7 +228,7 @@ Public Class MntTrxDetailOth
 
                 btnDelete.Enabled = True
 
-                imgTmp = Path.Combine(IO.Path.GetTempPath, "tmpImg." & Path.GetExtension(txtImageName.Text))
+                imgTmp = Path.Combine(IO.Path.GetTempPath, "tmpImg" & Path.GetExtension(txtImageName.Text))
 
                 Me.ActiveControl = txtProblem
                 txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
@@ -432,6 +432,7 @@ Public Class MntTrxDetailOth
             Else
                 If Not picImage.Image Is Nothing Then
                     Dim img As Image = picImage.Image
+                    MsgBox(imgTmp)
                     img.Save(imgTmp)
                     OpenImage(imgTmp, 30000) '30 seconds
                 End If
@@ -1735,6 +1736,46 @@ Public Class MntTrxDetailOth
     Private Sub dgvPic_Leave(sender As Object, e As EventArgs) Handles dgvPic.Leave
         lblPic.ForeColor = Color.Black
         lblPic.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnViewChecksheet_Enter(sender As Object, e As EventArgs) Handles btnViewChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnViewChecksheet_Leave(sender As Object, e As EventArgs) Handles btnViewChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnBrowseChecksheet_Enter(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnBrowseChecksheet_Leave(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnRemoveChecksheet_Enter(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnRemoveChecksheet_Leave(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbArea_Enter(sender As Object, e As EventArgs) Handles cmbArea.Enter
+        lblArea.ForeColor = Color.White
+        lblArea.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbArea_Leave(sender As Object, e As EventArgs) Handles cmbArea.Leave
+        lblArea.ForeColor = Color.Black
+        lblArea.BackColor = SystemColors.Control
     End Sub
 
 End Class

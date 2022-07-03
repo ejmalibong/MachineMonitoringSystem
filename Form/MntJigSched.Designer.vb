@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntMchSchedule
+Partial Class MntJigSched
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,7 +24,15 @@ Partial Class MntMchSchedule
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMchSchedule))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntJigSched))
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -55,15 +63,13 @@ Partial Class MntMchSchedule
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.txtYear = New System.Windows.Forms.TextBox()
         Me.lblYear = New System.Windows.Forms.Label()
-        Me.pnlSearchByFlag = New System.Windows.Forms.Panel()
-        Me.rdNo = New System.Windows.Forms.RadioButton()
-        Me.rdYes = New System.Windows.Forms.RadioButton()
+        Me.txtYearId = New System.Windows.Forms.MaskedTextBox()
         Me.ColScheduleId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColWeek = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPmFrequency = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColCreatedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColActivityBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColActivityDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -77,15 +83,14 @@ Partial Class MntMchSchedule
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
-        Me.pnlSearchByFlag.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmbSearchCriteria
         '
         Me.cmbSearchCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.cmbSearchCriteria.FormattingEnabled = True
-        Me.cmbSearchCriteria.Location = New System.Drawing.Point(4, 5)
+        Me.cmbSearchCriteria.Location = New System.Drawing.Point(4, 4)
         Me.cmbSearchCriteria.Name = "cmbSearchCriteria"
         Me.cmbSearchCriteria.Size = New System.Drawing.Size(160, 25)
         Me.cmbSearchCriteria.TabIndex = 545
@@ -93,9 +98,9 @@ Partial Class MntMchSchedule
         'pnlSearchByText
         '
         Me.pnlSearchByText.Controls.Add(Me.txtCommon)
-        Me.pnlSearchByText.Location = New System.Drawing.Point(167, 2)
+        Me.pnlSearchByText.Location = New System.Drawing.Point(165, 1)
         Me.pnlSearchByText.Name = "pnlSearchByText"
-        Me.pnlSearchByText.Size = New System.Drawing.Size(350, 31)
+        Me.pnlSearchByText.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByText.TabIndex = 548
         '
         'txtCommon
@@ -104,24 +109,24 @@ Partial Class MntMchSchedule
         Me.txtCommon.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCommon.Location = New System.Drawing.Point(3, 3)
         Me.txtCommon.Name = "txtCommon"
-        Me.txtCommon.Size = New System.Drawing.Size(344, 25)
+        Me.txtCommon.Size = New System.Drawing.Size(316, 25)
         Me.txtCommon.TabIndex = 0
         '
         'pnlSearchByCmb
         '
         Me.pnlSearchByCmb.Controls.Add(Me.cmbCommon)
-        Me.pnlSearchByCmb.Location = New System.Drawing.Point(167, 2)
+        Me.pnlSearchByCmb.Location = New System.Drawing.Point(165, 1)
         Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
-        Me.pnlSearchByCmb.Size = New System.Drawing.Size(350, 31)
+        Me.pnlSearchByCmb.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByCmb.TabIndex = 549
         '
         'cmbCommon
         '
-        Me.cmbCommon.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.cmbCommon.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.cmbCommon.FormattingEnabled = True
         Me.cmbCommon.Location = New System.Drawing.Point(3, 3)
         Me.cmbCommon.Name = "cmbCommon"
-        Me.cmbCommon.Size = New System.Drawing.Size(344, 25)
+        Me.cmbCommon.Size = New System.Drawing.Size(316, 25)
         Me.cmbCommon.TabIndex = 546
         '
         'pnlSearchByDate
@@ -131,27 +136,27 @@ Partial Class MntMchSchedule
         Me.pnlSearchByDate.Controls.Add(Me.lblSearchEndDate)
         Me.pnlSearchByDate.Controls.Add(Me.lblSearchStartDate)
         Me.pnlSearchByDate.Controls.Add(Me.dtpStartDate)
-        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByDate.Location = New System.Drawing.Point(167, 2)
+        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.pnlSearchByDate.Location = New System.Drawing.Point(165, 1)
         Me.pnlSearchByDate.Name = "pnlSearchByDate"
-        Me.pnlSearchByDate.Size = New System.Drawing.Size(350, 31)
+        Me.pnlSearchByDate.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByDate.TabIndex = 550
         '
         'dtpEndDate
         '
         Me.dtpEndDate.CustomFormat = "  MMM dd, yyyy"
-        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpEndDate.Location = New System.Drawing.Point(212, 4)
+        Me.dtpEndDate.Location = New System.Drawing.Point(194, 4)
         Me.dtpEndDate.Name = "dtpEndDate"
-        Me.dtpEndDate.Size = New System.Drawing.Size(135, 23)
+        Me.dtpEndDate.Size = New System.Drawing.Size(125, 24)
         Me.dtpEndDate.TabIndex = 27
         '
         'lblSearchEndDate
         '
         Me.lblSearchEndDate.AutoSize = True
         Me.lblSearchEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblSearchEndDate.Location = New System.Drawing.Point(188, 8)
+        Me.lblSearchEndDate.Location = New System.Drawing.Point(173, 8)
         Me.lblSearchEndDate.Name = "lblSearchEndDate"
         Me.lblSearchEndDate.Size = New System.Drawing.Size(19, 15)
         Me.lblSearchEndDate.TabIndex = 29
@@ -161,7 +166,7 @@ Partial Class MntMchSchedule
         '
         Me.lblSearchStartDate.AutoSize = True
         Me.lblSearchStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblSearchStartDate.Location = New System.Drawing.Point(6, 8)
+        Me.lblSearchStartDate.Location = New System.Drawing.Point(5, 8)
         Me.lblSearchStartDate.Name = "lblSearchStartDate"
         Me.lblSearchStartDate.Size = New System.Drawing.Size(35, 15)
         Me.lblSearchStartDate.TabIndex = 28
@@ -170,11 +175,11 @@ Partial Class MntMchSchedule
         'dtpStartDate
         '
         Me.dtpStartDate.CustomFormat = "  MMM dd, yyyy"
-        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpStartDate.Location = New System.Drawing.Point(46, 4)
+        Me.dtpStartDate.Location = New System.Drawing.Point(44, 4)
         Me.dtpStartDate.Name = "dtpStartDate"
-        Me.dtpStartDate.Size = New System.Drawing.Size(135, 23)
+        Me.dtpStartDate.Size = New System.Drawing.Size(125, 24)
         Me.dtpStartDate.TabIndex = 26
         '
         'btnReset
@@ -185,7 +190,7 @@ Partial Class MntMchSchedule
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnReset.Hint = "Remove filter"
         Me.btnReset.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Undo_16_x_16
-        Me.btnReset.Location = New System.Drawing.Point(609, 3)
+        Me.btnReset.Location = New System.Drawing.Point(577, 2)
         Me.btnReset.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -201,7 +206,7 @@ Partial Class MntMchSchedule
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnSearch.Hint = "Search"
         Me.btnSearch.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Find_16_x_16
-        Me.btnSearch.Location = New System.Drawing.Point(520, 3)
+        Me.btnSearch.Location = New System.Drawing.Point(488, 2)
         Me.btnSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -224,16 +229,18 @@ Partial Class MntMchSchedule
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.dgvList.ColumnHeadersHeight = 24
+        Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColScheduleId, Me.ColMachineName, Me.ColMonth, Me.ColWeek, Me.ColCreatedBy, Me.ColActivityBy, Me.ColActivityDate, Me.ColModifiedBy, Me.ColModifiedDate, Me.ColIsChecklistCompleted, Me.ColIsDone})
-        Me.dgvList.Location = New System.Drawing.Point(0, 35)
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColScheduleId, Me.ColMonth, Me.ColWeek, Me.ColJigCompleteName, Me.ColPmFrequency, Me.ColCreatedBy, Me.ColActivityBy, Me.ColActivityDate, Me.ColModifiedBy, Me.ColModifiedDate, Me.ColIsChecklistCompleted, Me.ColIsDone})
+        Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
         Me.dgvList.ReadOnly = True
         Me.dgvList.RowHeadersVisible = False
+        Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.dgvList.Size = New System.Drawing.Size(1184, 377)
+        Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvList.Size = New System.Drawing.Size(1014, 490)
         Me.dgvList.TabIndex = 553
         '
         'bindingNavigator
@@ -248,13 +255,14 @@ Partial Class MntMchSchedule
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(2, 418)
+        Me.bindingNavigator.Location = New System.Drawing.Point(4, 527)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
         Me.bindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
+        Me.bindingNavigator.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
         Me.bindingNavigator.TabIndex = 554
         '
@@ -292,6 +300,7 @@ Partial Class MntMchSchedule
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -361,13 +370,13 @@ Partial Class MntMchSchedule
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(808, 415)
+        Me.btnAdd.Location = New System.Drawing.Point(638, 526)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAdd.Size = New System.Drawing.Size(90, 32)
         Me.btnAdd.TabIndex = 558
-        Me.btnAdd.Text = " Add"
+        Me.btnAdd.Text = "  Add"
         '
         'btnEdit
         '
@@ -378,13 +387,13 @@ Partial Class MntMchSchedule
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(902, 415)
+        Me.btnEdit.Location = New System.Drawing.Point(732, 526)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnEdit.Size = New System.Drawing.Size(90, 32)
         Me.btnEdit.TabIndex = 557
-        Me.btnEdit.Text = " Edit"
+        Me.btnEdit.Text = "  Edit"
         '
         'btnDelete
         '
@@ -395,7 +404,7 @@ Partial Class MntMchSchedule
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(996, 415)
+        Me.btnDelete.Location = New System.Drawing.Point(826, 526)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -411,22 +420,13 @@ Partial Class MntMchSchedule
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1090, 415)
+        Me.btnClose.Location = New System.Drawing.Point(920, 526)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
-        '
-        'txtYear
-        '
-        Me.txtYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtYear.Location = New System.Drawing.Point(1100, 6)
-        Me.txtYear.Name = "txtYear"
-        Me.txtYear.Size = New System.Drawing.Size(80, 23)
-        Me.txtYear.TabIndex = 559
-        Me.txtYear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblYear
         '
@@ -435,45 +435,26 @@ Partial Class MntMchSchedule
         Me.lblYear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblYear.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblYear.ForeColor = System.Drawing.Color.Black
-        Me.lblYear.Location = New System.Drawing.Point(1041, 6)
+        Me.lblYear.Location = New System.Drawing.Point(871, 5)
         Me.lblYear.Name = "lblYear"
-        Me.lblYear.Size = New System.Drawing.Size(60, 23)
+        Me.lblYear.Size = New System.Drawing.Size(60, 24)
         Me.lblYear.TabIndex = 560
         Me.lblYear.Text = "Year"
         Me.lblYear.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pnlSearchByFlag
+        'txtYearId
         '
-        Me.pnlSearchByFlag.BackColor = System.Drawing.Color.White
-        Me.pnlSearchByFlag.Controls.Add(Me.rdNo)
-        Me.pnlSearchByFlag.Controls.Add(Me.rdYes)
-        Me.pnlSearchByFlag.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByFlag.Location = New System.Drawing.Point(167, 2)
-        Me.pnlSearchByFlag.Name = "pnlSearchByFlag"
-        Me.pnlSearchByFlag.Size = New System.Drawing.Size(350, 31)
-        Me.pnlSearchByFlag.TabIndex = 561
-        '
-        'rdNo
-        '
-        Me.rdNo.AutoSize = True
-        Me.rdNo.Location = New System.Drawing.Point(187, 6)
-        Me.rdNo.Name = "rdNo"
-        Me.rdNo.Size = New System.Drawing.Size(41, 19)
-        Me.rdNo.TabIndex = 3
-        Me.rdNo.TabStop = True
-        Me.rdNo.Text = "No"
-        Me.rdNo.UseVisualStyleBackColor = True
-        '
-        'rdYes
-        '
-        Me.rdYes.AutoSize = True
-        Me.rdYes.Location = New System.Drawing.Point(52, 6)
-        Me.rdYes.Name = "rdYes"
-        Me.rdYes.Size = New System.Drawing.Size(42, 19)
-        Me.rdYes.TabIndex = 2
-        Me.rdYes.TabStop = True
-        Me.rdYes.Text = "Yes"
-        Me.rdYes.UseVisualStyleBackColor = True
+        Me.txtYearId.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtYearId.BeepOnError = True
+        Me.txtYearId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtYearId.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtYearId.Location = New System.Drawing.Point(930, 5)
+        Me.txtYearId.Mask = "0000"
+        Me.txtYearId.Name = "txtYearId"
+        Me.txtYearId.ResetOnSpace = False
+        Me.txtYearId.Size = New System.Drawing.Size(80, 24)
+        Me.txtYearId.TabIndex = 579
+        Me.txtYearId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'ColScheduleId
         '
@@ -483,51 +464,79 @@ Partial Class MntMchSchedule
         Me.ColScheduleId.ReadOnly = True
         Me.ColScheduleId.Visible = False
         '
-        'ColMachineName
-        '
-        Me.ColMachineName.DataPropertyName = "MachineName"
-        Me.ColMachineName.HeaderText = "Machine"
-        Me.ColMachineName.Name = "ColMachineName"
-        Me.ColMachineName.ReadOnly = True
-        '
         'ColMonth
         '
         Me.ColMonth.DataPropertyName = "MonthShortName"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColMonth.HeaderText = "Month"
         Me.ColMonth.Name = "ColMonth"
         Me.ColMonth.ReadOnly = True
+        Me.ColMonth.Width = 60
         '
         'ColWeek
         '
         Me.ColWeek.DataPropertyName = "WeekId"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColWeek.HeaderText = "Week"
         Me.ColWeek.Name = "ColWeek"
         Me.ColWeek.ReadOnly = True
+        Me.ColWeek.Width = 50
+        '
+        'ColJigCompleteName
+        '
+        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
+        Me.ColJigCompleteName.HeaderText = "Jig"
+        Me.ColJigCompleteName.Name = "ColJigCompleteName"
+        Me.ColJigCompleteName.ReadOnly = True
+        Me.ColJigCompleteName.Width = 150
+        '
+        'ColPmFrequency
+        '
+        Me.ColPmFrequency.DataPropertyName = "PmFrequencyId"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColPmFrequency.HeaderText = "Freq"
+        Me.ColPmFrequency.Name = "ColPmFrequency"
+        Me.ColPmFrequency.ReadOnly = True
+        Me.ColPmFrequency.Width = 50
         '
         'ColCreatedBy
         '
-        Me.ColCreatedBy.DataPropertyName = "CreatedByName"
+        Me.ColCreatedBy.DataPropertyName = "CreatedByNickname"
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle5
         Me.ColCreatedBy.HeaderText = "Created By"
         Me.ColCreatedBy.Name = "ColCreatedBy"
         Me.ColCreatedBy.ReadOnly = True
         '
         'ColActivityBy
         '
-        Me.ColActivityBy.DataPropertyName = "ActivityByName"
+        Me.ColActivityBy.DataPropertyName = "ActivityByNickname"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColActivityBy.HeaderText = "Activity By"
         Me.ColActivityBy.Name = "ColActivityBy"
         Me.ColActivityBy.ReadOnly = True
+        Me.ColActivityBy.Width = 120
         '
         'ColActivityDate
         '
         Me.ColActivityDate.DataPropertyName = "ActivityDate"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle7
         Me.ColActivityDate.HeaderText = "Activity Date"
         Me.ColActivityDate.Name = "ColActivityDate"
         Me.ColActivityDate.ReadOnly = True
+        Me.ColActivityDate.Width = 120
         '
         'ColModifiedBy
         '
-        Me.ColModifiedBy.DataPropertyName = "ModifiedByName"
+        Me.ColModifiedBy.DataPropertyName = "ModifiedByNickname"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColModifiedBy.HeaderText = "Modified By"
         Me.ColModifiedBy.Name = "ColModifiedBy"
         Me.ColModifiedBy.ReadOnly = True
@@ -535,9 +544,13 @@ Partial Class MntMchSchedule
         'ColModifiedDate
         '
         Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColModifiedDate.HeaderText = "Modified Date"
         Me.ColModifiedDate.Name = "ColModifiedDate"
         Me.ColModifiedDate.ReadOnly = True
+        Me.ColModifiedDate.Width = 120
         '
         'ColIsChecklistCompleted
         '
@@ -545,6 +558,8 @@ Partial Class MntMchSchedule
         Me.ColIsChecklistCompleted.HeaderText = "CS"
         Me.ColIsChecklistCompleted.Name = "ColIsChecklistCompleted"
         Me.ColIsChecklistCompleted.ReadOnly = True
+        Me.ColIsChecklistCompleted.Visible = False
+        Me.ColIsChecklistCompleted.Width = 50
         '
         'ColIsDone
         '
@@ -552,16 +567,20 @@ Partial Class MntMchSchedule
         Me.ColIsDone.HeaderText = "Done"
         Me.ColIsDone.Name = "ColIsDone"
         Me.ColIsDone.ReadOnly = True
+        Me.ColIsDone.Width = 50
         '
-        'MntMchSchedule
+        'MntJigSched
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(1184, 450)
-        Me.Controls.Add(Me.pnlSearchByFlag)
+        Me.CausesValidation = False
+        Me.ClientSize = New System.Drawing.Size(1014, 561)
+        Me.Controls.Add(Me.pnlSearchByText)
+        Me.Controls.Add(Me.pnlSearchByCmb)
+        Me.Controls.Add(Me.pnlSearchByDate)
+        Me.Controls.Add(Me.txtYearId)
         Me.Controls.Add(Me.lblYear)
-        Me.Controls.Add(Me.txtYear)
         Me.Controls.Add(Me.btnAdd)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnDelete)
@@ -571,19 +590,17 @@ Partial Class MntMchSchedule
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnSearch)
         Me.Controls.Add(Me.cmbSearchCriteria)
-        Me.Controls.Add(Me.pnlSearchByDate)
-        Me.Controls.Add(Me.pnlSearchByCmb)
-        Me.Controls.Add(Me.pnlSearchByText)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntMchSchedule"
+        Me.Name = "MntJigSched"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Machine PM Schedule"
+        Me.Text = "Jig PM Schedule"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
@@ -593,8 +610,6 @@ Partial Class MntMchSchedule
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).EndInit()
         Me.bindingNavigator.ResumeLayout(False)
         Me.bindingNavigator.PerformLayout()
-        Me.pnlSearchByFlag.ResumeLayout(False)
-        Me.pnlSearchByFlag.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -630,15 +645,13 @@ Partial Class MntMchSchedule
     Friend WithEvents btnEdit As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
-    Friend WithEvents txtYear As TextBox
     Friend WithEvents lblYear As Label
-    Friend WithEvents pnlSearchByFlag As Panel
-    Friend WithEvents rdNo As RadioButton
-    Friend WithEvents rdYes As RadioButton
+    Friend WithEvents txtYearId As MaskedTextBox
     Friend WithEvents ColScheduleId As DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
     Friend WithEvents ColMonth As DataGridViewTextBoxColumn
     Friend WithEvents ColWeek As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigCompleteName As DataGridViewTextBoxColumn
+    Friend WithEvents ColPmFrequency As DataGridViewTextBoxColumn
     Friend WithEvents ColCreatedBy As DataGridViewTextBoxColumn
     Friend WithEvents ColActivityBy As DataGridViewTextBoxColumn
     Friend WithEvents ColActivityDate As DataGridViewTextBoxColumn

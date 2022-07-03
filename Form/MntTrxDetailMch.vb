@@ -174,7 +174,7 @@ Public Class MntTrxDetailMch
                 DisableForm(True)
                 Me.ActiveControl = cmbMachineName
             Else
-                Me.Text = "Activity No. " & trxId & ""
+                Me.Text = "Activity No. " & trxId
 
                 For Each row As DataRow In dtTrxHeader.Rows
                     orgMachineId = row("MachineId")
@@ -415,16 +415,28 @@ Public Class MntTrxDetailMch
                 weekId = 0
             Else
                 If cmbDowntimeSubStatus.SelectedValue = 3 Then 'preventive maintenance
-                    If orgMachineId = cmbMachineName.SelectedValue Then
-                        GetMachineSchedule(cmbMachineName.SelectedValue, trxId)
-                    Else
-                        GetMachineSchedule(cmbMachineName.SelectedValue)
-                    End If
+                    GetMachineSchedule(cmbMachineName.SelectedValue)
                 Else
                     txtScheduleMonth.Text = String.Empty
                     txtScheduleWeek.Text = String.Empty
                     txtScheduleMonth.Enabled = False
                     txtScheduleWeek.Enabled = False
+
+                    If orgMachineSubStatusId = 3 Then
+                        Dim prmSched(1) As SqlParameter
+                        prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSched(0).Value = cmbMachineName.SelectedValue
+                        prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSched(1).Value = trxId
+
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
+                        Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
+
+                        If rdrSched.Read Then
+                            orgScheduleId = rdrSched.Item("ScheduleId")
+                        End If
+                        rdrSched.Close()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -1100,6 +1112,39 @@ Public Class MntTrxDetailMch
 
                 dbMethod.ExecuteNonQuery("InsMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
+                'fill the pm schedule slot
+                'should be place here, before the update of dtTrxDetail so dgvDetail still have the data
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
+                    Dim prmMchSchd(5) As SqlParameter
+                    prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmMchSchd(0).Value = prmHeader(0).Value
+
+                    prmMchSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    If cmbTransactionStatus.SelectedValue = 1 Then prmMchSchd(1).Value = True Else prmMchSchd(1).Value = False
+
+                    prmMchSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmMchSchd(2).Value = False
+
+                    prmMchSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmMchSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                    Else
+                        prmMchSchd(3).Value = userId
+                    End If
+
+                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime2)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                    Else
+                        prmMchSchd(4).Value = dbMethod.GetServerDate
+                    End If
+
+                    prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmMchSchd(5).Value = scheduleId
+
+                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmMchSchd)
+                End If
+
                 'transaction details
                 If dgvDetail.Rows.Count > 0 Then
                     For Each dataRowView As DataRowView In Me.bsTrxDetail
@@ -1160,38 +1205,6 @@ Public Class MntTrxDetailMch
                         dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmUser)
                     End If
                 Next
-
-                'fill the pm schedule slot
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
-                    Dim prmMchSchd(5) As SqlParameter
-                    prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchSchd(0).Value = prmHeader(0).Value
-
-                    prmMchSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    If cmbTransactionStatus.SelectedValue = 1 Then prmMchSchd(1).Value = True Else prmMchSchd(1).Value = False
-
-                    prmMchSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmMchSchd(2).Value = False
-
-                    prmMchSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                    Else
-                        prmMchSchd(3).Value = userId
-                    End If
-
-                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                    Else
-                        prmMchSchd(4).Value = dbMethod.GetServerDate
-                    End If
-
-                    prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmMchSchd(5).Value = scheduleId
-
-                    dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchd)
-                End If
 
                 'existing transaction
             Else
@@ -1421,6 +1434,18 @@ Public Class MntTrxDetailMch
 
                     dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
 
+                    If orgMachineId <> cmbMachineName.SelectedValue Then
+                        Dim prmMachineStatusOrg(2) As SqlParameter
+                        prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatusOrg(0).Value = orgMachineId
+                        prmMachineStatusOrg(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(1).Value = 1
+                        prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(2).Value = 1
+
+                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
+                    End If
+
                 Else 'transaction status - on-going
                     prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
                     prmHeader(27).Value = 2
@@ -1523,209 +1548,199 @@ Public Class MntTrxDetailMch
                     prmMchStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                     prmMchStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
 
+                    If orgMachineId <> cmbMachineName.SelectedValue Then
+                        Dim prmMachineStatusOrg(2) As SqlParameter
+                        prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatusOrg(0).Value = orgMachineId
+                        prmMachineStatusOrg(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(1).Value = 1
+                        prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(2).Value = 1
+
+                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
+                    End If
+
                     dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
                 End If
+
                 dbMethod.ExecuteNonQuery("UpdMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
-                'transaction details
-                For Each dataRowView As DataRowView In Me.bsTrxDetail
-                    Dim row = dataRowView.Row
-                    row.Item("TrxId") = trxId
-                Next
-                Me.bsTrxDetail.EndEdit()
-                Me.adpTrxDetail.Update(dtTrxDetail)
+                If orgScheduleId > 0 Then 'clear up the orig pm schedule slot
+                    Dim prmOrgSchedule(8) As SqlParameter
+                    prmOrgSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmOrgSchedule(0).Value = Nothing
+                    prmOrgSchedule(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    prmOrgSchedule(1).Value = False
+                    prmOrgSchedule(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmOrgSchedule(2).Value = False
+                    prmOrgSchedule(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    prmOrgSchedule(3).Value = Nothing
+                    prmOrgSchedule(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime2)
+                    prmOrgSchedule(4).Value = Nothing
+                    prmOrgSchedule(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmOrgSchedule(5).Value = Nothing
+                    prmOrgSchedule(6) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmOrgSchedule(6).Value = Nothing
+                    prmOrgSchedule(7) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmOrgSchedule(7).Value = orgScheduleId
+                    prmOrgSchedule(8) = New SqlParameter("@Remarks", SqlDbType.Int)
+                    prmOrgSchedule(8).Value = Nothing
 
-                'transaction machine part
-                If cmbMachinePart.SelectedValue = 0 AndAlso Not cmbMachinePart.Enabled Then
-                    Dim prmMchPart(1) As SqlParameter
-                    prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
-                    prmMchPart(0).Value = Nothing
-                    prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchPart(1).Value = trxId
-
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
-                Else
-                    Dim prmMchPart(1) As SqlParameter
-                    prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
-                    prmMchPart(0).Value = cmbMachinePart.SelectedValue
-                    prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchPart(1).Value = trxId
-
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
-                End If
-
-                'transaction spare part
-                If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
-                    Dim prmSparePart(2) As SqlParameter
-                    prmSparePart(0) = New SqlParameter("@SparePartName", SqlDbType.NVarChar)
-                    prmSparePart(0).Value = Nothing
-                    prmSparePart(1) = New SqlParameter("@SparePartNo", SqlDbType.NVarChar)
-                    prmSparePart(1).Value = Nothing
-                    prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmSparePart(2).Value = trxId
-
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
-                Else
-                    If String.IsNullOrEmpty(txtPartsNo.Text.Trim) Then
-                        MessageBox.Show("Please indicate the part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        txtPartsNo.Focus()
-                        Return
-                    End If
-
-                    Dim prmSparePart(2) As SqlParameter
-                    prmSparePart(0) = New SqlParameter("@SparePartName", SqlDbType.NVarChar)
-                    prmSparePart(0).Value = txtPartsReplaced.Text.Trim
-                    prmSparePart(1) = New SqlParameter("@SparePartNo", SqlDbType.NVarChar)
-                    prmSparePart(1).Value = txtPartsNo.Text.Trim
-                    prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmSparePart(2).Value = trxId
-
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
-                End If
-
-                'transaction user - insert from pic gridview
-                For Each row As DataGridViewRow In dgvPic.Rows
-                    Dim userId As Integer = row.Cells("ColUserId").Value
-                    Dim isSelected As Boolean = Convert.ToBoolean(row.Cells("ColIsSelected").Value)
-
-                    Dim prmCount(1) As SqlParameter
-                    prmCount(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmCount(0).Value = trxId
-                    prmCount(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmCount(1).Value = userId
-
-                    trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmCount)
-
-                    If trxCount > 0 Then
-                        If isSelected Then
-                            'already on pic table - do nothing
-                        Else
-                            'previously selected as pic - delete from pic table
-                            Dim prmDel(1) As SqlParameter
-                            prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                            prmDel(0).Value = trxId
-                            prmDel(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                            prmDel(1).Value = userId
-
-                            dbMethod.ExecuteNonQuery("DelMntTransactionUserByUserId", CommandType.StoredProcedure, prmDel)
-                        End If
-                    Else
-                        If isSelected Then
-                            'selected - add to pic table
-                            Dim prmIns(1) As SqlParameter
-                            prmIns(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                            prmIns(0).Value = trxId
-                            prmIns(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                            prmIns(1).Value = userId
-
-                            dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns)
-                        Else
-                            'not selected - do nothing
-                        End If
-                    End If
-                Next
-
-                'transaction user - insert from technician log
-                For Each row As DataRowView In Me.bsTrxDetail
-                    Dim prmIns1(1) As SqlParameter
-                    prmIns1(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmIns1(0).Value = trxId
-                    prmIns1(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmIns1(1).Value = row.Item("UserId")
-
-                    trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmIns1)
-
-                    If Not trxCount > 0 Then
-                        Dim prmIns2(1) As SqlParameter
-                        prmIns2(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmIns2(0).Value = trxId
-                        prmIns2(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmIns2(1).Value = row.Item("UserId")
-
-                        dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns2)
-                    End If
-                Next
-
-                'set the orig machine to operational if machine was changed
-                If orgMachineId <> cmbMachineName.SelectedValue Then
-                    Dim prmMachineStatusOrg(2) As SqlParameter
-                    prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                    prmMachineStatusOrg(0).Value = orgMachineId
-                    prmMachineStatusOrg(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-                    prmMachineStatusOrg(1).Value = 1
-                    prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-                    prmMachineStatusOrg(2).Value = 1
-
-                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
-
-                    Dim prmMachineStatusNew(2) As SqlParameter
-                    prmMachineStatusNew(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                    prmMachineStatusNew(0).Value = cmbMachineName.SelectedValue
-                    prmMachineStatusNew(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-                    prmMachineStatusNew(1).Value = cmbDowntimeStatus.SelectedValue
-                    prmMachineStatusNew(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-                    prmMachineStatusNew(2).Value = cmbDowntimeSubStatus.SelectedValue
-
-                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusNew)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmOrgSchedule)
                 End If
 
                 If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
-                    If orgScheduleId <> scheduleId Then 'clear up the orig pm schedule slot
-                        Dim prmMchSchdOrg(8) As SqlParameter
-                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmMchSchdOrg(0).Value = Nothing
-                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                        prmMchSchdOrg(1).Value = False
-                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                        prmMchSchdOrg(2).Value = False
-                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                        prmMchSchdOrg(3).Value = Nothing
-                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                        prmMchSchdOrg(4).Value = Nothing
-                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                        prmMchSchdOrg(5).Value = Nothing
-                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-                        prmMchSchdOrg(6).Value = Nothing
-                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-                        prmMchSchdOrg(7).Value = Nothing
-                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                        prmMchSchdOrg(8).Value = orgScheduleId
+                    Dim prmNewSchedule(5) As SqlParameter
+                    prmNewSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmNewSchedule(0).Value = trxId
 
-                        dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
-                    End If
+                    prmNewSchedule(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    If cmbTransactionStatus.SelectedValue = 1 Then prmNewSchedule(1).Value = True Else prmNewSchedule(1).Value = False
 
-                    Dim prmMchSchd(5) As SqlParameter
-                    prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchSchd(0).Value = trxId
+                    prmNewSchedule(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmNewSchedule(2).Value = False
 
-                    prmMchSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    If cmbTransactionStatus.SelectedValue = 1 Then prmMchSchd(1).Value = True Else prmMchSchd(1).Value = False
-
-                    prmMchSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmMchSchd(2).Value = False
-
-                    prmMchSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    prmNewSchedule(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
                     If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                        prmNewSchedule(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
                     Else
-                        prmMchSchd(3).Value = userId
+                        prmNewSchedule(3).Value = userId
                     End If
 
-                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    prmNewSchedule(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime)
                     If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                        prmNewSchedule(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
                     Else
-                        prmMchSchd(4).Value = dbMethod.GetServerDate
+                        prmNewSchedule(4).Value = dbMethod.GetServerDate
                     End If
 
-                    prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmMchSchd(5).Value = scheduleId
+                    prmNewSchedule(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmNewSchedule(5).Value = scheduleId
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchd)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmNewSchedule)
                 End If
-            End If
 
-            Me.DialogResult = DialogResult.OK
+                'transaction details
+                For Each dataRowView As DataRowView In Me.bsTrxDetail
+                        Dim row = dataRowView.Row
+                        row.Item("TrxId") = trxId
+                    Next
+                    Me.bsTrxDetail.EndEdit()
+                    Me.adpTrxDetail.Update(dtTrxDetail)
+
+                    'transaction machine part
+                    If cmbMachinePart.SelectedValue = 0 AndAlso Not cmbMachinePart.Enabled Then
+                        Dim prmMchPart(1) As SqlParameter
+                        prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                        prmMchPart(0).Value = Nothing
+                        prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchPart(1).Value = trxId
+
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                    Else
+                        Dim prmMchPart(1) As SqlParameter
+                        prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                        prmMchPart(0).Value = cmbMachinePart.SelectedValue
+                        prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchPart(1).Value = trxId
+
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                    End If
+
+                    'transaction spare part
+                    If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
+                        Dim prmSparePart(2) As SqlParameter
+                        prmSparePart(0) = New SqlParameter("@SparePartName", SqlDbType.NVarChar)
+                        prmSparePart(0).Value = Nothing
+                        prmSparePart(1) = New SqlParameter("@SparePartNo", SqlDbType.NVarChar)
+                        prmSparePart(1).Value = Nothing
+                        prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSparePart(2).Value = trxId
+
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
+                    Else
+                        If String.IsNullOrEmpty(txtPartsNo.Text.Trim) Then
+                            MessageBox.Show("Please indicate the part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            txtPartsNo.Focus()
+                            Return
+                        End If
+
+                        Dim prmSparePart(2) As SqlParameter
+                        prmSparePart(0) = New SqlParameter("@SparePartName", SqlDbType.NVarChar)
+                        prmSparePart(0).Value = txtPartsReplaced.Text.Trim
+                        prmSparePart(1) = New SqlParameter("@SparePartNo", SqlDbType.NVarChar)
+                        prmSparePart(1).Value = txtPartsNo.Text.Trim
+                        prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSparePart(2).Value = trxId
+
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
+                    End If
+
+                    'transaction user - insert from pic gridview
+                    For Each row As DataGridViewRow In dgvPic.Rows
+                        Dim userId As Integer = row.Cells("ColUserId").Value
+                        Dim isSelected As Boolean = Convert.ToBoolean(row.Cells("ColIsSelected").Value)
+
+                        Dim prmCount(1) As SqlParameter
+                        prmCount(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmCount(0).Value = trxId
+                        prmCount(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmCount(1).Value = userId
+
+                        trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmCount)
+
+                        If trxCount > 0 Then
+                            If isSelected Then
+                                'already on pic table - do nothing
+                            Else
+                                'previously selected as pic - delete from pic table
+                                Dim prmDel(1) As SqlParameter
+                                prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                                prmDel(0).Value = trxId
+                                prmDel(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                                prmDel(1).Value = userId
+
+                                dbMethod.ExecuteNonQuery("DelMntTransactionUserByUserId", CommandType.StoredProcedure, prmDel)
+                            End If
+                        Else
+                            If isSelected Then
+                                'selected - add to pic table
+                                Dim prmIns(1) As SqlParameter
+                                prmIns(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                                prmIns(0).Value = trxId
+                                prmIns(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                                prmIns(1).Value = userId
+
+                                dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns)
+                            Else
+                                'not selected - do nothing
+                            End If
+                        End If
+                    Next
+
+                    'transaction user - insert from technician log
+                    For Each row As DataRowView In Me.bsTrxDetail
+                        Dim prmIns1(1) As SqlParameter
+                        prmIns1(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmIns1(0).Value = trxId
+                        prmIns1(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmIns1(1).Value = row.Item("UserId")
+
+                        trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmIns1)
+
+                        If Not trxCount > 0 Then
+                            Dim prmIns2(1) As SqlParameter
+                            prmIns2(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                            prmIns2(0).Value = trxId
+                            prmIns2(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                            prmIns2(1).Value = row.Item("UserId")
+
+                            dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns2)
+                        End If
+                    Next
+                End If
+
+                Me.DialogResult = DialogResult.OK
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -1823,9 +1838,11 @@ Public Class MntTrxDetailMch
             cmbMachineName.ValueMember = "MachineId"
 
             If trxId = 0 Then
-                Dim prm(0) As SqlParameter
+                Dim prm(1) As SqlParameter
                 prm(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
                 prm(0).Value = 1
+                prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
+                prm(1).Value = 1
 
                 dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "", prm)
             Else
@@ -1938,7 +1955,7 @@ Public Class MntTrxDetailMch
         End Try
     End Sub
 
-    Private Sub GetMachineSchedule(machineId As Integer, Optional trxId As Integer = 0)
+    Private Sub GetMachineSchedule(machineId As Integer)
         Try
             If trxId = 0 Then
                 Dim prmSchedule(0) As SqlParameter
@@ -1966,70 +1983,68 @@ Public Class MntTrxDetailMch
                 End If
                 rdrSchedule.Close()
             Else
-                If orgMachineId = machineId Then
-                    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then
+                If orgMachineId = machineId Then 'same machine
+                    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
                         Dim prmSchedule(1) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                         prmSchedule(0).Value = machineId
                         prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmSchedule(1).Value = trxId
 
-                        Dim query As String = "SELECT ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
                         Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                         If rdrSchedule.Read Then
                             scheduleId = rdrSchedule.Item("ScheduleId")
-                            orgScheduleId = rdrSchedule.Item("ScheduleId")
                             monthId = rdrSchedule.Item("MonthId")
                             weekId = rdrSchedule.Item("WeekId")
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
                         End If
                         rdrSchedule.Close()
-                    Else
+                    Else 'non-pm to pm
                         Dim prmSchedule(0) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                         prmSchedule(0).Value = machineId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule " &
-                                              "WHERE MachineId = @MachineId And ActivityDate Is NULL And IsDone = 0"
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND " &
+                                              "ActivityDate IS NULL AND IsDone = 0 "
                         Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                         If rdrSchedule.Read Then
                             scheduleId = rdrSchedule.Item("ScheduleId")
-                            orgScheduleId = rdrSchedule.Item("ScheduleId")
                             monthId = rdrSchedule.Item("MonthId")
                             weekId = rdrSchedule.Item("WeekId")
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
-                        Else
-                            MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            cmbDowntimeSubStatus.SelectedValue = 0
-                            txtScheduleMonth.Text = String.Empty
-                            txtScheduleWeek.Text = String.Empty
-
-                            scheduleId = 0
-                            monthId = 0
-                            weekId = 0
                         End If
-                        rdrSchedule.Close()
                     End If
-                Else
-                    Dim prmSchedule(0) As SqlParameter
-                    prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                    prmSchedule(0).Value = machineId
+                Else 'selected machine was changed
+                    Dim prmNewSched(0) As SqlParameter
+                    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmNewSched(0).Value = machineId
 
-                    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule " &
-                                          "WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0"
-                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0"
+                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
 
-                    If rdrSchedule.Read Then
+                    If rdrSchedule.Read Then 'non-pm to pm
                         scheduleId = rdrSchedule.Item("ScheduleId")
-                        orgScheduleId = rdrSchedule.Item("ScheduleId")
                         monthId = rdrSchedule.Item("MonthId")
                         weekId = rdrSchedule.Item("WeekId")
                         txtScheduleMonth.Text = MonthName(monthId)
                         txtScheduleWeek.Text = weekId
+
+                        Dim prmOrgSched(0) As SqlParameter 'pm to pm
+                        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmOrgSched(0).Value = trxId
+
+                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
+                        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
+
+                        While rdrOrgSched.Read
+                            orgScheduleId = rdrOrgSched.Item("ScheduleId")
+                        End While
+                        rdrOrgSched.Close()
                     Else
                         MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         cmbDowntimeSubStatus.SelectedValue = 0

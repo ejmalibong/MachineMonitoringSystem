@@ -102,6 +102,7 @@ Partial Class MntTrxActvityLog
         '
         Me.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom
         Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnClose.CausesValidation = False
         Me.btnClose.DefaultScheme = False
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -240,17 +241,16 @@ Partial Class MntTrxActvityLog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
-        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(385, 196)
+        Me.Controls.Add(Me.lblTechnician)
         Me.Controls.Add(Me.cmbTechnician)
         Me.Controls.Add(Me.lblTrxDate)
         Me.Controls.Add(Me.txtTrxDate)
         Me.Controls.Add(Me.lblElapsedTime)
         Me.Controls.Add(Me.lblFrom)
         Me.Controls.Add(Me.lblTo)
-        Me.Controls.Add(Me.lblTechnician)
         Me.Controls.Add(Me.lblShift)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnSave)

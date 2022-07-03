@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntJig
+Partial Class MntMchSched
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,16 +23,41 @@ Partial Class MntJig
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntJig))
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMchSched))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
+        Me.pnlSearchByDate = New System.Windows.Forms.Panel()
+        Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
+        Me.lblSearchEndDate = New System.Windows.Forms.Label()
+        Me.lblSearchStartDate = New System.Windows.Forms.Label()
+        Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColScheduleId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColWeek = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPmFrequency = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColCreatedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivityBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivityDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModifiedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModifiedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsChecklistCompleted = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.ColIsDone = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -50,16 +75,11 @@ Partial Class MntJig
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.ColJigId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigTypeName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.lblYear = New System.Windows.Forms.Label()
+        Me.txtYearId = New System.Windows.Forms.MaskedTextBox()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
+        Me.pnlSearchByDate.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
@@ -109,6 +129,59 @@ Partial Class MntJig
         Me.cmbCommon.Size = New System.Drawing.Size(316, 25)
         Me.cmbCommon.TabIndex = 546
         '
+        'pnlSearchByDate
+        '
+        Me.pnlSearchByDate.BackColor = System.Drawing.Color.White
+        Me.pnlSearchByDate.Controls.Add(Me.dtpEndDate)
+        Me.pnlSearchByDate.Controls.Add(Me.lblSearchEndDate)
+        Me.pnlSearchByDate.Controls.Add(Me.lblSearchStartDate)
+        Me.pnlSearchByDate.Controls.Add(Me.dtpStartDate)
+        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.pnlSearchByDate.Location = New System.Drawing.Point(165, 1)
+        Me.pnlSearchByDate.Name = "pnlSearchByDate"
+        Me.pnlSearchByDate.Size = New System.Drawing.Size(322, 31)
+        Me.pnlSearchByDate.TabIndex = 550
+        '
+        'dtpEndDate
+        '
+        Me.dtpEndDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpEndDate.Location = New System.Drawing.Point(194, 4)
+        Me.dtpEndDate.Name = "dtpEndDate"
+        Me.dtpEndDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpEndDate.TabIndex = 27
+        '
+        'lblSearchEndDate
+        '
+        Me.lblSearchEndDate.AutoSize = True
+        Me.lblSearchEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchEndDate.Location = New System.Drawing.Point(173, 8)
+        Me.lblSearchEndDate.Name = "lblSearchEndDate"
+        Me.lblSearchEndDate.Size = New System.Drawing.Size(19, 15)
+        Me.lblSearchEndDate.TabIndex = 29
+        Me.lblSearchEndDate.Text = "To"
+        '
+        'lblSearchStartDate
+        '
+        Me.lblSearchStartDate.AutoSize = True
+        Me.lblSearchStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchStartDate.Location = New System.Drawing.Point(5, 8)
+        Me.lblSearchStartDate.Name = "lblSearchStartDate"
+        Me.lblSearchStartDate.Size = New System.Drawing.Size(35, 15)
+        Me.lblSearchStartDate.TabIndex = 28
+        Me.lblSearchStartDate.Text = "From"
+        '
+        'dtpStartDate
+        '
+        Me.dtpStartDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpStartDate.Location = New System.Drawing.Point(44, 4)
+        Me.dtpStartDate.Name = "dtpStartDate"
+        Me.dtpStartDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpStartDate.TabIndex = 26
+        '
         'btnReset
         '
         Me.btnReset.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
@@ -149,16 +222,16 @@ Partial Class MntJig
         Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJigId, Me.ColJigCompleteName, Me.ColAreaName, Me.ColJigStatusName, Me.ColJigSubStatusName, Me.ColFrequencyName, Me.ColJigTypeName, Me.ColIsActive})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColScheduleId, Me.ColMonth, Me.ColWeek, Me.ColMachineName, Me.ColPmFrequency, Me.ColCreatedBy, Me.ColActivityBy, Me.ColActivityDate, Me.ColModifiedBy, Me.ColModifiedDate, Me.ColIsChecklistCompleted, Me.ColIsDone})
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
@@ -169,6 +242,119 @@ Partial Class MntJig
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvList.Size = New System.Drawing.Size(1014, 490)
         Me.dgvList.TabIndex = 553
+        '
+        'ColScheduleId
+        '
+        Me.ColScheduleId.DataPropertyName = "ScheduleId"
+        Me.ColScheduleId.HeaderText = "Schedule ID"
+        Me.ColScheduleId.Name = "ColScheduleId"
+        Me.ColScheduleId.ReadOnly = True
+        Me.ColScheduleId.Visible = False
+        '
+        'ColMonth
+        '
+        Me.ColMonth.DataPropertyName = "MonthShortName"
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle11
+        Me.ColMonth.HeaderText = "Month"
+        Me.ColMonth.Name = "ColMonth"
+        Me.ColMonth.ReadOnly = True
+        Me.ColMonth.Width = 60
+        '
+        'ColWeek
+        '
+        Me.ColWeek.DataPropertyName = "WeekId"
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle12
+        Me.ColWeek.HeaderText = "Week"
+        Me.ColWeek.Name = "ColWeek"
+        Me.ColWeek.ReadOnly = True
+        Me.ColWeek.Width = 50
+        '
+        'ColMachineName
+        '
+        Me.ColMachineName.DataPropertyName = "MachineName"
+        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.Name = "ColMachineName"
+        Me.ColMachineName.ReadOnly = True
+        Me.ColMachineName.Width = 150
+        '
+        'ColPmFrequency
+        '
+        Me.ColPmFrequency.DataPropertyName = "PmFrequencyId"
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle13
+        Me.ColPmFrequency.HeaderText = "Freq"
+        Me.ColPmFrequency.Name = "ColPmFrequency"
+        Me.ColPmFrequency.ReadOnly = True
+        Me.ColPmFrequency.Width = 50
+        '
+        'ColCreatedBy
+        '
+        Me.ColCreatedBy.DataPropertyName = "CreatedByNickname"
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle14
+        Me.ColCreatedBy.HeaderText = "Created By"
+        Me.ColCreatedBy.Name = "ColCreatedBy"
+        Me.ColCreatedBy.ReadOnly = True
+        '
+        'ColActivityBy
+        '
+        Me.ColActivityBy.DataPropertyName = "ActivityByNickname"
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle15
+        Me.ColActivityBy.HeaderText = "Activity By"
+        Me.ColActivityBy.Name = "ColActivityBy"
+        Me.ColActivityBy.ReadOnly = True
+        Me.ColActivityBy.Width = 120
+        '
+        'ColActivityDate
+        '
+        Me.ColActivityDate.DataPropertyName = "ActivityDate"
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle16.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle16
+        Me.ColActivityDate.HeaderText = "Activity Date"
+        Me.ColActivityDate.Name = "ColActivityDate"
+        Me.ColActivityDate.ReadOnly = True
+        Me.ColActivityDate.Width = 120
+        '
+        'ColModifiedBy
+        '
+        Me.ColModifiedBy.DataPropertyName = "ModifiedByNickname"
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle17
+        Me.ColModifiedBy.HeaderText = "Modified By"
+        Me.ColModifiedBy.Name = "ColModifiedBy"
+        Me.ColModifiedBy.ReadOnly = True
+        '
+        'ColModifiedDate
+        '
+        Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle18.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle18
+        Me.ColModifiedDate.HeaderText = "Modified Date"
+        Me.ColModifiedDate.Name = "ColModifiedDate"
+        Me.ColModifiedDate.ReadOnly = True
+        Me.ColModifiedDate.Width = 120
+        '
+        'ColIsChecklistCompleted
+        '
+        Me.ColIsChecklistCompleted.DataPropertyName = "IsChecklistCompleted"
+        Me.ColIsChecklistCompleted.HeaderText = "CS"
+        Me.ColIsChecklistCompleted.Name = "ColIsChecklistCompleted"
+        Me.ColIsChecklistCompleted.ReadOnly = True
+        Me.ColIsChecklistCompleted.Visible = False
+        Me.ColIsChecklistCompleted.Width = 50
+        '
+        'ColIsDone
+        '
+        Me.ColIsDone.DataPropertyName = "IsDone"
+        Me.ColIsDone.HeaderText = "Done"
+        Me.ColIsDone.Name = "ColIsDone"
+        Me.ColIsDone.ReadOnly = True
+        Me.ColIsDone.Width = 50
         '
         'bindingNavigator
         '
@@ -355,68 +541,35 @@ Partial Class MntJig
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
         '
-        'ColJigId
+        'lblYear
         '
-        Me.ColJigId.DataPropertyName = "JigId"
-        Me.ColJigId.HeaderText = "Jig Id"
-        Me.ColJigId.Name = "ColJigId"
-        Me.ColJigId.ReadOnly = True
-        Me.ColJigId.Visible = False
+        Me.lblYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblYear.BackColor = System.Drawing.SystemColors.Control
+        Me.lblYear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblYear.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblYear.ForeColor = System.Drawing.Color.Black
+        Me.lblYear.Location = New System.Drawing.Point(871, 5)
+        Me.lblYear.Name = "lblYear"
+        Me.lblYear.Size = New System.Drawing.Size(60, 24)
+        Me.lblYear.TabIndex = 560
+        Me.lblYear.Text = "Year"
+        Me.lblYear.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'ColJigCompleteName
+        'txtYearId
         '
-        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
-        Me.ColJigCompleteName.HeaderText = "Jig Name"
-        Me.ColJigCompleteName.Name = "ColJigCompleteName"
-        Me.ColJigCompleteName.ReadOnly = True
-        Me.ColJigCompleteName.Width = 150
+        Me.txtYearId.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtYearId.BeepOnError = True
+        Me.txtYearId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtYearId.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtYearId.Location = New System.Drawing.Point(930, 5)
+        Me.txtYearId.Mask = "0000"
+        Me.txtYearId.Name = "txtYearId"
+        Me.txtYearId.ResetOnSpace = False
+        Me.txtYearId.Size = New System.Drawing.Size(80, 24)
+        Me.txtYearId.TabIndex = 579
+        Me.txtYearId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
-        Me.ColAreaName.Width = 150
-        '
-        'ColJigStatusName
-        '
-        Me.ColJigStatusName.DataPropertyName = "JigStatusName"
-        Me.ColJigStatusName.HeaderText = "Status"
-        Me.ColJigStatusName.Name = "ColJigStatusName"
-        Me.ColJigStatusName.ReadOnly = True
-        '
-        'ColJigSubStatusName
-        '
-        Me.ColJigSubStatusName.DataPropertyName = "JigSubStatusName"
-        Me.ColJigSubStatusName.HeaderText = "Sub-Status"
-        Me.ColJigSubStatusName.Name = "ColJigSubStatusName"
-        Me.ColJigSubStatusName.ReadOnly = True
-        Me.ColJigSubStatusName.Width = 150
-        '
-        'ColFrequencyName
-        '
-        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
-        Me.ColFrequencyName.HeaderText = "PM Frequency"
-        Me.ColFrequencyName.Name = "ColFrequencyName"
-        Me.ColFrequencyName.ReadOnly = True
-        '
-        'ColJigTypeName
-        '
-        Me.ColJigTypeName.DataPropertyName = "JigTypeName"
-        Me.ColJigTypeName.HeaderText = "Jig Type"
-        Me.ColJigTypeName.Name = "ColJigTypeName"
-        Me.ColJigTypeName.ReadOnly = True
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.Width = 50
-        '
-        'MntJig
+        'MntMchSched
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -425,6 +578,9 @@ Partial Class MntJig
         Me.ClientSize = New System.Drawing.Size(1014, 561)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.pnlSearchByCmb)
+        Me.Controls.Add(Me.pnlSearchByDate)
+        Me.Controls.Add(Me.txtYearId)
+        Me.Controls.Add(Me.lblYear)
         Me.Controls.Add(Me.btnAdd)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnDelete)
@@ -439,15 +595,17 @@ Partial Class MntJig
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntJig"
+        Me.Name = "MntMchSched"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Jig Masterlist"
+        Me.Text = "Machine PM Schedule"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
+        Me.pnlSearchByDate.ResumeLayout(False)
+        Me.pnlSearchByDate.PerformLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).EndInit()
         Me.bindingNavigator.ResumeLayout(False)
@@ -462,6 +620,11 @@ Partial Class MntJig
     Friend WithEvents txtCommon As TextBox
     Friend WithEvents pnlSearchByCmb As Panel
     Friend WithEvents cmbCommon As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents pnlSearchByDate As Panel
+    Friend WithEvents dtpEndDate As DateTimePicker
+    Friend WithEvents lblSearchEndDate As Label
+    Friend WithEvents lblSearchStartDate As Label
+    Friend WithEvents dtpStartDate As DateTimePicker
     Friend WithEvents btnReset As PinkieControls.ButtonXP
     Friend WithEvents btnSearch As PinkieControls.ButtonXP
     Friend WithEvents dgvList As DataGridView
@@ -482,12 +645,18 @@ Partial Class MntJig
     Friend WithEvents btnEdit As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
-    Friend WithEvents ColJigId As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigCompleteName As DataGridViewTextBoxColumn
-    Friend WithEvents ColAreaName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigSubStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColFrequencyName As DataGridViewTextBoxColumn
-    Friend WithEvents ColJigTypeName As DataGridViewTextBoxColumn
-    Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
+    Friend WithEvents lblYear As Label
+    Friend WithEvents txtYearId As MaskedTextBox
+    Friend WithEvents ColScheduleId As DataGridViewTextBoxColumn
+    Friend WithEvents ColMonth As DataGridViewTextBoxColumn
+    Friend WithEvents ColWeek As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
+    Friend WithEvents ColPmFrequency As DataGridViewTextBoxColumn
+    Friend WithEvents ColCreatedBy As DataGridViewTextBoxColumn
+    Friend WithEvents ColActivityBy As DataGridViewTextBoxColumn
+    Friend WithEvents ColActivityDate As DataGridViewTextBoxColumn
+    Friend WithEvents ColModifiedBy As DataGridViewTextBoxColumn
+    Friend WithEvents ColModifiedDate As DataGridViewTextBoxColumn
+    Friend WithEvents ColIsChecklistCompleted As DataGridViewCheckBoxColumn
+    Friend WithEvents ColIsDone As DataGridViewCheckBoxColumn
 End Class

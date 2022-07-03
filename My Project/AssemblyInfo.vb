@@ -8,13 +8,13 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("Machine Monitoring")>
-<Assembly: AssemblyDescription("Machine Monitoring System")>
+<Assembly: AssemblyDescription("Machine & Jig Monitoring System with Log Report and PM Schedule")>
 <Assembly: AssemblyCompany("NBC (Philippines) Car Technology Corporation")>
 <Assembly: AssemblyProduct("Machine Monitoring System")>
 <Assembly: AssemblyCopyright("Copyright © 2021")>
 <Assembly: AssemblyTrademark("")>
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(True)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("8a2dd361-756b-479e-9288-bc78819ca7f6")>

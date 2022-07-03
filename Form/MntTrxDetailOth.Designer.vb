@@ -22,12 +22,12 @@ Partial Class MntTrxDetailOth
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.lblRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.txtDowntimeAccumulated = New System.Windows.Forms.Label()
@@ -424,6 +424,7 @@ Partial Class MntTrxDetailOth
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnClose.CausesValidation = False
         Me.btnClose.DefaultScheme = False
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -632,8 +633,8 @@ Partial Class MntTrxDetailOth
         '
         Me.ColUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColUserName.DataPropertyName = "UserName"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle31
         Me.ColUserName.HeaderText = "NickName"
         Me.ColUserName.Name = "ColUserName"
         Me.ColUserName.ReadOnly = True
@@ -670,13 +671,13 @@ Partial Class MntTrxDetailOth
         Me.dgvDetail.AllowUserToDeleteRows = False
         Me.dgvDetail.AllowUserToResizeColumns = False
         Me.dgvDetail.AllowUserToResizeRows = False
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle32.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle32
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxDetailId, Me.ColTrxId, Me.ColTrxDate, Me.ColUserIdLog, Me.ColShiftId, Me.ColTrxFrom, Me.ColTrxTo, Me.ColElapsedTime})
@@ -726,8 +727,8 @@ Partial Class MntTrxDetailOth
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle33
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -738,9 +739,9 @@ Partial Class MntTrxDetailOth
         'ColTrxFrom
         '
         Me.ColTrxFrom.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle4.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle34.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle34.NullValue = Nothing
+        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle34
         Me.ColTrxFrom.HeaderText = "From"
         Me.ColTrxFrom.Name = "ColTrxFrom"
         Me.ColTrxFrom.ReadOnly = True
@@ -751,9 +752,9 @@ Partial Class MntTrxDetailOth
         'ColTrxTo
         '
         Me.ColTrxTo.DataPropertyName = "TrxTo"
-        DataGridViewCellStyle5.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle5.NullValue = Nothing
-        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle35.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle35.NullValue = Nothing
+        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle35
         Me.ColTrxTo.HeaderText = "To"
         Me.ColTrxTo.Name = "ColTrxTo"
         Me.ColTrxTo.ReadOnly = True
@@ -764,8 +765,8 @@ Partial Class MntTrxDetailOth
         'ColElapsedTime
         '
         Me.ColElapsedTime.DataPropertyName = "ElapsedTime"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle36
         Me.ColElapsedTime.HeaderText = "Minutes"
         Me.ColElapsedTime.Name = "ColElapsedTime"
         Me.ColElapsedTime.ReadOnly = True

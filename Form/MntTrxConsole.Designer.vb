@@ -85,13 +85,13 @@ Partial Class MntTrxConsole
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
-        Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
-        Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
-        Me.lblSearchStartDate = New System.Windows.Forms.Label()
-        Me.lblSearchEndDate = New System.Windows.Forms.Label()
         Me.pnlSearchByDate = New System.Windows.Forms.Panel()
+        Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
+        Me.lblSearchEndDate = New System.Windows.Forms.Label()
+        Me.lblSearchStartDate = New System.Windows.Forms.Label()
+        Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommonCmb = New SergeUtils.EasyCompletionComboBox()
         Me.tmrElapsedTime = New System.Windows.Forms.Timer(Me.components)
@@ -288,6 +288,7 @@ Partial Class MntTrxConsole
         Me.dgvList.RowHeadersVisible = False
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvList.Size = New System.Drawing.Size(1048, 529)
         Me.dgvList.TabIndex = 158
@@ -392,11 +393,11 @@ Partial Class MntTrxConsole
         '
         Me.lblSearchCriteria.BackColor = System.Drawing.SystemColors.Control
         Me.lblSearchCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSearchCriteria.ForeColor = System.Drawing.Color.Black
-        Me.lblSearchCriteria.Location = New System.Drawing.Point(346, 5)
+        Me.lblSearchCriteria.Location = New System.Drawing.Point(346, 4)
         Me.lblSearchCriteria.Name = "lblSearchCriteria"
-        Me.lblSearchCriteria.Size = New System.Drawing.Size(60, 23)
+        Me.lblSearchCriteria.Size = New System.Drawing.Size(60, 25)
         Me.lblSearchCriteria.TabIndex = 534
         Me.lblSearchCriteria.Text = "Criteria"
         Me.lblSearchCriteria.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -458,7 +459,6 @@ Partial Class MntTrxConsole
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -527,7 +527,7 @@ Partial Class MntTrxConsole
         Me.pgMachine.Padding = New System.Windows.Forms.Padding(3)
         Me.pgMachine.Size = New System.Drawing.Size(342, 572)
         Me.pgMachine.TabIndex = 0
-        Me.pgMachine.Text = "Machines"
+        Me.pgMachine.Text = "Machine"
         Me.pgMachine.UseVisualStyleBackColor = True
         '
         'pgJig
@@ -639,7 +639,7 @@ Partial Class MntTrxConsole
         Me.lblStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
         Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
         Me.lblStatus.Location = New System.Drawing.Point(351, 568)
         Me.lblStatus.Name = "lblStatus"
@@ -663,22 +663,12 @@ Partial Class MntTrxConsole
         'cmbSearchCriteria
         '
         Me.cmbSearchCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbSearchCriteria.FormattingEnabled = True
-        Me.cmbSearchCriteria.Location = New System.Drawing.Point(405, 5)
+        Me.cmbSearchCriteria.Location = New System.Drawing.Point(405, 4)
         Me.cmbSearchCriteria.Name = "cmbSearchCriteria"
-        Me.cmbSearchCriteria.Size = New System.Drawing.Size(165, 23)
+        Me.cmbSearchCriteria.Size = New System.Drawing.Size(165, 25)
         Me.cmbSearchCriteria.TabIndex = 535
-        '
-        'dtpEndDate
-        '
-        Me.dtpEndDate.CustomFormat = "  MMM dd, yyyy"
-        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpEndDate.Location = New System.Drawing.Point(197, 4)
-        Me.dtpEndDate.Name = "dtpEndDate"
-        Me.dtpEndDate.Size = New System.Drawing.Size(125, 23)
-        Me.dtpEndDate.TabIndex = 21
         '
         'btnSearch
         '
@@ -688,7 +678,7 @@ Partial Class MntTrxConsole
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnSearch.Hint = "Search"
         Me.btnSearch.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Find_16_x_16
-        Me.btnSearch.Location = New System.Drawing.Point(903, 2)
+        Me.btnSearch.Location = New System.Drawing.Point(894, 2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSearch.Size = New System.Drawing.Size(85, 29)
@@ -704,43 +694,13 @@ Partial Class MntTrxConsole
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnReset.Hint = "Reset search filter"
         Me.btnReset.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Undo_16_x_16
-        Me.btnReset.Location = New System.Drawing.Point(992, 2)
+        Me.btnReset.Location = New System.Drawing.Point(983, 2)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnReset.Size = New System.Drawing.Size(85, 29)
         Me.btnReset.TabIndex = 539
         Me.btnReset.TabStop = False
         Me.btnReset.Text = "Reset"
-        '
-        'dtpStartDate
-        '
-        Me.dtpStartDate.CustomFormat = "  MMM dd, yyyy"
-        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpStartDate.Location = New System.Drawing.Point(44, 4)
-        Me.dtpStartDate.Name = "dtpStartDate"
-        Me.dtpStartDate.Size = New System.Drawing.Size(125, 23)
-        Me.dtpStartDate.TabIndex = 20
-        '
-        'lblSearchStartDate
-        '
-        Me.lblSearchStartDate.AutoSize = True
-        Me.lblSearchStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblSearchStartDate.Location = New System.Drawing.Point(4, 8)
-        Me.lblSearchStartDate.Name = "lblSearchStartDate"
-        Me.lblSearchStartDate.Size = New System.Drawing.Size(35, 15)
-        Me.lblSearchStartDate.TabIndex = 24
-        Me.lblSearchStartDate.Text = "From"
-        '
-        'lblSearchEndDate
-        '
-        Me.lblSearchEndDate.AutoSize = True
-        Me.lblSearchEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblSearchEndDate.Location = New System.Drawing.Point(173, 8)
-        Me.lblSearchEndDate.Name = "lblSearchEndDate"
-        Me.lblSearchEndDate.Size = New System.Drawing.Size(19, 15)
-        Me.lblSearchEndDate.TabIndex = 25
-        Me.lblSearchEndDate.Text = "To"
         '
         'pnlSearchByDate
         '
@@ -749,29 +709,69 @@ Partial Class MntTrxConsole
         Me.pnlSearchByDate.Controls.Add(Me.lblSearchEndDate)
         Me.pnlSearchByDate.Controls.Add(Me.lblSearchStartDate)
         Me.pnlSearchByDate.Controls.Add(Me.dtpStartDate)
-        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByDate.Location = New System.Drawing.Point(572, 1)
+        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.pnlSearchByDate.Location = New System.Drawing.Point(571, 1)
         Me.pnlSearchByDate.Name = "pnlSearchByDate"
-        Me.pnlSearchByDate.Size = New System.Drawing.Size(328, 31)
+        Me.pnlSearchByDate.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByDate.TabIndex = 536
+        '
+        'dtpEndDate
+        '
+        Me.dtpEndDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpEndDate.Location = New System.Drawing.Point(193, 4)
+        Me.dtpEndDate.Name = "dtpEndDate"
+        Me.dtpEndDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpEndDate.TabIndex = 27
+        '
+        'lblSearchEndDate
+        '
+        Me.lblSearchEndDate.AutoSize = True
+        Me.lblSearchEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchEndDate.Location = New System.Drawing.Point(171, 8)
+        Me.lblSearchEndDate.Name = "lblSearchEndDate"
+        Me.lblSearchEndDate.Size = New System.Drawing.Size(19, 15)
+        Me.lblSearchEndDate.TabIndex = 29
+        Me.lblSearchEndDate.Text = "To"
+        '
+        'lblSearchStartDate
+        '
+        Me.lblSearchStartDate.AutoSize = True
+        Me.lblSearchStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchStartDate.Location = New System.Drawing.Point(5, 8)
+        Me.lblSearchStartDate.Name = "lblSearchStartDate"
+        Me.lblSearchStartDate.Size = New System.Drawing.Size(35, 15)
+        Me.lblSearchStartDate.TabIndex = 28
+        Me.lblSearchStartDate.Text = "From"
+        '
+        'dtpStartDate
+        '
+        Me.dtpStartDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpStartDate.Location = New System.Drawing.Point(43, 3)
+        Me.dtpStartDate.Name = "dtpStartDate"
+        Me.dtpStartDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpStartDate.TabIndex = 26
         '
         'pnlSearchByCmb
         '
         Me.pnlSearchByCmb.BackColor = System.Drawing.Color.White
         Me.pnlSearchByCmb.Controls.Add(Me.cmbCommonCmb)
         Me.pnlSearchByCmb.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByCmb.Location = New System.Drawing.Point(572, 1)
+        Me.pnlSearchByCmb.Location = New System.Drawing.Point(571, 1)
         Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
-        Me.pnlSearchByCmb.Size = New System.Drawing.Size(328, 31)
+        Me.pnlSearchByCmb.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByCmb.TabIndex = 537
         '
         'cmbCommonCmb
         '
-        Me.cmbCommonCmb.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbCommonCmb.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.cmbCommonCmb.FormattingEnabled = True
-        Me.cmbCommonCmb.Location = New System.Drawing.Point(6, 4)
+        Me.cmbCommonCmb.Location = New System.Drawing.Point(3, 3)
         Me.cmbCommonCmb.Name = "cmbCommonCmb"
-        Me.cmbCommonCmb.Size = New System.Drawing.Size(316, 23)
+        Me.cmbCommonCmb.Size = New System.Drawing.Size(316, 25)
         Me.cmbCommonCmb.TabIndex = 25
         '
         'tmrElapsedTime
@@ -782,42 +782,43 @@ Partial Class MntTrxConsole
         '
         Me.pnlSearchByText.BackColor = System.Drawing.Color.White
         Me.pnlSearchByText.Controls.Add(Me.txtCommonTxt)
-        Me.pnlSearchByText.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByText.Location = New System.Drawing.Point(572, 1)
+        Me.pnlSearchByText.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.pnlSearchByText.Location = New System.Drawing.Point(571, 1)
         Me.pnlSearchByText.Name = "pnlSearchByText"
-        Me.pnlSearchByText.Size = New System.Drawing.Size(328, 31)
+        Me.pnlSearchByText.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByText.TabIndex = 538
         '
         'txtCommonTxt
         '
-        Me.txtCommonTxt.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtCommonTxt.Location = New System.Drawing.Point(6, 4)
+        Me.txtCommonTxt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtCommonTxt.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.txtCommonTxt.Location = New System.Drawing.Point(3, 3)
         Me.txtCommonTxt.Name = "txtCommonTxt"
-        Me.txtCommonTxt.Size = New System.Drawing.Size(316, 23)
+        Me.txtCommonTxt.Size = New System.Drawing.Size(316, 25)
         Me.txtCommonTxt.TabIndex = 543
         '
         'cmsConsole
         '
         Me.cmsConsole.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MachineRelatedToolStripMenuItem, Me.JigRelatedToolStripMenuItem, Me.OthersToolStripMenuItem})
         Me.cmsConsole.Name = "cmsConsole"
-        Me.cmsConsole.Size = New System.Drawing.Size(181, 92)
+        Me.cmsConsole.Size = New System.Drawing.Size(165, 70)
         '
         'MachineRelatedToolStripMenuItem
         '
         Me.MachineRelatedToolStripMenuItem.Name = "MachineRelatedToolStripMenuItem"
-        Me.MachineRelatedToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MachineRelatedToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.MachineRelatedToolStripMenuItem.Text = "Machine-Related"
         '
         'JigRelatedToolStripMenuItem
         '
         Me.JigRelatedToolStripMenuItem.Name = "JigRelatedToolStripMenuItem"
-        Me.JigRelatedToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.JigRelatedToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.JigRelatedToolStripMenuItem.Text = "Jig-Related"
         '
         'OthersToolStripMenuItem
         '
         Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
-        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.OthersToolStripMenuItem.Text = "Others"
         '
         'MntTrxConsole
@@ -827,10 +828,11 @@ Partial Class MntTrxConsole
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1400, 600)
-        Me.Controls.Add(Me.pnlSearchByCmb)
         Me.Controls.Add(Me.pnlSearchByDate)
-        Me.Controls.Add(Me.pnlSearchByText)
+        Me.Controls.Add(Me.pnlSearchByCmb)
         Me.Controls.Add(Me.lblSearchCriteria)
+        Me.Controls.Add(Me.cmbSearchCriteria)
+        Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.dgvList)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.cmbStatus)
@@ -843,7 +845,6 @@ Partial Class MntTrxConsole
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnCreate)
         Me.Controls.Add(Me.tabCtrl)
-        Me.Controls.Add(Me.cmbSearchCriteria)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.Name = "MntTrxConsole"
@@ -895,12 +896,8 @@ Partial Class MntTrxConsole
     Friend WithEvents lblStatus As System.Windows.Forms.Label
     Friend WithEvents cmbStatus As System.Windows.Forms.ComboBox
     Friend WithEvents cmbSearchCriteria As System.Windows.Forms.ComboBox
-    Friend WithEvents dtpEndDate As System.Windows.Forms.DateTimePicker
     Friend WithEvents btnSearch As PinkieControls.ButtonXP
     Friend WithEvents btnReset As PinkieControls.ButtonXP
-    Friend WithEvents dtpStartDate As System.Windows.Forms.DateTimePicker
-    Friend WithEvents lblSearchStartDate As System.Windows.Forms.Label
-    Friend WithEvents lblSearchEndDate As System.Windows.Forms.Label
     Friend WithEvents pnlSearchByDate As System.Windows.Forms.Panel
     Friend WithEvents tmrElapsedTime As System.Windows.Forms.Timer
     Friend WithEvents dgvJig As System.Windows.Forms.DataGridView
@@ -935,4 +932,8 @@ Partial Class MntTrxConsole
     Friend WithEvents ColDatetimeEnded As DataGridViewTextBoxColumn
     Friend WithEvents ColTotalAccumulatedTime As DataGridViewTextBoxColumn
     Friend WithEvents ColRoutingStatusName As DataGridViewTextBoxColumn
+    Friend WithEvents dtpEndDate As DateTimePicker
+    Friend WithEvents lblSearchEndDate As Label
+    Friend WithEvents lblSearchStartDate As Label
+    Friend WithEvents dtpStartDate As DateTimePicker
 End Class

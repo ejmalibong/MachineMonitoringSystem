@@ -35,22 +35,18 @@ Public Class MntActivityReport
             prMachineStatus(0).Value = Nothing
             dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbMachineDowntimeStatus, "< All > ", prMachineStatus)
 
-            Dim prmMachine(0) As SqlParameter
-            prmMachine(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            prmMachine(0).Value = Nothing
-            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachine, "< All > ", prmMachine)
+            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachine, "< All > ")
             AddHandler cmbMachine.Validated, AddressOf cmbMachine_Validated
 
-            Dim prmJigStatus(0) As SqlParameter
-            prmJigStatus(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-            prmJigStatus(0).Value = Nothing
-            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbJigDowntimeStatus, "< All > ", prmJigStatus)
+            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbJigDowntimeStatus, "< All > ")
 
             Dim prmJig(0) As SqlParameter
             prmJig(0) = New SqlParameter("@JigId", SqlDbType.Int)
             prmJig(0).Value = Nothing
             dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJig, "< All > ", prmJig)
             AddHandler cmbJig.Validated, AddressOf cmbJig_Validated
+
+            Me.ActiveControl = btnGenerate
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

@@ -101,7 +101,7 @@ Public Class Login
             prmCount(1) = New SqlParameter("@Password", SqlDbType.NVarChar)
             prmCount(1).Value = txtPassword.Text.Trim
 
-            count = dbMethod.ExecuteScalar("CntSecUser", CommandType.StoredProcedure, prmCount)
+            count = dbMethod.ExecuteScalar("CntSecUserByLogin", CommandType.StoredProcedure, prmCount)
 
             If count > 0 Then
                 Dim prmUser(1) As SqlParameter

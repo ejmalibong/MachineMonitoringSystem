@@ -165,7 +165,7 @@ Public Class MntTrxDetailJig
                 DisableForm(True)
                 Me.ActiveControl = cmbJigName
             Else
-                Me.Text = "Activity No. " & trxId & ""
+                Me.Text = "Activity No. " & trxId
 
                 For Each row As DataRow In dtTrxHeader.Rows
                     orgJigId = row("JigId")
@@ -342,7 +342,6 @@ Public Class MntTrxDetailJig
                     If Not dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime") Is DBNull.Value Then
                         txtRuntimeAccumulated.Text = dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime")
                     End If
-
                 Else
                     GetTotalRuntime(cmbJigName.SelectedValue)
                 End If
@@ -380,16 +379,28 @@ Public Class MntTrxDetailJig
                 weekId = 0
             Else
                 If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
-                    If orgJigId = cmbJigName.SelectedValue Then
-                        GetJigSchedule(cmbJigName.SelectedValue, trxId)
-                    Else
-                        GetJigSchedule(cmbJigName.SelectedValue)
-                    End If
+                    GetJigSchedule(cmbJigName.SelectedValue)
                 Else
                     txtScheduleMonth.Text = String.Empty
                     txtScheduleWeek.Text = String.Empty
                     txtScheduleMonth.Enabled = False
                     txtScheduleWeek.Enabled = False
+
+                    If orgJigSubStatusId = 2 Then
+                        Dim prmSched(1) As SqlParameter
+                        prmSched(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                        prmSched(0).Value = cmbJigName.SelectedValue
+                        prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSched(1).Value = trxId
+
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND TrxId = @TrxId"
+                        Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
+
+                        If rdrSched.Read Then
+                            orgScheduleId = rdrSched.Item("ScheduleId")
+                        End If
+                        rdrSched.Close()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -1060,6 +1071,39 @@ Public Class MntTrxDetailJig
 
                 dbMethod.ExecuteNonQuery("InsMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
+                'fill the pm schedule slot
+                'should be place here, before the update of dtTrxDetail so dgvDetail still have the data
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
+                    Dim prmMchSchd(5) As SqlParameter
+                    prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmMchSchd(0).Value = prmHeader(0).Value
+
+                    prmMchSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    If cmbTransactionStatus.SelectedValue = 1 Then prmMchSchd(1).Value = True Else prmMchSchd(1).Value = False
+
+                    prmMchSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmMchSchd(2).Value = False
+
+                    prmMchSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmMchSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                    Else
+                        prmMchSchd(3).Value = userId
+                    End If
+
+                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                    Else
+                        prmMchSchd(4).Value = dbMethod.GetServerDate
+                    End If
+
+                    prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmMchSchd(5).Value = scheduleId
+
+                    dbMethod.ExecuteNonQuery("UpdMntJigSchedule", CommandType.StoredProcedure, prmMchSchd)
+                End If
+
                 'transaction details
                 If dgvDetail.Rows.Count > 0 Then
                     For Each dataRowView As DataRowView In Me.bsTrxDetail
@@ -1106,38 +1150,6 @@ Public Class MntTrxDetailJig
                         dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmUser)
                     End If
                 Next
-
-                'fill the pm schedule slot
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
-                    Dim prmMchSchd(5) As SqlParameter
-                    prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchSchd(0).Value = prmHeader(0).Value
-
-                    prmMchSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    If cmbTransactionStatus.SelectedValue = 1 Then prmMchSchd(1).Value = True Else prmMchSchd(1).Value = False
-
-                    prmMchSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmMchSchd(2).Value = False
-
-                    prmMchSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                    Else
-                        prmMchSchd(3).Value = userId
-                    End If
-
-                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                    Else
-                        prmMchSchd(4).Value = dbMethod.GetServerDate
-                    End If
-
-                    prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmMchSchd(5).Value = scheduleId
-
-                    dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchd)
-                End If
 
                 'existing transaction
             Else
@@ -1367,6 +1379,18 @@ Public Class MntTrxDetailJig
 
                     dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
 
+                    If orgJigId <> cmbJigName.SelectedValue Then
+                        Dim prmJigStatusOrg(2) As SqlParameter
+                        prmJigStatusOrg(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                        prmJigStatusOrg(0).Value = orgJigId
+                        prmJigStatusOrg(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                        prmJigStatusOrg(1).Value = 1
+                        prmJigStatusOrg(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
+                        prmJigStatusOrg(2).Value = 1
+
+                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
+                    End If
+
                 Else 'transaction status - on-going
                     prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
                     prmHeader(27).Value = 2
@@ -1469,9 +1493,77 @@ Public Class MntTrxDetailJig
                     prmJigStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
                     prmJigStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
 
+                    If orgJigId <> cmbJigName.SelectedValue Then
+                        Dim prmJigStatusOrg(2) As SqlParameter
+                        prmJigStatusOrg(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                        prmJigStatusOrg(0).Value = orgJigId
+                        prmJigStatusOrg(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                        prmJigStatusOrg(1).Value = 1
+                        prmJigStatusOrg(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
+                        prmJigStatusOrg(2).Value = 1
+
+                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
+                    End If
+
                     dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
                 End If
+
                 dbMethod.ExecuteNonQuery("UpdMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
+
+                If orgScheduleId > 0 Then 'clear up the orig pm schedule slot
+                    Dim prmMchSchdOrg(8) As SqlParameter
+                    prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmMchSchdOrg(0).Value = Nothing
+                    prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    prmMchSchdOrg(1).Value = False
+                    prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmMchSchdOrg(2).Value = False
+                    prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    prmMchSchdOrg(3).Value = Nothing
+                    prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    prmMchSchdOrg(4).Value = Nothing
+                    prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmMchSchdOrg(5).Value = Nothing
+                    prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
+                    prmMchSchdOrg(6).Value = Nothing
+                    prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                    prmMchSchdOrg(7).Value = Nothing
+                    prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmMchSchdOrg(8).Value = orgScheduleId
+
+                    dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
+                End If
+
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
+                    Dim prmJigSchd(5) As SqlParameter
+                    prmJigSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmJigSchd(0).Value = trxId
+
+                    prmJigSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    If cmbTransactionStatus.SelectedValue = 1 Then prmJigSchd(1).Value = True Else prmJigSchd(1).Value = False
+
+                    prmJigSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmJigSchd(2).Value = False
+
+                    prmJigSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmJigSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                    Else
+                        prmJigSchd(3).Value = userId
+                    End If
+
+                    prmJigSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmJigSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                    Else
+                        prmJigSchd(4).Value = dbMethod.GetServerDate
+                    End If
+
+                    prmJigSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmJigSchd(5).Value = scheduleId
+
+                    dbMethod.ExecuteNonQuery("UpdMntJigSchedule", CommandType.StoredProcedure, prmJigSchd)
+                End If
 
                 'transaction details
                 For Each dataRowView As DataRowView In Me.bsTrxDetail
@@ -1572,84 +1664,6 @@ Public Class MntTrxDetailJig
                         dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns2)
                     End If
                 Next
-
-                'set the orig jig to operational if jig was changed
-                If orgJigId <> cmbJigName.SelectedValue Then
-                    Dim prmJigStatusOrg(2) As SqlParameter
-                    prmJigStatusOrg(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmJigStatusOrg(0).Value = orgJigId
-                    prmJigStatusOrg(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                    prmJigStatusOrg(1).Value = 1
-                    prmJigStatusOrg(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                    prmJigStatusOrg(2).Value = 1
-
-                    dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
-
-                    Dim prmJigStatusNew(2) As SqlParameter
-                    prmJigStatusNew(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmJigStatusNew(0).Value = cmbJigName.SelectedValue
-                    prmJigStatusNew(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                    prmJigStatusNew(1).Value = cmbDowntimeStatus.SelectedValue
-                    prmJigStatusNew(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                    prmJigStatusNew(2).Value = cmbDowntimeSubStatus.SelectedValue
-
-                    dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusNew)
-                End If
-
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
-                    If orgScheduleId <> scheduleId Then 'clear up the orig pm schedule slot
-                        Dim prmMchSchdOrg(8) As SqlParameter
-                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmMchSchdOrg(0).Value = Nothing
-                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                        prmMchSchdOrg(1).Value = False
-                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                        prmMchSchdOrg(2).Value = False
-                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                        prmMchSchdOrg(3).Value = Nothing
-                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                        prmMchSchdOrg(4).Value = Nothing
-                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                        prmMchSchdOrg(5).Value = Nothing
-                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-                        prmMchSchdOrg(6).Value = Nothing
-                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-                        prmMchSchdOrg(7).Value = Nothing
-                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                        prmMchSchdOrg(8).Value = orgScheduleId
-
-                        dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
-                    End If
-
-                    Dim prmJigSchd(5) As SqlParameter
-                    prmJigSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmJigSchd(0).Value = trxId
-
-                    prmJigSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    If cmbTransactionStatus.SelectedValue = 1 Then prmJigSchd(1).Value = True Else prmJigSchd(1).Value = False
-
-                    prmJigSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmJigSchd(2).Value = False
-
-                    prmJigSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmJigSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                    Else
-                        prmJigSchd(3).Value = userId
-                    End If
-
-                    prmJigSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                    If dgvDetail.Rows.Count > 0 Then
-                        prmJigSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                    Else
-                        prmJigSchd(4).Value = dbMethod.GetServerDate
-                    End If
-
-                    prmJigSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmJigSchd(5).Value = scheduleId
-
-                    dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmJigSchd)
-                End If
             End If
 
             Me.DialogResult = DialogResult.OK
@@ -1817,7 +1831,7 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub GetJigSchedule(jigId As Integer, Optional trxId As Integer = 0)
+    Private Sub GetJigSchedule(jigId As Integer)
         Try
             If trxId = 0 Then
                 Dim prmSchedule(0) As SqlParameter
@@ -1845,8 +1859,8 @@ Public Class MntTrxDetailJig
                 End If
                 rdrSchedule.Close()
             Else
-                If orgJigId = jigId Then
-                    If orgJigSubStatusId = cmbDowntimeSubStatus.SelectedValue Then
+                If orgJigId = jigId Then 'same jig
+                    If orgJigSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
                         Dim prmSchedule(1) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
                         prmSchedule(0).Value = jigId
@@ -1858,14 +1872,13 @@ Public Class MntTrxDetailJig
 
                         If rdrSchedule.Read Then
                             scheduleId = rdrSchedule.Item("ScheduleId")
-                            orgScheduleId = rdrSchedule.Item("ScheduleId")
                             monthId = rdrSchedule.Item("MonthId")
                             weekId = rdrSchedule.Item("WeekId")
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
                         End If
                         rdrSchedule.Close()
-                    Else
+                    Else 'non-pm to pm
                         Dim prmSchedule(0) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
                         prmSchedule(0).Value = jigId
@@ -1875,24 +1888,14 @@ Public Class MntTrxDetailJig
 
                         If rdrSchedule.Read Then
                             scheduleId = rdrSchedule.Item("ScheduleId")
-                            orgScheduleId = rdrSchedule.Item("ScheduleId")
                             monthId = rdrSchedule.Item("MonthId")
                             weekId = rdrSchedule.Item("WeekId")
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
-                        Else
-                            MessageBox.Show("No PM schedule found for this jig.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            cmbDowntimeSubStatus.SelectedValue = 0
-                            txtScheduleMonth.Text = String.Empty
-                            txtScheduleWeek.Text = String.Empty
-
-                            scheduleId = 0
-                            monthId = 0
-                            weekId = 0
                         End If
                         rdrSchedule.Close()
                     End If
-                Else
+                Else 'selected jig was changed
                     Dim prmSchedule(0) As SqlParameter
                     prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
                     prmSchedule(0).Value = jigId
@@ -1900,13 +1903,25 @@ Public Class MntTrxDetailJig
                     Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND ActivityDate IS NULL AND IsDone = 0"
                     Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
-                    If rdrSchedule.Read Then
+                    If rdrSchedule.Read Then 'non-pm to pm
                         scheduleId = rdrSchedule.Item("ScheduleId")
                         orgScheduleId = rdrSchedule.Item("ScheduleId")
                         monthId = rdrSchedule.Item("MonthId")
                         weekId = rdrSchedule.Item("WeekId")
                         txtScheduleMonth.Text = MonthName(monthId)
                         txtScheduleWeek.Text = weekId
+
+                        Dim prmOrgSched(0) As SqlParameter 'pm to pm
+                        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmOrgSched(0).Value = trxId
+
+                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntJigSchedule WHERE TrxId = @TrxId"
+                        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
+
+                        While rdrOrgSched.Read
+                            orgScheduleId = rdrOrgSched.Item("ScheduleId")
+                        End While
+                        rdrOrgSched.Close()
                     Else
                         MessageBox.Show("No PM schedule found for this jig.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         cmbDowntimeSubStatus.SelectedValue = 0
@@ -2306,6 +2321,25 @@ Public Class MntTrxDetailJig
     Private Sub dgvPic_Leave(sender As Object, e As EventArgs) Handles dgvPic.Leave
         lblPic.ForeColor = Color.Black
         lblPic.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub txtChecksheet_Enter(sender As Object, e As EventArgs) Handles txtChecksheet.Enter
+        lblChecksheet.ForeColor = Color.White
+        lblChecksheet.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub txtChecksheet_Leave(sender As Object, e As EventArgs) Handles txtChecksheet.Leave
+        lblChecksheet.ForeColor = Color.Black
+        lblChecksheet.BackColor = SystemColors.Control
+    End Sub
+    Private Sub txt4M_Enter(sender As Object, e As EventArgs) Handles txt4M.Enter
+        lbl4M.ForeColor = Color.White
+        lbl4M.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub txt4M_Leave(sender As Object, e As EventArgs) Handles txt4M.Leave
+        lbl4M.ForeColor = Color.Black
+        lbl4M.BackColor = SystemColors.Control
     End Sub
 
 End Class

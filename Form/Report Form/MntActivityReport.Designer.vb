@@ -23,32 +23,32 @@ Partial Class MntActivityReport
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pnlLeft = New System.Windows.Forms.Panel()
+        Me.lblShift = New System.Windows.Forms.Label()
         Me.cmbUserName = New SergeUtils.EasyCompletionComboBox()
         Me.cmbArea = New SergeUtils.EasyCompletionComboBox()
         Me.cmbJigDowntimeStatus = New System.Windows.Forms.ComboBox()
-        Me.lblJigDowntimeStatus = New System.Windows.Forms.Label()
-        Me.lblJig = New System.Windows.Forms.Label()
         Me.cmbJig = New SergeUtils.EasyCompletionComboBox()
-        Me.lblMachine = New System.Windows.Forms.Label()
         Me.cmbMachine = New SergeUtils.EasyCompletionComboBox()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnGenerate = New PinkieControls.ButtonXP()
-        Me.lblTransactionStatus = New System.Windows.Forms.Label()
         Me.cmbTransactionStatus = New System.Windows.Forms.ComboBox()
-        Me.lblArea = New System.Windows.Forms.Label()
         Me.cmbMachineDowntimeStatus = New System.Windows.Forms.ComboBox()
-        Me.lblMachineDowntimeStatus = New System.Windows.Forms.Label()
-        Me.lblShift = New System.Windows.Forms.Label()
-        Me.lblUserName = New System.Windows.Forms.Label()
-        Me.lblEndDate = New System.Windows.Forms.Label()
         Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
-        Me.lblStartDate = New System.Windows.Forms.Label()
         Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
         Me.grpShift = New System.Windows.Forms.GroupBox()
         Me.rdBoth = New System.Windows.Forms.RadioButton()
         Me.rdDay = New System.Windows.Forms.RadioButton()
         Me.rdNight = New System.Windows.Forms.RadioButton()
+        Me.lblStartDate = New System.Windows.Forms.Label()
+        Me.lblEndDate = New System.Windows.Forms.Label()
+        Me.lblUserName = New System.Windows.Forms.Label()
+        Me.lblArea = New System.Windows.Forms.Label()
+        Me.lblTransactionStatus = New System.Windows.Forms.Label()
+        Me.lblMachineDowntimeStatus = New System.Windows.Forms.Label()
+        Me.lblMachine = New System.Windows.Forms.Label()
+        Me.lblJigDowntimeStatus = New System.Windows.Forms.Label()
+        Me.lblJig = New System.Windows.Forms.Label()
         Me.rptViewer = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.pnlLeft.SuspendLayout()
         Me.grpShift.SuspendLayout()
@@ -56,29 +56,29 @@ Partial Class MntActivityReport
         '
         'pnlLeft
         '
+        Me.pnlLeft.Controls.Add(Me.lblShift)
         Me.pnlLeft.Controls.Add(Me.cmbUserName)
         Me.pnlLeft.Controls.Add(Me.cmbArea)
         Me.pnlLeft.Controls.Add(Me.cmbJigDowntimeStatus)
-        Me.pnlLeft.Controls.Add(Me.lblJigDowntimeStatus)
-        Me.pnlLeft.Controls.Add(Me.lblJig)
         Me.pnlLeft.Controls.Add(Me.cmbJig)
-        Me.pnlLeft.Controls.Add(Me.lblMachine)
         Me.pnlLeft.Controls.Add(Me.cmbMachine)
         Me.pnlLeft.Controls.Add(Me.btnReset)
         Me.pnlLeft.Controls.Add(Me.btnClose)
         Me.pnlLeft.Controls.Add(Me.btnGenerate)
-        Me.pnlLeft.Controls.Add(Me.lblTransactionStatus)
         Me.pnlLeft.Controls.Add(Me.cmbTransactionStatus)
-        Me.pnlLeft.Controls.Add(Me.lblArea)
         Me.pnlLeft.Controls.Add(Me.cmbMachineDowntimeStatus)
-        Me.pnlLeft.Controls.Add(Me.lblMachineDowntimeStatus)
-        Me.pnlLeft.Controls.Add(Me.lblShift)
-        Me.pnlLeft.Controls.Add(Me.lblUserName)
-        Me.pnlLeft.Controls.Add(Me.lblEndDate)
         Me.pnlLeft.Controls.Add(Me.dtpEndDate)
-        Me.pnlLeft.Controls.Add(Me.lblStartDate)
         Me.pnlLeft.Controls.Add(Me.dtpStartDate)
         Me.pnlLeft.Controls.Add(Me.grpShift)
+        Me.pnlLeft.Controls.Add(Me.lblStartDate)
+        Me.pnlLeft.Controls.Add(Me.lblEndDate)
+        Me.pnlLeft.Controls.Add(Me.lblUserName)
+        Me.pnlLeft.Controls.Add(Me.lblArea)
+        Me.pnlLeft.Controls.Add(Me.lblTransactionStatus)
+        Me.pnlLeft.Controls.Add(Me.lblMachineDowntimeStatus)
+        Me.pnlLeft.Controls.Add(Me.lblMachine)
+        Me.pnlLeft.Controls.Add(Me.lblJigDowntimeStatus)
+        Me.pnlLeft.Controls.Add(Me.lblJig)
         Me.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.pnlLeft.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.pnlLeft.Location = New System.Drawing.Point(0, 0)
@@ -86,11 +86,21 @@ Partial Class MntActivityReport
         Me.pnlLeft.Size = New System.Drawing.Size(210, 586)
         Me.pnlLeft.TabIndex = 0
         '
+        'lblShift
+        '
+        Me.lblShift.AutoSize = True
+        Me.lblShift.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblShift.Location = New System.Drawing.Point(4, 137)
+        Me.lblShift.Name = "lblShift"
+        Me.lblShift.Size = New System.Drawing.Size(31, 15)
+        Me.lblShift.TabIndex = 29
+        Me.lblShift.Text = "Shift"
+        '
         'cmbUserName
         '
         Me.cmbUserName.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbUserName.FormattingEnabled = True
-        Me.cmbUserName.Location = New System.Drawing.Point(7, 110)
+        Me.cmbUserName.Location = New System.Drawing.Point(7, 111)
         Me.cmbUserName.Name = "cmbUserName"
         Me.cmbUserName.Size = New System.Drawing.Size(196, 23)
         Me.cmbUserName.TabIndex = 2
@@ -99,7 +109,7 @@ Partial Class MntActivityReport
         '
         Me.cmbArea.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbArea.FormattingEnabled = True
-        Me.cmbArea.Location = New System.Drawing.Point(7, 203)
+        Me.cmbArea.Location = New System.Drawing.Point(7, 202)
         Me.cmbArea.Name = "cmbArea"
         Me.cmbArea.Size = New System.Drawing.Size(196, 23)
         Me.cmbArea.TabIndex = 4
@@ -114,26 +124,6 @@ Partial Class MntActivityReport
         Me.cmbJigDowntimeStatus.Size = New System.Drawing.Size(196, 23)
         Me.cmbJigDowntimeStatus.TabIndex = 8
         '
-        'lblJigDowntimeStatus
-        '
-        Me.lblJigDowntimeStatus.AutoSize = True
-        Me.lblJigDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblJigDowntimeStatus.Location = New System.Drawing.Point(4, 362)
-        Me.lblJigDowntimeStatus.Name = "lblJigDowntimeStatus"
-        Me.lblJigDowntimeStatus.Size = New System.Drawing.Size(114, 15)
-        Me.lblJigDowntimeStatus.TabIndex = 161
-        Me.lblJigDowntimeStatus.Text = "Jig Downtime Status"
-        '
-        'lblJig
-        '
-        Me.lblJig.AutoSize = True
-        Me.lblJig.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblJig.Location = New System.Drawing.Point(4, 406)
-        Me.lblJig.Name = "lblJig"
-        Me.lblJig.Size = New System.Drawing.Size(56, 15)
-        Me.lblJig.TabIndex = 159
-        Me.lblJig.Text = "Jig Name"
-        '
         'cmbJig
         '
         Me.cmbJig.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -143,21 +133,11 @@ Partial Class MntActivityReport
         Me.cmbJig.Size = New System.Drawing.Size(196, 23)
         Me.cmbJig.TabIndex = 9
         '
-        'lblMachine
-        '
-        Me.lblMachine.AutoSize = True
-        Me.lblMachine.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblMachine.Location = New System.Drawing.Point(4, 318)
-        Me.lblMachine.Name = "lblMachine"
-        Me.lblMachine.Size = New System.Drawing.Size(88, 15)
-        Me.lblMachine.TabIndex = 157
-        Me.lblMachine.Text = "Machine Name"
-        '
         'cmbMachine
         '
         Me.cmbMachine.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbMachine.FormattingEnabled = True
-        Me.cmbMachine.Location = New System.Drawing.Point(7, 335)
+        Me.cmbMachine.Location = New System.Drawing.Point(7, 334)
         Me.cmbMachine.Name = "cmbMachine"
         Me.cmbMachine.Size = New System.Drawing.Size(196, 23)
         Me.cmbMachine.TabIndex = 7
@@ -210,112 +190,42 @@ Partial Class MntActivityReport
         Me.btnGenerate.TabStop = False
         Me.btnGenerate.Text = "Generate"
         '
-        'lblTransactionStatus
-        '
-        Me.lblTransactionStatus.AutoSize = True
-        Me.lblTransactionStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTransactionStatus.Location = New System.Drawing.Point(4, 230)
-        Me.lblTransactionStatus.Name = "lblTransactionStatus"
-        Me.lblTransactionStatus.Size = New System.Drawing.Size(102, 15)
-        Me.lblTransactionStatus.TabIndex = 33
-        Me.lblTransactionStatus.Text = "Transaction Status"
-        '
         'cmbTransactionStatus
         '
         Me.cmbTransactionStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbTransactionStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbTransactionStatus.FormattingEnabled = True
-        Me.cmbTransactionStatus.Location = New System.Drawing.Point(7, 247)
+        Me.cmbTransactionStatus.Location = New System.Drawing.Point(7, 246)
         Me.cmbTransactionStatus.Name = "cmbTransactionStatus"
         Me.cmbTransactionStatus.Size = New System.Drawing.Size(196, 23)
         Me.cmbTransactionStatus.TabIndex = 5
-        '
-        'lblArea
-        '
-        Me.lblArea.AutoSize = True
-        Me.lblArea.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblArea.Location = New System.Drawing.Point(8, 186)
-        Me.lblArea.Name = "lblArea"
-        Me.lblArea.Size = New System.Drawing.Size(31, 15)
-        Me.lblArea.TabIndex = 32
-        Me.lblArea.Text = "Area"
         '
         'cmbMachineDowntimeStatus
         '
         Me.cmbMachineDowntimeStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbMachineDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbMachineDowntimeStatus.FormattingEnabled = True
-        Me.cmbMachineDowntimeStatus.Location = New System.Drawing.Point(7, 291)
+        Me.cmbMachineDowntimeStatus.Location = New System.Drawing.Point(7, 290)
         Me.cmbMachineDowntimeStatus.Name = "cmbMachineDowntimeStatus"
         Me.cmbMachineDowntimeStatus.Size = New System.Drawing.Size(196, 23)
         Me.cmbMachineDowntimeStatus.TabIndex = 6
-        '
-        'lblMachineDowntimeStatus
-        '
-        Me.lblMachineDowntimeStatus.AutoSize = True
-        Me.lblMachineDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblMachineDowntimeStatus.Location = New System.Drawing.Point(4, 274)
-        Me.lblMachineDowntimeStatus.Name = "lblMachineDowntimeStatus"
-        Me.lblMachineDowntimeStatus.Size = New System.Drawing.Size(146, 15)
-        Me.lblMachineDowntimeStatus.TabIndex = 31
-        Me.lblMachineDowntimeStatus.Text = "Machine Downtime Status"
-        '
-        'lblShift
-        '
-        Me.lblShift.AutoSize = True
-        Me.lblShift.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblShift.Location = New System.Drawing.Point(4, 137)
-        Me.lblShift.Name = "lblShift"
-        Me.lblShift.Size = New System.Drawing.Size(31, 15)
-        Me.lblShift.TabIndex = 29
-        Me.lblShift.Text = "Shift"
-        '
-        'lblUserName
-        '
-        Me.lblUserName.AutoSize = True
-        Me.lblUserName.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblUserName.Location = New System.Drawing.Point(4, 93)
-        Me.lblUserName.Name = "lblUserName"
-        Me.lblUserName.Size = New System.Drawing.Size(63, 15)
-        Me.lblUserName.TabIndex = 26
-        Me.lblUserName.Text = "Technician"
-        '
-        'lblEndDate
-        '
-        Me.lblEndDate.AutoSize = True
-        Me.lblEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblEndDate.Location = New System.Drawing.Point(4, 49)
-        Me.lblEndDate.Name = "lblEndDate"
-        Me.lblEndDate.Size = New System.Drawing.Size(54, 15)
-        Me.lblEndDate.TabIndex = 24
-        Me.lblEndDate.Text = "End Date"
         '
         'dtpEndDate
         '
         Me.dtpEndDate.CustomFormat = "  MMMM dd, yyyy"
         Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpEndDate.Location = New System.Drawing.Point(7, 66)
+        Me.dtpEndDate.Location = New System.Drawing.Point(7, 67)
         Me.dtpEndDate.Name = "dtpEndDate"
         Me.dtpEndDate.Size = New System.Drawing.Size(196, 23)
         Me.dtpEndDate.TabIndex = 1
-        '
-        'lblStartDate
-        '
-        Me.lblStartDate.AutoSize = True
-        Me.lblStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblStartDate.Location = New System.Drawing.Point(4, 5)
-        Me.lblStartDate.Name = "lblStartDate"
-        Me.lblStartDate.Size = New System.Drawing.Size(58, 15)
-        Me.lblStartDate.TabIndex = 21
-        Me.lblStartDate.Text = "Start Date"
         '
         'dtpStartDate
         '
         Me.dtpStartDate.CustomFormat = "  MMMM dd, yyyy"
         Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpStartDate.Location = New System.Drawing.Point(7, 22)
+        Me.dtpStartDate.Location = New System.Drawing.Point(7, 23)
         Me.dtpStartDate.Name = "dtpStartDate"
         Me.dtpStartDate.Size = New System.Drawing.Size(196, 23)
         Me.dtpStartDate.TabIndex = 0
@@ -326,7 +236,8 @@ Partial Class MntActivityReport
         Me.grpShift.Controls.Add(Me.rdDay)
         Me.grpShift.Controls.Add(Me.rdNight)
         Me.grpShift.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpShift.Location = New System.Drawing.Point(7, 147)
+        Me.grpShift.Location = New System.Drawing.Point(7, 150)
+        Me.grpShift.Margin = New System.Windows.Forms.Padding(0)
         Me.grpShift.Name = "grpShift"
         Me.grpShift.Size = New System.Drawing.Size(196, 36)
         Me.grpShift.TabIndex = 3
@@ -369,6 +280,96 @@ Partial Class MntActivityReport
         Me.rdNight.Text = "Night"
         Me.rdNight.UseVisualStyleBackColor = True
         '
+        'lblStartDate
+        '
+        Me.lblStartDate.AutoSize = True
+        Me.lblStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStartDate.Location = New System.Drawing.Point(4, 5)
+        Me.lblStartDate.Name = "lblStartDate"
+        Me.lblStartDate.Size = New System.Drawing.Size(58, 15)
+        Me.lblStartDate.TabIndex = 21
+        Me.lblStartDate.Text = "Start Date"
+        '
+        'lblEndDate
+        '
+        Me.lblEndDate.AutoSize = True
+        Me.lblEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblEndDate.Location = New System.Drawing.Point(4, 49)
+        Me.lblEndDate.Name = "lblEndDate"
+        Me.lblEndDate.Size = New System.Drawing.Size(54, 15)
+        Me.lblEndDate.TabIndex = 24
+        Me.lblEndDate.Text = "End Date"
+        '
+        'lblUserName
+        '
+        Me.lblUserName.AutoSize = True
+        Me.lblUserName.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblUserName.Location = New System.Drawing.Point(4, 93)
+        Me.lblUserName.Name = "lblUserName"
+        Me.lblUserName.Size = New System.Drawing.Size(63, 15)
+        Me.lblUserName.TabIndex = 26
+        Me.lblUserName.Text = "Technician"
+        '
+        'lblArea
+        '
+        Me.lblArea.AutoSize = True
+        Me.lblArea.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblArea.Location = New System.Drawing.Point(8, 184)
+        Me.lblArea.Name = "lblArea"
+        Me.lblArea.Size = New System.Drawing.Size(31, 15)
+        Me.lblArea.TabIndex = 32
+        Me.lblArea.Text = "Area"
+        '
+        'lblTransactionStatus
+        '
+        Me.lblTransactionStatus.AutoSize = True
+        Me.lblTransactionStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTransactionStatus.Location = New System.Drawing.Point(4, 228)
+        Me.lblTransactionStatus.Name = "lblTransactionStatus"
+        Me.lblTransactionStatus.Size = New System.Drawing.Size(102, 15)
+        Me.lblTransactionStatus.TabIndex = 33
+        Me.lblTransactionStatus.Text = "Transaction Status"
+        '
+        'lblMachineDowntimeStatus
+        '
+        Me.lblMachineDowntimeStatus.AutoSize = True
+        Me.lblMachineDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMachineDowntimeStatus.Location = New System.Drawing.Point(4, 272)
+        Me.lblMachineDowntimeStatus.Name = "lblMachineDowntimeStatus"
+        Me.lblMachineDowntimeStatus.Size = New System.Drawing.Size(146, 15)
+        Me.lblMachineDowntimeStatus.TabIndex = 31
+        Me.lblMachineDowntimeStatus.Text = "Machine Downtime Status"
+        '
+        'lblMachine
+        '
+        Me.lblMachine.AutoSize = True
+        Me.lblMachine.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMachine.Location = New System.Drawing.Point(4, 316)
+        Me.lblMachine.Name = "lblMachine"
+        Me.lblMachine.Size = New System.Drawing.Size(88, 15)
+        Me.lblMachine.TabIndex = 157
+        Me.lblMachine.Text = "Machine Name"
+        '
+        'lblJigDowntimeStatus
+        '
+        Me.lblJigDowntimeStatus.AutoSize = True
+        Me.lblJigDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblJigDowntimeStatus.Location = New System.Drawing.Point(4, 360)
+        Me.lblJigDowntimeStatus.Name = "lblJigDowntimeStatus"
+        Me.lblJigDowntimeStatus.Size = New System.Drawing.Size(114, 15)
+        Me.lblJigDowntimeStatus.TabIndex = 161
+        Me.lblJigDowntimeStatus.Text = "Jig Downtime Status"
+        '
+        'lblJig
+        '
+        Me.lblJig.AutoSize = True
+        Me.lblJig.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblJig.Location = New System.Drawing.Point(4, 405)
+        Me.lblJig.Name = "lblJig"
+        Me.lblJig.Size = New System.Drawing.Size(56, 15)
+        Me.lblJig.TabIndex = 159
+        Me.lblJig.Text = "Jig Name"
+        '
         'rptViewer
         '
         Me.rptViewer.Dock = System.Windows.Forms.DockStyle.Fill
@@ -381,8 +382,7 @@ Partial Class MntActivityReport
         '
         'MntActivityReport
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
