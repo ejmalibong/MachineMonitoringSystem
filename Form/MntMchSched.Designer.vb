@@ -23,15 +23,15 @@ Partial Class MntMchSched
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMchSched))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
@@ -222,13 +222,13 @@ Partial Class MntMchSched
         Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColScheduleId, Me.ColMonth, Me.ColWeek, Me.ColMachineName, Me.ColPmFrequency, Me.ColCreatedBy, Me.ColActivityBy, Me.ColActivityDate, Me.ColModifiedBy, Me.ColModifiedDate, Me.ColIsChecklistCompleted, Me.ColIsDone})
@@ -254,8 +254,8 @@ Partial Class MntMchSched
         'ColMonth
         '
         Me.ColMonth.DataPropertyName = "MonthShortName"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColMonth.HeaderText = "Month"
         Me.ColMonth.Name = "ColMonth"
         Me.ColMonth.ReadOnly = True
@@ -264,8 +264,8 @@ Partial Class MntMchSched
         'ColWeek
         '
         Me.ColWeek.DataPropertyName = "WeekId"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColWeek.HeaderText = "Week"
         Me.ColWeek.Name = "ColWeek"
         Me.ColWeek.ReadOnly = True
@@ -282,8 +282,8 @@ Partial Class MntMchSched
         'ColPmFrequency
         '
         Me.ColPmFrequency.DataPropertyName = "PmFrequencyId"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle4
         Me.ColPmFrequency.HeaderText = "Freq"
         Me.ColPmFrequency.Name = "ColPmFrequency"
         Me.ColPmFrequency.ReadOnly = True
@@ -292,8 +292,8 @@ Partial Class MntMchSched
         'ColCreatedBy
         '
         Me.ColCreatedBy.DataPropertyName = "CreatedByNickname"
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle5
         Me.ColCreatedBy.HeaderText = "Created By"
         Me.ColCreatedBy.Name = "ColCreatedBy"
         Me.ColCreatedBy.ReadOnly = True
@@ -301,8 +301,8 @@ Partial Class MntMchSched
         'ColActivityBy
         '
         Me.ColActivityBy.DataPropertyName = "ActivityByNickname"
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColActivityBy.HeaderText = "Activity By"
         Me.ColActivityBy.Name = "ColActivityBy"
         Me.ColActivityBy.ReadOnly = True
@@ -311,9 +311,9 @@ Partial Class MntMchSched
         'ColActivityDate
         '
         Me.ColActivityDate.DataPropertyName = "ActivityDate"
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle16.Format = "MM/dd/yyyy hh:mm tt"
-        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle7
         Me.ColActivityDate.HeaderText = "Activity Date"
         Me.ColActivityDate.Name = "ColActivityDate"
         Me.ColActivityDate.ReadOnly = True
@@ -322,8 +322,8 @@ Partial Class MntMchSched
         'ColModifiedBy
         '
         Me.ColModifiedBy.DataPropertyName = "ModifiedByNickname"
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColModifiedBy.HeaderText = "Modified By"
         Me.ColModifiedBy.Name = "ColModifiedBy"
         Me.ColModifiedBy.ReadOnly = True
@@ -331,9 +331,9 @@ Partial Class MntMchSched
         'ColModifiedDate
         '
         Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle18.Format = "MM/dd/yyyy hh:mm tt"
-        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColModifiedDate.HeaderText = "Modified Date"
         Me.ColModifiedDate.Name = "ColModifiedDate"
         Me.ColModifiedDate.ReadOnly = True
@@ -413,7 +413,6 @@ Partial Class MntMchSched
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -479,7 +478,7 @@ Partial Class MntMchSched
         Me.btnAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnAdd.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnAdd.DefaultScheme = True
-        Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
@@ -574,6 +573,7 @@ Partial Class MntMchSched
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
+        Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1014, 561)
         Me.Controls.Add(Me.pnlSearchByText)

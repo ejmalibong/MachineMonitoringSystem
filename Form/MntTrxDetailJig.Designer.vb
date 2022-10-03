@@ -72,7 +72,6 @@ Partial Class MntTrxDetailJig
         Me.ColUserId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblActivityLog = New System.Windows.Forms.Label()
-        Me.pnlApprovers = New System.Windows.Forms.Panel()
         Me.dgvDetail = New System.Windows.Forms.DataGridView()
         Me.ColTrxDetailId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -106,10 +105,47 @@ Partial Class MntTrxDetailJig
         Me.btnRemoveChecksheet = New PinkieControls.ButtonXP()
         Me.btnRemove4M = New PinkieControls.ButtonXP()
         Me.btnView4M = New PinkieControls.ButtonXP()
+        Me.pnlApprovers = New System.Windows.Forms.Panel()
+        Me.txtApp1Remarks = New System.Windows.Forms.TextBox()
+        Me.lblApp1Remarks = New System.Windows.Forms.Label()
+        Me.txtApp1Position = New System.Windows.Forms.Label()
+        Me.lblApp1Name = New System.Windows.Forms.Label()
+        Me.cmbApp1Name = New SergeUtils.EasyCompletionComboBox()
+        Me.txtApp1Date = New System.Windows.Forms.Label()
+        Me.lblApp1Position = New System.Windows.Forms.Label()
+        Me.lblApp1Date = New System.Windows.Forms.Label()
+        Me.lblApp1Status = New System.Windows.Forms.Label()
+        Me.cmbApp1Status = New System.Windows.Forms.ComboBox()
+        Me.txtApp2Remarks = New System.Windows.Forms.TextBox()
+        Me.lblApp2Remarks = New System.Windows.Forms.Label()
+        Me.txtApp2Position = New System.Windows.Forms.Label()
+        Me.lblApp2Name = New System.Windows.Forms.Label()
+        Me.cmbApp2Name = New SergeUtils.EasyCompletionComboBox()
+        Me.txtApp2Date = New System.Windows.Forms.Label()
+        Me.lblApp2Position = New System.Windows.Forms.Label()
+        Me.lblApp2Date = New System.Windows.Forms.Label()
+        Me.lblApp2Status = New System.Windows.Forms.Label()
+        Me.cmbApp2Status = New System.Windows.Forms.ComboBox()
+        Me.txtApp3Remarks = New System.Windows.Forms.TextBox()
+        Me.lblApp3Remarks = New System.Windows.Forms.Label()
+        Me.txtApp3Position = New System.Windows.Forms.Label()
+        Me.lblApp3Name = New System.Windows.Forms.Label()
+        Me.cmbApp3Name = New SergeUtils.EasyCompletionComboBox()
+        Me.txtApp3Date = New System.Windows.Forms.Label()
+        Me.lblApp3Position = New System.Windows.Forms.Label()
+        Me.lblApp3Date = New System.Windows.Forms.Label()
+        Me.lblApp3Status = New System.Windows.Forms.Label()
+        Me.cmbApp3Status = New System.Windows.Forms.ComboBox()
+        Me.cmbRoutingStatus = New System.Windows.Forms.ComboBox()
+        Me.txtModifiedBy = New System.Windows.Forms.Label()
+        Me.txtModifiedDate = New System.Windows.Forms.Label()
+        Me.lblModifiedDate = New System.Windows.Forms.Label()
+        Me.lblModifiedBy = New System.Windows.Forms.Label()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.dgvPic, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvDetail, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlApprovers.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtRuntimeAccumulated
@@ -118,7 +154,7 @@ Partial Class MntTrxDetailJig
         Me.txtRuntimeAccumulated.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtRuntimeAccumulated.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtRuntimeAccumulated.ForeColor = System.Drawing.Color.Black
-        Me.txtRuntimeAccumulated.Location = New System.Drawing.Point(733, 173)
+        Me.txtRuntimeAccumulated.Location = New System.Drawing.Point(782, 173)
         Me.txtRuntimeAccumulated.Name = "txtRuntimeAccumulated"
         Me.txtRuntimeAccumulated.Size = New System.Drawing.Size(181, 25)
         Me.txtRuntimeAccumulated.TabIndex = 215
@@ -131,7 +167,7 @@ Partial Class MntTrxDetailJig
         Me.lblRuntimeAccumulated.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblRuntimeAccumulated.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblRuntimeAccumulated.ForeColor = System.Drawing.Color.Black
-        Me.lblRuntimeAccumulated.Location = New System.Drawing.Point(634, 173)
+        Me.lblRuntimeAccumulated.Location = New System.Drawing.Point(683, 173)
         Me.lblRuntimeAccumulated.Name = "lblRuntimeAccumulated"
         Me.lblRuntimeAccumulated.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblRuntimeAccumulated.Size = New System.Drawing.Size(100, 25)
@@ -145,7 +181,7 @@ Partial Class MntTrxDetailJig
         Me.txtDowntimeAccumulated.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtDowntimeAccumulated.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtDowntimeAccumulated.ForeColor = System.Drawing.Color.Black
-        Me.txtDowntimeAccumulated.Location = New System.Drawing.Point(1032, 173)
+        Me.txtDowntimeAccumulated.Location = New System.Drawing.Point(1081, 173)
         Me.txtDowntimeAccumulated.Name = "txtDowntimeAccumulated"
         Me.txtDowntimeAccumulated.Size = New System.Drawing.Size(156, 25)
         Me.txtDowntimeAccumulated.TabIndex = 217
@@ -158,7 +194,7 @@ Partial Class MntTrxDetailJig
         Me.lblDowntimeAccumulated.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblDowntimeAccumulated.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblDowntimeAccumulated.ForeColor = System.Drawing.Color.Black
-        Me.lblDowntimeAccumulated.Location = New System.Drawing.Point(913, 173)
+        Me.lblDowntimeAccumulated.Location = New System.Drawing.Point(962, 173)
         Me.lblDowntimeAccumulated.Name = "lblDowntimeAccumulated"
         Me.lblDowntimeAccumulated.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblDowntimeAccumulated.Size = New System.Drawing.Size(120, 25)
@@ -172,7 +208,7 @@ Partial Class MntTrxDetailJig
         Me.txtTransactionDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtTransactionDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtTransactionDate.ForeColor = System.Drawing.Color.Black
-        Me.txtTransactionDate.Location = New System.Drawing.Point(382, 50)
+        Me.txtTransactionDate.Location = New System.Drawing.Point(431, 50)
         Me.txtTransactionDate.Name = "txtTransactionDate"
         Me.txtTransactionDate.Size = New System.Drawing.Size(250, 23)
         Me.txtTransactionDate.TabIndex = 242
@@ -185,7 +221,7 @@ Partial Class MntTrxDetailJig
         Me.lblTransactionDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblTransactionDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblTransactionDate.ForeColor = System.Drawing.Color.Black
-        Me.lblTransactionDate.Location = New System.Drawing.Point(253, 50)
+        Me.lblTransactionDate.Location = New System.Drawing.Point(302, 50)
         Me.lblTransactionDate.Name = "lblTransactionDate"
         Me.lblTransactionDate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblTransactionDate.Size = New System.Drawing.Size(130, 23)
@@ -199,7 +235,7 @@ Partial Class MntTrxDetailJig
         Me.txtImageName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtImageName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtImageName.ForeColor = System.Drawing.Color.Black
-        Me.txtImageName.Location = New System.Drawing.Point(634, 509)
+        Me.txtImageName.Location = New System.Drawing.Point(683, 509)
         Me.txtImageName.Name = "txtImageName"
         Me.txtImageName.Size = New System.Drawing.Size(280, 23)
         Me.txtImageName.TabIndex = 245
@@ -211,7 +247,7 @@ Partial Class MntTrxDetailJig
         Me.cmbTransactionStatus.BackColor = System.Drawing.SystemColors.Window
         Me.cmbTransactionStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbTransactionStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.cmbTransactionStatus.Location = New System.Drawing.Point(382, 25)
+        Me.cmbTransactionStatus.Location = New System.Drawing.Point(431, 25)
         Me.cmbTransactionStatus.Name = "cmbTransactionStatus"
         Me.cmbTransactionStatus.Size = New System.Drawing.Size(250, 23)
         Me.cmbTransactionStatus.TabIndex = 0
@@ -222,7 +258,7 @@ Partial Class MntTrxDetailJig
         Me.lblTransactionStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblTransactionStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblTransactionStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblTransactionStatus.Location = New System.Drawing.Point(253, 25)
+        Me.lblTransactionStatus.Location = New System.Drawing.Point(302, 25)
         Me.lblTransactionStatus.Name = "lblTransactionStatus"
         Me.lblTransactionStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblTransactionStatus.Size = New System.Drawing.Size(130, 23)
@@ -236,7 +272,7 @@ Partial Class MntTrxDetailJig
         Me.lblRoutingStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblRoutingStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblRoutingStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblRoutingStatus.Location = New System.Drawing.Point(253, 0)
+        Me.lblRoutingStatus.Location = New System.Drawing.Point(302, 0)
         Me.lblRoutingStatus.Name = "lblRoutingStatus"
         Me.lblRoutingStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblRoutingStatus.Size = New System.Drawing.Size(130, 23)
@@ -250,7 +286,7 @@ Partial Class MntTrxDetailJig
         Me.lblJigName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblJigName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblJigName.ForeColor = System.Drawing.Color.Black
-        Me.lblJigName.Location = New System.Drawing.Point(253, 75)
+        Me.lblJigName.Location = New System.Drawing.Point(302, 75)
         Me.lblJigName.Name = "lblJigName"
         Me.lblJigName.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblJigName.Size = New System.Drawing.Size(130, 23)
@@ -264,7 +300,7 @@ Partial Class MntTrxDetailJig
         Me.lblArea.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblArea.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblArea.ForeColor = System.Drawing.Color.Black
-        Me.lblArea.Location = New System.Drawing.Point(253, 100)
+        Me.lblArea.Location = New System.Drawing.Point(302, 100)
         Me.lblArea.Name = "lblArea"
         Me.lblArea.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblArea.Size = New System.Drawing.Size(130, 23)
@@ -277,7 +313,7 @@ Partial Class MntTrxDetailJig
         Me.cmbDowntimeStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbDowntimeStatus.FormattingEnabled = True
-        Me.cmbDowntimeStatus.Location = New System.Drawing.Point(382, 150)
+        Me.cmbDowntimeStatus.Location = New System.Drawing.Point(431, 150)
         Me.cmbDowntimeStatus.Name = "cmbDowntimeStatus"
         Me.cmbDowntimeStatus.Size = New System.Drawing.Size(250, 23)
         Me.cmbDowntimeStatus.TabIndex = 3
@@ -288,7 +324,7 @@ Partial Class MntTrxDetailJig
         Me.lblDowntimeStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblDowntimeStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblDowntimeStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblDowntimeStatus.Location = New System.Drawing.Point(253, 150)
+        Me.lblDowntimeStatus.Location = New System.Drawing.Point(302, 150)
         Me.lblDowntimeStatus.Name = "lblDowntimeStatus"
         Me.lblDowntimeStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblDowntimeStatus.Size = New System.Drawing.Size(130, 23)
@@ -300,7 +336,7 @@ Partial Class MntTrxDetailJig
         '
         Me.txtProblem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtProblem.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtProblem.Location = New System.Drawing.Point(253, 247)
+        Me.txtProblem.Location = New System.Drawing.Point(302, 247)
         Me.txtProblem.Multiline = True
         Me.txtProblem.Name = "txtProblem"
         Me.txtProblem.Size = New System.Drawing.Size(379, 62)
@@ -312,7 +348,7 @@ Partial Class MntTrxDetailJig
         Me.lblProblem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblProblem.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblProblem.ForeColor = System.Drawing.Color.Black
-        Me.lblProblem.Location = New System.Drawing.Point(253, 225)
+        Me.lblProblem.Location = New System.Drawing.Point(302, 225)
         Me.lblProblem.Name = "lblProblem"
         Me.lblProblem.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblProblem.Size = New System.Drawing.Size(379, 23)
@@ -324,7 +360,7 @@ Partial Class MntTrxDetailJig
         '
         Me.txtActionTaken.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtActionTaken.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtActionTaken.Location = New System.Drawing.Point(253, 419)
+        Me.txtActionTaken.Location = New System.Drawing.Point(302, 419)
         Me.txtActionTaken.Multiline = True
         Me.txtActionTaken.Name = "txtActionTaken"
         Me.txtActionTaken.Size = New System.Drawing.Size(379, 63)
@@ -336,7 +372,7 @@ Partial Class MntTrxDetailJig
         Me.lblActionTaken.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblActionTaken.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblActionTaken.ForeColor = System.Drawing.Color.Black
-        Me.lblActionTaken.Location = New System.Drawing.Point(253, 397)
+        Me.lblActionTaken.Location = New System.Drawing.Point(302, 397)
         Me.lblActionTaken.Name = "lblActionTaken"
         Me.lblActionTaken.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblActionTaken.Size = New System.Drawing.Size(379, 23)
@@ -350,7 +386,7 @@ Partial Class MntTrxDetailJig
         Me.lblPartsReplaced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblPartsReplaced.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblPartsReplaced.ForeColor = System.Drawing.Color.Black
-        Me.lblPartsReplaced.Location = New System.Drawing.Point(253, 484)
+        Me.lblPartsReplaced.Location = New System.Drawing.Point(302, 484)
         Me.lblPartsReplaced.Name = "lblPartsReplaced"
         Me.lblPartsReplaced.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblPartsReplaced.Size = New System.Drawing.Size(130, 23)
@@ -363,7 +399,7 @@ Partial Class MntTrxDetailJig
         Me.txtPartsReplaced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtPartsReplaced.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtPartsReplaced.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtPartsReplaced.Location = New System.Drawing.Point(382, 484)
+        Me.txtPartsReplaced.Location = New System.Drawing.Point(431, 484)
         Me.txtPartsReplaced.Name = "txtPartsReplaced"
         Me.txtPartsReplaced.Size = New System.Drawing.Size(250, 23)
         Me.txtPartsReplaced.TabIndex = 10
@@ -373,7 +409,7 @@ Partial Class MntTrxDetailJig
         Me.txtPartsNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtPartsNo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtPartsNo.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtPartsNo.Location = New System.Drawing.Point(382, 509)
+        Me.txtPartsNo.Location = New System.Drawing.Point(431, 509)
         Me.txtPartsNo.Name = "txtPartsNo"
         Me.txtPartsNo.Size = New System.Drawing.Size(250, 23)
         Me.txtPartsNo.TabIndex = 11
@@ -384,7 +420,7 @@ Partial Class MntTrxDetailJig
         Me.lblPartsNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblPartsNo.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblPartsNo.ForeColor = System.Drawing.Color.Black
-        Me.lblPartsNo.Location = New System.Drawing.Point(253, 509)
+        Me.lblPartsNo.Location = New System.Drawing.Point(302, 509)
         Me.lblPartsNo.Name = "lblPartsNo"
         Me.lblPartsNo.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblPartsNo.Size = New System.Drawing.Size(130, 23)
@@ -398,7 +434,7 @@ Partial Class MntTrxDetailJig
         Me.lblJoNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblJoNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblJoNumber.ForeColor = System.Drawing.Color.Black
-        Me.lblJoNumber.Location = New System.Drawing.Point(253, 534)
+        Me.lblJoNumber.Location = New System.Drawing.Point(302, 534)
         Me.lblJoNumber.Name = "lblJoNumber"
         Me.lblJoNumber.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblJoNumber.Size = New System.Drawing.Size(130, 23)
@@ -411,7 +447,7 @@ Partial Class MntTrxDetailJig
         Me.txtJoNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtJoNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtJoNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtJoNumber.Location = New System.Drawing.Point(382, 534)
+        Me.txtJoNumber.Location = New System.Drawing.Point(431, 534)
         Me.txtJoNumber.MaxLength = 15
         Me.txtJoNumber.Name = "txtJoNumber"
         Me.txtJoNumber.Size = New System.Drawing.Size(250, 23)
@@ -423,7 +459,7 @@ Partial Class MntTrxDetailJig
         Me.lblJoRequestor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblJoRequestor.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblJoRequestor.ForeColor = System.Drawing.Color.Black
-        Me.lblJoRequestor.Location = New System.Drawing.Point(253, 559)
+        Me.lblJoRequestor.Location = New System.Drawing.Point(302, 559)
         Me.lblJoRequestor.Name = "lblJoRequestor"
         Me.lblJoRequestor.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblJoRequestor.Size = New System.Drawing.Size(130, 23)
@@ -436,7 +472,7 @@ Partial Class MntTrxDetailJig
         Me.txtJoRequestor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtJoRequestor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtJoRequestor.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtJoRequestor.Location = New System.Drawing.Point(382, 559)
+        Me.txtJoRequestor.Location = New System.Drawing.Point(431, 559)
         Me.txtJoRequestor.Name = "txtJoRequestor"
         Me.txtJoRequestor.Size = New System.Drawing.Size(250, 23)
         Me.txtJoRequestor.TabIndex = 13
@@ -448,7 +484,7 @@ Partial Class MntTrxDetailJig
         Me.btnRemoveRow.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnRemoveRow.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnRemoveRow.Hint = "Delete selected activity log"
-        Me.btnRemoveRow.Location = New System.Drawing.Point(1100, 2)
+        Me.btnRemoveRow.Location = New System.Drawing.Point(1149, 2)
         Me.btnRemoveRow.Name = "btnRemoveRow"
         Me.btnRemoveRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnRemoveRow.Size = New System.Drawing.Size(85, 28)
@@ -463,7 +499,7 @@ Partial Class MntTrxDetailJig
         Me.btnAddRow.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnAddRow.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnAddRow.Hint = "Add activity log"
-        Me.btnAddRow.Location = New System.Drawing.Point(1014, 2)
+        Me.btnAddRow.Location = New System.Drawing.Point(1063, 2)
         Me.btnAddRow.Name = "btnAddRow"
         Me.btnAddRow.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAddRow.Size = New System.Drawing.Size(85, 28)
@@ -480,7 +516,7 @@ Partial Class MntTrxDetailJig
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1098, 606)
+        Me.btnClose.Location = New System.Drawing.Point(1147, 599)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
@@ -497,7 +533,7 @@ Partial Class MntTrxDetailJig
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(1004, 606)
+        Me.btnDelete.Location = New System.Drawing.Point(1053, 599)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(90, 32)
@@ -515,7 +551,7 @@ Partial Class MntTrxDetailJig
         Me.btnCancel.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnCancel.Hint = "Cancel changes"
         Me.btnCancel.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Undo_16_x_16
-        Me.btnCancel.Location = New System.Drawing.Point(910, 606)
+        Me.btnCancel.Location = New System.Drawing.Point(959, 599)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnCancel.Size = New System.Drawing.Size(90, 32)
@@ -532,7 +568,7 @@ Partial Class MntTrxDetailJig
         Me.btnSave.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnSave.Hint = "Save record"
         Me.btnSave.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Save_16_x_16
-        Me.btnSave.Location = New System.Drawing.Point(816, 606)
+        Me.btnSave.Location = New System.Drawing.Point(865, 599)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(90, 32)
@@ -545,7 +581,7 @@ Partial Class MntTrxDetailJig
         Me.lblImageAttachment.BackColor = System.Drawing.SystemColors.Control
         Me.lblImageAttachment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblImageAttachment.ForeColor = System.Drawing.Color.Black
-        Me.lblImageAttachment.Location = New System.Drawing.Point(634, 200)
+        Me.lblImageAttachment.Location = New System.Drawing.Point(683, 200)
         Me.lblImageAttachment.Name = "lblImageAttachment"
         Me.lblImageAttachment.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblImageAttachment.Size = New System.Drawing.Size(280, 24)
@@ -609,7 +645,7 @@ Partial Class MntTrxDetailJig
         Me.pnlImage.Controls.Add(Me.btnRemoveImage)
         Me.pnlImage.Controls.Add(Me.btnBrowseImage)
         Me.pnlImage.Controls.Add(Me.picImage)
-        Me.pnlImage.Location = New System.Drawing.Point(634, 223)
+        Me.pnlImage.Location = New System.Drawing.Point(683, 223)
         Me.pnlImage.Name = "pnlImage"
         Me.pnlImage.Size = New System.Drawing.Size(280, 284)
         Me.pnlImage.TabIndex = 244
@@ -635,7 +671,7 @@ Partial Class MntTrxDetailJig
         Me.lblPic.BackColor = System.Drawing.SystemColors.Control
         Me.lblPic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblPic.ForeColor = System.Drawing.Color.Black
-        Me.lblPic.Location = New System.Drawing.Point(916, 200)
+        Me.lblPic.Location = New System.Drawing.Point(965, 200)
         Me.lblPic.Name = "lblPic"
         Me.lblPic.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblPic.Size = New System.Drawing.Size(272, 24)
@@ -653,7 +689,7 @@ Partial Class MntTrxDetailJig
         Me.dgvPic.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvPic.ColumnHeadersVisible = False
         Me.dgvPic.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColIsSelected, Me.ColUserId, Me.ColUserName})
-        Me.dgvPic.Location = New System.Drawing.Point(916, 223)
+        Me.dgvPic.Location = New System.Drawing.Point(965, 223)
         Me.dgvPic.MultiSelect = False
         Me.dgvPic.Name = "dgvPic"
         Me.dgvPic.RowHeadersVisible = False
@@ -698,23 +734,13 @@ Partial Class MntTrxDetailJig
         Me.lblActivityLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblActivityLog.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblActivityLog.ForeColor = System.Drawing.Color.Black
-        Me.lblActivityLog.Location = New System.Drawing.Point(634, 0)
+        Me.lblActivityLog.Location = New System.Drawing.Point(683, 0)
         Me.lblActivityLog.Name = "lblActivityLog"
         Me.lblActivityLog.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblActivityLog.Size = New System.Drawing.Size(554, 32)
         Me.lblActivityLog.TabIndex = 279
         Me.lblActivityLog.Text = "Activity Log"
         Me.lblActivityLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'pnlApprovers
-        '
-        Me.pnlApprovers.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.pnlApprovers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pnlApprovers.Dock = System.Windows.Forms.DockStyle.Left
-        Me.pnlApprovers.Location = New System.Drawing.Point(0, 0)
-        Me.pnlApprovers.Name = "pnlApprovers"
-        Me.pnlApprovers.Size = New System.Drawing.Size(250, 641)
-        Me.pnlApprovers.TabIndex = 281
         '
         'dgvDetail
         '
@@ -732,7 +758,7 @@ Partial Class MntTrxDetailJig
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxDetailId, Me.ColTrxId, Me.ColTrxDate, Me.ColUserIdLog, Me.ColShiftId, Me.ColTrxFrom, Me.ColTrxTo, Me.ColElapsedTime})
-        Me.dgvDetail.Location = New System.Drawing.Point(634, 31)
+        Me.dgvDetail.Location = New System.Drawing.Point(683, 31)
         Me.dgvDetail.MultiSelect = False
         Me.dgvDetail.Name = "dgvDetail"
         Me.dgvDetail.ReadOnly = True
@@ -831,7 +857,7 @@ Partial Class MntTrxDetailJig
         Me.txtRoutingStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtRoutingStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtRoutingStatus.ForeColor = System.Drawing.Color.Black
-        Me.txtRoutingStatus.Location = New System.Drawing.Point(382, 0)
+        Me.txtRoutingStatus.Location = New System.Drawing.Point(431, 0)
         Me.txtRoutingStatus.Name = "txtRoutingStatus"
         Me.txtRoutingStatus.Size = New System.Drawing.Size(250, 23)
         Me.txtRoutingStatus.TabIndex = 296
@@ -847,7 +873,7 @@ Partial Class MntTrxDetailJig
         Me.lblRootCause.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblRootCause.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblRootCause.ForeColor = System.Drawing.Color.Black
-        Me.lblRootCause.Location = New System.Drawing.Point(253, 311)
+        Me.lblRootCause.Location = New System.Drawing.Point(302, 311)
         Me.lblRootCause.Name = "lblRootCause"
         Me.lblRootCause.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblRootCause.Size = New System.Drawing.Size(379, 23)
@@ -859,7 +885,7 @@ Partial Class MntTrxDetailJig
         '
         Me.txtRootCause.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtRootCause.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtRootCause.Location = New System.Drawing.Point(253, 333)
+        Me.txtRootCause.Location = New System.Drawing.Point(302, 333)
         Me.txtRootCause.Multiline = True
         Me.txtRootCause.Name = "txtRootCause"
         Me.txtRootCause.Size = New System.Drawing.Size(379, 62)
@@ -871,7 +897,7 @@ Partial Class MntTrxDetailJig
         Me.lblChecksheet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblChecksheet.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblChecksheet.ForeColor = System.Drawing.Color.Black
-        Me.lblChecksheet.Location = New System.Drawing.Point(634, 534)
+        Me.lblChecksheet.Location = New System.Drawing.Point(683, 534)
         Me.lblChecksheet.Name = "lblChecksheet"
         Me.lblChecksheet.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblChecksheet.Size = New System.Drawing.Size(100, 23)
@@ -885,7 +911,7 @@ Partial Class MntTrxDetailJig
         Me.lblScheduleMonth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblScheduleMonth.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblScheduleMonth.ForeColor = System.Drawing.Color.Black
-        Me.lblScheduleMonth.Location = New System.Drawing.Point(253, 200)
+        Me.lblScheduleMonth.Location = New System.Drawing.Point(302, 200)
         Me.lblScheduleMonth.Name = "lblScheduleMonth"
         Me.lblScheduleMonth.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblScheduleMonth.Size = New System.Drawing.Size(130, 23)
@@ -899,7 +925,7 @@ Partial Class MntTrxDetailJig
         Me.lblScheduleWeek.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblScheduleWeek.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblScheduleWeek.ForeColor = System.Drawing.Color.Black
-        Me.lblScheduleWeek.Location = New System.Drawing.Point(503, 200)
+        Me.lblScheduleWeek.Location = New System.Drawing.Point(552, 200)
         Me.lblScheduleWeek.Name = "lblScheduleWeek"
         Me.lblScheduleWeek.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblScheduleWeek.Size = New System.Drawing.Size(70, 23)
@@ -915,7 +941,7 @@ Partial Class MntTrxDetailJig
         Me.btnViewChecksheet.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnViewChecksheet.Hint = "Open checksheet"
         Me.btnViewChecksheet.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Expand_16_x_16
-        Me.btnViewChecksheet.Location = New System.Drawing.Point(1131, 533)
+        Me.btnViewChecksheet.Location = New System.Drawing.Point(1182, 533)
         Me.btnViewChecksheet.Name = "btnViewChecksheet"
         Me.btnViewChecksheet.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnViewChecksheet.Size = New System.Drawing.Size(28, 25)
@@ -928,7 +954,7 @@ Partial Class MntTrxDetailJig
         Me.txtArea.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtArea.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtArea.ForeColor = System.Drawing.Color.Black
-        Me.txtArea.Location = New System.Drawing.Point(382, 100)
+        Me.txtArea.Location = New System.Drawing.Point(431, 100)
         Me.txtArea.Name = "txtArea"
         Me.txtArea.Size = New System.Drawing.Size(250, 23)
         Me.txtArea.TabIndex = 560
@@ -939,7 +965,7 @@ Partial Class MntTrxDetailJig
         '
         Me.txtScheduleMonth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtScheduleMonth.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtScheduleMonth.Location = New System.Drawing.Point(382, 200)
+        Me.txtScheduleMonth.Location = New System.Drawing.Point(431, 200)
         Me.txtScheduleMonth.Name = "txtScheduleMonth"
         Me.txtScheduleMonth.Size = New System.Drawing.Size(122, 23)
         Me.txtScheduleMonth.TabIndex = 5
@@ -949,7 +975,7 @@ Partial Class MntTrxDetailJig
         '
         Me.txtScheduleWeek.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtScheduleWeek.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtScheduleWeek.Location = New System.Drawing.Point(572, 200)
+        Me.txtScheduleWeek.Location = New System.Drawing.Point(621, 200)
         Me.txtScheduleWeek.Name = "txtScheduleWeek"
         Me.txtScheduleWeek.Size = New System.Drawing.Size(60, 23)
         Me.txtScheduleWeek.TabIndex = 6
@@ -959,7 +985,7 @@ Partial Class MntTrxDetailJig
         '
         Me.cmbJigName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbJigName.FormattingEnabled = True
-        Me.cmbJigName.Location = New System.Drawing.Point(382, 75)
+        Me.cmbJigName.Location = New System.Drawing.Point(431, 75)
         Me.cmbJigName.Name = "cmbJigName"
         Me.cmbJigName.Size = New System.Drawing.Size(250, 23)
         Me.cmbJigName.TabIndex = 1
@@ -970,7 +996,7 @@ Partial Class MntTrxDetailJig
         Me.lblJigPart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblJigPart.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblJigPart.ForeColor = System.Drawing.Color.Black
-        Me.lblJigPart.Location = New System.Drawing.Point(253, 125)
+        Me.lblJigPart.Location = New System.Drawing.Point(302, 125)
         Me.lblJigPart.Name = "lblJigPart"
         Me.lblJigPart.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblJigPart.Size = New System.Drawing.Size(130, 23)
@@ -981,7 +1007,7 @@ Partial Class MntTrxDetailJig
         'rdWithChecker
         '
         Me.rdWithChecker.Enabled = False
-        Me.rdWithChecker.Location = New System.Drawing.Point(393, 127)
+        Me.rdWithChecker.Location = New System.Drawing.Point(442, 127)
         Me.rdWithChecker.Name = "rdWithChecker"
         Me.rdWithChecker.Size = New System.Drawing.Size(96, 19)
         Me.rdWithChecker.TabIndex = 579
@@ -992,7 +1018,7 @@ Partial Class MntTrxDetailJig
         'rdWithoutChecker
         '
         Me.rdWithoutChecker.Enabled = False
-        Me.rdWithoutChecker.Location = New System.Drawing.Point(503, 127)
+        Me.rdWithoutChecker.Location = New System.Drawing.Point(552, 127)
         Me.rdWithoutChecker.Name = "rdWithoutChecker"
         Me.rdWithoutChecker.Size = New System.Drawing.Size(114, 19)
         Me.rdWithoutChecker.TabIndex = 580
@@ -1004,7 +1030,7 @@ Partial Class MntTrxDetailJig
         '
         Me.pnlJigPart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pnlJigPart.Enabled = False
-        Me.pnlJigPart.Location = New System.Drawing.Point(382, 125)
+        Me.pnlJigPart.Location = New System.Drawing.Point(431, 125)
         Me.pnlJigPart.Name = "pnlJigPart"
         Me.pnlJigPart.Size = New System.Drawing.Size(250, 23)
         Me.pnlJigPart.TabIndex = 581
@@ -1014,7 +1040,7 @@ Partial Class MntTrxDetailJig
         Me.cmbDowntimeSubStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbDowntimeSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbDowntimeSubStatus.FormattingEnabled = True
-        Me.cmbDowntimeSubStatus.Location = New System.Drawing.Point(382, 175)
+        Me.cmbDowntimeSubStatus.Location = New System.Drawing.Point(431, 175)
         Me.cmbDowntimeSubStatus.Name = "cmbDowntimeSubStatus"
         Me.cmbDowntimeSubStatus.Size = New System.Drawing.Size(250, 23)
         Me.cmbDowntimeSubStatus.TabIndex = 4
@@ -1025,7 +1051,7 @@ Partial Class MntTrxDetailJig
         Me.lblDowntimeSubStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblDowntimeSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblDowntimeSubStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblDowntimeSubStatus.Location = New System.Drawing.Point(253, 175)
+        Me.lblDowntimeSubStatus.Location = New System.Drawing.Point(302, 175)
         Me.lblDowntimeSubStatus.Name = "lblDowntimeSubStatus"
         Me.lblDowntimeSubStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblDowntimeSubStatus.Size = New System.Drawing.Size(130, 23)
@@ -1035,11 +1061,11 @@ Partial Class MntTrxDetailJig
         '
         'txtChecksheet
         '
-        Me.txtChecksheet.Location = New System.Drawing.Point(733, 534)
+        Me.txtChecksheet.Location = New System.Drawing.Point(782, 534)
         Me.txtChecksheet.Multiline = False
         Me.txtChecksheet.Name = "txtChecksheet"
         Me.txtChecksheet.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txtChecksheet.Size = New System.Drawing.Size(396, 23)
+        Me.txtChecksheet.Size = New System.Drawing.Size(398, 23)
         Me.txtChecksheet.TabIndex = 582
         Me.txtChecksheet.Text = ""
         Me.txtChecksheet.WordWrap = False
@@ -1050,7 +1076,7 @@ Partial Class MntTrxDetailJig
         Me.lbl4M.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl4M.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lbl4M.ForeColor = System.Drawing.Color.Black
-        Me.lbl4M.Location = New System.Drawing.Point(634, 559)
+        Me.lbl4M.Location = New System.Drawing.Point(683, 559)
         Me.lbl4M.Name = "lbl4M"
         Me.lbl4M.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lbl4M.Size = New System.Drawing.Size(100, 23)
@@ -1060,11 +1086,11 @@ Partial Class MntTrxDetailJig
         '
         'txt4M
         '
-        Me.txt4M.Location = New System.Drawing.Point(733, 559)
+        Me.txt4M.Location = New System.Drawing.Point(782, 559)
         Me.txt4M.Multiline = False
         Me.txt4M.Name = "txt4M"
         Me.txt4M.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txt4M.Size = New System.Drawing.Size(396, 23)
+        Me.txt4M.Size = New System.Drawing.Size(398, 23)
         Me.txt4M.TabIndex = 584
         Me.txt4M.Text = ""
         Me.txt4M.WordWrap = False
@@ -1077,7 +1103,7 @@ Partial Class MntTrxDetailJig
         Me.btnRemoveChecksheet.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnRemoveChecksheet.Hint = "Remove checksheet link"
         Me.btnRemoveChecksheet.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Remove_16_x_16
-        Me.btnRemoveChecksheet.Location = New System.Drawing.Point(1160, 533)
+        Me.btnRemoveChecksheet.Location = New System.Drawing.Point(1211, 533)
         Me.btnRemoveChecksheet.Name = "btnRemoveChecksheet"
         Me.btnRemoveChecksheet.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnRemoveChecksheet.Size = New System.Drawing.Size(28, 25)
@@ -1092,7 +1118,7 @@ Partial Class MntTrxDetailJig
         Me.btnRemove4M.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnRemove4M.Hint = "Remove checksheet link"
         Me.btnRemove4M.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Remove_16_x_16
-        Me.btnRemove4M.Location = New System.Drawing.Point(1160, 558)
+        Me.btnRemove4M.Location = New System.Drawing.Point(1211, 558)
         Me.btnRemove4M.Name = "btnRemove4M"
         Me.btnRemove4M.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnRemove4M.Size = New System.Drawing.Size(28, 25)
@@ -1107,12 +1133,513 @@ Partial Class MntTrxDetailJig
         Me.btnView4M.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnView4M.Hint = "Open checksheet"
         Me.btnView4M.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Expand_16_x_16
-        Me.btnView4M.Location = New System.Drawing.Point(1131, 558)
+        Me.btnView4M.Location = New System.Drawing.Point(1182, 558)
         Me.btnView4M.Name = "btnView4M"
         Me.btnView4M.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnView4M.Size = New System.Drawing.Size(28, 25)
         Me.btnView4M.TabIndex = 586
         Me.btnView4M.TabStop = False
+        '
+        'pnlApprovers
+        '
+        Me.pnlApprovers.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.pnlApprovers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlApprovers.Controls.Add(Me.txtApp1Remarks)
+        Me.pnlApprovers.Controls.Add(Me.lblApp1Remarks)
+        Me.pnlApprovers.Controls.Add(Me.txtApp1Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp1Name)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp1Name)
+        Me.pnlApprovers.Controls.Add(Me.txtApp1Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp1Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp1Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp1Status)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp1Status)
+        Me.pnlApprovers.Controls.Add(Me.txtApp2Remarks)
+        Me.pnlApprovers.Controls.Add(Me.lblApp2Remarks)
+        Me.pnlApprovers.Controls.Add(Me.txtApp2Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp2Name)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp2Name)
+        Me.pnlApprovers.Controls.Add(Me.txtApp2Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp2Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp2Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp2Status)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp2Status)
+        Me.pnlApprovers.Controls.Add(Me.txtApp3Remarks)
+        Me.pnlApprovers.Controls.Add(Me.lblApp3Remarks)
+        Me.pnlApprovers.Controls.Add(Me.txtApp3Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp3Name)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp3Name)
+        Me.pnlApprovers.Controls.Add(Me.txtApp3Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp3Position)
+        Me.pnlApprovers.Controls.Add(Me.lblApp3Date)
+        Me.pnlApprovers.Controls.Add(Me.lblApp3Status)
+        Me.pnlApprovers.Controls.Add(Me.cmbApp3Status)
+        Me.pnlApprovers.Dock = System.Windows.Forms.DockStyle.Left
+        Me.pnlApprovers.Location = New System.Drawing.Point(0, 0)
+        Me.pnlApprovers.Name = "pnlApprovers"
+        Me.pnlApprovers.Size = New System.Drawing.Size(300, 634)
+        Me.pnlApprovers.TabIndex = 281
+        '
+        'txtApp1Remarks
+        '
+        Me.txtApp1Remarks.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp1Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp1Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp1Remarks.Location = New System.Drawing.Point(2, 546)
+        Me.txtApp1Remarks.Multiline = True
+        Me.txtApp1Remarks.Name = "txtApp1Remarks"
+        Me.txtApp1Remarks.Size = New System.Drawing.Size(294, 84)
+        Me.txtApp1Remarks.TabIndex = 297
+        '
+        'lblApp1Remarks
+        '
+        Me.lblApp1Remarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp1Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp1Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp1Remarks.ForeColor = System.Drawing.Color.Black
+        Me.lblApp1Remarks.Location = New System.Drawing.Point(2, 524)
+        Me.lblApp1Remarks.Name = "lblApp1Remarks"
+        Me.lblApp1Remarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp1Remarks.Size = New System.Drawing.Size(294, 23)
+        Me.lblApp1Remarks.TabIndex = 296
+        Me.lblApp1Remarks.Text = "Remarks"
+        Me.lblApp1Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtApp1Position
+        '
+        Me.txtApp1Position.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp1Position.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp1Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp1Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp1Position.ForeColor = System.Drawing.Color.Black
+        Me.txtApp1Position.Location = New System.Drawing.Point(61, 499)
+        Me.txtApp1Position.Name = "txtApp1Position"
+        Me.txtApp1Position.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp1Position.TabIndex = 295
+        Me.txtApp1Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp1Position.UseCompatibleTextRendering = True
+        '
+        'lblApp1Name
+        '
+        Me.lblApp1Name.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp1Name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp1Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp1Name.ForeColor = System.Drawing.Color.Black
+        Me.lblApp1Name.Location = New System.Drawing.Point(2, 474)
+        Me.lblApp1Name.Name = "lblApp1Name"
+        Me.lblApp1Name.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp1Name.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp1Name.TabIndex = 292
+        Me.lblApp1Name.Text = "Name"
+        Me.lblApp1Name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp1Name
+        '
+        Me.cmbApp1Name.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbApp1Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp1Name.FormattingEnabled = True
+        Me.cmbApp1Name.Location = New System.Drawing.Point(61, 474)
+        Me.cmbApp1Name.Name = "cmbApp1Name"
+        Me.cmbApp1Name.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp1Name.TabIndex = 294
+        '
+        'txtApp1Date
+        '
+        Me.txtApp1Date.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp1Date.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp1Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp1Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp1Date.ForeColor = System.Drawing.Color.Black
+        Me.txtApp1Date.Location = New System.Drawing.Point(61, 449)
+        Me.txtApp1Date.Name = "txtApp1Date"
+        Me.txtApp1Date.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp1Date.TabIndex = 293
+        Me.txtApp1Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp1Date.UseCompatibleTextRendering = True
+        '
+        'lblApp1Position
+        '
+        Me.lblApp1Position.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp1Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp1Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp1Position.ForeColor = System.Drawing.Color.Black
+        Me.lblApp1Position.Location = New System.Drawing.Point(2, 499)
+        Me.lblApp1Position.Name = "lblApp1Position"
+        Me.lblApp1Position.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp1Position.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp1Position.TabIndex = 291
+        Me.lblApp1Position.Text = "Position"
+        Me.lblApp1Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp1Date
+        '
+        Me.lblApp1Date.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp1Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp1Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp1Date.ForeColor = System.Drawing.Color.Black
+        Me.lblApp1Date.Location = New System.Drawing.Point(2, 449)
+        Me.lblApp1Date.Name = "lblApp1Date"
+        Me.lblApp1Date.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp1Date.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp1Date.TabIndex = 290
+        Me.lblApp1Date.Text = "Date"
+        Me.lblApp1Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp1Status
+        '
+        Me.lblApp1Status.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp1Status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp1Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp1Status.ForeColor = System.Drawing.Color.Black
+        Me.lblApp1Status.Location = New System.Drawing.Point(2, 424)
+        Me.lblApp1Status.Name = "lblApp1Status"
+        Me.lblApp1Status.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp1Status.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp1Status.TabIndex = 289
+        Me.lblApp1Status.Text = "Status"
+        Me.lblApp1Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp1Status
+        '
+        Me.cmbApp1Status.BackColor = System.Drawing.SystemColors.Window
+        Me.cmbApp1Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbApp1Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp1Status.Location = New System.Drawing.Point(61, 424)
+        Me.cmbApp1Status.Name = "cmbApp1Status"
+        Me.cmbApp1Status.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp1Status.TabIndex = 288
+        '
+        'txtApp2Remarks
+        '
+        Me.txtApp2Remarks.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp2Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp2Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp2Remarks.Location = New System.Drawing.Point(2, 336)
+        Me.txtApp2Remarks.Multiline = True
+        Me.txtApp2Remarks.Name = "txtApp2Remarks"
+        Me.txtApp2Remarks.Size = New System.Drawing.Size(294, 86)
+        Me.txtApp2Remarks.TabIndex = 287
+        '
+        'lblApp2Remarks
+        '
+        Me.lblApp2Remarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp2Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp2Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp2Remarks.ForeColor = System.Drawing.Color.Black
+        Me.lblApp2Remarks.Location = New System.Drawing.Point(2, 314)
+        Me.lblApp2Remarks.Name = "lblApp2Remarks"
+        Me.lblApp2Remarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp2Remarks.Size = New System.Drawing.Size(294, 23)
+        Me.lblApp2Remarks.TabIndex = 286
+        Me.lblApp2Remarks.Text = "Remarks"
+        Me.lblApp2Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtApp2Position
+        '
+        Me.txtApp2Position.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp2Position.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp2Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp2Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp2Position.ForeColor = System.Drawing.Color.Black
+        Me.txtApp2Position.Location = New System.Drawing.Point(61, 289)
+        Me.txtApp2Position.Name = "txtApp2Position"
+        Me.txtApp2Position.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp2Position.TabIndex = 285
+        Me.txtApp2Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp2Position.UseCompatibleTextRendering = True
+        '
+        'lblApp2Name
+        '
+        Me.lblApp2Name.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp2Name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp2Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp2Name.ForeColor = System.Drawing.Color.Black
+        Me.lblApp2Name.Location = New System.Drawing.Point(2, 264)
+        Me.lblApp2Name.Name = "lblApp2Name"
+        Me.lblApp2Name.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp2Name.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp2Name.TabIndex = 282
+        Me.lblApp2Name.Text = "Name"
+        Me.lblApp2Name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp2Name
+        '
+        Me.cmbApp2Name.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbApp2Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp2Name.FormattingEnabled = True
+        Me.cmbApp2Name.Location = New System.Drawing.Point(61, 264)
+        Me.cmbApp2Name.Name = "cmbApp2Name"
+        Me.cmbApp2Name.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp2Name.TabIndex = 284
+        '
+        'txtApp2Date
+        '
+        Me.txtApp2Date.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp2Date.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp2Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp2Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp2Date.ForeColor = System.Drawing.Color.Black
+        Me.txtApp2Date.Location = New System.Drawing.Point(61, 239)
+        Me.txtApp2Date.Name = "txtApp2Date"
+        Me.txtApp2Date.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp2Date.TabIndex = 283
+        Me.txtApp2Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp2Date.UseCompatibleTextRendering = True
+        '
+        'lblApp2Position
+        '
+        Me.lblApp2Position.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp2Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp2Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp2Position.ForeColor = System.Drawing.Color.Black
+        Me.lblApp2Position.Location = New System.Drawing.Point(2, 289)
+        Me.lblApp2Position.Name = "lblApp2Position"
+        Me.lblApp2Position.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp2Position.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp2Position.TabIndex = 281
+        Me.lblApp2Position.Text = "Position"
+        Me.lblApp2Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp2Date
+        '
+        Me.lblApp2Date.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp2Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp2Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp2Date.ForeColor = System.Drawing.Color.Black
+        Me.lblApp2Date.Location = New System.Drawing.Point(2, 239)
+        Me.lblApp2Date.Name = "lblApp2Date"
+        Me.lblApp2Date.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp2Date.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp2Date.TabIndex = 280
+        Me.lblApp2Date.Text = "Date"
+        Me.lblApp2Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp2Status
+        '
+        Me.lblApp2Status.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp2Status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp2Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp2Status.ForeColor = System.Drawing.Color.Black
+        Me.lblApp2Status.Location = New System.Drawing.Point(2, 214)
+        Me.lblApp2Status.Name = "lblApp2Status"
+        Me.lblApp2Status.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp2Status.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp2Status.TabIndex = 279
+        Me.lblApp2Status.Text = "Status"
+        Me.lblApp2Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp2Status
+        '
+        Me.cmbApp2Status.BackColor = System.Drawing.SystemColors.Window
+        Me.cmbApp2Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbApp2Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp2Status.Location = New System.Drawing.Point(61, 214)
+        Me.cmbApp2Status.Name = "cmbApp2Status"
+        Me.cmbApp2Status.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp2Status.TabIndex = 278
+        '
+        'txtApp3Remarks
+        '
+        Me.txtApp3Remarks.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp3Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp3Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp3Remarks.Location = New System.Drawing.Point(2, 124)
+        Me.txtApp3Remarks.Multiline = True
+        Me.txtApp3Remarks.Name = "txtApp3Remarks"
+        Me.txtApp3Remarks.Size = New System.Drawing.Size(294, 88)
+        Me.txtApp3Remarks.TabIndex = 277
+        '
+        'lblApp3Remarks
+        '
+        Me.lblApp3Remarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp3Remarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp3Remarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp3Remarks.ForeColor = System.Drawing.Color.Black
+        Me.lblApp3Remarks.Location = New System.Drawing.Point(2, 102)
+        Me.lblApp3Remarks.Name = "lblApp3Remarks"
+        Me.lblApp3Remarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp3Remarks.Size = New System.Drawing.Size(294, 23)
+        Me.lblApp3Remarks.TabIndex = 276
+        Me.lblApp3Remarks.Text = "Remarks"
+        Me.lblApp3Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtApp3Position
+        '
+        Me.txtApp3Position.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp3Position.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp3Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp3Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp3Position.ForeColor = System.Drawing.Color.Black
+        Me.txtApp3Position.Location = New System.Drawing.Point(61, 77)
+        Me.txtApp3Position.Name = "txtApp3Position"
+        Me.txtApp3Position.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp3Position.TabIndex = 275
+        Me.txtApp3Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp3Position.UseCompatibleTextRendering = True
+        '
+        'lblApp3Name
+        '
+        Me.lblApp3Name.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp3Name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp3Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp3Name.ForeColor = System.Drawing.Color.Black
+        Me.lblApp3Name.Location = New System.Drawing.Point(2, 52)
+        Me.lblApp3Name.Name = "lblApp3Name"
+        Me.lblApp3Name.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp3Name.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp3Name.TabIndex = 272
+        Me.lblApp3Name.Text = "Name"
+        Me.lblApp3Name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp3Name
+        '
+        Me.cmbApp3Name.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbApp3Name.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp3Name.FormattingEnabled = True
+        Me.cmbApp3Name.Location = New System.Drawing.Point(61, 52)
+        Me.cmbApp3Name.Name = "cmbApp3Name"
+        Me.cmbApp3Name.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp3Name.TabIndex = 274
+        '
+        'txtApp3Date
+        '
+        Me.txtApp3Date.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtApp3Date.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtApp3Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtApp3Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtApp3Date.ForeColor = System.Drawing.Color.Black
+        Me.txtApp3Date.Location = New System.Drawing.Point(61, 27)
+        Me.txtApp3Date.Name = "txtApp3Date"
+        Me.txtApp3Date.Size = New System.Drawing.Size(235, 23)
+        Me.txtApp3Date.TabIndex = 273
+        Me.txtApp3Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtApp3Date.UseCompatibleTextRendering = True
+        '
+        'lblApp3Position
+        '
+        Me.lblApp3Position.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp3Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp3Position.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp3Position.ForeColor = System.Drawing.Color.Black
+        Me.lblApp3Position.Location = New System.Drawing.Point(2, 77)
+        Me.lblApp3Position.Name = "lblApp3Position"
+        Me.lblApp3Position.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp3Position.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp3Position.TabIndex = 271
+        Me.lblApp3Position.Text = "Position"
+        Me.lblApp3Position.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp3Date
+        '
+        Me.lblApp3Date.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp3Date.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp3Date.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp3Date.ForeColor = System.Drawing.Color.Black
+        Me.lblApp3Date.Location = New System.Drawing.Point(2, 27)
+        Me.lblApp3Date.Name = "lblApp3Date"
+        Me.lblApp3Date.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp3Date.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp3Date.TabIndex = 270
+        Me.lblApp3Date.Text = "Date"
+        Me.lblApp3Date.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblApp3Status
+        '
+        Me.lblApp3Status.BackColor = System.Drawing.SystemColors.Control
+        Me.lblApp3Status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblApp3Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblApp3Status.ForeColor = System.Drawing.Color.Black
+        Me.lblApp3Status.Location = New System.Drawing.Point(2, 2)
+        Me.lblApp3Status.Name = "lblApp3Status"
+        Me.lblApp3Status.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblApp3Status.Size = New System.Drawing.Size(60, 23)
+        Me.lblApp3Status.TabIndex = 269
+        Me.lblApp3Status.Text = "Status"
+        Me.lblApp3Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbApp3Status
+        '
+        Me.cmbApp3Status.BackColor = System.Drawing.SystemColors.Window
+        Me.cmbApp3Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbApp3Status.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbApp3Status.Location = New System.Drawing.Point(61, 2)
+        Me.cmbApp3Status.Name = "cmbApp3Status"
+        Me.cmbApp3Status.Size = New System.Drawing.Size(235, 23)
+        Me.cmbApp3Status.TabIndex = 268
+        '
+        'cmbRoutingStatus
+        '
+        Me.cmbRoutingStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbRoutingStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbRoutingStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbRoutingStatus.FormattingEnabled = True
+        Me.cmbRoutingStatus.Location = New System.Drawing.Point(431, 0)
+        Me.cmbRoutingStatus.Name = "cmbRoutingStatus"
+        Me.cmbRoutingStatus.Size = New System.Drawing.Size(250, 23)
+        Me.cmbRoutingStatus.TabIndex = 588
+        Me.cmbRoutingStatus.Visible = False
+        '
+        'txtModifiedBy
+        '
+        Me.txtModifiedBy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtModifiedBy.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtModifiedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtModifiedBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtModifiedBy.ForeColor = System.Drawing.Color.Black
+        Me.txtModifiedBy.Location = New System.Drawing.Point(431, 584)
+        Me.txtModifiedBy.Name = "txtModifiedBy"
+        Me.txtModifiedBy.Size = New System.Drawing.Size(250, 23)
+        Me.txtModifiedBy.TabIndex = 592
+        Me.txtModifiedBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtModifiedBy.UseCompatibleTextRendering = True
+        Me.txtModifiedBy.Visible = False
+        '
+        'txtModifiedDate
+        '
+        Me.txtModifiedDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtModifiedDate.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtModifiedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtModifiedDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtModifiedDate.ForeColor = System.Drawing.Color.Black
+        Me.txtModifiedDate.Location = New System.Drawing.Point(431, 609)
+        Me.txtModifiedDate.Name = "txtModifiedDate"
+        Me.txtModifiedDate.Size = New System.Drawing.Size(250, 23)
+        Me.txtModifiedDate.TabIndex = 591
+        Me.txtModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtModifiedDate.UseCompatibleTextRendering = True
+        Me.txtModifiedDate.Visible = False
+        '
+        'lblModifiedDate
+        '
+        Me.lblModifiedDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblModifiedDate.BackColor = System.Drawing.SystemColors.Control
+        Me.lblModifiedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblModifiedDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblModifiedDate.ForeColor = System.Drawing.Color.Black
+        Me.lblModifiedDate.Location = New System.Drawing.Point(302, 609)
+        Me.lblModifiedDate.Name = "lblModifiedDate"
+        Me.lblModifiedDate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblModifiedDate.Size = New System.Drawing.Size(130, 23)
+        Me.lblModifiedDate.TabIndex = 590
+        Me.lblModifiedDate.Text = "Modified Date"
+        Me.lblModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblModifiedDate.Visible = False
+        '
+        'lblModifiedBy
+        '
+        Me.lblModifiedBy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblModifiedBy.BackColor = System.Drawing.SystemColors.Control
+        Me.lblModifiedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblModifiedBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblModifiedBy.ForeColor = System.Drawing.Color.Black
+        Me.lblModifiedBy.Location = New System.Drawing.Point(302, 584)
+        Me.lblModifiedBy.Name = "lblModifiedBy"
+        Me.lblModifiedBy.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblModifiedBy.Size = New System.Drawing.Size(130, 23)
+        Me.lblModifiedBy.TabIndex = 589
+        Me.lblModifiedBy.Text = "Modified By"
+        Me.lblModifiedBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblModifiedBy.Visible = False
         '
         'MntTrxDetailJig
         '
@@ -1120,7 +1647,11 @@ Partial Class MntTrxDetailJig
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(1192, 641)
+        Me.ClientSize = New System.Drawing.Size(1241, 634)
+        Me.Controls.Add(Me.txtModifiedBy)
+        Me.Controls.Add(Me.txtModifiedDate)
+        Me.Controls.Add(Me.lblModifiedDate)
+        Me.Controls.Add(Me.lblModifiedBy)
         Me.Controls.Add(Me.btnRemove4M)
         Me.Controls.Add(Me.btnView4M)
         Me.Controls.Add(Me.btnRemoveChecksheet)
@@ -1183,6 +1714,7 @@ Partial Class MntTrxDetailJig
         Me.Controls.Add(Me.dgvDetail)
         Me.Controls.Add(Me.pnlApprovers)
         Me.Controls.Add(Me.pnlJigPart)
+        Me.Controls.Add(Me.cmbRoutingStatus)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.KeyPreview = True
@@ -1198,6 +1730,8 @@ Partial Class MntTrxDetailJig
         Me.pnlImage.ResumeLayout(False)
         CType(Me.dgvPic, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvDetail, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlApprovers.ResumeLayout(False)
+        Me.pnlApprovers.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1242,7 +1776,6 @@ Partial Class MntTrxDetailJig
     Friend WithEvents lblPic As System.Windows.Forms.Label
     Friend WithEvents dgvPic As System.Windows.Forms.DataGridView
     Friend WithEvents lblActivityLog As System.Windows.Forms.Label
-    Friend WithEvents pnlApprovers As System.Windows.Forms.Panel
     Friend WithEvents dgvDetail As System.Windows.Forms.DataGridView
     Friend WithEvents txtRoutingStatus As System.Windows.Forms.Label
     Friend WithEvents ofdImage As System.Windows.Forms.OpenFileDialog
@@ -1280,4 +1813,40 @@ Partial Class MntTrxDetailJig
     Friend WithEvents ColTrxFrom As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxTo As DataGridViewTextBoxColumn
     Friend WithEvents ColElapsedTime As DataGridViewTextBoxColumn
+    Friend WithEvents pnlApprovers As Panel
+    Friend WithEvents txtApp1Remarks As TextBox
+    Friend WithEvents lblApp1Remarks As Label
+    Friend WithEvents txtApp1Position As Label
+    Friend WithEvents lblApp1Name As Label
+    Friend WithEvents cmbApp1Name As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents txtApp1Date As Label
+    Friend WithEvents lblApp1Position As Label
+    Friend WithEvents lblApp1Date As Label
+    Friend WithEvents lblApp1Status As Label
+    Friend WithEvents cmbApp1Status As ComboBox
+    Friend WithEvents txtApp2Remarks As TextBox
+    Friend WithEvents lblApp2Remarks As Label
+    Friend WithEvents txtApp2Position As Label
+    Friend WithEvents lblApp2Name As Label
+    Friend WithEvents cmbApp2Name As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents txtApp2Date As Label
+    Friend WithEvents lblApp2Position As Label
+    Friend WithEvents lblApp2Date As Label
+    Friend WithEvents lblApp2Status As Label
+    Friend WithEvents cmbApp2Status As ComboBox
+    Friend WithEvents txtApp3Remarks As TextBox
+    Friend WithEvents lblApp3Remarks As Label
+    Friend WithEvents txtApp3Position As Label
+    Friend WithEvents lblApp3Name As Label
+    Friend WithEvents cmbApp3Name As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents txtApp3Date As Label
+    Friend WithEvents lblApp3Position As Label
+    Friend WithEvents lblApp3Date As Label
+    Friend WithEvents lblApp3Status As Label
+    Friend WithEvents cmbApp3Status As ComboBox
+    Friend WithEvents cmbRoutingStatus As ComboBox
+    Friend WithEvents txtModifiedBy As Label
+    Friend WithEvents txtModifiedDate As Label
+    Friend WithEvents lblModifiedDate As Label
+    Friend WithEvents lblModifiedBy As Label
 End Class

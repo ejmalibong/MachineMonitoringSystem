@@ -52,17 +52,21 @@ Public Class MntTrxConsole
 
     Private dicSearch As New Dictionary(Of String, Integer)
     Private dicStatus As New Dictionary(Of String, Integer)
+    Private dicShift As New Dictionary(Of String, Object)
 
     Private machineStatusId As Integer = 1
     Private jigStatusId As Integer = 1
 
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
+    Private sectionId As Integer = 0
     Private isAdmin As Boolean = False
 
     Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 35, 2}
 
-    Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
+    Private isDebug As Boolean = My.Settings.IsDebug
+
+    Public Sub New(_userId As Integer, _workgroupId As Integer, _sectionId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -70,14 +74,13 @@ Public Class MntTrxConsole
         ' Add any initialization after the InitializeComponent() call.
         userId = _userId
         workgroupId = _workgroupId
+        sectionId = _sectionId
         isAdmin = _isAdmin
     End Sub
 
     Private Sub MntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         SearchCriteria()
         TransactionStatus()
-
-        cmbStatus.SelectedValue = 1
 
         pageIndex = 0
         pageSize = 50
@@ -93,6 +96,8 @@ Public Class MntTrxConsole
         Me.dgvList.Columns(5).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Me.dgvMachine.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Me.dgvJig.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+
+        cmbStatus.SelectedValue = 1
     End Sub
 
     Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -171,7 +176,7 @@ Public Class MntTrxConsole
                 ElseIf jigStatusId = 2 Then
                     dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.Orange 'scheduled
                 ElseIf jigStatusId = 3 Then
-                    dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral 'unscheduled
+                    dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral 'unscheduled 
                 End If
             Next
         Catch ex As Exception
@@ -440,10 +445,14 @@ Public Class MntTrxConsole
                             dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbCommonCmb, "< All >")
 
                         Case 12
-                            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommonCmb, "< All >")
+                            Dim prmSec(0) As SqlParameter
+                            prmSec(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+                            prmSec(0).Value = sectionId
+
+                            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommonCmb, "< All >", prmSec)
 
                         Case 13
-                            dbMethod.FillCmbWithCaption("RdGenShift", CommandType.StoredProcedure, "ShiftId", "ShiftName", cmbCommonCmb, "< All >")
+                            GetShift()
                     End Select
 
                     pnlSearchByDate.Visible = False
@@ -468,9 +477,13 @@ Public Class MntTrxConsole
     Private Sub cmbCommonCmb_Validated(sender As Object, e As EventArgs) Handles cmbCommonCmb.Validated
         Try
             Select Case cmbSearchCriteria.SelectedValue
-                Case 2, 3, 4, 5, 6, 12, 13
-                    If String.IsNullOrEmpty(cmbCommonCmb.Text) Or cmbCommonCmb.SelectedValue = 0 Then
+                Case 2, 3, 4, 5, 6, 12
+                    If String.IsNullOrEmpty(cmbCommonCmb.Text) Or cmbCommonCmb.SelectedValue = 0 Or cmbCommonCmb.SelectedValue Is Nothing Then
                         cmbCommonCmb.SelectedValue = 0
+                    End If
+                Case 13
+                    If String.IsNullOrEmpty(cmbCommonCmb.Text) Or cmbCommonCmb.SelectedValue Is Nothing Then
+                        cmbCommonCmb.SelectedIndex = 0
                     End If
             End Select
         Catch ex As Exception
@@ -1210,7 +1223,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -1218,7 +1231,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdTrxDate", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1228,7 +1241,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -1236,7 +1249,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdTrxDate", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1254,7 +1267,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdTrxDate", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1264,7 +1277,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -1337,13 +1350,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@MachineId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdMachineId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1353,13 +1366,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@MachineId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdMachineId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1375,7 +1388,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdMachineId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1385,7 +1398,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@MachineId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -1452,13 +1465,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeMachineStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1468,13 +1481,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeMachineStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1490,7 +1503,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeMachineStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1500,7 +1513,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -1567,13 +1580,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@JigId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJigId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1583,13 +1596,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@JigId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJigId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1605,7 +1618,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJigId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1615,7 +1628,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@JigId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -1682,13 +1695,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeJigStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1698,13 +1711,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeJigStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1720,7 +1733,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDowntimeJigStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1730,7 +1743,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -1797,13 +1810,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@AreaId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdAreaId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1813,13 +1826,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@AreaId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdAreaId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1835,7 +1848,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdAreaId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1845,7 +1858,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@AreaId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -1914,7 +1927,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -1922,7 +1935,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1932,7 +1945,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -1940,7 +1953,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1958,7 +1971,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -1968,7 +1981,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -2043,7 +2056,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -2051,7 +2064,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2061,7 +2074,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -2069,7 +2082,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2087,7 +2100,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdDatetimeEnded", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(5) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2097,7 +2110,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@StartDate", SqlDbType.Date)
                     prmRouting(4).Value = dtpStartDate.Value
                     prmRouting(5) = New SqlParameter("@EndDate", SqlDbType.Date)
@@ -2170,13 +2183,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@Problem", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdProblem", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2186,13 +2199,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@AreaId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdAreaId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2208,7 +2221,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdProblem", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2218,7 +2231,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@Problem", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
@@ -2285,13 +2298,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdRootCause", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2307,7 +2320,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdRootCause", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2323,7 +2336,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdRootCause", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2333,7 +2346,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
@@ -2400,13 +2413,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdActionTaken", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2416,13 +2429,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdActionTaken", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2438,7 +2451,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdActionTaken", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2448,7 +2461,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
@@ -2515,13 +2528,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@UserId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdUserId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2531,13 +2544,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@UserId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdUserId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2553,7 +2566,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdUserId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2563,7 +2576,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@UserId", SqlDbType.Int)
                     prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = 0, Nothing, cmbCommonCmb.SelectedValue)
 
@@ -2616,7 +2629,7 @@ Public Class MntTrxConsole
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
                     prmRouting(3).Value = 5
                     prmRouting(4) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = "0", Nothing, cmbCommonCmb.SelectedValue)
+                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue Is Nothing, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdShiftId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
@@ -2630,13 +2643,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = "0", Nothing, cmbCommonCmb.SelectedValue)
+                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue Is Nothing, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdShiftId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2648,11 +2661,11 @@ Public Class MntTrxConsole
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
                     prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = "0", Nothing, cmbCommonCmb.SelectedValue)
+                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue Is Nothing, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdShiftId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2664,11 +2677,11 @@ Public Class MntTrxConsole
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
                     prmRouting(3).Value = 3
                     prmRouting(4) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = "0", Nothing, cmbCommonCmb.SelectedValue)
+                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue Is Nothing, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdShiftId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2678,9 +2691,9 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue = "0", Nothing, cmbCommonCmb.SelectedValue)
+                    prmRouting(4).Value = IIf(cmbCommonCmb.SelectedValue Is Nothing, Nothing, cmbCommonCmb.SelectedValue)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdShiftId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
@@ -2745,13 +2758,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@JoNumber", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoNumber", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2761,13 +2774,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@JoNumber", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoNumber", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2783,7 +2796,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoNumber", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2793,7 +2806,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@JoNumber", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
@@ -2860,13 +2873,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
                     prmRouting(4) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoRequestor", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of sr mngr
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2876,13 +2889,13 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
                     prmRouting(4) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoRequestor", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of sv
+                ElseIf cmbStatus.SelectedValue = 4 Then 'for approval of approver 2
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2898,7 +2911,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusIdJoRequestor", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of asv
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(4) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2908,7 +2921,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
                     prmRouting(4) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
@@ -2972,11 +2985,11 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 99
+                    prmRouting(3).Value = 6
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 3
+                ElseIf cmbStatus.SelectedValue = 3 Then 'for approval of approver 1
                     Dim prmRouting(3) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -2986,7 +2999,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 2
+                    prmRouting(3).Value = 4
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
@@ -3004,7 +3017,7 @@ Public Class MntTrxConsole
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
-                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 1
+                ElseIf cmbStatus.SelectedValue = 5 Then 'for approval of approver 3
                     Dim prmRouting(3) As SqlParameter
                     prmRouting(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                     prmRouting(0).Value = pageIndex
@@ -3014,7 +3027,7 @@ Public Class MntTrxConsole
                     prmRouting(2).Direction = ParameterDirection.Output
                     prmRouting(2).Value = totalCount
                     prmRouting(3) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmRouting(3).Value = 4
+                    prmRouting(3).Value = 2
 
                     dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByRoutingStatusId", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
@@ -3168,7 +3181,8 @@ Public Class MntTrxConsole
 
     Private Sub TransactionStatus()
         dicStatus.Add(" On-going Activity", 1)
-        dicStatus.Add(" Done", 2)
+        'dicStatus.Add(" Done", 2)
+        dicStatus.Add(" Returned for revision", 2)
         dicStatus.Add(" For approval of Superior 1", 3)
         dicStatus.Add(" For approval of Superior 2", 4)
         dicStatus.Add(" For approval of Superior 3", 5)
@@ -3177,6 +3191,15 @@ Public Class MntTrxConsole
         cmbStatus.DisplayMember = "Key"
         cmbStatus.ValueMember = "Value"
         cmbStatus.DataSource = New BindingSource(dicStatus, Nothing)
+    End Sub
+
+    Private Sub GetShift()
+        dicShift.Add(" < All >", Nothing)
+        dicShift.Add(" Day Shift", "D")
+        dicShift.Add(" Night Shift", "N")
+        cmbCommonCmb.DisplayMember = "Key"
+        cmbCommonCmb.ValueMember = "Value"
+        cmbCommonCmb.DataSource = New BindingSource(dicShift, Nothing)
     End Sub
 
 End Class

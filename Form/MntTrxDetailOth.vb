@@ -6,55 +6,62 @@ Imports System.Runtime.InteropServices
 Imports System.Text
 
 Public Class MntTrxDetailOth
-    Private dbConnection As New Connection
-    Private directories As New Directory
-    Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
-    Private dbMain As New BlackCoffeeLibrary.Main
-    Private impersonation As New UserImpersonation.UserImpersonation
+    Private WithEvents bsSecUserLog As New BindingSource
+    Private WithEvents bsTrxDetail As New BindingSource
+    Private WithEvents bsTrxUser As New BindingSource
+    Private accessLevelId As Integer = 0
 
     Private adpTrxDetail As New SqlDataAdapter
+    Private orgAreaId As Integer = 0
 
+    Private bite As Byte() 'the word `byte` is not a valid identifier
+    Private dbConnection As New Connection
+    Private dbMain As New BlackCoffeeLibrary.Main
+    Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+
+    Private dicApp1Action As New Dictionary(Of String, Integer)
+    Private dicApp2Action As New Dictionary(Of String, Integer)
+    Private dicApp3Action As New Dictionary(Of String, Integer)
+
+    Private directory As New Directory
     Private dtRoutingStatus As New DataTable
     Private dtSecUserLog As New DataTable
     Private dtSecUserPic As New DataTable
-
-    Private dtTrxHeader As New DataTable
     Private dtTrxDetail As New DataTable
+    Private dtTrxHeader As New DataTable
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
 
-    Private WithEvents bsTrxDetail As New BindingSource
-    Private WithEvents bsTrxUser As New BindingSource
-    Private WithEvents bsSecUserLog As New BindingSource
-
-    Private mStream As New MemoryStream
-    Private bite As Byte() 'the word `byte` is not a valid identifier
-
-    Private userId As Integer
-    Private workgroupId As Integer = 0
-    Private isAdmin As Boolean = True
-    Private trxId As Integer = 0
-
-    Private areaId As Integer = 0
-
-    Private trxCount As Integer = 0
+    Private attDirectory As String = directory.AttachmentInitialDirectory
+    Private imgDirectory As String = directory.ImageInitialDirectory
 
     Private imgTmp As String = String.Empty
+    Private impersonation As New UserImpersonation.UserImpersonation
+    Private isAdmin As Boolean = True
+
+    Private lstAttachment As New List(Of CsAttachment)
+    Private lstAttachmentCopy As New List(Of CsAttachment)
+    Private lstAttachmentDelete As New List(Of CsAttachment)
+    Private lstImgAttachment As New List(Of ImgAttachment)
+
+    Private mStream As New MemoryStream
+
+    Private orgApp1Status As Integer = 0
+    Private orgApp2Status As Integer = 0
+    Private orgApp3Status As Integer = 0
 
     Private orgFilename As String = String.Empty
+    Private orgModifiedBy As Nullable(Of Integer)
+    Private orgModifiedDate As Nullable(Of Date)
+    Private orgRoutingStatusId As Integer = 0
 
     Private serverNetUserName As String = String.Empty
     Private serverNetUserPassword As String = String.Empty
 
-    Private imgDirectory As String = directories.ImageInitialDirectory
-    Private attDirectory As String = directories.AttachmentInitialDirectory
-
-    Private lstImgAttachment As New List(Of ImgAttachment)
-    Private lstAttachment As New List(Of CsAttachment)
-    Private lstAttachmentDelete As New List(Of CsAttachment)
-    Private lstAttachmentCopy As New List(Of CsAttachment)
-
-    Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 35, 2} 'asv, sv, asm, smngr
+    Private trxCount As Integer = 0
+    Private trxId As Integer = 0
+    Private userId As Integer
+    Private workgroupId As Integer = 0
 
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _trxId As Integer = 0)
 
@@ -67,7 +74,571 @@ Public Class MntTrxDetailOth
         isAdmin = _isAdmin
         trxId = _trxId
 
+        Select Case workgroupId
+            Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                accessLevelId = 1
+            Case 35, 40 'mngr, asst mngr
+                accessLevelId = 2
+            Case 29, 30 'sv, asv
+                accessLevelId = 3
+            Case 5 'sr tech
+                accessLevelId = 4
+            Case Else
+                accessLevelId = 99
+        End Select
+
         InitializeContructor()
+    End Sub
+
+    Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
+
+    Public Sub DisableForm(isDisable As Boolean)
+        If isDisable Then
+            cmbTransactionStatus.Enabled = False
+
+            txtProblem.Enabled = False
+            txtRootCause.Enabled = False
+            txtActionTaken.Enabled = False
+            txtPartsReplaced.Enabled = False
+            txtPartsNo.Enabled = False
+            txtJoNumber.Enabled = False
+            txtJoRequestor.Enabled = False
+
+            btnAddRow.Enabled = False
+            btnRemoveRow.Enabled = False
+            btnViewImage.Enabled = False
+            btnBrowseImage.Enabled = False
+            btnRemoveImage.Enabled = False
+            btnViewChecksheet.Enabled = False
+            btnBrowseChecksheet.Enabled = False
+            btnRemoveChecksheet.Enabled = False
+
+            dgvDetail.ClearSelection()
+            dgvDetail.Enabled = False
+            dgvPic.Enabled = False
+
+            If trxId = 0 Then
+                cmbApp3Status.Enabled = False
+                cmbApp3Name.Enabled = False
+                txtApp3Remarks.Enabled = False
+
+                cmbApp2Status.Enabled = False
+                cmbApp2Name.Enabled = False
+                txtApp2Remarks.Enabled = False
+
+                cmbApp1Status.Enabled = False
+                cmbApp1Name.Enabled = False
+                txtApp1Remarks.Enabled = False
+            End If
+
+        Else 'contains area, enable form
+            If trxId = 0 Then 'new transaction, enable all controls, enable approvers controls based on accesslevel
+                cmbTransactionStatus.Enabled = True
+
+                txtProblem.Enabled = True
+                txtRootCause.Enabled = True
+                txtActionTaken.Enabled = True
+                txtPartsReplaced.Enabled = True
+                txtJoNumber.Enabled = True
+                txtJoRequestor.Enabled = True
+
+                btnAddRow.Enabled = True
+                btnRemoveRow.Enabled = True
+                btnViewImage.Enabled = True
+                btnBrowseImage.Enabled = True
+                btnRemoveImage.Enabled = True
+                btnViewChecksheet.Enabled = True
+                btnBrowseChecksheet.Enabled = True
+                btnRemoveChecksheet.Enabled = True
+
+                dgvDetail.ClearSelection()
+                dgvDetail.Enabled = True
+                dgvPic.Enabled = True
+
+                If isAdmin Or accessLevelId = 1 Then
+                    cmbApp3Status.Enabled = False
+                    cmbApp3Name.Enabled = False
+                    txtApp3Remarks.Enabled = False
+
+                    cmbApp2Status.Enabled = False
+                    cmbApp2Name.Enabled = False
+                    txtApp2Remarks.Enabled = False
+
+                    cmbApp1Status.Enabled = False
+                    cmbApp1Name.Enabled = False
+                    txtApp1Remarks.Enabled = False
+                Else
+                    Select Case accessLevelId
+                        Case 2 'mngr, asm
+                            cmbApp3Status.Enabled = False
+                            cmbApp3Name.Enabled = True
+                            txtApp3Remarks.Enabled = False
+
+                            cmbApp2Status.Enabled = False
+                            cmbApp2Name.Enabled = False
+                            txtApp1Remarks.Enabled = False
+
+                            cmbApp1Status.Enabled = False
+                            cmbApp1Name.Enabled = False
+                            txtApp1Remarks.Enabled = False
+
+                        Case 3 'sv, asv
+                            cmbApp3Status.Enabled = False
+                            cmbApp3Name.Enabled = True
+                            txtApp3Remarks.Enabled = False
+
+                            cmbApp2Status.Enabled = False
+                            cmbApp2Name.Enabled = True
+                            txtApp2Remarks.Enabled = False
+
+                            cmbApp1Status.Enabled = False
+                            cmbApp1Name.Enabled = False
+                            txtApp1Remarks.Enabled = False
+
+                        Case Else 'others
+                            cmbApp3Status.Enabled = False
+                            cmbApp3Name.Enabled = True
+                            txtApp3Remarks.Enabled = False
+
+                            cmbApp2Status.Enabled = False
+                            cmbApp2Name.Enabled = True
+                            txtApp2Remarks.Enabled = False
+
+                            cmbApp1Status.Enabled = False
+                            cmbApp1Name.Enabled = True
+                            txtApp1Remarks.Enabled = False
+                    End Select
+                End If
+
+            Else 'existing transaction
+                btnViewImage.Enabled = True
+                btnViewChecksheet.Enabled = True
+
+                If isAdmin Or accessLevelId = 1 Then
+                    cmbTransactionStatus.Enabled = False
+
+                    txtProblem.Enabled = True
+                    txtRootCause.Enabled = True
+                    txtActionTaken.Enabled = True
+                    txtPartsReplaced.Enabled = True
+                    txtJoNumber.Enabled = True
+                    txtJoRequestor.Enabled = True
+
+                    btnAddRow.Enabled = True
+                    btnRemoveRow.Enabled = True
+                    btnBrowseImage.Enabled = True
+                    btnRemoveImage.Enabled = True
+                    btnBrowseChecksheet.Enabled = True
+                    btnRemoveChecksheet.Enabled = True
+
+                    If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                        txtPartsNo.Enabled = False
+                    Else
+                        txtPartsNo.Enabled = True
+                    End If
+
+                    dgvDetail.ClearSelection()
+                    dgvDetail.Enabled = True
+                    dgvPic.Enabled = True
+
+                    cmbApp3Status.Enabled = True
+                    cmbApp3Name.Enabled = True
+                    txtApp3Remarks.Enabled = True
+
+                    cmbApp2Status.Enabled = False
+                    cmbApp2Name.Enabled = False
+                    txtApp2Remarks.Enabled = False
+
+                    cmbApp1Status.Enabled = False
+                    cmbApp1Name.Enabled = False
+                    txtApp1Remarks.Enabled = False
+
+                Else 'other access level
+                    Select Case accessLevelId
+                        Case 2 'mngr, asm
+                            Select Case orgRoutingStatusId
+                                Case 1, 2 'from `for approval of approver 3` and `completed`, disable the form
+                                    cmbTransactionStatus.Enabled = False
+                                    cmbArea.Enabled = False
+
+                                    txtProblem.Enabled = False
+                                    txtRootCause.Enabled = False
+                                    txtActionTaken.Enabled = False
+                                    txtPartsReplaced.Enabled = False
+                                    txtPartsNo.Enabled = False
+                                    txtJoNumber.Enabled = False
+                                    txtJoRequestor.Enabled = False
+
+                                    btnAddRow.Enabled = False
+                                    btnRemoveRow.Enabled = False
+                                    btnBrowseImage.Enabled = False
+                                    btnRemoveImage.Enabled = False
+                                    btnBrowseChecksheet.Enabled = False
+                                    btnRemoveChecksheet.Enabled = False
+
+                                    dgvDetail.ClearSelection()
+                                    dgvDetail.Enabled = False
+                                    dgvPic.Enabled = False
+
+                                    cmbApp3Status.Enabled = False
+                                    cmbApp3Name.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    cmbApp2Status.Enabled = False
+                                    cmbApp2Name.Enabled = False
+                                    txtApp2Remarks.Enabled = False
+
+                                    cmbApp1Status.Enabled = False
+                                    cmbApp1Name.Enabled = False
+                                    txtApp1Remarks.Enabled = False
+
+                                    btnSave.Enabled = False
+                                    btnCancel.Enabled = False
+                                    btnDelete.Enabled = False
+
+                                Case Else
+                                    cmbArea.Enabled = True
+
+                                    txtProblem.Enabled = True
+                                    txtRootCause.Enabled = True
+                                    txtActionTaken.Enabled = True
+                                    txtPartsReplaced.Enabled = True
+                                    txtJoNumber.Enabled = True
+                                    txtJoRequestor.Enabled = True
+
+                                    btnAddRow.Enabled = True
+                                    btnRemoveRow.Enabled = True
+                                    btnBrowseImage.Enabled = True
+                                    btnRemoveImage.Enabled = True
+                                    btnBrowseChecksheet.Enabled = True
+                                    btnRemoveChecksheet.Enabled = True
+
+                                    cmbApp3Status.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    If String.IsNullOrEmpty(txtApp3Date.Text.Trim) Then
+                                        cmbApp3Name.Enabled = True
+                                    Else
+                                        cmbApp3Name.Enabled = False
+                                    End If
+
+                                    btnSave.Enabled = True
+                                    btnCancel.Enabled = True
+                                    btnDelete.Enabled = True
+
+                                    Select Case orgRoutingStatusId
+                                        Case 6, 5 'from `returned to revision` to `on-going`
+                                            cmbTransactionStatus.Enabled = True
+
+                                            If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                                txtPartsNo.Enabled = False
+                                            Else
+                                                txtPartsNo.Enabled = True
+                                            End If
+
+                                            cmbApp2Status.SelectedValue = 0
+                                            cmbApp2Name.SelectedValue = 0
+                                            txtApp2Remarks.Clear()
+
+                                            cmbApp2Status.Enabled = False
+                                            cmbApp2Name.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            cmbApp1Status.SelectedValue = 0
+                                            cmbApp1Name.SelectedValue = 0
+                                            txtApp1Remarks.Clear()
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+
+                                        Case 4 'for approval of approver 1
+                                            cmbTransactionStatus.Enabled = False
+
+                                            If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                                txtPartsNo.Enabled = False
+                                            Else
+                                                txtPartsNo.Enabled = True
+                                            End If
+
+                                            cmbApp2Status.Enabled = False
+                                            cmbApp2Name.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+
+                                        Case 3 'for approval of approver 2
+                                            cmbTransactionStatus.Enabled = False
+
+                                            If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                                txtPartsNo.Enabled = False
+                                            Else
+                                                txtPartsNo.Enabled = True
+                                            End If
+
+                                            cmbApp2Status.Enabled = True
+                                            cmbApp2Name.Enabled = False
+                                            txtApp2Remarks.Enabled = True
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+
+                                        Case Else
+                                            cmbTransactionStatus.Enabled = False
+                                            txtPartsNo.Enabled = False
+
+                                            cmbApp2Status.Enabled = False
+                                            cmbApp2Name.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+                                    End Select
+                            End Select
+
+                        Case 3 'sv, asv
+                            Select Case orgRoutingStatusId
+                                Case 1, 2 'from `for approval of approver 2` to `completed`, disable the form
+                                    cmbTransactionStatus.Enabled = False
+                                    cmbArea.Enabled = False
+
+                                    txtProblem.Enabled = False
+                                    txtRootCause.Enabled = False
+                                    txtActionTaken.Enabled = False
+                                    txtPartsReplaced.Enabled = False
+                                    txtPartsNo.Enabled = False
+                                    txtJoNumber.Enabled = False
+                                    txtJoRequestor.Enabled = False
+
+                                    btnAddRow.Enabled = False
+                                    btnRemoveRow.Enabled = False
+                                    btnBrowseImage.Enabled = False
+                                    btnRemoveImage.Enabled = False
+                                    btnBrowseChecksheet.Enabled = False
+                                    btnRemoveChecksheet.Enabled = False
+
+                                    dgvDetail.ClearSelection()
+                                    dgvDetail.Enabled = False
+                                    dgvPic.Enabled = False
+
+                                    cmbApp3Status.Enabled = False
+                                    cmbApp3Name.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    cmbApp2Status.Enabled = False
+                                    cmbApp2Name.Enabled = False
+                                    txtApp2Remarks.Enabled = False
+
+                                    cmbApp1Status.Enabled = False
+                                    cmbApp1Name.Enabled = False
+                                    txtApp1Remarks.Enabled = False
+
+                                    btnSave.Enabled = False
+                                    btnCancel.Enabled = False
+                                    btnDelete.Enabled = False
+
+                                Case Else
+                                    cmbArea.Enabled = True
+
+                                    txtProblem.Enabled = True
+                                    txtRootCause.Enabled = True
+                                    txtActionTaken.Enabled = True
+                                    txtPartsReplaced.Enabled = True
+                                    txtJoNumber.Enabled = True
+                                    txtJoRequestor.Enabled = True
+
+                                    btnAddRow.Enabled = True
+                                    btnRemoveRow.Enabled = True
+                                    btnBrowseImage.Enabled = True
+                                    btnRemoveImage.Enabled = True
+                                    btnBrowseChecksheet.Enabled = True
+                                    btnRemoveChecksheet.Enabled = True
+
+                                    cmbApp3Status.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    If String.IsNullOrEmpty(txtApp3Date.Text.Trim) Then
+                                        cmbApp3Name.Enabled = True
+                                    Else
+                                        cmbApp3Name.Enabled = False
+                                    End If
+
+                                    btnSave.Enabled = True
+                                    btnCancel.Enabled = True
+                                    btnDelete.Enabled = True
+
+                                    Select Case orgRoutingStatusId
+                                        Case 6, 5 'from `returned to revision` to `on-going`
+                                            cmbTransactionStatus.Enabled = True
+
+                                            If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                                txtPartsNo.Enabled = False
+                                            Else
+                                                txtPartsNo.Enabled = True
+                                            End If
+
+                                            cmbApp2Status.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                                cmbApp2Name.Enabled = True
+                                            Else
+                                                cmbApp2Name.Enabled = False
+                                            End If
+
+                                            cmbApp1Status.SelectedValue = 0
+                                            cmbApp1Name.SelectedValue = 0
+                                            txtApp1Remarks.Clear()
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+
+                                        Case 4
+                                            cmbTransactionStatus.Enabled = False
+
+                                            If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                                txtPartsNo.Enabled = False
+                                            Else
+                                                txtPartsNo.Enabled = True
+                                            End If
+
+                                            cmbApp2Status.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                                cmbApp2Name.Enabled = True
+                                            Else
+                                                cmbApp2Name.Enabled = False
+                                            End If
+
+                                            cmbApp1Status.Enabled = True
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = True
+
+                                        Case Else
+                                            cmbTransactionStatus.Enabled = False
+                                            txtPartsNo.Enabled = False
+
+                                            cmbApp2Status.Enabled = False
+                                            cmbApp2Name.Enabled = False
+                                            txtApp2Remarks.Enabled = False
+
+                                            cmbApp1Status.Enabled = False
+                                            cmbApp1Name.Enabled = False
+                                            txtApp1Remarks.Enabled = False
+                                    End Select
+                            End Select
+
+                        Case Else
+                            Select Case orgRoutingStatusId
+                                Case 6, 5 'from `returned to revision` to `on-going activity`
+                                    cmbTransactionStatus.Enabled = True
+                                    cmbArea.Enabled = True
+
+                                    If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                        txtPartsNo.Enabled = False
+                                    Else
+                                        txtPartsNo.Enabled = True
+                                    End If
+
+                                    txtProblem.Enabled = True
+                                    txtRootCause.Enabled = True
+                                    txtActionTaken.Enabled = True
+                                    txtPartsReplaced.Enabled = True
+
+                                    txtJoNumber.Enabled = True
+                                    txtJoRequestor.Enabled = True
+
+                                    btnAddRow.Enabled = True
+                                    btnRemoveRow.Enabled = True
+                                    btnBrowseImage.Enabled = True
+                                    btnRemoveImage.Enabled = True
+                                    btnBrowseChecksheet.Enabled = True
+                                    btnRemoveChecksheet.Enabled = True
+
+                                    dgvDetail.ClearSelection()
+                                    dgvDetail.Enabled = True
+                                    dgvPic.Enabled = True
+
+                                    cmbApp3Status.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                                        cmbApp3Name.Enabled = True
+                                    Else
+                                        cmbApp3Name.Enabled = False
+                                    End If
+
+                                    cmbApp2Status.Enabled = False
+                                    txtApp2Remarks.Enabled = False
+
+                                    If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                        cmbApp2Name.Enabled = True
+                                    Else
+                                        cmbApp2Name.Enabled = False
+                                    End If
+
+                                    cmbApp1Status.Enabled = False
+                                    txtApp1Remarks.Enabled = False
+
+                                    If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                                        cmbApp1Name.Enabled = True
+                                    Else
+                                        cmbApp1Name.Enabled = False
+                                    End If
+
+                                    btnSave.Enabled = True
+                                    btnCancel.Enabled = True
+                                    btnDelete.Enabled = True
+
+                                Case Else 'from `for approval of approver 1` to `completed`, disable the form once the activity is already on approvers
+                                    cmbTransactionStatus.Enabled = False
+                                    cmbArea.Enabled = False
+
+                                    txtProblem.Enabled = False
+                                    txtRootCause.Enabled = False
+                                    txtActionTaken.Enabled = False
+                                    txtPartsReplaced.Enabled = False
+                                    txtPartsNo.Enabled = False
+                                    txtJoNumber.Enabled = False
+                                    txtJoRequestor.Enabled = False
+
+                                    btnAddRow.Enabled = False
+                                    btnRemoveRow.Enabled = False
+                                    btnBrowseImage.Enabled = False
+                                    btnRemoveImage.Enabled = False
+                                    btnBrowseChecksheet.Enabled = False
+                                    btnRemoveChecksheet.Enabled = False
+
+                                    dgvDetail.ClearSelection()
+                                    dgvDetail.Enabled = False
+                                    dgvPic.Enabled = False
+
+                                    cmbApp3Status.Enabled = False
+                                    cmbApp3Name.Enabled = False
+                                    txtApp3Remarks.Enabled = False
+
+                                    cmbApp2Status.Enabled = False
+                                    cmbApp2Name.Enabled = False
+                                    txtApp2Remarks.Enabled = False
+
+                                    cmbApp1Status.Enabled = False
+                                    cmbApp1Name.Enabled = False
+                                    txtApp1Remarks.Enabled = False
+
+                                    btnSave.Enabled = False
+                                    btnCancel.Enabled = False
+                                    btnDelete.Enabled = False
+                            End Select
+                    End Select
+                End If
+            End If
+        End If
     End Sub
 
     Public Sub InitializeContructor()
@@ -105,6 +676,9 @@ Public Class MntTrxDetailOth
         LoadArea()
         GetSetting(My.Settings.SettingsId)
         impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+
+        LoadApproverAction()
+        LoadApprovers()
 
         If trxId = 0 Then
             Me.bsTrxDetail.DataSource = dtTrxDetail
@@ -145,186 +719,100 @@ Public Class MntTrxDetailOth
         End If
     End Sub
 
-    Private Sub frmMntTrxDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Async Sub OpenImage(ByVal imagePath As String, ByVal time As Integer)
         Try
-            If trxId = 0 Then
-                Me.Text = "New Activity Entry"
+            Dim exePathReturnValue = New StringBuilder()
+            FindExecutable(Path.GetFileName(imagePath), Path.GetDirectoryName(imagePath), exePathReturnValue)
+            Dim exePath = exePathReturnValue.ToString()
+            Dim arguments = """" & imagePath & """"
 
-                txtTransactionDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", dbMethod.GetServerDate)
-
-                Dim dRow As DataRow = dtRoutingStatus.Select("RoutingStatusId = 5")(0)
-                txtRoutingStatus.Text = dRow("RoutingStatusName").ToString.Trim
-
-                btnDelete.Enabled = False
-
-                DisableForm(True)
-                Me.ActiveControl = cmbArea
-            Else
-                Me.Text = "Activity No. " & trxId
-
-                For Each row As DataRow In dtTrxHeader.Rows
-                    'transaction header
-                    Dim dRow As DataRow = dtRoutingStatus.Select("RoutingStatusId = " & row("RoutingStatusId") & "")(0)
-                    txtRoutingStatus.Text = dRow("RoutingStatusName").ToString.Trim
-
-                    txtTransactionDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("TrxDate"))
-                    cmbTransactionStatus.SelectedValue = row("TrxStatusId")
-                    cmbArea.SelectedValue = row("AreaId")
-
-                    If Not row("TotalAccumulatedRuntime") Is DBNull.Value Then
-                        txtRuntimeAccumulated.Text = row("TotalAccumulatedRuntime")
-                    End If
-
-                    If Not row("TotalAccumulatedDowntime") Is DBNull.Value Then
-                        txtDowntimeAccumulated.Text = row("TotalAccumulatedDowntime")
-                    End If
-
-                    If Not row("Problem") Is DBNull.Value Then
-                        txtProblem.Text = row("Problem")
-                    End If
-
-                    If Not row("RootCause") Is DBNull.Value Then
-                        txtRootCause.Text = row("RootCause")
-                    End If
-
-                    If Not row("ActionTaken") Is DBNull.Value Then
-                        txtActionTaken.Text = row("ActionTaken")
-                    End If
-
-                    If Not row("JoNumber") Is DBNull.Value Then
-                        txtJoNumber.Text = row("JoNumber")
-                    End If
-
-                    If Not row("JoRequestor") Is DBNull.Value Then
-                        txtJoRequestor.Text = row("JoRequestor")
-                    End If
-
-                    If Not row("Image") Is DBNull.Value Then
-                        bite = row("Image")
-                        Using ms As New MemoryStream(bite)
-                            picImage.Image = Image.FromStream(ms)
-                        End Using
-                    End If
-
-                    If Not row("ImageName") Is DBNull.Value Then
-                        txtImageName.Text = row("ImageName")
-                    End If
-                Next
-
-                For Each row As DataRow In dtTrxSparePart.Rows
-                    If Not row("SparePartName") Is DBNull.Value AndAlso Not row("SparePartNo") Is DBNull.Value Then
-                        txtPartsReplaced.Text = row("SparePartName")
-                        txtPartsNo.Text = row("SparePartNo")
-                    End If
-                Next
-
-                If Not dtTrxHeader.Rows(0).Item("FileName") Is DBNull.Value Then
-                    Dim fileName As String = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
-                    Dim oldAttachment As New CsAttachment(Path.Combine(attDirectory, fileName), fileName, Path.GetExtension(Path.Combine(attDirectory, fileName)))
-                    lstAttachment.Add(oldAttachment)
-                    txtAttachment.Text = fileName
-                    orgFilename = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
-                End If
-
-                btnDelete.Enabled = True
-
-                imgTmp = Path.Combine(IO.Path.GetTempPath, "tmpImg" & Path.GetExtension(txtImageName.Text))
-
-                Me.ActiveControl = txtProblem
-                txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
+            If Path.GetFileName(exePath).Equals("photoviewer.dll", StringComparison.InvariantCultureIgnoreCase) Then
+                arguments = """" & exePath & """, ImageView_Fullscreen " & imagePath
+                exePath = "rundll32"
             End If
+
+            Dim process = New Process()
+            process.StartInfo.FileName = exePath
+            process.StartInfo.Arguments = arguments
+            process.EnableRaisingEvents = True
+            AddHandler process.Exited, New EventHandler(AddressOf DeleteTempImg)
+            process.Start()
+
+            Await Task.Delay(time)
+
+            If Not process.HasExited Then
+                process.Kill()
+            End If
+
+            process.Close()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub frmMntTrxDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If e.KeyCode.Equals(Keys.F8) Then 'delete
-            e.Handled = True
-            If isAdmin Or superiorWorkgroupId.Contains(workgroupId) Then
-                If btnDelete.Enabled = True Then
-                    btnDelete.PerformClick()
-                End If
-            Else
-                If btnDelete.Enabled = True Then
-                    btnDelete.PerformClick()
-                End If
-            End If
-        ElseIf e.KeyCode.Equals(Keys.F10) Then 'save
-            e.Handled = True
-            If isAdmin Or superiorWorkgroupId.Contains(workgroupId) Then
-                If btnSave.Enabled = True Then
-                    btnSave.PerformClick()
-                End If
-            Else
-                If btnSave.Enabled = True Then
-                    btnSave.PerformClick()
-                End If
-            End If
-        End If
-    End Sub
+    <DllImport("shell32.dll")>
+    Private Shared Function FindExecutable(ByVal lpFile As String, ByVal lpDirectory As String, <Out> ByVal lpResult As StringBuilder) As Integer
+    End Function
 
-    Private Sub frmMntTrxDetailOth_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        impersonation.UndoImpersonateUser()
-    End Sub
+    Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
+        If lstAttachmentCopy.Count > 0 Then
+            Dim streamRead As System.IO.FileStream
+            Dim streamWrite As System.IO.FileStream
 
-    Private Sub cmbArea_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
-        Try
-            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbArea.Text)
-            If e.Cancel Then Beep()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+            For i As Integer = 0 To lstAttachmentCopy.Count - 1
+                streamRead = New System.IO.FileStream(lstAttachmentCopy(i).FileName, System.IO.FileMode.Open)
+                streamWrite = New System.IO.FileStream(attDirectory & "\" & lstAttachmentCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
 
-    Private Sub cmbArea_Validated(sender As Object, e As EventArgs)
-        Try
-            If cmbArea.SelectedValue = 0 Then
-                DisableForm(True)
-            Else
-                DisableForm(False)
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+                Dim lngLen As Long = streamRead.Length - 1
+                Dim byteBuffer(4096) As Byte
+                Dim intBytesRead As Integer
 
-    Private Sub cmbArea_SelectedValueChanged(sender As Object, e As EventArgs)
-        Try
-            If cmbArea.SelectedValue = 0 Then
-                DisableForm(True)
-            Else
-                DisableForm(False)
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+                ShowProgress("Uploading files : (0/" + (lngLen * 100).ToString + ")", lblProgress)
 
-    Private Sub txtPartsReplaced_TextChanged(sender As Object, e As EventArgs) Handles txtPartsReplaced.TextChanged
-        If txtPartsReplaced.Text.Trim.Length > 0 Then
-            txtPartsNo.Enabled = True
-        Else
-            txtPartsNo.Enabled = False
-        End If
-    End Sub
+                While streamRead.Position < lngLen
+                    If (bgWorker.CancellationPending = True) Then
+                        e.Cancel = True
+                        Exit While
+                    End If
 
-    Private Sub dgvPic_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvPic.DataBindingComplete
-        For Each row As DataRow In dtTrxUser.Rows
-            For i As Integer = 0 To dgvPic.Rows.Count - 1
-                If dgvPic.Rows(i).Cells("ColUserId").Value = row("UserId") Then
-                    dgvPic.Rows(i).Cells("ColIsSelected").Value = True
-                End If
+                    bgWorker.ReportProgress(CInt(streamRead.Position / lngLen * 100))
+                    ShowProgress("Uploading attachment : (" + CInt(streamRead.Position).ToString + "/" + (lngLen * 100).ToString + ")", lblProgress)
+                    intBytesRead = (streamRead.Read(byteBuffer, 0, 4096))
+
+                    streamWrite.Write(byteBuffer, 0, intBytesRead)
+                End While
+
+                streamRead.Dispose()
+                streamWrite.Dispose()
             Next
-        Next
+        End If
     End Sub
 
-    Private Sub dgvDetail_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvDetail.DataError
-        e.Cancel = False
+    Private Sub bgWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWorker.ProgressChanged
+        progBar.Value = e.ProgressPercentage
     End Sub
 
-    Private Sub dgvPic_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvPic.DataError
-        e.Cancel = False
+    Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
+        If e.Cancelled = True Then
+            progBar.Visible = False
+            lblProgress.Visible = False
+
+            btnAddRow.Enabled = True
+            btnDelete.Enabled = True
+            btnViewImage.Enabled = True
+            btnBrowseImage.Enabled = True
+            btnRemoveImage.Enabled = True
+            btnViewChecksheet.Enabled = True
+            btnBrowseChecksheet.Enabled = True
+            btnRemoveChecksheet.Enabled = True
+
+            btnSave.Enabled = True
+            btnCancel.Enabled = True
+            btnDelete.Enabled = True
+            btnClose.Enabled = True
+        Else
+            Me.DialogResult = DialogResult.OK
+        End If
     End Sub
 
     Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
@@ -378,6 +866,117 @@ Public Class MntTrxDetailOth
         End Try
     End Sub
 
+    Private Sub btnAddRow_Enter(sender As Object, e As EventArgs) Handles btnAddRow.Enter
+        lblActivityLog.ForeColor = Color.White
+        lblActivityLog.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnAddRow_Leave(sender As Object, e As EventArgs) Handles btnAddRow.Leave
+        lblActivityLog.ForeColor = Color.Black
+        lblActivityLog.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnBrowseChecksheet_Click(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Click
+        Try
+            ofdAttachment.Filter = "Image Files (*.jpeg, *.png) | *.jpg; *.jpeg; *.png; *.bmp; *.gif; *.tif; *.tiff; |" &
+                                   "Word Documents (*.doc) | *.doc; *.docx; |" &
+                                   "Excel Worksheets (*.xls, *.xlsx) | *.xls; *.xlsx |" &
+                                   "Presentation Files (*.ppt, *pptx) | *.ppt; *.pptx; *.odp; |" &
+                                   "PDF Files (*.pdf) | *.pdf; |" &
+                                   "Text Files (*.txt) | *.txt |" &
+                                   "All Files (*.*) | *.*"
+            ofdAttachment.FilterIndex = 7
+            ofdAttachment.ShowDialog()
+            ofdAttachment.RestoreDirectory = True
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnBrowseChecksheet_Enter(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnBrowseChecksheet_Leave(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
+        Try
+            ofdImage.Filter = "JPEGs (*.jpg, *.jpeg) | *.jpg; *.jpeg |GIFs (*.gif) | *.gif |Bitmaps (*.bmp) | *.bmp | All Images (*.*) | *.jpg; *.jpeg; *.gif; *.bmp; *.png; *.tif; *.tiff"
+            ofdImage.FilterIndex = 7
+            ofdImage.ShowDialog()
+            ofdImage.RestoreDirectory = True
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
+    End Sub
+
+    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+        Try
+            If btnDelete.Enabled = False Then
+                Exit Sub
+            End If
+
+            If trxId > 0 Then
+                Dim question As String = String.Format("Are you sure you want to delete this record?")
+
+                If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                    Dim prmDel(0) As SqlParameter
+                    prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmDel(0).Value = trxId
+
+                    dbMethod.ExecuteNonQuery("DelMntTransactionHeader", CommandType.StoredProcedure, prmDel)
+
+                    Me.DialogResult = Windows.Forms.DialogResult.OK
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnRemoveChecksheet_Click(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Click
+        Try
+            If Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
+                If lstAttachment.Count > 0 Then lstAttachment.RemoveAt(0)
+                txtAttachment.Text = String.Empty
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnRemoveChecksheet_Enter(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub btnRemoveChecksheet_Leave(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
+        Try
+            If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
+
+            If Not picImage.Image Is Nothing Then
+                picImage.Image.Dispose()
+                picImage.Image = Nothing
+                txtImageName.Text = String.Empty
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Sub btnRemoveRow_Click(sender As Object, e As EventArgs) Handles btnRemoveRow.Click
         Try
             If dgvDetail.Rows.Count > 0 Then
@@ -421,184 +1020,22 @@ Public Class MntTrxDetailOth
         End Try
     End Sub
 
-    Private Sub dgvPic_SelectionChanged(sender As Object, e As EventArgs) Handles dgvPic.SelectionChanged
-        dgvPic.ClearSelection()
+    Private Sub btnRemoveRow_Enter(sender As Object, e As EventArgs) Handles btnRemoveRow.Enter
+        lblActivityLog.ForeColor = Color.White
+        lblActivityLog.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
-        Try
-            If lstImgAttachment.Count > 0 Then
-                Process.Start(lstImgAttachment(0).FileName)
-            Else
-                If Not picImage.Image Is Nothing Then
-                    Dim img As Image = picImage.Image
-                    MsgBox(imgTmp)
-                    img.Save(imgTmp)
-                    OpenImage(imgTmp, 30000) '30 seconds
-                End If
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    <DllImport("shell32.dll")>
-    Private Shared Function FindExecutable(ByVal lpFile As String, ByVal lpDirectory As String, <Out> ByVal lpResult As StringBuilder) As Integer
-    End Function
-
-    Public Async Sub OpenImage(ByVal imagePath As String, ByVal time As Integer)
-        Try
-            Dim exePathReturnValue = New StringBuilder()
-            FindExecutable(Path.GetFileName(imagePath), Path.GetDirectoryName(imagePath), exePathReturnValue)
-            Dim exePath = exePathReturnValue.ToString()
-            Dim arguments = """" & imagePath & """"
-
-            If Path.GetFileName(exePath).Equals("photoviewer.dll", StringComparison.InvariantCultureIgnoreCase) Then
-                arguments = """" & exePath & """, ImageView_Fullscreen " & imagePath
-                exePath = "rundll32"
-            End If
-
-            Dim process = New Process()
-            process.StartInfo.FileName = exePath
-            process.StartInfo.Arguments = arguments
-            process.EnableRaisingEvents = True
-            AddHandler process.Exited, New EventHandler(AddressOf DeleteTempImg)
-            process.Start()
-
-            Await Task.Delay(time)
-
-            If Not process.HasExited Then
-                process.Kill()
-            End If
-
-            process.Close()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub DeleteTempImg(ByVal sender As Object, ByVal e As System.EventArgs)
-        If File.Exists(imgTmp) Then
-            File.Delete(imgTmp)
-        End If
-    End Sub
-
-    Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
-        Try
-            ofdImage.Filter = "JPEGs (*.jpg, *.jpeg) | *.jpg; *.jpeg |GIFs (*.gif) | *.gif |Bitmaps (*.bmp) | *.bmp | All Images (*.*) | *.jpg; *.jpeg; *.gif; *.bmp; *.png; *.tif; *.tiff"
-            ofdImage.FilterIndex = 7
-            ofdImage.ShowDialog()
-            ofdImage.RestoreDirectory = True
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
-        Try
-            If Not picImage.Image Is Nothing Then
-                If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
-                picImage.Image.Dispose()
-                picImage.Image = Nothing
-                txtImageName.Text = String.Empty
-            End If
-
-            Dim attachment As New ImgAttachment(ofdImage.FileName, ofdImage.SafeFileName, Path.GetExtension(ofdImage.SafeFileName).ToLower)
-            lstImgAttachment.Add(attachment)
-
-            Using ms As New MemoryStream
-                Using bmp As New Bitmap(lstImgAttachment(0).FileName)
-                    Dim jpgEncoder As ImageCodecInfo = dbMain.GetEncoder(ImageFormat.Jpeg)
-                    Dim myEncoder As Imaging.Encoder = System.Drawing.Imaging.Encoder.Quality
-
-                    'create an encoder parameters object
-                    'an encoder parameters object has an array of encoderparameter objects; in this case, there is only one encoderparameter object in the array.
-                    Dim myEncoderParameters As New EncoderParameters(1)
-                    'save the bitmap as a JPG file with quality level compression
-                    Dim myEncoderParameter = New EncoderParameter(myEncoder, 500L)
-                    myEncoderParameters.Param(0) = myEncoderParameter
-                    bmp.Save(ms, jpgEncoder, myEncoderParameters)
-                End Using
-
-                picImage.Image = Image.FromStream(ms)
-            End Using
-
-            txtImageName.Text = lstImgAttachment(0).SafeName
-            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImgAttachment(0).FileName)
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
-        Try
-            If Not picImage.Image Is Nothing Then
-                If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
-                picImage.Image.Dispose()
-                picImage.Image = Nothing
-                txtImageName.Text = String.Empty
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnViewChecksheet_Click(sender As Object, e As EventArgs) Handles btnViewChecksheet.Click
-        Try
-            If lstAttachment.Count > 0 Then
-                Process.Start(lstAttachment(0).FileName)
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnBrowseChecksheet_Click(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Click
-        Try
-            ofdAttachment.Filter = "Image Files (*.jpeg, *.png) | *.jpg; *.jpeg; *.png; *.bmp; *.gif; *.tif; *.tiff; |" &
-                                   "Word Documents (*.doc) | *.doc; *.docx; |" &
-                                   "Excel Worksheets (*.xls, *.xlsx) | *.xls; *.xlsx |" &
-                                   "Presentation Files (*.ppt, *pptx) | *.ppt; *.pptx; *.odp; |" &
-                                   "PDF Files (*.pdf) | *.pdf; |" &
-                                   "Text Files (*.txt) | *.txt |" &
-                                   "All Files (*.*) | *.*"
-            ofdAttachment.FilterIndex = 7
-            ofdAttachment.ShowDialog()
-            ofdAttachment.RestoreDirectory = True
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub ofdAttachment_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdAttachment.FileOk
-        Try
-            If Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
-                If lstAttachment.Count > 0 Then lstAttachment.RemoveAt(0)
-                txtAttachment.Text = String.Empty
-            End If
-
-            Dim checksheet As New CsAttachment(ofdAttachment.FileName, ofdAttachment.SafeFileName, Path.GetExtension(ofdAttachment.SafeFileName).ToLower)
-            lstAttachment.Add(checksheet)
-
-            txtAttachment.Text = Path.GetFileName(ofdAttachment.FileName)
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnRemoveChecksheet_Click(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Click
-        Try
-            If Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
-                If lstAttachment.Count > 0 Then lstAttachment.RemoveAt(0)
-                txtAttachment.Text = String.Empty
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    Private Sub btnRemoveRow_Leave(sender As Object, e As EventArgs) Handles btnRemoveRow.Leave
+        lblActivityLog.ForeColor = Color.Black
+        lblActivityLog.BackColor = SystemColors.Control
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Try
+            If btnSave.Enabled = False Then
+                Exit Sub
+            End If
+
             If cmbArea.SelectedValue = 0 Then
                 MessageBox.Show("Please select an area.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 cmbArea.Focus()
@@ -664,45 +1101,62 @@ Public Class MntTrxDetailOth
                     prmHeader(13).Value = txtJoRequestor.Text.Trim
                 End If
 
-                prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                prmHeader(14).Value = 0
-                prmHeader(15) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                prmHeader(15).Value = 6
-                prmHeader(16) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                prmHeader(16).Value = Nothing
-                prmHeader(17) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                prmHeader(17).Value = Nothing
-                prmHeader(18) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                prmHeader(18).Value = 0
-                prmHeader(19) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                prmHeader(19).Value = 5
-                prmHeader(20) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                prmHeader(20).Value = Nothing
-                prmHeader(21) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                prmHeader(21).Value = Nothing
-                prmHeader(22) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                prmHeader(22).Value = 0
-                prmHeader(23) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                prmHeader(23).Value = 2
-                prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                prmHeader(24).Value = Nothing
-                prmHeader(25) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                prmHeader(25).Value = Nothing
-                prmHeader(26) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                prmHeader(26).Value = Nothing
-                prmHeader(27) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                prmHeader(27).Value = Nothing
-                prmHeader(28) = New SqlParameter("@FileName", SqlDbType.NVarChar)
-                prmHeader(28).Value = Nothing
-                prmHeader(29) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                prmHeader(29).Value = Nothing
-
                 If cmbTransactionStatus.SelectedValue = 1 Then 'transaction status - done
                     If dgvDetail.Rows.Count = 0 Then
                         MessageBox.Show("Please input activity logs.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         btnAddRow.Focus()
                         Return
                     End If
+
+                    'approvers
+                    prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(14).Value = 0
+                    prmHeader(15) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(15).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                    prmHeader(16) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                    prmHeader(16).Value = Nothing
+                    prmHeader(17) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(17).Value = Nothing
+
+                    prmHeader(18) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(18).Value = 0
+                    prmHeader(19) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(19).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                    prmHeader(20) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                    prmHeader(20).Value = Nothing
+                    prmHeader(21) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(21).Value = Nothing
+
+                    prmHeader(22) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(22).Value = 0
+
+                    If cmbApp3Name.SelectedValue = 0 Then
+                        MessageBox.Show("Please select one from approver 3.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return
+                    Else
+                        prmHeader(23) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(23).Value = cmbApp3Name.SelectedValue
+                    End If
+
+                    If isAdmin Or accessLevelId = 1 Then
+                        prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(24).Value = dbMethod.GetServerDate
+                    Else
+                        prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(24).Value = Nothing
+                    End If
+
+                    prmHeader(25) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(25).Value = Nothing
+
+                    prmHeader(26) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(26).Value = Nothing
+                    prmHeader(27) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(27).Value = Nothing
+                    prmHeader(28) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(28).Value = Nothing
+                    prmHeader(29) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(29).Value = Nothing
 
                     prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                     prmHeader(30).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
@@ -714,8 +1168,25 @@ Public Class MntTrxDetailOth
                     prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                     prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                     prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
-                    prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmHeader(35).Value = 1
+
+                    'routing status
+                    If cmbApp1Name.SelectedValue = 0 Then
+                        If cmbApp2Name.SelectedValue = 0 Then
+                            If isAdmin Or accessLevelId = 1 Then
+                                prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(35).Value = 1
+                            Else
+                                prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(35).Value = 2
+                            End If
+                        Else
+                            prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                            prmHeader(35).Value = 3
+                        End If
+                    Else
+                        prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                        prmHeader(35).Value = 4
+                    End If
 
                     If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
                         MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -764,6 +1235,51 @@ Public Class MntTrxDetailOth
                     prmHeader(42).Value = Nothing
 
                 Else 'transaction status - on-going
+                    'approvers
+                    prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(14).Value = 0
+                    prmHeader(15) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(15).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                    prmHeader(16) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                    prmHeader(16).Value = Nothing
+                    prmHeader(17) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(17).Value = Nothing
+
+                    prmHeader(18) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(18).Value = 0
+                    prmHeader(19) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(19).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                    prmHeader(20) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                    prmHeader(20).Value = Nothing
+                    prmHeader(21) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(21).Value = Nothing
+
+                    prmHeader(22) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(22).Value = 0
+
+                    If cmbApp3Name.SelectedValue = 3 Then
+                        MessageBox.Show("Please select one for approver 3.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        cmbApp3Name.Focus()
+                        Return
+                    Else
+                        prmHeader(23) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(23).Value = cmbApp3Name.SelectedValue
+                    End If
+
+                    prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                    prmHeader(24).Value = Nothing
+                    prmHeader(25) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(25).Value = Nothing
+
+                    prmHeader(26) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(26).Value = Nothing
+                    prmHeader(27) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(27).Value = Nothing
+                    prmHeader(28) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(28).Value = Nothing
+                    prmHeader(29) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(29).Value = Nothing
+
                     If dgvDetail.Rows.Count > 0 Then
                         prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                         prmHeader(30).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
@@ -796,6 +1312,7 @@ Public Class MntTrxDetailOth
                         prmHeader(34).Value = Nothing
                     End If
 
+                    'routing status
                     prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
                     prmHeader(35).Value = 5
 
@@ -844,6 +1361,7 @@ Public Class MntTrxDetailOth
                     prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                     prmHeader(42).Value = Nothing
                 End If
+
                 dbMethod.ExecuteNonQuery("InsMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
                 'transaction details
@@ -893,6 +1411,7 @@ Public Class MntTrxDetailOth
                     End If
                 Next
 
+                'rename attachments
                 If lstAttachment.Count > 0 AndAlso Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
                     For i As Integer = 0 To lstAttachment.Count - 1
                         Dim extension As String = String.Empty
@@ -935,7 +1454,7 @@ Public Class MntTrxDetailOth
                 prmHeader(6) = New SqlParameter("@DowntimeJigSubStatusId", SqlDbType.Int)
                 prmHeader(6).Value = Nothing
                 prmHeader(7) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmHeader(7).Value = areaId
+                prmHeader(7).Value = cmbArea.SelectedValue
 
                 If String.IsNullOrEmpty(txtRuntimeAccumulated.Text.Trim) Then
                     prmHeader(8) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
@@ -961,37 +1480,6 @@ Public Class MntTrxDetailOth
                     prmHeader(10).Value = txtJoRequestor.Text.Trim
                 End If
 
-                prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                prmHeader(11).Value = 0
-                prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                prmHeader(12).Value = 6
-                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                prmHeader(13).Value = Nothing
-                prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                prmHeader(14).Value = Nothing
-                prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                prmHeader(15).Value = 0
-                prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                prmHeader(16).Value = 5
-                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                prmHeader(17).Value = Nothing
-                prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                prmHeader(18).Value = Nothing
-                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                prmHeader(19).Value = 0
-                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                prmHeader(20).Value = 2
-                prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                prmHeader(21).Value = Nothing
-                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                prmHeader(22).Value = Nothing
-                prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                prmHeader(23).Value = userId
-                prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                prmHeader(24).Value = dbMethod.GetServerDate
-                prmHeader(25) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                prmHeader(25).Value = Nothing
-
                 If cmbTransactionStatus.SelectedValue = 1 Then 'transaction status - done
                     If dgvDetail.Rows.Count = 0 Then
                         MessageBox.Show("Please input activity logs.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -999,8 +1487,441 @@ Public Class MntTrxDetailOth
                         Return
                     End If
 
-                    prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                    prmHeader(27).Value = 1
+                    'approvers
+                    If isAdmin Or accessLevelId = 1 Then
+                        If cmbApp1Name.SelectedValue = 0 Then
+                            prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                            prmHeader(11).Value = 0
+                            prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                            prmHeader(12).Value = Nothing
+                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                            prmHeader(13).Value = Nothing
+                            prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                            prmHeader(14).Value = Nothing
+                        Else
+                            prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                            prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                            prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                            prmHeader(12).Value = cmbApp1Name.SelectedValue
+
+                            If cmbApp1Status.SelectedValue = 0 Then
+                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                prmHeader(13).Value = Nothing
+                            Else
+                                If cmbApp1Status.SelectedValue = orgApp1Status Then
+                                    If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(13).Value = Nothing
+                                    Else
+                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                    End If
+                                Else
+                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(13).Value = dbMethod.GetServerDate
+                                End If
+                            End If
+
+                            prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                            prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                        End If
+
+                        If cmbApp2Name.SelectedValue = 0 Then
+                            prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                            prmHeader(15).Value = 0
+                            prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                            prmHeader(16).Value = Nothing
+                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                            prmHeader(17).Value = Nothing
+                            prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                            prmHeader(18).Value = Nothing
+                        Else
+                            prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                            prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                            prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                            prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+
+                            If cmbApp2Status.SelectedValue = 0 Then
+                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                prmHeader(17).Value = Nothing
+                            Else
+                                If cmbApp2Status.SelectedValue = orgApp2Status Then
+                                    If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(17).Value = Nothing
+                                    Else
+                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                    End If
+                                Else
+                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(17).Value = dbMethod.GetServerDate
+                                End If
+                            End If
+
+                            prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                            prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                        End If
+
+                        prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                        prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                        prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(20).Value = cmbApp3Name.SelectedValue
+
+                        If cmbApp3Status.SelectedValue = 0 Then
+                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                            prmHeader(21).Value = Nothing
+                        Else
+                            If cmbApp3Status.SelectedValue = orgApp3Status Then
+                                If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(21).Value = Nothing
+                                Else
+                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                End If
+                            Else
+                                prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                prmHeader(21).Value = dbMethod.GetServerDate
+                            End If
+                        End If
+
+                        prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                        prmHeader(22).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+
+                    Else 'other access level
+                        Select Case accessLevelId
+                            Case 2 'mngr, asm
+                                If cmbApp1Name.SelectedValue = 0 Then
+                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(11).Value = 0
+                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(12).Value = Nothing
+                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(13).Value = Nothing
+                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(14).Value = Nothing
+                                Else
+                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(12).Value = cmbApp1Name.SelectedValue
+
+                                    If cmbApp1Status.SelectedValue = 0 Then
+                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(13).Value = Nothing
+                                    Else
+                                        If cmbApp1Status.SelectedValue = orgApp1Status Then
+                                            If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(13).Value = Nothing
+                                            Else
+                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                            End If
+                                        Else
+                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(13).Value = dbMethod.GetServerDate
+                                        End If
+                                    End If
+
+                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                                End If
+
+                                prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+
+                                If cmbApp2Status.SelectedValue = 0 Then
+                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(17).Value = Nothing
+                                Else
+                                    If cmbApp2Status.SelectedValue = orgApp2Status Then
+                                        If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(17).Value = Nothing
+                                        Else
+                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                        End If
+                                    Else
+                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(17).Value = dbMethod.GetServerDate
+                                    End If
+                                End If
+
+                                prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+
+                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+
+                                If cmbApp3Status.SelectedValue = 0 Then
+                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(21).Value = Nothing
+                                Else
+                                    If cmbApp3Status.SelectedValue = orgApp3Status Then
+                                        If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Nothing
+                                        Else
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                        End If
+                                    Else
+                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                    End If
+                                End If
+
+                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+
+                            Case 3 'sv, asv
+                                prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+
+                                If cmbApp1Status.SelectedValue = 0 Then 'no action selected
+                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(13).Value = Nothing
+                                Else
+                                    If cmbApp1Status.SelectedValue = orgApp1Status Then 'did not change action
+                                        If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(13).Value = Nothing
+                                        Else
+                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                        End If
+                                    Else 'change an action
+                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(13).Value = dbMethod.GetServerDate
+                                    End If
+                                End If
+
+                                prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+
+                                If cmbApp2Name.SelectedValue = 0 Then
+                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(15).Value = 0
+                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(16).Value = Nothing
+                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(17).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(18).Value = Nothing
+                                Else
+                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+
+                                    If cmbApp2Status.SelectedValue = 0 Then 'no action selected
+                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(17).Value = Nothing
+                                    Else
+                                        If cmbApp2Status.SelectedValue = orgApp2Status Then 'did not change action
+                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(17).Value = Nothing
+                                            Else
+                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                            End If
+                                        Else 'change an action
+                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(17).Value = dbMethod.GetServerDate
+                                        End If
+                                    End If
+
+                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                                End If
+
+                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+
+                                If cmbApp3Status.SelectedValue = 0 Then 'no action selected
+                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(21).Value = Nothing
+                                Else
+                                    If cmbApp3Status.SelectedValue = orgApp3Status Then 'did not change action
+                                        If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Nothing
+                                        Else
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                        End If
+                                    Else 'change an action
+                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                    End If
+                                End If
+
+                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+
+                            Case Else 'technician
+                                If cmbApp1Name.SelectedValue = 0 Then
+                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(11).Value = 0
+                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(12).Value = Nothing
+                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(13).Value = Nothing
+                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(14).Value = Nothing
+                                Else
+                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(12).Value = cmbApp1Name.SelectedValue
+
+                                    If cmbApp1Status.SelectedValue = 0 Then
+                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(13).Value = Nothing
+                                    Else
+                                        If cmbApp1Status.SelectedValue = orgApp1Status Then
+                                            If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(13).Value = Nothing
+                                            Else
+                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                            End If
+                                        Else
+                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(13).Value = dbMethod.GetServerDate
+                                        End If
+                                    End If
+
+                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                                End If
+
+                                If cmbApp2Name.SelectedValue = 0 Then
+                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(15).Value = 0
+                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(16).Value = Nothing
+                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(17).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(18).Value = Nothing
+                                Else
+                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+
+                                    If cmbApp2Status.SelectedValue = 0 Then
+                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(17).Value = Nothing
+                                    Else
+                                        If cmbApp2Status.SelectedValue = orgApp2Status Then
+                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
+                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(17).Value = Nothing
+                                            Else
+                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                            End If
+                                        Else
+                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(17).Value = dbMethod.GetServerDate
+                                        End If
+                                    End If
+
+                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                                End If
+
+                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+
+                                If cmbApp3Status.SelectedValue = 0 Then
+                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(21).Value = Nothing
+                                Else
+                                    If cmbApp3Status.SelectedValue = orgApp3Status Then
+                                        If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Nothing
+                                        Else
+                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                        End If
+                                    Else
+                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                    End If
+                                End If
+
+                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                        End Select
+                    End If
+
+                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(23).Value = userId
+                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(24).Value = dbMethod.GetServerDate
+
+                    prmHeader(25) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(25).Value = Nothing
+                    prmHeader(26) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(26).Value = Nothing
+
+                    'trx status
+                    If isAdmin Or accessLevelId = 1 Then 'will be based on routing status
+                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                    Else
+                        Select Case accessLevelId
+                            Case 2
+                                Select Case cmbApp2Status.SelectedValue
+                                    Case 0 'no selected action
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                                    Case 1 'selected approve
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = 1
+                                    Case 2 'selected `returned for revision`
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = 2
+                                End Select
+
+                            Case 3
+                                Select Case cmbApp1Status.SelectedValue
+                                    Case 0 'no selected action
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                                    Case 1 'selected approve
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = 1
+                                    Case 2 'selected `returned for revision`
+                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(27).Value = 2
+                                End Select
+
+                            Case Else
+                                prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                prmHeader(27).Value = 1 'selected done
+                        End Select
+                    End If
+
                     prmHeader(28) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                     prmHeader(28).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
                     prmHeader(29) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
@@ -1011,8 +1932,104 @@ Public Class MntTrxDetailOth
                     prmHeader(31).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                     prmHeader(32) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                     prmHeader(32).Value = txtDowntimeAccumulated.Text.Trim
-                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmHeader(33).Value = 1
+
+                    'routingstatus
+                    If isAdmin Or accessLevelId = 1 Then
+                        If orgRoutingStatusId = 2 Then 'for approval of approver 3
+                            If cmbRoutingStatus.SelectedValue = 2 Then 'for approval of approver 3
+                                Select Case cmbApp3Status.SelectedValue
+                                    Case 0
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = orgRoutingStatusId
+                                    Case 1
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = 1
+                                    Case 2
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = 6
+                                End Select
+                            Else
+                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(33).Value = cmbRoutingStatus.SelectedValue
+                            End If
+                        Else
+                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                            prmHeader(33).Value = cmbRoutingStatus.SelectedValue
+                        End If
+                    Else
+                        Select Case accessLevelId
+                            Case 2
+                                If orgRoutingStatusId = 3 Then
+                                    Select Case cmbApp2Status.SelectedValue
+                                        Case 0
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = orgRoutingStatusId
+                                        Case 1
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = 2
+                                        Case 2
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = 6
+                                    End Select
+                                ElseIf orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
+                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(33).Value = 2
+                                Else
+                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(33).Value = orgRoutingStatusId
+                                End If
+
+                            Case 3
+                                If orgRoutingStatusId = 4 Then 'for approval of approver 1
+                                    Select Case cmbApp1Status.SelectedValue
+                                        Case 0
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = orgRoutingStatusId
+                                        Case 1
+                                            If cmbApp2Name.SelectedValue = 0 Then
+                                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                                prmHeader(33).Value = 2
+                                            Else
+                                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                                prmHeader(33).Value = 3
+                                            End If
+                                        Case 2
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = 6
+                                    End Select
+                                ElseIf orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then 'on-going or returned for revision
+                                    If cmbApp2Name.SelectedValue = 0 Then 'no approver 2, directed to approver 3
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = 2
+                                    Else 'with approver 2
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = 3
+                                    End If
+                                Else 'other routing status
+                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(33).Value = orgRoutingStatusId
+                                End If
+
+                            Case Else
+                                If orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then 'on-going or returned for revision
+                                    If cmbApp1Name.SelectedValue = 0 Then 'no approver 1
+                                        If cmbApp2Name.SelectedValue = 0 Then 'no approver 2, directed to approver 3
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = 2
+                                        Else 'with approver 2
+                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(33).Value = 3
+                                        End If
+                                    Else 'with approver 1
+                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(33).Value = 4
+                                    End If
+                                Else 'other routing status
+                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(33).Value = orgRoutingStatusId
+                                End If
+                        End Select
+                    End If
 
                     If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
                         MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -1061,6 +2078,64 @@ Public Class MntTrxDetailOth
                     prmHeader(40).Value = Nothing
 
                 Else 'transaction status - on-going
+                    'approvers
+                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(11).Value = If(cmbApp1Status.SelectedValue = 1, 1, 0)
+                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+
+                    If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
+                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                        prmHeader(13).Value = Nothing
+                    Else
+                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                        prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                    End If
+
+                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(14).Value = If(String.IsNullOrWhiteSpace(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+
+                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(15).Value = If(cmbApp2Status.SelectedValue = 1, 1, 0)
+                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+
+                    If String.IsNullOrEmpty(txtApp2Date.Text.Trim) Then
+                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                        prmHeader(17).Value = Nothing
+                    Else
+                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                        prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                    End If
+
+                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(18).Value = If(String.IsNullOrWhiteSpace(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+
+                    prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(19).Value = If(cmbApp3Status.SelectedValue = 1, 1, 0)
+                    prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                    prmHeader(20).Value = cmbApp3Name.SelectedValue
+
+                    If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
+                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(21).Value = Nothing
+                    Else
+                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                    End If
+
+                    prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(22).Value = If(String.IsNullOrWhiteSpace(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+
+                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(23).Value = userId
+                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(24).Value = dbMethod.GetServerDate
+                    prmHeader(25) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(25).Value = Nothing
+                    prmHeader(26) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(26).Value = Nothing
+
                     prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
                     prmHeader(27).Value = 2
 
@@ -1096,7 +2171,7 @@ Public Class MntTrxDetailOth
                     End If
 
                     prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmHeader(33).Value = 5
+                    prmHeader(33).Value = orgRoutingStatusId
 
                     If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
                         prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
@@ -1137,6 +2212,8 @@ Public Class MntTrxDetailOth
                         prmHeader(38).Value = txtImageName.Text.Trim
                     End If
                 End If
+
+                dbMethod.ExecuteNonQuery("UpdMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
                 'attachment list is not empty
                 If lstAttachment.Count > 0 AndAlso Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
@@ -1332,28 +2409,36 @@ Public Class MntTrxDetailOth
         End Try
     End Sub
 
-    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+    Private Sub btnViewChecksheet_Click(sender As Object, e As EventArgs) Handles btnViewChecksheet.Click
         Try
-            If cmbArea.SelectedValue = 0 Then
-                DisableForm(True)
-                Exit Sub
+            If lstAttachment.Count > 0 Then
+                Process.Start(lstAttachment(0).FileName)
             End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
-            If btnDelete.Enabled = False Then
-                Exit Sub
-            End If
+    Private Sub btnViewChecksheet_Enter(sender As Object, e As EventArgs) Handles btnViewChecksheet.Enter
+        lblAttachment.ForeColor = Color.White
+        lblAttachment.BackColor = Color.DarkSlateGray
+    End Sub
 
-            If trxId > 0 Then
-                Dim question As String = String.Format("Are you sure you want to delete this record?")
+    Private Sub btnViewChecksheet_Leave(sender As Object, e As EventArgs) Handles btnViewChecksheet.Leave
+        lblAttachment.ForeColor = Color.Black
+        lblAttachment.BackColor = SystemColors.Control
+    End Sub
 
-                If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    Dim prmDel(0) As SqlParameter
-                    prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmDel(0).Value = trxId
-
-                    dbMethod.ExecuteNonQuery("DelMntTransactionHeader", CommandType.StoredProcedure, prmDel)
-
-                    Me.DialogResult = Windows.Forms.DialogResult.OK
+    Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
+        Try
+            If lstImgAttachment.Count > 0 Then
+                Process.Start(lstImgAttachment(0).FileName)
+            Else
+                'https://stackoverflow.com/questions/14866603/a-generic-error-occurred-in-gdi-when-attempting-to-use-image-save
+                If Not picImage.Image Is Nothing Then
+                    Dim bmp As Bitmap = New Bitmap(picImage.Image)
+                    bmp.Save(imgTmp)
+                    OpenImage(imgTmp, 30000) '30 seconds
                 End If
             End If
         Catch ex As Exception
@@ -1361,201 +2446,319 @@ Public Class MntTrxDetailOth
         End Try
     End Sub
 
-    Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
-        If lstAttachmentCopy.Count > 0 Then
-            Dim streamRead As System.IO.FileStream
-            Dim streamWrite As System.IO.FileStream
+    Private Sub cmbApp1Name_Enter(sender As Object, e As EventArgs) Handles cmbApp1Name.Enter
+        lblApp1Name.ForeColor = Color.White
+        lblApp1Name.BackColor = Color.DarkSlateGray
+    End Sub
 
-            For i As Integer = 0 To lstAttachmentCopy.Count - 1
-                streamRead = New System.IO.FileStream(lstAttachmentCopy(i).FileName, System.IO.FileMode.Open)
-                streamWrite = New System.IO.FileStream(attDirectory & "\" & lstAttachmentCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+    Private Sub cmbApp1Name_Leave(sender As Object, e As EventArgs) Handles cmbApp1Name.Leave
+        lblApp1Name.ForeColor = Color.Black
+        lblApp1Name.BackColor = SystemColors.Control
+    End Sub
 
-                Dim lngLen As Long = streamRead.Length - 1
-                Dim byteBuffer(4096) As Byte
-                Dim intBytesRead As Integer
+    Private Sub cmbApp1Name_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbApp1Name.SelectedValueChanged
+        Try
+            If Not cmbApp1Name.SelectedValue = 0 Then
+                Dim prmUser(0) As SqlParameter
+                prmUser(0) = New SqlParameter("UserId", SqlDbType.NVarChar)
+                prmUser(0).Value = cmbApp1Name.SelectedValue
 
-                ShowProgress("Uploading files : (0/" + (lngLen * 100).ToString + ")", lblProgress)
+                Dim rdrUser As IDataReader = dbMethod.ExecuteReader("RdSecUser", CommandType.StoredProcedure, prmUser)
 
-                While streamRead.Position < lngLen
-                    If (bgWorker.CancellationPending = True) Then
-                        e.Cancel = True
-                        Exit While
-                    End If
-
-                    bgWorker.ReportProgress(CInt(streamRead.Position / lngLen * 100))
-                    ShowProgress("Uploading attachment : (" + CInt(streamRead.Position).ToString + "/" + (lngLen * 100).ToString + ")", lblProgress)
-                    intBytesRead = (streamRead.Read(byteBuffer, 0, 4096))
-
-                    streamWrite.Write(byteBuffer, 0, intBytesRead)
+                While rdrUser.Read
+                    txtApp1Position.Text = rdrUser("WorkgroupName").ToString.Trim
                 End While
-
-                streamRead.Dispose()
-                streamWrite.Dispose()
-            Next
-        End If
-    End Sub
-
-    Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
-        If lbl.InvokeRequired Then
-            lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
-        Else
-            lbl.Text = text
-        End If
-    End Sub
-
-    Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
-
-    Private Sub bgWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWorker.ProgressChanged
-        progBar.Value = e.ProgressPercentage
-    End Sub
-
-    Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
-        If e.Cancelled = True Then
-            progBar.Visible = False
-            lblProgress.Visible = False
-
-            btnAddRow.Enabled = True
-            btnDelete.Enabled = True
-            btnViewImage.Enabled = True
-            btnBrowseImage.Enabled = True
-            btnRemoveImage.Enabled = True
-            btnViewChecksheet.Enabled = True
-            btnBrowseChecksheet.Enabled = True
-            btnRemoveChecksheet.Enabled = True
-
-            btnSave.Enabled = True
-            btnCancel.Enabled = True
-            btnDelete.Enabled = True
-            btnClose.Enabled = True
-        Else
-            Me.DialogResult = DialogResult.OK
-        End If
-    End Sub
-
-    Private Sub LoadTransactionStatus()
-        Try
-            cmbTransactionStatus.DisplayMember = "TrxStatusName"
-            cmbTransactionStatus.ValueMember = "TrxStatusId"
-            dbMethod.FillCmb("RdGenTransactionStatus", CommandType.StoredProcedure, "TrxStatusId", "TrxStatusName", cmbTransactionStatus)
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub LoadArea()
-        Try
-            cmbArea.DisplayMember = "AreaName"
-            cmbArea.ValueMember = "AreaId"
-            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< Select Area >")
-
-            AddHandler cmbArea.Validating, AddressOf cmbArea_Validating
-            AddHandler cmbArea.Validated, AddressOf cmbArea_Validated
-            AddHandler cmbArea.SelectedValueChanged, AddressOf cmbArea_SelectedValueChanged
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub FilterPicTable()
-        Try
-            If dgvDetail.Rows.Count > 0 Then
-                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 2 AND UserId NOT IN (")
-
-                For i As Integer = 0 To dgvDetail.Rows.Count - 1
-                    If i > 0 Then
-                        filterBuilder.Append(",")
-                    End If
-                    filterBuilder.Append(dgvDetail.Rows(i).Cells("ColNickname").Value)
-                Next
-
-                filterBuilder.Append(")")
-
-                Me.bsTrxUser.Filter = filterBuilder.ToString
+                rdrUser.Close()
+            Else
+                txtApp1Position.Text = String.Empty
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub GetTotalDowntime()
-        Try
-            Dim minutes As String
-            Dim totalMinutes As Integer = 0
-
-            For Each row As DataGridViewRow In dgvDetail.Rows
-                minutes = row.Cells("ColElapsedTime").Value
-                totalMinutes = totalMinutes + minutes
-            Next
-
-            txtDowntimeAccumulated.Text = totalMinutes
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Public Sub DisableForm(isDisable As Boolean)
-        If isDisable Then
-            cmbTransactionStatus.Enabled = False
-
-            txtProblem.Enabled = False
-            txtRootCause.Enabled = False
-            txtActionTaken.Enabled = False
-            txtPartsReplaced.Enabled = False
-            txtPartsNo.Enabled = False
-            txtJoNumber.Enabled = False
-            txtJoRequestor.Enabled = False
-
-            btnAddRow.Enabled = False
-            btnRemoveRow.Enabled = False
-            btnViewImage.Enabled = False
-            btnBrowseImage.Enabled = False
-            btnRemoveImage.Enabled = False
-            btnViewChecksheet.Enabled = False
-            btnBrowseChecksheet.Enabled = False
-            btnRemoveChecksheet.Enabled = False
-        Else
-            cmbTransactionStatus.Enabled = True
-
-            txtProblem.Enabled = True
-            txtRootCause.Enabled = True
-            txtActionTaken.Enabled = True
-            txtPartsReplaced.Enabled = True
-            txtJoNumber.Enabled = True
-            txtJoRequestor.Enabled = True
-
-            btnAddRow.Enabled = True
-            btnRemoveRow.Enabled = True
-            btnViewImage.Enabled = True
-            btnBrowseImage.Enabled = True
-            btnRemoveImage.Enabled = True
-            btnViewChecksheet.Enabled = True
-            btnBrowseChecksheet.Enabled = True
-            btnRemoveChecksheet.Enabled = True
+    Private Sub cmbApp1Name_Validated(sender As Object, e As EventArgs) Handles cmbApp1Name.Validated
+        If cmbApp1Name.Text.Trim.Length = 0 Or cmbApp1Name.SelectedValue = 0 Then
+            cmbApp1Name.SelectedValue = 0
         End If
     End Sub
 
-    Private Sub GetSetting(settingsId As Integer)
+    Private Sub cmbApp1Name_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
         Try
-            Dim prm(0) As SqlParameter
-            prm(0) = New SqlParameter("@SettingsId", SqlDbType.Int)
-            prm(0).Value = settingsId
+            If cmbApp1Name.Text.Trim.Length = 0 Then
+                cmbApp1Name.SelectedValue = 0
+                e.Cancel = False
+            Else
+                e.Cancel = sender.FindStringExact(sender.text) < 0
+            End If
 
-            Using rdrSetting As IDataReader = dbMethod.ExecuteReader("SELECT * FROM dbo.SysSetting WHERE SettingsId = @SettingsId", CommandType.Text, prm)
-                While rdrSetting.Read
-
-                    If Not rdrSetting.Item("ServerNetUserName") Is DBNull.Value Then
-                        serverNetUserName = rdrSetting.Item("ServerNetUserName").ToString.Trim
-                    End If
-
-                    If Not rdrSetting.Item("ServerNetUserPassword") Is DBNull.Value Then
-                        serverNetUserPassword = rdrSetting.Item("ServerNetUserPassword").ToString.Trim
-                    End If
-                End While
-                rdrSetting.Close()
-            End Using
+            If e.Cancel Then Beep()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub cmbApp1Status_Enter(sender As Object, e As EventArgs) Handles cmbApp1Status.Enter
+        lblApp1Status.ForeColor = Color.White
+        lblApp1Status.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbApp1Status_Leave(sender As Object, e As EventArgs) Handles cmbApp1Status.Leave
+        lblApp1Status.ForeColor = Color.Black
+        lblApp1Status.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbApp2Name_Enter(sender As Object, e As EventArgs) Handles cmbApp2Name.Enter
+        lblApp2Name.ForeColor = Color.White
+        lblApp2Name.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbApp2Name_Leave(sender As Object, e As EventArgs) Handles cmbApp2Name.Leave
+        lblApp2Name.ForeColor = Color.Black
+        lblApp2Name.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbApp2Name_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbApp2Name.SelectedValueChanged
+        Try
+            If Not cmbApp2Name.SelectedIndex = 0 Then
+                Dim prmUser(0) As SqlParameter
+                prmUser(0) = New SqlParameter("UserId", SqlDbType.NVarChar)
+                prmUser(0).Value = cmbApp2Name.SelectedValue
+
+                Dim rdrUser As IDataReader = dbMethod.ExecuteReader("RdSecUser", CommandType.StoredProcedure, prmUser)
+
+                While rdrUser.Read
+                    txtApp2Position.Text = rdrUser("WorkgroupName").ToString.Trim
+                End While
+                rdrUser.Close()
+            Else
+                txtApp2Position.Text = String.Empty
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbApp2Name_Validated(sender As Object, e As EventArgs) Handles cmbApp2Name.Validated
+        If cmbApp2Name.Text.Trim.Length = 0 Or cmbApp2Name.SelectedValue = 0 Then
+            cmbApp2Name.SelectedValue = 0
+        End If
+    End Sub
+
+    Private Sub cmbApp2Name_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            If cmbApp2Name.Text.Trim.Length = 0 Then
+                cmbApp2Name.SelectedValue = 0
+                e.Cancel = False
+            Else
+                e.Cancel = sender.FindStringExact(sender.text) < 0
+            End If
+
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbApp2Status_Enter(sender As Object, e As EventArgs) Handles cmbApp2Status.Enter
+        lblApp2Status.ForeColor = Color.White
+        lblApp2Status.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbApp2Status_Leave(sender As Object, e As EventArgs) Handles cmbApp2Status.Leave
+        lblApp2Status.ForeColor = Color.Black
+        lblApp2Status.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbApp3Name_Enter(sender As Object, e As EventArgs) Handles cmbApp3Name.Enter
+        lblApp3Name.ForeColor = Color.White
+        lblApp3Name.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbApp3Name_Leave(sender As Object, e As EventArgs) Handles cmbApp3Name.Leave
+        lblApp3Name.ForeColor = Color.Black
+        lblApp3Name.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbApp3Name_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbApp3Name.SelectedValueChanged
+        Try
+            If Not cmbApp3Name.SelectedValue = 0 Then
+                Dim prmUser(0) As SqlParameter
+                prmUser(0) = New SqlParameter("UserId", SqlDbType.NVarChar)
+                prmUser(0).Value = cmbApp3Name.SelectedValue
+
+                Dim rdrUser As IDataReader = dbMethod.ExecuteReader("RdSecUser", CommandType.StoredProcedure, prmUser)
+
+                While rdrUser.Read
+                    txtApp3Position.Text = rdrUser("WorkgroupName").ToString.Trim
+                End While
+                rdrUser.Close()
+            Else
+                txtApp3Position.Text = String.Empty
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbApp3Name_Validated(sender As Object, e As EventArgs) Handles cmbApp3Name.Validated
+        If cmbApp3Name.Text.Trim.Length = 0 Or cmbApp3Name.SelectedValue = 0 Then
+            cmbApp3Name.SelectedValue = 0
+        End If
+    End Sub
+
+    Private Sub cmbApp3Name_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            If cmbApp3Name.Text.Trim.Length = 0 Then
+                cmbApp3Name.SelectedValue = 0
+                e.Cancel = False
+            Else
+                e.Cancel = sender.FindStringExact(sender.text) < 0
+            End If
+
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbApp3Status_Enter(sender As Object, e As EventArgs) Handles cmbApp3Status.Enter
+        lblApp3Status.ForeColor = Color.White
+        lblApp3Status.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbApp3Status_Leave(sender As Object, e As EventArgs) Handles cmbApp3Status.Leave
+        lblApp3Status.ForeColor = Color.Black
+        lblApp3Status.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbArea_Enter(sender As Object, e As EventArgs) Handles cmbArea.Enter
+        lblArea.ForeColor = Color.White
+        lblArea.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbArea_Leave(sender As Object, e As EventArgs) Handles cmbArea.Leave
+        lblArea.ForeColor = Color.Black
+        lblArea.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbArea_SelectedValueChanged(sender As Object, e As EventArgs)
+        Try
+            If cmbArea.SelectedValue = 0 Then
+                DisableForm(True)
+            Else
+                DisableForm(False)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbArea_Validated(sender As Object, e As EventArgs)
+        Try
+            If cmbArea.SelectedValue = 0 Then
+                DisableForm(True)
+            Else
+                DisableForm(False)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbArea_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbArea.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbRoutingStatus_SelectedValueChanged(sender As Object, e As EventArgs)
+        Try
+            Select Case cmbRoutingStatus.SelectedValue
+                Case 7 'disapproved
+                    MessageBox.Show("Disapproved status is inactive. Please select another status.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    LoadRoutingStatus(orgRoutingStatusId)
+                    Me.ActiveControl = cmbRoutingStatus
+
+                Case 6 'returned for revision
+                    cmbTransactionStatus.SelectedValue = 2 'set to on-going
+
+                    If orgRoutingStatusId = 2 Then
+                        cmbApp3Status.SelectedValue = 2
+                    Else
+                        cmbApp3Status.SelectedValue = 0
+                    End If
+
+                    cmbApp2Status.SelectedValue = 0
+                    cmbApp1Status.SelectedValue = 0
+
+                Case 5 'on-going
+                    cmbTransactionStatus.SelectedValue = 2 'set to on-going
+                    cmbApp3Status.SelectedValue = 0
+                    cmbApp2Status.SelectedValue = 0
+                    cmbApp1Status.SelectedValue = 0
+
+                Case 4 'for approval of approver 1
+                    If cmbApp1Name.SelectedValue = 0 Then
+                        MessageBox.Show("No selected approver 1.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        LoadRoutingStatus(orgRoutingStatusId)
+                        Me.ActiveControl = cmbApp1Name
+                    End If
+
+                    cmbTransactionStatus.SelectedValue = 1
+                    cmbApp3Status.SelectedValue = 0
+                    cmbApp2Status.SelectedValue = 0
+                    cmbApp1Status.SelectedValue = 0
+
+                Case 3 'for approval of approver 2
+                    If cmbApp2Name.SelectedValue = 0 Then
+                        MessageBox.Show("No selected approver 2.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        LoadRoutingStatus(orgRoutingStatusId)
+                        Me.ActiveControl = cmbApp2Name
+                    End If
+
+                    cmbTransactionStatus.SelectedValue = 1
+                    cmbApp3Status.SelectedValue = 0
+                    cmbApp2Status.SelectedValue = 0
+
+                    cmbApp1Status.SelectedValue = orgApp1Status
+
+                Case 2 'for approval of approver 3
+                    cmbTransactionStatus.SelectedValue = 1
+                    cmbApp3Status.SelectedValue = 0
+
+                    cmbApp2Status.SelectedValue = orgApp2Status
+                    cmbApp1Status.SelectedValue = orgApp1Status
+
+                Case 1
+                    cmbTransactionStatus.SelectedValue = 1
+                    cmbApp3Status.SelectedValue = 1
+
+                    cmbApp2Status.SelectedValue = orgApp2Status
+                    cmbApp1Status.SelectedValue = orgApp1Status
+            End Select
+
+            If cmbRoutingStatus.SelectedValue <> orgRoutingStatusId Then
+                cmbApp3Status.Enabled = False
+            Else
+                cmbApp3Status.Enabled = True
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbTransactionStatus_Enter(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Enter
+        lblTransactionStatus.ForeColor = Color.White
+        lblTransactionStatus.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbTransactionStatus_Leave(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Leave
+        lblTransactionStatus.ForeColor = Color.Black
+        lblTransactionStatus.BackColor = SystemColors.Control
     End Sub
 
     Private Function CreateTrxDetail() As DataTable
@@ -1608,34 +2811,571 @@ Public Class MntTrxDetailOth
         Return dtTrxDetail
     End Function
 
-    Private Sub cmbTransactionStatus_Enter(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Enter
-        lblTransactionStatus.ForeColor = Color.White
-        lblTransactionStatus.BackColor = Color.DarkSlateGray
+    Private Sub DeleteTempImg(ByVal sender As Object, ByVal e As System.EventArgs)
+        If File.Exists(imgTmp) Then
+            File.Delete(imgTmp)
+        End If
     End Sub
 
-    Private Sub cmbTransactionStatus_Leave(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Leave
-        lblTransactionStatus.ForeColor = Color.Black
-        lblTransactionStatus.BackColor = SystemColors.Control
+    Private Sub dgvDetail_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvDetail.DataError
+        e.Cancel = False
     End Sub
 
-    Private Sub txtProblem_Enter(sender As Object, e As EventArgs) Handles txtProblem.Enter
-        lblProblem.ForeColor = Color.White
-        lblProblem.BackColor = Color.DarkSlateGray
+    Private Sub dgvDetail_Enter(sender As Object, e As EventArgs) Handles dgvDetail.Enter
+        lblActivityLog.ForeColor = Color.White
+        lblActivityLog.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub txtProblem_Leave(sender As Object, e As EventArgs) Handles txtProblem.Leave
-        lblProblem.ForeColor = Color.Black
-        lblProblem.BackColor = SystemColors.Control
+    Private Sub dgvDetail_Leave(sender As Object, e As EventArgs) Handles dgvDetail.Leave
+        lblActivityLog.ForeColor = Color.Black
+        lblActivityLog.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub txtRootCause_Enter(sender As Object, e As EventArgs) Handles txtRootCause.Enter
-        lblRootCause.ForeColor = Color.White
-        lblRootCause.BackColor = Color.DarkSlateGray
+    Private Sub dgvPic_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvPic.DataBindingComplete
+        For Each row As DataRow In dtTrxUser.Rows
+            For i As Integer = 0 To dgvPic.Rows.Count - 1
+                If dgvPic.Rows(i).Cells("ColUserId").Value = row("UserId") Then
+                    dgvPic.Rows(i).Cells("ColIsSelected").Value = True
+                End If
+            Next
+        Next
     End Sub
 
-    Private Sub txtRootCause_Leave(sender As Object, e As EventArgs) Handles txtRootCause.Leave
-        lblRootCause.ForeColor = Color.Black
-        lblRootCause.BackColor = SystemColors.Control
+    Private Sub dgvPic_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvPic.DataError
+        e.Cancel = False
+    End Sub
+
+    Private Sub dgvPic_Enter(sender As Object, e As EventArgs) Handles dgvPic.Enter
+        lblPic.ForeColor = Color.White
+        lblPic.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub dgvPic_Leave(sender As Object, e As EventArgs) Handles dgvPic.Leave
+        lblPic.ForeColor = Color.Black
+        lblPic.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub dgvPic_SelectionChanged(sender As Object, e As EventArgs) Handles dgvPic.SelectionChanged
+        dgvPic.ClearSelection()
+    End Sub
+
+    Private Sub FilterPicTable()
+        Try
+            If dgvDetail.Rows.Count > 0 Then
+                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 2 AND UserId NOT IN (")
+
+                For i As Integer = 0 To dgvDetail.Rows.Count - 1
+                    If i > 0 Then
+                        filterBuilder.Append(",")
+                    End If
+                    filterBuilder.Append(dgvDetail.Rows(i).Cells("ColNickname").Value)
+                Next
+
+                filterBuilder.Append(")")
+
+                Me.bsTrxUser.Filter = filterBuilder.ToString
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub frmMntTrxDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode.Equals(Keys.F8) Then 'delete
+            e.Handled = True
+            If btnDelete.Enabled = True Then
+                btnDelete.PerformClick()
+            End If
+        ElseIf e.KeyCode.Equals(Keys.F10) Then 'save
+            e.Handled = True
+            If btnSave.Enabled = True Then
+                btnSave.PerformClick()
+            End If
+        End If
+    End Sub
+
+    Private Sub frmMntTrxDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Try
+            If trxId = 0 Then
+                Me.Text = "New Activity Entry"
+
+                txtTransactionDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", dbMethod.GetServerDate)
+
+                LoadRoutingStatus(5)
+
+                btnDelete.Enabled = False
+
+                DisableForm(True)
+                Me.ActiveControl = cmbArea
+            Else
+                Me.Text = "Activity No. " & trxId
+
+                For Each row As DataRow In dtTrxHeader.Rows
+                    'transaction header
+                    LoadRoutingStatus(row("RoutingStatusId"))
+                    orgRoutingStatusId = row("RoutingStatusId")
+
+                    LoadRoutingStatus(row("RoutingStatusId"))
+                    orgRoutingStatusId = row("RoutingStatusId")
+
+                    If isAdmin Or accessLevelId = 1 Then
+                        txtRoutingStatus.Visible = False
+                        cmbRoutingStatus.Visible = True
+                    End If
+
+                    txtTransactionDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("TrxDate"))
+                    cmbTransactionStatus.SelectedValue = row("TrxStatusId")
+                    cmbArea.SelectedValue = row("AreaId")
+                    orgAreaId = row("AreaId")
+
+                    If Not row("TotalAccumulatedRuntime") Is DBNull.Value Then
+                        txtRuntimeAccumulated.Text = row("TotalAccumulatedRuntime")
+                    End If
+
+                    If Not row("TotalAccumulatedDowntime") Is DBNull.Value Then
+                        txtDowntimeAccumulated.Text = row("TotalAccumulatedDowntime")
+                    End If
+
+                    If Not row("Problem") Is DBNull.Value Then
+                        txtProblem.Text = row("Problem")
+                    End If
+
+                    If Not row("RootCause") Is DBNull.Value Then
+                        txtRootCause.Text = row("RootCause")
+                    End If
+
+                    If Not row("ActionTaken") Is DBNull.Value Then
+                        txtActionTaken.Text = row("ActionTaken")
+                    End If
+
+                    If Not row("JoNumber") Is DBNull.Value Then
+                        txtJoNumber.Text = row("JoNumber")
+                    End If
+
+                    If Not row("JoRequestor") Is DBNull.Value Then
+                        txtJoRequestor.Text = row("JoRequestor")
+                    End If
+
+                    If Not row("Image") Is DBNull.Value Then
+                        bite = row("Image")
+                        Using ms As New MemoryStream(bite)
+                            picImage.Image = Image.FromStream(ms)
+                        End Using
+                    End If
+
+                    If Not row("ImageName") Is DBNull.Value Then
+                        txtImageName.Text = row("ImageName")
+                    End If
+
+                    If Not row("ModifiedBy") Is DBNull.Value Then
+                        orgModifiedBy = row("ModifiedBy")
+                    Else
+                        orgModifiedBy = Nothing
+                    End If
+
+                    If Not row("ModifiedDate") Is DBNull.Value Then
+                        orgModifiedDate = row("ModifiedDate")
+                    Else
+                        orgModifiedDate = Nothing
+                    End If
+
+                    orgApp3Status = IIf(row("ApproverIsApproved3") = True, 1, 0)
+                    orgApp2Status = IIf(row("ApproverIsApproved2") = True, 1, 0)
+                    orgApp1Status = IIf(row("ApproverIsApproved1") = True, 1, 0)
+
+                    If row("ApproverIsApproved3") = True Then
+                        cmbApp3Status.SelectedValue = 1
+                    Else
+                        If Not row("ApproverDate3") Is DBNull.Value Then 'returned
+                            cmbApp3Status.SelectedValue = 2
+                        Else
+                            cmbApp3Status.SelectedValue = 0
+                        End If
+                    End If
+
+                    If row("ApproverIsApproved2") = True Then
+                        cmbApp2Status.SelectedValue = 1
+                    Else
+                        If Not row("ApproverDate2") Is DBNull.Value Then 'returned
+                            cmbApp2Status.SelectedValue = 2
+                        Else
+                            cmbApp2Status.SelectedValue = 0
+                        End If
+                    End If
+
+                    If row("ApproverIsApproved1") = True Then
+                        cmbApp1Status.SelectedValue = 1
+                    Else
+                        If Not row("ApproverDate1") Is DBNull.Value Then 'returned
+                            cmbApp1Status.SelectedValue = 2
+                        Else
+                            cmbApp1Status.SelectedValue = 0
+                        End If
+                    End If
+
+                    cmbApp3Name.SelectedValue = row("ApproverId3")
+
+                    If row("ApproverId2") Is DBNull.Value Then
+                        cmbApp2Name.SelectedValue = 0
+                    Else
+                        cmbApp2Name.SelectedValue = row("ApproverId2")
+                    End If
+
+                    If row("ApproverId1") Is DBNull.Value Then
+                        cmbApp1Name.SelectedValue = 0
+                    Else
+                        cmbApp1Name.SelectedValue = row("ApproverId1")
+                    End If
+
+                    If Not row("ApproverDate3") Is DBNull.Value Then
+                        txtApp3Date.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("ApproverDate3"))
+                    End If
+
+                    If Not row("ApproverDate2") Is DBNull.Value Then
+                        txtApp2Date.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("ApproverDate2"))
+                    End If
+
+                    If Not row("ApproverDate1") Is DBNull.Value Then
+                        txtApp1Date.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("ApproverDate1"))
+                    End If
+
+                    If Not row("ApproverRemarks3") Is DBNull.Value Then
+                        txtApp3Remarks.Text = row("ApproverRemarks3").ToString.Trim
+                    End If
+
+                    If Not row("ApproverRemarks2") Is DBNull.Value Then
+                        txtApp2Remarks.Text = row("ApproverRemarks2").ToString.Trim
+                    End If
+
+                    If Not row("ApproverRemarks1") Is DBNull.Value Then
+                        txtApp1Remarks.Text = row("ApproverRemarks1").ToString.Trim
+                    End If
+
+                    If Not row("ModifiedBy") Is DBNull.Value Then
+                        lblModifiedBy.Visible = True
+                        txtModifiedBy.Visible = True
+                        txtModifiedBy.Text = GetUserName(CInt(row("ModifiedBy")))
+                    End If
+
+                    If Not row("ModifiedDate") Is DBNull.Value Then
+                        lblModifiedDate.Visible = True
+                        txtModifiedDate.Visible = True
+                        txtModifiedDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("ModifiedDate"))
+                    End If
+                Next
+
+                For Each row As DataRow In dtTrxSparePart.Rows
+                    If Not row("SparePartName") Is DBNull.Value AndAlso Not row("SparePartNo") Is DBNull.Value Then
+                        txtPartsReplaced.Text = row("SparePartName")
+                        txtPartsNo.Text = row("SparePartNo")
+                    End If
+                Next
+
+                If Not dtTrxHeader.Rows(0).Item("FileName") Is DBNull.Value Then
+                    Dim fileName As String = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
+                    Dim oldAttachment As New CsAttachment(Path.Combine(attDirectory, fileName), fileName, Path.GetExtension(Path.Combine(attDirectory, fileName)))
+                    lstAttachment.Add(oldAttachment)
+                    txtAttachment.Text = fileName
+                    orgFilename = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
+                End If
+
+                imgTmp = Path.Combine(IO.Path.GetTempPath, "tmpImg" & Path.GetExtension(txtImageName.Text))
+
+                'decide what control should receive focus
+                If isAdmin Or accessLevelId = 1 Then
+                    If cmbApp3Name.SelectedValue = userId AndAlso orgRoutingStatusId = 2 Then
+                        Me.ActiveControl = txtApp3Remarks
+                        txtApp3Remarks.Select(txtApp3Remarks.Text.ToString.Trim.Length, 0)
+                    Else
+                        Me.ActiveControl = txtProblem
+                        txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
+                    End If
+                Else
+                    Select Case accessLevelId
+                        Case 2
+                            If orgRoutingStatusId = 3 AndAlso cmbApp2Name.SelectedValue = userId Then
+                                Me.ActiveControl = txtApp2Remarks
+                                txtApp2Remarks.Select(txtApp2Remarks.Text.ToString.Trim.Length, 0)
+                            ElseIf orgRoutingStatusId = 4 Or orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
+                                Me.ActiveControl = txtProblem
+                                txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
+                            Else
+                                Me.ActiveControl = btnClose
+                            End If
+
+                        Case 3
+                            If orgRoutingStatusId = 4 AndAlso cmbApp1Name.SelectedValue = userId Then
+                                Me.ActiveControl = txtApp1Remarks
+                                txtApp1Remarks.Select(txtApp1Remarks.Text.ToString.Trim.Length, 0)
+                            ElseIf orgRoutingStatusId = 3 Or orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
+                                Me.ActiveControl = txtProblem
+                                txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
+                            Else
+                                Me.ActiveControl = btnClose
+                            End If
+
+                        Case Else
+                            If orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
+                                Me.ActiveControl = txtProblem
+                                txtProblem.Select(txtProblem.Text.ToString.Trim.Length, 0)
+                            Else
+                                Me.ActiveControl = btnClose
+                            End If
+                    End Select
+                End If
+            End If
+
+            If btnCancel.Enabled = True Then
+                Me.CancelButton = btnCancel
+            Else
+                Me.CancelButton = btnClose
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub frmMntTrxDetailOth_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        impersonation.UndoImpersonateUser()
+    End Sub
+    Private Sub GetSetting(settingsId As Integer)
+        Try
+            Dim prm(0) As SqlParameter
+            prm(0) = New SqlParameter("@SettingsId", SqlDbType.Int)
+            prm(0).Value = settingsId
+
+            Using rdrSetting As IDataReader = dbMethod.ExecuteReader("SELECT * FROM dbo.SysSetting WHERE SettingsId = @SettingsId", CommandType.Text, prm)
+                While rdrSetting.Read
+
+                    If Not rdrSetting.Item("ServerNetUserName") Is DBNull.Value Then
+                        serverNetUserName = rdrSetting.Item("ServerNetUserName").ToString.Trim
+                    End If
+
+                    If Not rdrSetting.Item("ServerNetUserPassword") Is DBNull.Value Then
+                        serverNetUserPassword = rdrSetting.Item("ServerNetUserPassword").ToString.Trim
+                    End If
+                End While
+                rdrSetting.Close()
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub GetTotalDowntime()
+        Try
+            Dim minutes As String
+            Dim totalMinutes As Integer = 0
+
+            For Each row As DataGridViewRow In dgvDetail.Rows
+                minutes = row.Cells("ColElapsedTime").Value
+                totalMinutes = totalMinutes + minutes
+            Next
+
+            txtDowntimeAccumulated.Text = totalMinutes
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Function GetUserName(userId As Integer) As String
+        Dim username As String = String.Empty
+
+        Try
+            Dim prmUser(0) As SqlParameter
+            prmUser(0) = New SqlParameter("@UserId", SqlDbType.Int)
+            prmUser(0).Value = userId
+            username = dbMethod.ExecuteScalar("SELECT TRIM(UserName) AS UserName FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmUser)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        Return username
+    End Function
+
+    Private Sub LoadApproverAction()
+        Try
+            dicApp3Action.Add(" < Select Action > ", 0)
+            dicApp3Action.Add("Approved", 1)
+            dicApp3Action.Add("Return for revision", 2)
+            cmbApp3Status.DisplayMember = "Key"
+            cmbApp3Status.ValueMember = "Value"
+            cmbApp3Status.DataSource = New BindingSource(dicApp3Action, Nothing)
+
+            dicApp2Action.Add(" < Select Action > ", 0)
+            dicApp2Action.Add("Approved", 1)
+            dicApp2Action.Add("Return for revision", 2)
+            cmbApp2Status.DisplayMember = "Key"
+            cmbApp2Status.ValueMember = "Value"
+            cmbApp2Status.DataSource = New BindingSource(dicApp2Action, Nothing)
+
+            dicApp1Action.Add(" < Select Action > ", 0)
+            dicApp1Action.Add("Approved", 1)
+            dicApp1Action.Add("Return for revision", 2)
+            cmbApp1Status.DisplayMember = "Key"
+            cmbApp1Status.ValueMember = "Value"
+            cmbApp1Status.DataSource = New BindingSource(dicApp1Action, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadApprovers()
+        Try
+            Dim prmApp3(0) As SqlParameter
+            prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+            prmApp3(0).Value = 1
+
+            dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+            Dim prmApp2(1) As SqlParameter
+            prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+            prmApp2(0).Value = 2
+            prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmApp2(1).Value = 2
+
+            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
+
+            Dim prmApp1(1) As SqlParameter
+            prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+            prmApp1(0).Value = 3
+            prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmApp1(1).Value = 2
+
+            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< None >", prmApp1)
+
+            If cmbApp3Name.Items.Count = 1 Then
+                cmbApp3Name.SelectedIndex = 0
+            Else
+                cmbApp3Name.SelectedIndex = 1
+            End If
+
+            If cmbApp2Name.Items.Count = 2 Then
+                cmbApp2Name.SelectedIndex = 1
+            ElseIf cmbApp2Name.Items.Count > 2 Then
+                cmbApp2Name.SelectedValue = 0
+            End If
+
+            If cmbApp1Name.Items.Count = 2 Then
+                cmbApp1Name.SelectedIndex = 1
+            ElseIf cmbApp1Name.Items.Count > 2 Then
+                cmbApp1Name.SelectedValue = 0
+            End If
+
+            AddHandler cmbApp3Name.Validating, AddressOf cmbApp3Name_Validating
+            AddHandler cmbApp2Name.Validating, AddressOf cmbApp2Name_Validating
+            AddHandler cmbApp1Name.Validating, AddressOf cmbApp1Name_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadArea()
+        Try
+            cmbArea.DisplayMember = "AreaName"
+            cmbArea.ValueMember = "AreaId"
+            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< Select Area >")
+
+            AddHandler cmbArea.Validating, AddressOf cmbArea_Validating
+            AddHandler cmbArea.Validated, AddressOf cmbArea_Validated
+            AddHandler cmbArea.SelectedValueChanged, AddressOf cmbArea_SelectedValueChanged
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadRoutingStatus(Optional routingStatusId As Integer = 0)
+        Try
+            dbMethod.FillCmb("RdGenRoutingStatus", CommandType.StoredProcedure, "RoutingStatusId", "RoutingStatusName", cmbRoutingStatus)
+
+            If Not routingStatusId = 0 Then
+                cmbRoutingStatus.SelectedValue = routingStatusId
+                txtRoutingStatus.Text = cmbRoutingStatus.Text
+            End If
+
+            AddHandler cmbRoutingStatus.SelectedValueChanged, AddressOf cmbRoutingStatus_SelectedValueChanged
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadTransactionStatus()
+        Try
+            cmbTransactionStatus.DisplayMember = "TrxStatusName"
+            cmbTransactionStatus.ValueMember = "TrxStatusId"
+            dbMethod.FillCmb("RdGenTransactionStatus", CommandType.StoredProcedure, "TrxStatusId", "TrxStatusName", cmbTransactionStatus)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ofdAttachment_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdAttachment.FileOk
+        Try
+            If Not String.IsNullOrEmpty(txtAttachment.Text.Trim) Then
+                If lstAttachment.Count > 0 Then lstAttachment.RemoveAt(0)
+                txtAttachment.Text = String.Empty
+            End If
+
+            Dim checksheet As New CsAttachment(ofdAttachment.FileName, ofdAttachment.SafeFileName, Path.GetExtension(ofdAttachment.SafeFileName).ToLower)
+            lstAttachment.Add(checksheet)
+
+            txtAttachment.Text = Path.GetFileName(ofdAttachment.FileName)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
+        Try
+            If Not picImage.Image Is Nothing Then
+                If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
+                picImage.Image.Dispose()
+                picImage.Image = Nothing
+                txtImageName.Text = String.Empty
+            End If
+
+            Dim attachment As New ImgAttachment(ofdImage.FileName, ofdImage.SafeFileName, Path.GetExtension(ofdImage.SafeFileName).ToLower)
+            lstImgAttachment.Add(attachment)
+
+            Using ms As New MemoryStream
+                Using bmp As New Bitmap(lstImgAttachment(0).FileName)
+                    Dim jpgEncoder As ImageCodecInfo = dbMain.GetEncoder(ImageFormat.Jpeg)
+                    Dim myEncoder As Imaging.Encoder = System.Drawing.Imaging.Encoder.Quality
+
+                    'create an encoder parameters object
+                    'an encoder parameters object has an array of encoderparameter objects; in this case, there is only one encoderparameter object in the array.
+                    Dim myEncoderParameters As New EncoderParameters(1)
+                    'save the bitmap as a JPG file with quality level compression
+                    Dim myEncoderParameter = New EncoderParameter(myEncoder, 500L)
+                    myEncoderParameters.Param(0) = myEncoderParameter
+                    bmp.Save(ms, jpgEncoder, myEncoderParameters)
+                End Using
+
+                picImage.Image = Image.FromStream(ms)
+            End Using
+
+            txtImageName.Text = lstImgAttachment(0).SafeName
+            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImgAttachment(0).FileName)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub pnlImage_Enter(sender As Object, e As EventArgs) Handles pnlImage.Enter
+        lblImageAttachment.ForeColor = Color.White
+        lblImageAttachment.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub pnlImage_Leave(sender As Object, e As EventArgs) Handles pnlImage.Leave
+        lblImageAttachment.ForeColor = Color.Black
+        lblImageAttachment.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
+        If lbl.InvokeRequired Then
+            lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
+        Else
+            lbl.Text = text
+        End If
     End Sub
 
     Private Sub txtActionTaken_Enter(sender As Object, e As EventArgs) Handles txtActionTaken.Enter
@@ -1646,26 +3386,6 @@ Public Class MntTrxDetailOth
     Private Sub txtActionTaken_Leave(sender As Object, e As EventArgs) Handles txtActionTaken.Leave
         lblActionTaken.ForeColor = Color.Black
         lblActionTaken.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub txtPartsReplaced_Enter(sender As Object, e As EventArgs) Handles txtPartsReplaced.Enter
-        lblPartsReplaced.ForeColor = Color.White
-        lblPartsReplaced.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub txtPartsReplaced_Leave(sender As Object, e As EventArgs) Handles txtPartsReplaced.Leave
-        lblPartsReplaced.ForeColor = Color.Black
-        lblPartsReplaced.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub txtPartsNo_Enter(sender As Object, e As EventArgs) Handles txtPartsNo.Enter
-        lblPartsNo.ForeColor = Color.White
-        lblPartsNo.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub txtPartsNo_Leave(sender As Object, e As EventArgs) Handles txtPartsNo.Leave
-        lblPartsNo.ForeColor = Color.Black
-        lblPartsNo.BackColor = SystemColors.Control
     End Sub
 
     Private Sub txtJoNumber_Enter(sender As Object, e As EventArgs) Handles txtJoNumber.Enter
@@ -1688,94 +3408,85 @@ Public Class MntTrxDetailOth
         lblJoRequestor.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub dgvDetail_Enter(sender As Object, e As EventArgs) Handles dgvDetail.Enter
-        lblActivityLog.ForeColor = Color.White
-        lblActivityLog.BackColor = Color.DarkSlateGray
+    Private Sub txtPartsNo_Enter(sender As Object, e As EventArgs) Handles txtPartsNo.Enter
+        lblPartsNo.ForeColor = Color.White
+        lblPartsNo.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub dgvDetail_Leave(sender As Object, e As EventArgs) Handles dgvDetail.Leave
-        lblActivityLog.ForeColor = Color.Black
-        lblActivityLog.BackColor = SystemColors.Control
+    Private Sub txtPartsNo_Leave(sender As Object, e As EventArgs) Handles txtPartsNo.Leave
+        lblPartsNo.ForeColor = Color.Black
+        lblPartsNo.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub btnAddRow_Enter(sender As Object, e As EventArgs) Handles btnAddRow.Enter
-        lblActivityLog.ForeColor = Color.White
-        lblActivityLog.BackColor = Color.DarkSlateGray
+    Private Sub txtPartsReplaced_Enter(sender As Object, e As EventArgs) Handles txtPartsReplaced.Enter
+        lblPartsReplaced.ForeColor = Color.White
+        lblPartsReplaced.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub btnAddRow_Leave(sender As Object, e As EventArgs) Handles btnAddRow.Leave
-        lblActivityLog.ForeColor = Color.Black
-        lblActivityLog.BackColor = SystemColors.Control
+    Private Sub txtPartsReplaced_Leave(sender As Object, e As EventArgs) Handles txtPartsReplaced.Leave
+        lblPartsReplaced.ForeColor = Color.Black
+        lblPartsReplaced.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub btnRemoveRow_Enter(sender As Object, e As EventArgs) Handles btnRemoveRow.Enter
-        lblActivityLog.ForeColor = Color.White
-        lblActivityLog.BackColor = Color.DarkSlateGray
+    Private Sub txtPartsReplaced_TextChanged(sender As Object, e As EventArgs) Handles txtPartsReplaced.TextChanged
+        If trxId = 0 Then
+            If txtPartsReplaced.Text.Trim.Length > 0 Then
+                txtPartsNo.Enabled = True
+            Else
+                txtPartsNo.Enabled = False
+            End If
+        Else
+            If isAdmin Or accessLevelId = 1 Then
+                If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                    txtPartsNo.Enabled = False
+                Else
+                    txtPartsNo.Enabled = True
+                End If
+            Else
+                Select Case accessLevelId
+                    Case 2, 3  'mgr, asm, sv, asv
+                        Select Case orgRoutingStatusId
+                            Case 6, 5, 4, 3 'from `returned for revision` to `for approval of approver 2`
+                                If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                    txtPartsNo.Enabled = False
+                                Else
+                                    txtPartsNo.Enabled = True
+                                End If
+                            Case Else 'from `for approval of approver 3` to `completed`
+                                txtPartsNo.Enabled = False
+                        End Select
+                    Case Else
+                        Select Case orgRoutingStatusId
+                            Case 6, 5 'from `returned for revision` to `on-going`
+                                If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
+                                    txtPartsNo.Enabled = False
+                                Else
+                                    txtPartsNo.Enabled = True
+                                End If
+                            Case Else 'from `for approval of approver 1` to `completed`
+                                txtPartsNo.Enabled = False
+                        End Select
+                End Select
+            End If
+        End If
+    End Sub
+    Private Sub txtProblem_Enter(sender As Object, e As EventArgs) Handles txtProblem.Enter
+        lblProblem.ForeColor = Color.White
+        lblProblem.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub btnRemoveRow_Leave(sender As Object, e As EventArgs) Handles btnRemoveRow.Leave
-        lblActivityLog.ForeColor = Color.Black
-        lblActivityLog.BackColor = SystemColors.Control
+    Private Sub txtProblem_Leave(sender As Object, e As EventArgs) Handles txtProblem.Leave
+        lblProblem.ForeColor = Color.Black
+        lblProblem.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub pnlImage_Enter(sender As Object, e As EventArgs) Handles pnlImage.Enter
-        lblImageAttachment.ForeColor = Color.White
-        lblImageAttachment.BackColor = Color.DarkSlateGray
+    Private Sub txtRootCause_Enter(sender As Object, e As EventArgs) Handles txtRootCause.Enter
+        lblRootCause.ForeColor = Color.White
+        lblRootCause.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub pnlImage_Leave(sender As Object, e As EventArgs) Handles pnlImage.Leave
-        lblImageAttachment.ForeColor = Color.Black
-        lblImageAttachment.BackColor = SystemColors.Control
+    Private Sub txtRootCause_Leave(sender As Object, e As EventArgs) Handles txtRootCause.Leave
+        lblRootCause.ForeColor = Color.Black
+        lblRootCause.BackColor = SystemColors.Control
     End Sub
-
-    Private Sub dgvPic_Enter(sender As Object, e As EventArgs) Handles dgvPic.Enter
-        lblPic.ForeColor = Color.White
-        lblPic.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub dgvPic_Leave(sender As Object, e As EventArgs) Handles dgvPic.Leave
-        lblPic.ForeColor = Color.Black
-        lblPic.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub btnViewChecksheet_Enter(sender As Object, e As EventArgs) Handles btnViewChecksheet.Enter
-        lblAttachment.ForeColor = Color.White
-        lblAttachment.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub btnViewChecksheet_Leave(sender As Object, e As EventArgs) Handles btnViewChecksheet.Leave
-        lblAttachment.ForeColor = Color.Black
-        lblAttachment.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub btnBrowseChecksheet_Enter(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Enter
-        lblAttachment.ForeColor = Color.White
-        lblAttachment.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub btnBrowseChecksheet_Leave(sender As Object, e As EventArgs) Handles btnBrowseChecksheet.Leave
-        lblAttachment.ForeColor = Color.Black
-        lblAttachment.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub btnRemoveChecksheet_Enter(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Enter
-        lblAttachment.ForeColor = Color.White
-        lblAttachment.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub btnRemoveChecksheet_Leave(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Leave
-        lblAttachment.ForeColor = Color.Black
-        lblAttachment.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub cmbArea_Enter(sender As Object, e As EventArgs) Handles cmbArea.Enter
-        lblArea.ForeColor = Color.White
-        lblArea.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub cmbArea_Leave(sender As Object, e As EventArgs) Handles cmbArea.Leave
-        lblArea.ForeColor = Color.Black
-        lblArea.BackColor = SystemColors.Control
-    End Sub
-
 End Class

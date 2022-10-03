@@ -7,7 +7,8 @@ Public Class MntMch
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
-    Private dtSchedule As New DataTable
+    Private dicRemarks As New Dictionary(Of String, Object)
+    Private dtMachine As New DataTable
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
     Private isFilterByMachineName As Boolean = False
@@ -16,6 +17,7 @@ Public Class MntMch
     Private isFilterByMachineSubStatus As Boolean = False
     Private isFilterByGroup As Boolean = False
     Private isFilterByFrequency As Boolean = False
+    Private isFilterByRemarks As Boolean = False
     Private pageCount As Integer
     Private pageIndex As Integer
     Private pageSize As Integer
@@ -138,7 +140,6 @@ Public Class MntMch
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Invoke(New Action(AddressOf GetScrollingIndex))
-        pageIndex = 0
         LoadData()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Invoke(New Action(AddressOf SetScrollingIndex))
     End Sub
@@ -171,6 +172,7 @@ Public Class MntMch
                     isFilterByMachineSubStatus = False
                     isFilterByGroup = False
                     isFilterByFrequency = False
+                    isFilterByRemarks = False
 
                 Case 2
                     isFilterByMachineName = False
@@ -179,6 +181,7 @@ Public Class MntMch
                     isFilterByMachineSubStatus = False
                     isFilterByGroup = False
                     isFilterByFrequency = False
+                    isFilterByRemarks = False
 
                 Case 3
                     isFilterByMachineName = False
@@ -187,6 +190,7 @@ Public Class MntMch
                     isFilterByMachineSubStatus = False
                     isFilterByGroup = False
                     isFilterByFrequency = False
+                    isFilterByRemarks = False
 
                 Case 4
                     isFilterByMachineName = False
@@ -195,6 +199,7 @@ Public Class MntMch
                     isFilterByMachineSubStatus = True
                     isFilterByGroup = False
                     isFilterByFrequency = False
+                    isFilterByRemarks = False
 
                 Case 5
                     isFilterByMachineName = False
@@ -203,6 +208,7 @@ Public Class MntMch
                     isFilterByMachineSubStatus = False
                     isFilterByGroup = True
                     isFilterByFrequency = False
+                    isFilterByRemarks = False
 
                 Case 6
                     isFilterByMachineName = False
@@ -211,6 +217,16 @@ Public Class MntMch
                     isFilterByMachineSubStatus = False
                     isFilterByGroup = False
                     isFilterByFrequency = True
+                    isFilterByRemarks = False
+
+                Case 7
+                    isFilterByMachineName = False
+                    isFilterByArea = False
+                    isFilterByMachineStatus = False
+                    isFilterByMachineSubStatus = False
+                    isFilterByGroup = False
+                    isFilterByFrequency = False
+                    isFilterByRemarks = True
             End Select
 
             pageIndex = 0
@@ -228,6 +244,10 @@ Public Class MntMch
         Else
             If cmbCommon.SelectedValue = 0 Then
                 cmbCommon.SelectedValue = 0
+            End If
+
+            If cmbCommon.SelectedValue Is Nothing Then
+                cmbCommon.SelectedIndex = 0
             End If
         End If
 
@@ -267,11 +287,18 @@ Public Class MntMch
                     pnlSearchByText.Visible = False
 
                     LoadPartGroup()
+
                 Case 6
                     pnlSearchByCmb.Visible = True
                     pnlSearchByText.Visible = False
 
                     LoadFrequency()
+
+                Case 7
+                    pnlSearchByCmb.Visible = True
+                    pnlSearchByText.Visible = False
+
+                    LoadRemarks()
             End Select
 
             Select Case cmbSearchCriteria.SelectedValue
@@ -281,6 +308,9 @@ Public Class MntMch
                 Case 1
                     ActiveControl = txtCommon
                     txtCommon.Text = String.Empty
+                Case 7
+                    ActiveControl = cmbCommon
+                    cmbCommon.SelectedIndex = 0
             End Select
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -367,110 +397,132 @@ Public Class MntMch
             totalCount = 0
 
             If isFilterByMachineName = True Then
-                Dim prmSchedule(3) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
-                prmSchedule(3) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
-                prmSchedule(3).Value = txtCommon.Text.Trim
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
+                prmMasterlist(3).Value = txtCommon.Text.Trim
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineName", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineName", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByArea = True Then
-                Dim prmSchedule(3) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
-                prmSchedule(3) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmSchedule(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@AreaId", SqlDbType.Int)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByAreaId", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByAreaId", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByMachineStatus = True Then
-                Dim prmSchedule(3) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
-                prmSchedule(3) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-                prmSchedule(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineStatusId", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineStatusId", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByMachineSubStatus = True Then
-                Dim prmSchedule(3) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
-                prmSchedule(3) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-                prmSchedule(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineSubStatusId", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineSubStatusId", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByGroup = True Then
-                Dim prmSchedule(3) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
-                prmSchedule(3) = New SqlParameter("@GroupId", SqlDbType.Int)
-                prmSchedule(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@GroupId", SqlDbType.Int)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByGroupId", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByGroupId", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByFrequency = True Then
-                Dim prmJigMasterlist(3) As SqlParameter
-                prmJigMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmJigMasterlist(0).Value = pageIndex
-                prmJigMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmJigMasterlist(1).Value = pageSize
-                prmJigMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmJigMasterlist(2).Direction = ParameterDirection.Output
-                prmJigMasterlist(2).Value = totalCount
-                prmJigMasterlist(3) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
-                prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmJigMasterlist)
-                totalCount = prmJigMasterlist(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
+
+            ElseIf isFilterByRemarks = True Then
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue Is Nothing, Nothing, IIf(cmbCommon.SelectedValue = 1, 1, 0))
+
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByIsActive", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
 
             Else
-                Dim prmSchedule(2) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmSchedule(0).Value = pageIndex
-                prmSchedule(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmSchedule(1).Value = pageSize
-                prmSchedule(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmSchedule(2).Direction = ParameterDirection.Output
-                prmSchedule(2).Value = totalCount
+                Dim prmMasterlist(2) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
 
-                dtSchedule = dbMethod.FillDataTable("RdMntMachineMasterlist", CommandType.StoredProcedure, prmSchedule)
-                totalCount = prmSchedule(2).Value
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlist", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
             End If
 
-            bsMachine.DataSource = dtSchedule
+            Me.Text = String.Empty
+            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
+                Me.Text = "Machine Masterlist - " & totalCount & " item"
+            Else
+                Me.Text = "Machine Masterlist - " & totalCount & " items"
+            End If
+
+            bsMachine.DataSource = dtMachine
             bsMachine.ResetBindings(True)
             dgvList.AutoGenerateColumns = False
             dgvList.DataSource = bsMachine
@@ -505,14 +557,30 @@ Public Class MntMch
         Try
             dicSearchCriteria.Add(" Machine Name", 1)
             dicSearchCriteria.Add(" Area", 2)
-            dicSearchCriteria.Add(" Machine Status", 3)
-            dicSearchCriteria.Add(" Machine Sub Status", 4)
+            dicSearchCriteria.Add(" Status", 3)
+            dicSearchCriteria.Add(" Sub-Status", 4)
             dicSearchCriteria.Add(" Part Group", 5)
             dicSearchCriteria.Add(" PM Frequency", 6)
+            dicSearchCriteria.Add(" Remarks", 7)
 
             cmbSearchCriteria.DisplayMember = "Key"
             cmbSearchCriteria.ValueMember = "Value"
             cmbSearchCriteria.DataSource = New BindingSource(dicSearchCriteria, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadRemarks()
+        Try
+            dicRemarks.Clear()
+
+            dicRemarks.Add("< All >", Nothing)
+            dicRemarks.Add(" Active", 1)
+            dicRemarks.Add(" Inactive", 2)
+            cmbCommon.DisplayMember = "Key"
+            cmbCommon.ValueMember = "Value"
+            cmbCommon.DataSource = New BindingSource(dicRemarks, Nothing)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

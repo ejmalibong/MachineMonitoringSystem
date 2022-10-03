@@ -53,6 +53,8 @@ Partial Class SecUser
         Me.ColPassword = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColNickname = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserItem = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColSection = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColWorkgroup = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsAdmin = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
@@ -61,8 +63,6 @@ Partial Class SecUser
         Me.txtCommon = New System.Windows.Forms.TextBox()
         Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.ColSection = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.ColWorkgroup = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
         Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
@@ -81,7 +81,7 @@ Partial Class SecUser
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(990, 475)
+        Me.btnClose.Location = New System.Drawing.Point(991, 476)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -98,7 +98,7 @@ Partial Class SecUser
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(896, 475)
+        Me.btnDelete.Location = New System.Drawing.Point(897, 476)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -115,7 +115,7 @@ Partial Class SecUser
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(802, 475)
+        Me.btnEdit.Location = New System.Drawing.Point(803, 476)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -132,7 +132,7 @@ Partial Class SecUser
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(708, 475)
+        Me.btnAdd.Location = New System.Drawing.Point(709, 476)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -152,14 +152,14 @@ Partial Class SecUser
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(4, 482)
+        Me.bindingNavigator.Location = New System.Drawing.Point(4, 480)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
         Me.bindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
-        Me.bindingNavigator.Size = New System.Drawing.Size(291, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
         Me.bindingNavigator.TabIndex = 543
         '
         'txtTotalPageNumber
@@ -260,11 +260,11 @@ Partial Class SecUser
         'cmbSearchCriteria
         '
         Me.cmbSearchCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbSearchCriteria.FormattingEnabled = True
-        Me.cmbSearchCriteria.Location = New System.Drawing.Point(4, 5)
+        Me.cmbSearchCriteria.Location = New System.Drawing.Point(4, 4)
         Me.cmbSearchCriteria.Name = "cmbSearchCriteria"
-        Me.cmbSearchCriteria.Size = New System.Drawing.Size(140, 23)
+        Me.cmbSearchCriteria.Size = New System.Drawing.Size(160, 25)
         Me.cmbSearchCriteria.TabIndex = 544
         '
         'btnSearch
@@ -275,7 +275,7 @@ Partial Class SecUser
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnSearch.Hint = "Search"
         Me.btnSearch.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Find_16_x_16
-        Me.btnSearch.Location = New System.Drawing.Point(500, 2)
+        Me.btnSearch.Location = New System.Drawing.Point(514, 2)
         Me.btnSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -291,7 +291,7 @@ Partial Class SecUser
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnReset.Hint = "Remove filter"
         Me.btnReset.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Undo_16_x_16
-        Me.btnReset.Location = New System.Drawing.Point(589, 2)
+        Me.btnReset.Location = New System.Drawing.Point(602, 2)
         Me.btnReset.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -326,14 +326,12 @@ Partial Class SecUser
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1084, 438)
+        Me.dgvList.Size = New System.Drawing.Size(1084, 440)
         Me.dgvList.TabIndex = 549
         '
         'ColUserId
         '
         Me.ColUserId.DataPropertyName = "UserId"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColUserId.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColUserId.HeaderText = "UserId"
         Me.ColUserId.Name = "ColUserId"
         Me.ColUserId.ReadOnly = True
@@ -342,10 +340,13 @@ Partial Class SecUser
         'ColEmployeeId
         '
         Me.ColEmployeeId.DataPropertyName = "EmployeeId"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.ColEmployeeId.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColEmployeeId.HeaderText = "Employee ID"
         Me.ColEmployeeId.Name = "ColEmployeeId"
         Me.ColEmployeeId.ReadOnly = True
-        Me.ColEmployeeId.Width = 95
+        Me.ColEmployeeId.Width = 90
         '
         'ColUserName
         '
@@ -379,6 +380,22 @@ Partial Class SecUser
         Me.ColUserItem.ReadOnly = True
         Me.ColUserItem.Width = 150
         '
+        'ColSection
+        '
+        Me.ColSection.DataPropertyName = "SectionName"
+        Me.ColSection.HeaderText = "Section"
+        Me.ColSection.Name = "ColSection"
+        Me.ColSection.ReadOnly = True
+        Me.ColSection.Width = 180
+        '
+        'ColWorkgroup
+        '
+        Me.ColWorkgroup.DataPropertyName = "WorkgroupName"
+        Me.ColWorkgroup.HeaderText = "Workgroup"
+        Me.ColWorkgroup.Name = "ColWorkgroup"
+        Me.ColWorkgroup.ReadOnly = True
+        Me.ColWorkgroup.Width = 180
+        '
         'ColIsAdmin
         '
         Me.ColIsAdmin.DataPropertyName = "IsAdmin"
@@ -400,7 +417,7 @@ Partial Class SecUser
         'pnlSearchByCmb
         '
         Me.pnlSearchByCmb.Controls.Add(Me.cmbCommon)
-        Me.pnlSearchByCmb.Location = New System.Drawing.Point(146, 3)
+        Me.pnlSearchByCmb.Location = New System.Drawing.Point(164, 3)
         Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
         Me.pnlSearchByCmb.Size = New System.Drawing.Size(350, 27)
         Me.pnlSearchByCmb.TabIndex = 545
@@ -417,7 +434,7 @@ Partial Class SecUser
         'pnlSearchByText
         '
         Me.pnlSearchByText.Controls.Add(Me.txtCommon)
-        Me.pnlSearchByText.Location = New System.Drawing.Point(146, 3)
+        Me.pnlSearchByText.Location = New System.Drawing.Point(164, 3)
         Me.pnlSearchByText.Name = "pnlSearchByText"
         Me.pnlSearchByText.Size = New System.Drawing.Size(350, 27)
         Me.pnlSearchByText.TabIndex = 547
@@ -450,26 +467,6 @@ Partial Class SecUser
         Me.DataGridViewComboBoxColumn2.ReadOnly = True
         Me.DataGridViewComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewComboBoxColumn2.Width = 120
-        '
-        'ColSection
-        '
-        Me.ColSection.DataPropertyName = "SectionId"
-        Me.ColSection.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
-        Me.ColSection.HeaderText = "Section"
-        Me.ColSection.Name = "ColSection"
-        Me.ColSection.ReadOnly = True
-        Me.ColSection.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColSection.Width = 180
-        '
-        'ColWorkgroup
-        '
-        Me.ColWorkgroup.DataPropertyName = "WorkgroupId"
-        Me.ColWorkgroup.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
-        Me.ColWorkgroup.HeaderText = "Workgroup"
-        Me.ColWorkgroup.Name = "ColWorkgroup"
-        Me.ColWorkgroup.ReadOnly = True
-        Me.ColWorkgroup.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColWorkgroup.Width = 90
         '
         'DataGridViewNullableComboBoxColumn1
         '
@@ -505,6 +502,7 @@ Partial Class SecUser
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
+        Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1084, 511)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.dgvList)
@@ -520,10 +518,12 @@ Partial Class SecUser
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.KeyPreview = True
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "SecUser"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "User Profile"
+        Me.Text = "User Masterlist"
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).EndInit()
         Me.bindingNavigator.ResumeLayout(False)
         Me.bindingNavigator.PerformLayout()
@@ -571,8 +571,8 @@ Partial Class SecUser
     Friend WithEvents ColPassword As DataGridViewTextBoxColumn
     Friend WithEvents ColNickname As DataGridViewTextBoxColumn
     Friend WithEvents ColUserItem As DataGridViewTextBoxColumn
-    Friend WithEvents ColSection As DataGridViewComboBoxColumn
-    Friend WithEvents ColWorkgroup As DataGridViewComboBoxColumn
+    Friend WithEvents ColSection As DataGridViewTextBoxColumn
+    Friend WithEvents ColWorkgroup As DataGridViewTextBoxColumn
     Friend WithEvents ColIsAdmin As DataGridViewCheckBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
 End Class

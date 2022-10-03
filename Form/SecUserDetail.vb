@@ -3,17 +3,13 @@ Imports BlackCoffeeLibrary
 
 Public Class SecUserDetail
     Private connection As New Connection
-    Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dbMain As New BlackCoffeeLibrary.Main
-
-    Private userId As Integer = 0
+    Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private departmentId As Integer = 0
-    Private sectionId As Integer = 0
-    Private workgroupId As Integer = 0
     Private isAdmin As Boolean = False
-
-    Public Property SubjectId As Integer = 0
-
+    Private sectionId As Integer = 0
+    Private userId As Integer = 0
+    Private workgroupId As Integer = 0
     Public Sub New(_userId As Integer, _departmentId As Integer, _sectionId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -29,52 +25,42 @@ Public Class SecUserDetail
         FillSection(sectionId)
     End Sub
 
-    Private Sub frmSecUserEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If isAdmin Or sectionId = 1 Or sectionId = 4 Then
-            cmbSection.Enabled = True
-            pnlIsAdmin.Enabled = True
-        Else
-            cmbSection.Enabled = False
-            cmbSection.SelectedValue = sectionId
-            pnlIsAdmin.Enabled = False
-        End If
+    Public Property pKey As Integer = 0
 
-        If userId = 0 Then
-            rdAdminNo.Checked = True
-            rdActiveYes.Checked = True
-            btnDelete.Enabled = False
-
-            If isAdmin Or sectionId = 1 Or sectionId = 4 Then
-                cmbWorkgroup.Enabled = False
-                cmbWorkgroup.SelectedValue = 0
-            End If
-        End If
-
-        Me.ActiveControl = txtEmployeeId
-        txtEmployeeId.Select(txtEmployeeId.Text.Trim.Length, 0)
-    End Sub
-
-    Private Sub frmSecUserEditor_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        If e.KeyCode.Equals(Keys.F8) Then
-            e.Handled = True
-            btnDelete.PerformClick()
-        ElseIf e.KeyCode.Equals(Keys.F10) Then
-            e.Handled = True
-            btnSave.PerformClick()
-        End If
-    End Sub
-
-    Private Sub cmbSection_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
-            If cmbSection.SelectedValue = 0 Then
-                cmbWorkgroup.SelectedValue = 0
-                cmbWorkgroup.Enabled = False
+            If userId <> 0 Then
+                Dim prmCount(0) As SqlParameter
+                prmCount(0) = New SqlParameter("@UserId", SqlDbType.Int)
+                prmCount(0).Value = userId
 
-                cmbWorkgroup.DataSource = Nothing
-                cmbWorkgroup.Items.Clear()
-            Else
-                cmbWorkgroup.Enabled = True
-                FillWorkgroup(cmbSection.SelectedValue)
+                Dim count As Integer = 0
+                count = dbMethod.ExecuteScalar("SELECT COUNT(TrxDetailId) FROM dbo.MntTransactionDetail WHERE UserId = @UserId", CommandType.Text, prmCount)
+
+                If count > 0 Then
+                    Dim question = String.Format("This user contains activities." & Environment.NewLine &
+                                                 "Mark as inactive instead?")
+                    If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                        Dim prmInactive(0) As SqlParameter
+                        prmInactive(0) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmInactive(0).Value = userId
+
+                        dbMethod.ExecuteNonQuery("UPDATE dbo.SecUser SET IsActive = 0 WHERE UserId = @UserId", CommandType.Text, prmInactive)
+
+                        Me.DialogResult = DialogResult.OK
+                    End If
+                Else
+                    Dim question = String.Format("Are you sure you want to delete this user?")
+                    If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+                        Dim prmInactive(0) As SqlParameter
+                        prmInactive(0) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmInactive(0).Value = userId
+
+                        dbMethod.ExecuteNonQuery("DELETE FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmInactive)
+
+                        Me.DialogResult = DialogResult.OK
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -139,7 +125,7 @@ Public Class SecUserDetail
                 prmUserName(0) = New SqlParameter("@UserName", SqlDbType.VarChar)
                 prmUserName(0).Value = txtUserName.Text.Trim
 
-                cntUsername = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE UserName = @UserName", CommandType.Text, prmUserName)
+                cntUsername = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE TRIM(UserName) = @UserName", CommandType.Text, prmUserName)
 
                 If cntUsername > 0 Then
                     MessageBox.Show("User name already exist.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -165,19 +151,19 @@ Public Class SecUserDetail
                 prmUser(7) = New SqlParameter("@IsAdmin", SqlDbType.Bit)
                 prmUser(7).Value = IIf(rdAdminYes.Checked, True, False)
                 prmUser(8) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmUser(8).Value = IIf(rdActiveYes.Checked, True, False)
+                prmUser(8).Value = IIf(rdActive.Checked, True, False)
 
                 dbMethod.ExecuteNonQuery("InsSecUser", CommandType.StoredProcedure, prmUser)
-                SubjectId = prmUser(0).Value
+                pKey = prmUser(0).Value
 
             Else
-                Dim prmCountEmployeeId(1) As SqlParameter
-                prmCountEmployeeId(0) = New SqlParameter("@EmployeeId", SqlDbType.Char, 8)
-                prmCountEmployeeId(0).Value = txtEmployeeId.Text.Trim
-                prmCountEmployeeId(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                prmCountEmployeeId(1).Value = userId
+                Dim prmCntEmp(1) As SqlParameter
+                prmCntEmp(0) = New SqlParameter("@EmployeeId", SqlDbType.Char, 8)
+                prmCntEmp(0).Value = txtEmployeeId.Text.Trim
+                prmCntEmp(1) = New SqlParameter("@UserId", SqlDbType.Int)
+                prmCntEmp(1).Value = userId
 
-                cntEmployeeId = dbMethod.ExecuteScalar("SELECT COUNT(EmployeeId) FROM dbo.SecUser WHERE EmployeeId = @EmployeeId AND UserId <> @UserId", CommandType.Text, prmCountEmployeeId)
+                cntEmployeeId = dbMethod.ExecuteScalar("SELECT COUNT(EmployeeId) FROM dbo.SecUser WHERE EmployeeId = @EmployeeId AND UserId <> @UserId", CommandType.Text, prmCntEmp)
 
                 If cntEmployeeId > 0 Then
                     MessageBox.Show("Employee ID already exist.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -191,7 +177,7 @@ Public Class SecUserDetail
                 prmUserName(1) = New SqlParameter("@UserId", SqlDbType.Int)
                 prmUserName(1).Value = userId
 
-                cntUsername = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE UserName = @UserName AND UserId <> @UserId", CommandType.Text, prmUserName)
+                cntUsername = dbMethod.ExecuteScalar("SELECT COUNT(UserId) FROM dbo.SecUser WHERE TRIM(UserName) = @UserName AND UserId <> @UserId", CommandType.Text, prmUserName)
 
                 If cntUsername > 0 Then
                     MessageBox.Show("User name already exist.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -217,11 +203,11 @@ Public Class SecUserDetail
                 prmUser(7) = New SqlParameter("@IsAdmin", SqlDbType.Bit)
                 prmUser(7).Value = IIf(rdAdminYes.Checked, True, False)
                 prmUser(8) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmUser(8).Value = IIf(rdActiveYes.Checked, True, False)
+                prmUser(8).Value = IIf(rdActive.Checked, True, False)
 
                 dbMethod.ExecuteNonQuery("UpdSecUser", CommandType.StoredProcedure, prmUser)
 
-                SubjectId = userId
+                pKey = userId
             End If
 
             Me.DialogResult = DialogResult.OK
@@ -230,40 +216,17 @@ Public Class SecUserDetail
         End Try
     End Sub
 
-    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+    Private Sub cmbSection_SelectedValueChanged(sender As Object, e As EventArgs)
         Try
-            If userId <> 0 Then
-                Dim prmCount(0) As SqlParameter
-                prmCount(0) = New SqlParameter("@UserId", SqlDbType.Int)
-                prmCount(0).Value = userId
+            If cmbSection.SelectedValue = 0 Then
+                cmbWorkgroup.SelectedValue = 0
+                cmbWorkgroup.Enabled = False
 
-                Dim count As Integer = 0
-                count = dbMethod.ExecuteScalar("SELECT COUNT(TrxDetailId) FROM dbo.MntTransactionDetail WHERE UserId = @UserId", CommandType.Text, prmCount)
-
-                If count > 0 Then
-                    Dim message1 = String.Format("This user is already included in activities." & Environment.NewLine &
-                                                 "Mark this user as inactive instead?")
-                    If MessageBox.Show(message1, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                        Dim prmInactive(0) As SqlParameter
-                        prmInactive(0) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmInactive(0).Value = userId
-
-                        dbMethod.ExecuteNonQuery("UPDATE dbo.SecUser SET IsActive = 0 WHERE UserId = @UserId", CommandType.Text, prmInactive)
-
-                        Me.DialogResult = DialogResult.OK
-                    End If
-                Else
-                    Dim message2 = String.Format("Are you sure you want to delete this user?")
-                    If MessageBox.Show(message2, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                        Dim prmInactive(0) As SqlParameter
-                        prmInactive(0) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmInactive(0).Value = userId
-
-                        dbMethod.ExecuteNonQuery("DELETE FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmInactive)
-
-                        Me.DialogResult = DialogResult.OK
-                    End If
-                End If
+                cmbWorkgroup.DataSource = Nothing
+                cmbWorkgroup.Items.Clear()
+            Else
+                cmbWorkgroup.Enabled = True
+                FillWorkgroup(cmbSection.SelectedValue)
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -304,6 +267,41 @@ Public Class SecUserDetail
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub frm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode.Equals(Keys.F8) Then
+            e.Handled = True
+            btnDelete.PerformClick()
+        ElseIf e.KeyCode.Equals(Keys.F10) Then
+            e.Handled = True
+            btnSave.PerformClick()
+        End If
+    End Sub
+
+    Private Sub frm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If isAdmin Or sectionId = 1 Or sectionId = 4 Then
+            cmbSection.Enabled = True
+            pnlIsAdmin.Enabled = True
+        Else
+            cmbSection.Enabled = False
+            cmbSection.SelectedValue = sectionId
+            pnlIsAdmin.Enabled = False
+        End If
+
+        If userId = 0 Then
+            rdAdminNo.Checked = True
+            rdActive.Checked = True
+            btnDelete.Enabled = False
+
+            If isAdmin Or sectionId = 1 Or sectionId = 4 Then
+                cmbWorkgroup.Enabled = False
+                cmbWorkgroup.SelectedValue = 0
+            End If
+        End If
+
+        Me.ActiveControl = txtEmployeeId
+        txtEmployeeId.Select(txtEmployeeId.Text.Trim.Length, 0)
     End Sub
 
 End Class

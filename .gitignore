@@ -335,3 +335,4 @@ ASALocalRun/
 
 # Application Files
 .config
+*.config

@@ -66,8 +66,20 @@
           <DataField>JigName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DowntimeJigStatusId">
+          <DataField>DowntimeJigStatusId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="JigStatusName">
           <DataField>JigStatusName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DowntimeJigSubStatusId">
+          <DataField>DowntimeJigSubStatusId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="JigSubStatusName">
+          <DataField>JigSubStatusName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DatetimeStarted">
@@ -125,7 +137,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsReport</rd:DataSetName>
-        <rd:SchemaPath>B:\Users BACKUP\NBCP-LT-058\Documents\Visual Studio 2012\Projects\MachineMonitoringSystem\MachineMonitoringSystem\Dataset\dsReport.xsd</rd:SchemaPath>
+        <rd:SchemaPath>B:\Users BACKUP\NBCP-LT-043\Documents\Visual Studio 2012\Projects\MachineMonitoringSystem\MachineMonitoringSystem\Dataset\dsReport.xsd</rd:SchemaPath>
         <rd:TableName>RptMntActivityReport</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -756,7 +768,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(Not IsDBNull(Fields!MachineId.Value), Fields!MachineName.Value, IIF(Not IsDBNull(Fields!JigId.Value), Fields!JigName.Value, ""))</Value>
+                                  <Value>=IIF(Not IsNothing(Fields!MachineId.Value), Fields!MachineName.Value, IIF(Not IsNothing(Fields!JigId.Value), Fields!JigName.Value, ""))</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -769,7 +781,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(Not IsDBNull(Fields!MachineStatusName.Value), Fields!MachineStatusName.Value, IIF(Not IsDBNull(Fields!JigStatusName.Value), Fields!JigStatusName.Value, ""))</Value>
+                                  <Value>=IIF(Not IsNothing(Fields!MachineId.Value), Fields!MachineStatusName.Value, IIF(Not IsNothing(Fields!JigId.Value), Fields!JigStatusName.Value, ""))</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -782,7 +794,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(Not IsDBNull(Fields!MachineStatusName.Value), Fields!MachineSubStatusName.Value, "")</Value>
+                                  <Value>=IIF(Not IsNothing(Fields!MachineStatusName.Value), Fields!MachineSubStatusName.Value, IIF(Not IsNothing(Fields!JigId.Value), Fields!JigSubStatusName.Value, ""))</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>

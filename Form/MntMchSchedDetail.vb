@@ -257,7 +257,12 @@ Public Class MntMchSchedDetail
         Try
             cmbMachineName.DisplayMember = "MachineName"
             cmbMachineName.ValueMember = "MachineId"
-            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "< Select Machine >")
+
+            Dim prmMch(0) As SqlParameter
+            prmMch(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+            prmMch(0).Value = True
+
+            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "< Select Machine >", prmMch)
 
             AddHandler cmbMachineName.SelectedValueChanged, AddressOf cmbMachineName_SelectedValueChanged
         Catch ex As Exception
@@ -393,7 +398,7 @@ Public Class MntMchSchedDetail
         End If
 
         pnlChecklist.Enabled = False
-        pnlStatus.Enabled = False
+        pnlRemarks.Enabled = False
     End Sub
     Private Sub ResetForm()
         Try
@@ -624,13 +629,13 @@ Public Class MntMchSchedDetail
         lblChecklist.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
-        lblStatus.ForeColor = Color.White
-        lblStatus.BackColor = Color.DarkSlateGray
+    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlRemarks.Enter
+        lblRemarks.ForeColor = Color.White
+        lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
-        lblStatus.ForeColor = Color.Black
-        lblStatus.BackColor = SystemColors.Control
+    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlRemarks.Leave
+        lblRemarks.ForeColor = Color.Black
+        lblRemarks.BackColor = SystemColors.Control
     End Sub
 End Class

@@ -14,7 +14,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>\\192.168.20.11\Engineering\IT System\Machine Monitoring System\</PublishUrl>
+    <PublishUrl>\\nbc-filesvr02\Engineering\IT System\Machine Monitoring System\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>55</ApplicationRevision>
+    <ApplicationRevision>66</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -156,6 +156,11 @@
     <Compile Include="Class\DataGridViewNullableComboBoxColumn.vb" />
     <Compile Include="Class\KeyValidation.vb" />
     <Compile Include="Class\Program.vb" />
+    <Compile Include="Dataset\dsReport.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReport.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Form\Main.Designer.vb">
       <DependentUpon>Main.vb</DependentUpon>
     </Compile>
@@ -166,6 +171,30 @@
       <DependentUpon>Login.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\Login.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntJigCs.Designer.vb">
+      <DependentUpon>MntJigCs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntJigCs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntMchCs.Designer.vb">
+      <DependentUpon>MntMchCs.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntMchCs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntModelExtensionDetail.Designer.vb">
+      <DependentUpon>MntModelExtensionDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntModelExtensionDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntModelExtension.Designer.vb">
+      <DependentUpon>MntModelExtension.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntModelExtension.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntJigSched.Designer.vb">
@@ -192,6 +221,12 @@
     <Compile Include="Form\MntJigDetail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\MntJigModelDetail.Designer.vb">
+      <DependentUpon>MntJigModelDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntJigModelDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntMchSched.Designer.vb">
       <DependentUpon>MntMchSched.vb</DependentUpon>
     </Compile>
@@ -214,6 +249,12 @@
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\MntTrxActvityLog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntTrxApproval.Designer.vb">
+      <DependentUpon>MntTrxApproval.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntTrxApproval.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntTrxConsole.Designer.vb">
@@ -252,6 +293,12 @@
     <Compile Include="Form\MntMchSchedDetail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\MntJigModel.Designer.vb">
+      <DependentUpon>MntJigModel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntJigModel.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\SecUser.Designer.vb">
       <DependentUpon>SecUser.vb</DependentUpon>
     </Compile>
@@ -284,6 +331,17 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Dataset\dsReport.xsc">
+      <DependentUpon>dsReport.xsd</DependentUpon>
+    </None>
+    <None Include="Dataset\dsReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReport.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Dataset\dsReport.xss">
+      <DependentUpon>dsReport.xsd</DependentUpon>
+    </None>
     <None Include="Resources\Password-Show.png" />
     <None Include="Resources\Password-Hide.png" />
     <None Include="Resources\24x24\Zoom 24 x 24.png" />
@@ -666,6 +724,18 @@
     <EmbeddedResource Include="Form\Main.resx">
       <DependentUpon>Main.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntJigCs.resx">
+      <DependentUpon>MntJigCs.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntMchCs.resx">
+      <DependentUpon>MntMchCs.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntModelExtensionDetail.resx">
+      <DependentUpon>MntModelExtensionDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntModelExtension.resx">
+      <DependentUpon>MntModelExtension.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntJigSched.resx">
       <DependentUpon>MntJigSched.vb</DependentUpon>
     </EmbeddedResource>
@@ -678,6 +748,9 @@
     <EmbeddedResource Include="Form\MntJigDetail.resx">
       <DependentUpon>MntJigDetail.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntJigModelDetail.resx">
+      <DependentUpon>MntJigModelDetail.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntMchSched.resx">
       <DependentUpon>MntMchSched.vb</DependentUpon>
     </EmbeddedResource>
@@ -689,6 +762,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxActvityLog.resx">
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntTrxApproval.resx">
+      <DependentUpon>MntTrxApproval.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxConsole.resx">
       <DependentUpon>MntTrxConsole.vb</DependentUpon>
@@ -707,6 +783,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntMchSchedDetail.resx">
       <DependentUpon>MntMchSchedDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntJigModel.resx">
+      <DependentUpon>MntJigModel.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\SecUser.resx">
       <DependentUpon>SecUser.vb</DependentUpon>

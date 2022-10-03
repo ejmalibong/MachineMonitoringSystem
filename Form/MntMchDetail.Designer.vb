@@ -26,8 +26,8 @@ Partial Class MntMchDetail
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnSave = New PinkieControls.ButtonXP()
         Me.lblArea = New System.Windows.Forms.Label()
-        Me.lblMachineStatus = New System.Windows.Forms.Label()
         Me.lblStatus = New System.Windows.Forms.Label()
+        Me.lblRemarks = New System.Windows.Forms.Label()
         Me.pnlStatus = New System.Windows.Forms.Panel()
         Me.rdInactive = New System.Windows.Forms.RadioButton()
         Me.rdActive = New System.Windows.Forms.RadioButton()
@@ -36,7 +36,7 @@ Partial Class MntMchDetail
         Me.txtMachineName = New System.Windows.Forms.TextBox()
         Me.txtMachineStatus = New System.Windows.Forms.Label()
         Me.txtMachineSubStatus = New System.Windows.Forms.Label()
-        Me.lblMachineSubStatus = New System.Windows.Forms.Label()
+        Me.lblSubStatus = New System.Windows.Forms.Label()
         Me.lblPartGroup = New System.Windows.Forms.Label()
         Me.cmbPartGroup = New SergeUtils.EasyCompletionComboBox()
         Me.lblFrequency = New System.Windows.Forms.Label()
@@ -108,33 +108,33 @@ Partial Class MntMchDetail
         Me.lblArea.Text = "Area"
         Me.lblArea.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lblMachineStatus
-        '
-        Me.lblMachineStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.lblMachineStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblMachineStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblMachineStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblMachineStatus.Location = New System.Drawing.Point(4, 104)
-        Me.lblMachineStatus.Name = "lblMachineStatus"
-        Me.lblMachineStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblMachineStatus.Size = New System.Drawing.Size(100, 23)
-        Me.lblMachineStatus.TabIndex = 559
-        Me.lblMachineStatus.Text = "Mch Status"
-        Me.lblMachineStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'lblStatus
         '
         Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
         Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(4, 154)
+        Me.lblStatus.Location = New System.Drawing.Point(4, 104)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblStatus.Size = New System.Drawing.Size(100, 23)
-        Me.lblStatus.TabIndex = 568
+        Me.lblStatus.TabIndex = 559
         Me.lblStatus.Text = "Status"
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblRemarks
+        '
+        Me.lblRemarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblRemarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblRemarks.ForeColor = System.Drawing.Color.Black
+        Me.lblRemarks.Location = New System.Drawing.Point(4, 154)
+        Me.lblRemarks.Name = "lblRemarks"
+        Me.lblRemarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblRemarks.Size = New System.Drawing.Size(100, 23)
+        Me.lblRemarks.TabIndex = 568
+        Me.lblRemarks.Text = "Remarks"
+        Me.lblRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'pnlStatus
         '
@@ -232,19 +232,19 @@ Partial Class MntMchDetail
         Me.txtMachineSubStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtMachineSubStatus.UseCompatibleTextRendering = True
         '
-        'lblMachineSubStatus
+        'lblSubStatus
         '
-        Me.lblMachineSubStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.lblMachineSubStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblMachineSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblMachineSubStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblMachineSubStatus.Location = New System.Drawing.Point(4, 129)
-        Me.lblMachineSubStatus.Name = "lblMachineSubStatus"
-        Me.lblMachineSubStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblMachineSubStatus.Size = New System.Drawing.Size(100, 23)
-        Me.lblMachineSubStatus.TabIndex = 583
-        Me.lblMachineSubStatus.Text = "Mch Sub-Status"
-        Me.lblMachineSubStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblSubStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.lblSubStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSubStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblSubStatus.Location = New System.Drawing.Point(4, 129)
+        Me.lblSubStatus.Name = "lblSubStatus"
+        Me.lblSubStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblSubStatus.Size = New System.Drawing.Size(100, 23)
+        Me.lblSubStatus.TabIndex = 583
+        Me.lblSubStatus.Text = "Sub-Status"
+        Me.lblSubStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblPartGroup
         '
@@ -308,15 +308,15 @@ Partial Class MntMchDetail
         Me.Controls.Add(Me.lblPartGroup)
         Me.Controls.Add(Me.cmbPartGroup)
         Me.Controls.Add(Me.txtMachineSubStatus)
-        Me.Controls.Add(Me.lblMachineSubStatus)
+        Me.Controls.Add(Me.lblSubStatus)
         Me.Controls.Add(Me.txtMachineStatus)
         Me.Controls.Add(Me.txtMachineName)
-        Me.Controls.Add(Me.lblMachineStatus)
+        Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.lblMachineName)
         Me.Controls.Add(Me.lblArea)
         Me.Controls.Add(Me.cmbArea)
         Me.Controls.Add(Me.pnlStatus)
-        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.lblRemarks)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnDelete)
         Me.Controls.Add(Me.btnSave)
@@ -343,9 +343,9 @@ Partial Class MntMchDetail
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnSave As PinkieControls.ButtonXP
     Friend WithEvents lblArea As Label
-    Friend WithEvents lblMachineStatus As Label
-    Friend WithEvents lblMachineName As Label
     Friend WithEvents lblStatus As Label
+    Friend WithEvents lblMachineName As Label
+    Friend WithEvents lblRemarks As Label
     Friend WithEvents pnlStatus As Panel
     Friend WithEvents rdInactive As RadioButton
     Friend WithEvents rdActive As RadioButton
@@ -354,7 +354,7 @@ Partial Class MntMchDetail
     Friend WithEvents txtMachineName As TextBox
     Friend WithEvents txtMachineStatus As Label
     Friend WithEvents txtMachineSubStatus As Label
-    Friend WithEvents lblMachineSubStatus As Label
+    Friend WithEvents lblSubStatus As Label
     Friend WithEvents lblPartGroup As Label
     Friend WithEvents cmbPartGroup As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblFrequency As Label

@@ -30,14 +30,14 @@ Partial Class MntMchSchedDetail
         Me.lblWeekNo = New System.Windows.Forms.Label()
         Me.lblMachineName = New System.Windows.Forms.Label()
         Me.lblActivityDate = New System.Windows.Forms.Label()
-        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.lblRemarks = New System.Windows.Forms.Label()
         Me.lblChecklist = New System.Windows.Forms.Label()
         Me.lblCreatedBy = New System.Windows.Forms.Label()
         Me.lblActivityBy = New System.Windows.Forms.Label()
         Me.pnlChecklist = New System.Windows.Forms.Panel()
         Me.rdIncomplete = New System.Windows.Forms.RadioButton()
         Me.rdComplete = New System.Windows.Forms.RadioButton()
-        Me.pnlStatus = New System.Windows.Forms.Panel()
+        Me.pnlRemarks = New System.Windows.Forms.Panel()
         Me.rdPending = New System.Windows.Forms.RadioButton()
         Me.rdDone = New System.Windows.Forms.RadioButton()
         Me.lblModifiedDate = New System.Windows.Forms.Label()
@@ -54,7 +54,7 @@ Partial Class MntMchSchedDetail
         Me.txtPmFrequency = New System.Windows.Forms.Label()
         Me.lblPmFrequency = New System.Windows.Forms.Label()
         Me.pnlChecklist.SuspendLayout()
-        Me.pnlStatus.SuspendLayout()
+        Me.pnlRemarks.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnClose
@@ -177,19 +177,19 @@ Partial Class MntMchSchedDetail
         Me.lblActivityDate.Text = "Activity Date"
         Me.lblActivityDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lblStatus
+        'lblRemarks
         '
-        Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(4, 279)
-        Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblStatus.Size = New System.Drawing.Size(100, 23)
-        Me.lblStatus.TabIndex = 567
-        Me.lblStatus.Text = "Status"
-        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblRemarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblRemarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblRemarks.ForeColor = System.Drawing.Color.Black
+        Me.lblRemarks.Location = New System.Drawing.Point(4, 279)
+        Me.lblRemarks.Name = "lblRemarks"
+        Me.lblRemarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblRemarks.Size = New System.Drawing.Size(100, 23)
+        Me.lblRemarks.TabIndex = 567
+        Me.lblRemarks.Text = "Remarks"
+        Me.lblRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblChecklist
         '
@@ -267,17 +267,17 @@ Partial Class MntMchSchedDetail
         Me.rdComplete.Text = "Complete"
         Me.rdComplete.UseVisualStyleBackColor = True
         '
-        'pnlStatus
+        'pnlRemarks
         '
-        Me.pnlStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pnlRemarks.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pnlStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pnlStatus.Controls.Add(Me.rdPending)
-        Me.pnlStatus.Controls.Add(Me.rdDone)
-        Me.pnlStatus.Location = New System.Drawing.Point(103, 279)
-        Me.pnlStatus.Name = "pnlStatus"
-        Me.pnlStatus.Size = New System.Drawing.Size(217, 23)
-        Me.pnlStatus.TabIndex = 11
+        Me.pnlRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlRemarks.Controls.Add(Me.rdPending)
+        Me.pnlRemarks.Controls.Add(Me.rdDone)
+        Me.pnlRemarks.Location = New System.Drawing.Point(103, 279)
+        Me.pnlRemarks.Name = "pnlRemarks"
+        Me.pnlRemarks.Size = New System.Drawing.Size(217, 23)
+        Me.pnlRemarks.TabIndex = 11
         '
         'rdPending
         '
@@ -495,13 +495,13 @@ Partial Class MntMchSchedDetail
         Me.Controls.Add(Me.cmbMonth)
         Me.Controls.Add(Me.lblModifiedDate)
         Me.Controls.Add(Me.lblModifiedBy)
-        Me.Controls.Add(Me.pnlStatus)
+        Me.Controls.Add(Me.pnlRemarks)
         Me.Controls.Add(Me.pnlChecklist)
         Me.Controls.Add(Me.lblActivityDate)
         Me.Controls.Add(Me.lblActivityBy)
         Me.Controls.Add(Me.lblCreatedBy)
         Me.Controls.Add(Me.lblChecklist)
-        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.lblRemarks)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnDelete)
         Me.Controls.Add(Me.btnSave)
@@ -519,8 +519,8 @@ Partial Class MntMchSchedDetail
         Me.Text = "Schedule Editor"
         Me.pnlChecklist.ResumeLayout(False)
         Me.pnlChecklist.PerformLayout()
-        Me.pnlStatus.ResumeLayout(False)
-        Me.pnlStatus.PerformLayout()
+        Me.pnlRemarks.ResumeLayout(False)
+        Me.pnlRemarks.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -534,12 +534,12 @@ Partial Class MntMchSchedDetail
     Friend WithEvents lblWeekNo As Label
     Friend WithEvents lblMachineName As Label
     Friend WithEvents lblActivityDate As Label
-    Friend WithEvents lblStatus As Label
+    Friend WithEvents lblRemarks As Label
     Friend WithEvents lblChecklist As Label
     Friend WithEvents lblCreatedBy As Label
     Friend WithEvents lblActivityBy As Label
     Friend WithEvents pnlChecklist As Panel
-    Friend WithEvents pnlStatus As Panel
+    Friend WithEvents pnlRemarks As Panel
     Friend WithEvents rdIncomplete As RadioButton
     Friend WithEvents rdComplete As RadioButton
     Friend WithEvents rdPending As RadioButton

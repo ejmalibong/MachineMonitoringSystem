@@ -16,6 +16,10 @@ Public Class Main
     Private workgroupName As String = String.Empty
     Private isAdmin As Boolean = False
 
+    Private accessLevelId As Integer = 0
+
+    Private arrSplitted() As String
+
     Public Sub New(_userId As Integer, _userName As String, _departmentId As Integer, _departmentName As String, _sectionId As Integer,
                    _sectionName As String, _workgroupId As Integer, _workgroupName As String, _isAdmin As Boolean)
 
@@ -71,8 +75,9 @@ Public Class Main
     Private Sub Main_MdiChildActivate(sender As Object, e As EventArgs) Handles MyBase.MdiChildActivate
         Dim activeForm As Form = Me.ActiveMdiChild
 
-        If Not activeForm Is Nothing Then
-            Me.Text = "Machine Monitoring System - " & activeForm.Text & ""
+        If activeForm IsNot Nothing Then
+            arrSplitted = Split(activeForm.Text.Trim, " - ", 2)
+            Me.Text = "Machine Monitoring System - " & arrSplitted(0) & ""
         Else
             Me.Text = "Machine Monitoring System"
         End If
@@ -97,11 +102,7 @@ Public Class Main
 
     'file
     Private Sub MntTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntTransactionConsoleToolStripMenuItem.Click
-        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, isAdmin), True)
-    End Sub
-
-    Private Sub MntTransactionApprovalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntTransactionApprovalToolStripMenuItem.Click
-
+        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
     End Sub
 
     Private Sub MntMachineScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMachineScheduleToolStripMenuItem.Click
@@ -129,21 +130,33 @@ Public Class Main
         dbMain.FormLoader(Me, New MntActivityReport)
     End Sub
 
-    Private Sub MntPmReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntPmReportToolStripMenuItem.Click
-
+    'maintenance
+    Private Sub MntMachineToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMchToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntMch(userId))
     End Sub
 
-    'maintenance
-    Private Sub MntMachineToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMachineToolStripMenuItem.Click
-        dbMain.FormLoader(Me, New MntMch(userId))
+    Private Sub MntMchChecksheetToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntMchChecksheetToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntMchCs)
     End Sub
 
     Private Sub MntJigToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntJigToolStripMenuItem.Click
         dbMain.FormLoader(Me, New MntJig(userId))
     End Sub
 
+    Private Sub MntJigChecksheetToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntJigChecksheetToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntJigCs)
+    End Sub
+
+    Private Sub MntJigModelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntJigModelToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntJigModel)
+    End Sub
+
+    Private Sub MntModelExtensionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntModelExtensionToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntModelExtension)
+    End Sub
+
     Private Sub SecUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SecUserToolStripMenuItem.Click
-        'dbMain.FormLoader(Me, New SecUser(departmentId, sectionId, workgroupId, isAdmin))
+        dbMain.FormLoader(Me, New SecUser(departmentId, sectionId, workgroupId, isAdmin))
     End Sub
 
     Private Sub GetWorkgroupAccess(wgroupId As Integer, sectId As Integer)
@@ -152,22 +165,36 @@ Public Class Main
 
             Case 2 'maintenance
                 Select Case wgroupId
-                    Case 29, 30, 35 'asv, sv, asm
-                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, isAdmin), True)
+                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                        accessLevelId = 1
+                    Case 35, 40 'mngr, asst mngr
+                        accessLevelId = 2
+                    Case 29, 30 'sv, asv
+                        accessLevelId = 3
+                    Case 5 'sr tech
+                        accessLevelId = 4
+                    Case Else
+                        accessLevelId = 99
+                End Select
 
-                    Case Else 'technician, maintenance assistant, sr technician
-                        MntTransactionApprovalToolStripMenuItem.Visible = False
+                Select Case accessLevelId
+                    Case 1
+
+                    Case 2, 3
+                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        'dbMain.FormLoader(Me, New MntMchCs)
+
+                    Case Else
                         SecUserToolStripMenuItem.Visible = False
                         MntModelExtensionSeparator.Visible = False
 
-                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, isAdmin), True)
+                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                 End Select
 
             Case 4 'it
 
             Case Else
                 Application.Exit()
-
         End Select
     End Sub
 

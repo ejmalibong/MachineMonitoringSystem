@@ -33,6 +33,14 @@ Partial Class MntMch
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -50,14 +58,6 @@ Partial Class MntMch
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -170,6 +170,68 @@ Partial Class MntMch
         Me.dgvList.Size = New System.Drawing.Size(1014, 490)
         Me.dgvList.TabIndex = 553
         '
+        'ColMachineId
+        '
+        Me.ColMachineId.DataPropertyName = "MachineId"
+        Me.ColMachineId.HeaderText = "Machine ID"
+        Me.ColMachineId.Name = "ColMachineId"
+        Me.ColMachineId.ReadOnly = True
+        Me.ColMachineId.Visible = False
+        '
+        'ColMachineName
+        '
+        Me.ColMachineName.DataPropertyName = "MachineName"
+        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.Name = "ColMachineName"
+        Me.ColMachineName.ReadOnly = True
+        Me.ColMachineName.Width = 150
+        '
+        'ColAreaName
+        '
+        Me.ColAreaName.DataPropertyName = "AreaName"
+        Me.ColAreaName.HeaderText = "Area"
+        Me.ColAreaName.Name = "ColAreaName"
+        Me.ColAreaName.ReadOnly = True
+        Me.ColAreaName.Width = 150
+        '
+        'ColMachineStatusName
+        '
+        Me.ColMachineStatusName.DataPropertyName = "MachineStatusName"
+        Me.ColMachineStatusName.HeaderText = "Status"
+        Me.ColMachineStatusName.Name = "ColMachineStatusName"
+        Me.ColMachineStatusName.ReadOnly = True
+        '
+        'ColMachineSubStatusName
+        '
+        Me.ColMachineSubStatusName.DataPropertyName = "MachineSubStatusName"
+        Me.ColMachineSubStatusName.HeaderText = "Sub-Status"
+        Me.ColMachineSubStatusName.Name = "ColMachineSubStatusName"
+        Me.ColMachineSubStatusName.ReadOnly = True
+        Me.ColMachineSubStatusName.Width = 150
+        '
+        'ColGroupName
+        '
+        Me.ColGroupName.DataPropertyName = "GroupName"
+        Me.ColGroupName.HeaderText = "Part Group"
+        Me.ColGroupName.Name = "ColGroupName"
+        Me.ColGroupName.ReadOnly = True
+        Me.ColGroupName.Width = 150
+        '
+        'ColFrequencyName
+        '
+        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
+        Me.ColFrequencyName.HeaderText = "PM Frequency"
+        Me.ColFrequencyName.Name = "ColFrequencyName"
+        Me.ColFrequencyName.ReadOnly = True
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.Width = 50
+        '
         'bindingNavigator
         '
         Me.bindingNavigator.AddNewItem = Nothing
@@ -227,6 +289,7 @@ Partial Class MntMch
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -354,73 +417,12 @@ Partial Class MntMch
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
         '
-        'ColMachineId
-        '
-        Me.ColMachineId.DataPropertyName = "MachineId"
-        Me.ColMachineId.HeaderText = "Machine ID"
-        Me.ColMachineId.Name = "ColMachineId"
-        Me.ColMachineId.ReadOnly = True
-        Me.ColMachineId.Visible = False
-        '
-        'ColMachineName
-        '
-        Me.ColMachineName.DataPropertyName = "MachineName"
-        Me.ColMachineName.HeaderText = "Machine"
-        Me.ColMachineName.Name = "ColMachineName"
-        Me.ColMachineName.ReadOnly = True
-        Me.ColMachineName.Width = 150
-        '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
-        Me.ColAreaName.Width = 150
-        '
-        'ColMachineStatusName
-        '
-        Me.ColMachineStatusName.DataPropertyName = "MachineStatusName"
-        Me.ColMachineStatusName.HeaderText = "Status"
-        Me.ColMachineStatusName.Name = "ColMachineStatusName"
-        Me.ColMachineStatusName.ReadOnly = True
-        '
-        'ColMachineSubStatusName
-        '
-        Me.ColMachineSubStatusName.DataPropertyName = "MachineSubStatusName"
-        Me.ColMachineSubStatusName.HeaderText = "Sub-Status"
-        Me.ColMachineSubStatusName.Name = "ColMachineSubStatusName"
-        Me.ColMachineSubStatusName.ReadOnly = True
-        Me.ColMachineSubStatusName.Width = 150
-        '
-        'ColGroupName
-        '
-        Me.ColGroupName.DataPropertyName = "GroupName"
-        Me.ColGroupName.HeaderText = "Part Group"
-        Me.ColGroupName.Name = "ColGroupName"
-        Me.ColGroupName.ReadOnly = True
-        Me.ColGroupName.Width = 150
-        '
-        'ColFrequencyName
-        '
-        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
-        Me.ColFrequencyName.HeaderText = "PM Frequency"
-        Me.ColFrequencyName.Name = "ColFrequencyName"
-        Me.ColFrequencyName.ReadOnly = True
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.Width = 50
-        '
         'MntMch
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
+        Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1014, 561)
         Me.Controls.Add(Me.pnlSearchByText)

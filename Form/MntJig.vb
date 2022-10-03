@@ -6,9 +6,9 @@ Public Class MntJig
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
-    Private dicCriteriaStatus As New Dictionary(Of String, Integer)
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
-    Private dtSchedule As New DataTable
+    Private dicRemarks As New Dictionary(Of String, Object)
+    Private dtJig As New DataTable
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
     Private isFilterByJigName As Boolean = False
@@ -19,6 +19,7 @@ Public Class MntJig
     Private isFilterByJigSubStatus As Boolean = False
     Private isFilterByFrequency As Boolean = False
     Private isFilterByJigType As Boolean = False
+    Private isFilterByRemarks As Boolean = False
     Private pageCount As Integer
     Private pageIndex As Integer
     Private pageSize As Integer
@@ -178,6 +179,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 2
                     isFilterByJigName = False
@@ -188,6 +190,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 3
                     isFilterByJigName = False
@@ -198,6 +201,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 4
                     isFilterByJigName = False
@@ -208,6 +212,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 5
                     isFilterByJigName = False
@@ -218,6 +223,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 6
                     isFilterByJigName = False
@@ -228,6 +234,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = True
                     isFilterByFrequency = False
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 7
                     isFilterByJigName = False
@@ -238,6 +245,7 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = True
                     isFilterByJigType = False
+                    isFilterByRemarks = False
 
                 Case 8
                     isFilterByJigName = False
@@ -248,6 +256,18 @@ Public Class MntJig
                     isFilterByJigSubStatus = False
                     isFilterByFrequency = False
                     isFilterByJigType = True
+                    isFilterByRemarks = False
+
+                Case 9
+                    isFilterByJigName = False
+                    isFilterByArea = False
+                    isFilterByModel = False
+                    isFilterByExtension = False
+                    isFilterByJigStatus = False
+                    isFilterByJigSubStatus = False
+                    isFilterByFrequency = False
+                    isFilterByJigType = False
+                    isFilterByRemarks = True
             End Select
 
             pageIndex = 0
@@ -265,6 +285,10 @@ Public Class MntJig
         Else
             If cmbCommon.SelectedValue = 0 Then
                 cmbCommon.SelectedValue = 0
+            End If
+
+            If cmbCommon.SelectedValue Is Nothing Then
+                cmbCommon.SelectedIndex = 0
             End If
         End If
     End Sub
@@ -323,12 +347,21 @@ Public Class MntJig
                     pnlSearchByText.Visible = False
 
                     LoadJigType()
+
+                Case 9
+                    pnlSearchByCmb.Visible = True
+                    pnlSearchByText.Visible = False
+
+                    LoadRemarks()
             End Select
 
             Select Case cmbSearchCriteria.SelectedValue
                 Case 2, 3, 4, 5, 6
                     ActiveControl = cmbCommon
                     cmbCommon.SelectedValue = 0
+                Case 9
+                    ActiveControl = cmbCommon
+                    cmbCommon.SelectedIndex = 0
                 Case 1
                     ActiveControl = txtCommon
                     txtCommon.Clear()
@@ -394,7 +427,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@JigName", SqlDbType.NVarChar)
                 prmJigMasterlist(3).Value = txtCommon.Text.Trim
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByJigName", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByJigName", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByArea = True Then
@@ -409,7 +442,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@AreaId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByAreaId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByAreaId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByModel = True Then
@@ -424,7 +457,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@ModelId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByModelId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByModelId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByExtension = True Then
@@ -439,7 +472,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@ExtensionId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByExtensionId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByExtensionId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByJigStatus = True Then
@@ -454,7 +487,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@JigStatusId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByJigStatusId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByJigStatusId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByJigSubStatus = True Then
@@ -469,7 +502,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByJigSubStatusId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByJigSubStatusId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByFrequency = True Then
@@ -484,7 +517,7 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             ElseIf isFilterByJigType = True Then
@@ -499,7 +532,22 @@ Public Class MntJig
                 prmJigMasterlist(3) = New SqlParameter("@JigTypeId", SqlDbType.Int)
                 prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlistByJigTypeId", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByJigTypeId", CommandType.StoredProcedure, prmJigMasterlist)
+                totalCount = prmJigMasterlist(2).Value
+
+            ElseIf isFilterByRemarks = True Then
+                Dim prmJigMasterlist(3) As SqlParameter
+                prmJigMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmJigMasterlist(0).Value = pageIndex
+                prmJigMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmJigMasterlist(1).Value = pageSize
+                prmJigMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmJigMasterlist(2).Direction = ParameterDirection.Output
+                prmJigMasterlist(2).Value = totalCount
+                prmJigMasterlist(3) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmJigMasterlist(3).Value = IIf(cmbCommon.SelectedValue Is Nothing, Nothing, IIf(cmbCommon.SelectedValue = 1, 1, 0))
+
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByIsActive", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
 
             Else
@@ -512,11 +560,18 @@ Public Class MntJig
                 prmJigMasterlist(2).Direction = ParameterDirection.Output
                 prmJigMasterlist(2).Value = totalCount
 
-                dtSchedule = dbMethod.FillDataTable("RdMntJigMasterlist", CommandType.StoredProcedure, prmJigMasterlist)
+                dtJig = dbMethod.FillDataTable("RdMntJigMasterlist", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
             End If
 
-            bsJig.DataSource = dtSchedule
+            Me.Text = String.Empty
+            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
+                Me.Text = "Jig Masterlist - " & totalCount & " item"
+            Else
+                Me.Text = "Jig Masterlist - " & totalCount & " items"
+            End If
+
+            bsJig.DataSource = dtJig
             bsJig.ResetBindings(True)
             dgvList.AutoGenerateColumns = False
             dgvList.DataSource = bsJig
@@ -595,16 +650,32 @@ Public Class MntJig
         dbMethod.FillCmbWithCaption("RdMntJigType", CommandType.StoredProcedure, "JigTypeId", "JigTypeName", cmbCommon, "< All >")
     End Sub
 
+    Private Sub LoadRemarks()
+        Try
+            dicRemarks.Clear()
+
+            dicRemarks.Add("< All >", Nothing)
+            dicRemarks.Add(" Active", 1)
+            dicRemarks.Add(" Inactive", 2)
+            cmbCommon.DisplayMember = "Key"
+            cmbCommon.ValueMember = "Value"
+            cmbCommon.DataSource = New BindingSource(dicRemarks, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Sub LoadSearchCriteria()
         Try
             dicSearchCriteria.Add(" Jig Name", 1)
             dicSearchCriteria.Add(" Area", 2)
             dicSearchCriteria.Add(" Model", 3)
             dicSearchCriteria.Add(" Extension", 4)
-            dicSearchCriteria.Add(" Jig Status", 5)
-            dicSearchCriteria.Add(" Jig Sub Status", 6)
+            dicSearchCriteria.Add(" Status", 5)
+            dicSearchCriteria.Add(" Sub-Status", 6)
             dicSearchCriteria.Add(" PM Frequency", 7)
             dicSearchCriteria.Add(" Jig Type", 8)
+            dicSearchCriteria.Add(" Remarks", 9)
 
             cmbSearchCriteria.DisplayMember = "Key"
             cmbSearchCriteria.ValueMember = "Value"

@@ -65,7 +65,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("\\nbc-filesvr02\Engineering\IT System\Machine Monitoring System\Attachments")>  _
         Public ReadOnly Property AttachmentDirectory() As String
             Get
                 Return CType(Me("AttachmentDirectory"),String)
@@ -78,6 +78,17 @@ Namespace My
         Public ReadOnly Property SettingsId() As Integer
             Get
                 Return CType(Me("SettingsId"),Integer)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=LENOVO-AX3RONG2;Initial Catalog=MachineMonitoring;Persist Security In"& _ 
+            "fo=True;User ID=sa;Password=Nbc12#")>  _
+        Public ReadOnly Property MachineMonitoringConnectionString() As String
+            Get
+                Return CType(Me("MachineMonitoringConnectionString"),String)
             End Get
         End Property
     End Class

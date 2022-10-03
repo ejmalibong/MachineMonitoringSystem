@@ -33,6 +33,14 @@ Partial Class MntJig
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColJigId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColJigStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColJigSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColJigTypeName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -50,14 +58,6 @@ Partial Class MntJig
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.ColJigId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigTypeName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -170,6 +170,67 @@ Partial Class MntJig
         Me.dgvList.Size = New System.Drawing.Size(1014, 490)
         Me.dgvList.TabIndex = 553
         '
+        'ColJigId
+        '
+        Me.ColJigId.DataPropertyName = "JigId"
+        Me.ColJigId.HeaderText = "Jig Id"
+        Me.ColJigId.Name = "ColJigId"
+        Me.ColJigId.ReadOnly = True
+        Me.ColJigId.Visible = False
+        '
+        'ColJigCompleteName
+        '
+        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
+        Me.ColJigCompleteName.HeaderText = "Jig Name"
+        Me.ColJigCompleteName.Name = "ColJigCompleteName"
+        Me.ColJigCompleteName.ReadOnly = True
+        Me.ColJigCompleteName.Width = 150
+        '
+        'ColAreaName
+        '
+        Me.ColAreaName.DataPropertyName = "AreaName"
+        Me.ColAreaName.HeaderText = "Area"
+        Me.ColAreaName.Name = "ColAreaName"
+        Me.ColAreaName.ReadOnly = True
+        Me.ColAreaName.Width = 150
+        '
+        'ColJigStatusName
+        '
+        Me.ColJigStatusName.DataPropertyName = "JigStatusName"
+        Me.ColJigStatusName.HeaderText = "Status"
+        Me.ColJigStatusName.Name = "ColJigStatusName"
+        Me.ColJigStatusName.ReadOnly = True
+        '
+        'ColJigSubStatusName
+        '
+        Me.ColJigSubStatusName.DataPropertyName = "JigSubStatusName"
+        Me.ColJigSubStatusName.HeaderText = "Sub-Status"
+        Me.ColJigSubStatusName.Name = "ColJigSubStatusName"
+        Me.ColJigSubStatusName.ReadOnly = True
+        Me.ColJigSubStatusName.Width = 150
+        '
+        'ColFrequencyName
+        '
+        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
+        Me.ColFrequencyName.HeaderText = "PM Frequency"
+        Me.ColFrequencyName.Name = "ColFrequencyName"
+        Me.ColFrequencyName.ReadOnly = True
+        '
+        'ColJigTypeName
+        '
+        Me.ColJigTypeName.DataPropertyName = "JigTypeName"
+        Me.ColJigTypeName.HeaderText = "Jig Type"
+        Me.ColJigTypeName.Name = "ColJigTypeName"
+        Me.ColJigTypeName.ReadOnly = True
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.Width = 50
+        '
         'bindingNavigator
         '
         Me.bindingNavigator.AddNewItem = Nothing
@@ -182,7 +243,7 @@ Partial Class MntJig
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(4, 527)
+        Me.bindingNavigator.Location = New System.Drawing.Point(4, 529)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
@@ -227,7 +288,6 @@ Partial Class MntJig
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -355,72 +415,12 @@ Partial Class MntJig
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
         '
-        'ColJigId
-        '
-        Me.ColJigId.DataPropertyName = "JigId"
-        Me.ColJigId.HeaderText = "Jig Id"
-        Me.ColJigId.Name = "ColJigId"
-        Me.ColJigId.ReadOnly = True
-        Me.ColJigId.Visible = False
-        '
-        'ColJigCompleteName
-        '
-        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
-        Me.ColJigCompleteName.HeaderText = "Jig Name"
-        Me.ColJigCompleteName.Name = "ColJigCompleteName"
-        Me.ColJigCompleteName.ReadOnly = True
-        Me.ColJigCompleteName.Width = 150
-        '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
-        Me.ColAreaName.Width = 150
-        '
-        'ColJigStatusName
-        '
-        Me.ColJigStatusName.DataPropertyName = "JigStatusName"
-        Me.ColJigStatusName.HeaderText = "Status"
-        Me.ColJigStatusName.Name = "ColJigStatusName"
-        Me.ColJigStatusName.ReadOnly = True
-        '
-        'ColJigSubStatusName
-        '
-        Me.ColJigSubStatusName.DataPropertyName = "JigSubStatusName"
-        Me.ColJigSubStatusName.HeaderText = "Sub-Status"
-        Me.ColJigSubStatusName.Name = "ColJigSubStatusName"
-        Me.ColJigSubStatusName.ReadOnly = True
-        Me.ColJigSubStatusName.Width = 150
-        '
-        'ColFrequencyName
-        '
-        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
-        Me.ColFrequencyName.HeaderText = "PM Frequency"
-        Me.ColFrequencyName.Name = "ColFrequencyName"
-        Me.ColFrequencyName.ReadOnly = True
-        '
-        'ColJigTypeName
-        '
-        Me.ColJigTypeName.DataPropertyName = "JigTypeName"
-        Me.ColJigTypeName.HeaderText = "Jig Type"
-        Me.ColJigTypeName.Name = "ColJigTypeName"
-        Me.ColJigTypeName.ReadOnly = True
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.Width = 50
-        '
         'MntJig
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
+        Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1014, 561)
         Me.Controls.Add(Me.pnlSearchByText)

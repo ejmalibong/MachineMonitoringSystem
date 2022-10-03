@@ -34,7 +34,7 @@ Partial Class SecUserDetail
         Me.lblNickname = New System.Windows.Forms.Label()
         Me.txtNickname = New System.Windows.Forms.TextBox()
         Me.lblWorkgroup = New System.Windows.Forms.Label()
-        Me.lblIsActive = New System.Windows.Forms.Label()
+        Me.lblRemarks = New System.Windows.Forms.Label()
         Me.lblIsAdmin = New System.Windows.Forms.Label()
         Me.cmbWorkgroup = New SergeUtils.EasyCompletionComboBox()
         Me.lblUserItem = New System.Windows.Forms.Label()
@@ -44,17 +44,17 @@ Partial Class SecUserDetail
         Me.pnlIsAdmin = New System.Windows.Forms.Panel()
         Me.rdAdminNo = New System.Windows.Forms.RadioButton()
         Me.rdAdminYes = New System.Windows.Forms.RadioButton()
-        Me.pnlIsActive = New System.Windows.Forms.Panel()
-        Me.rdActiveNo = New System.Windows.Forms.RadioButton()
-        Me.rdActiveYes = New System.Windows.Forms.RadioButton()
+        Me.pnlStatus = New System.Windows.Forms.Panel()
+        Me.rdInactive = New System.Windows.Forms.RadioButton()
+        Me.rdActive = New System.Windows.Forms.RadioButton()
         Me.pnlIsAdmin.SuspendLayout()
-        Me.pnlIsActive.SuspendLayout()
+        Me.pnlStatus.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
+        Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnClose.DefaultScheme = False
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -70,7 +70,7 @@ Partial Class SecUserDetail
         'btnDelete
         '
         Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
+        Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnDelete.DefaultScheme = False
         Me.btnDelete.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -87,7 +87,7 @@ Partial Class SecUserDetail
         'btnSave
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSave.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
+        Me.btnSave.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnSave.DefaultScheme = False
         Me.btnSave.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -216,19 +216,19 @@ Partial Class SecUserDetail
         Me.lblWorkgroup.Text = "Workgroup"
         Me.lblWorkgroup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lblIsActive
+        'lblRemarks
         '
-        Me.lblIsActive.BackColor = System.Drawing.SystemColors.Control
-        Me.lblIsActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblIsActive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblIsActive.ForeColor = System.Drawing.Color.Black
-        Me.lblIsActive.Location = New System.Drawing.Point(4, 204)
-        Me.lblIsActive.Name = "lblIsActive"
-        Me.lblIsActive.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblIsActive.Size = New System.Drawing.Size(100, 23)
-        Me.lblIsActive.TabIndex = 567
-        Me.lblIsActive.Text = "Active"
-        Me.lblIsActive.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblRemarks.BackColor = System.Drawing.SystemColors.Control
+        Me.lblRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblRemarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblRemarks.ForeColor = System.Drawing.Color.Black
+        Me.lblRemarks.Location = New System.Drawing.Point(4, 204)
+        Me.lblRemarks.Name = "lblRemarks"
+        Me.lblRemarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblRemarks.Size = New System.Drawing.Size(100, 23)
+        Me.lblRemarks.TabIndex = 567
+        Me.lblRemarks.Text = "Remarks"
+        Me.lblRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblIsAdmin
         '
@@ -340,39 +340,39 @@ Partial Class SecUserDetail
         Me.rdAdminYes.Text = "Yes"
         Me.rdAdminYes.UseVisualStyleBackColor = True
         '
-        'pnlIsActive
+        'pnlStatus
         '
-        Me.pnlIsActive.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pnlStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pnlIsActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pnlIsActive.Controls.Add(Me.rdActiveNo)
-        Me.pnlIsActive.Controls.Add(Me.rdActiveYes)
-        Me.pnlIsActive.Location = New System.Drawing.Point(103, 204)
-        Me.pnlIsActive.Name = "pnlIsActive"
-        Me.pnlIsActive.Size = New System.Drawing.Size(217, 23)
-        Me.pnlIsActive.TabIndex = 8
+        Me.pnlStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlStatus.Controls.Add(Me.rdInactive)
+        Me.pnlStatus.Controls.Add(Me.rdActive)
+        Me.pnlStatus.Location = New System.Drawing.Point(103, 204)
+        Me.pnlStatus.Name = "pnlStatus"
+        Me.pnlStatus.Size = New System.Drawing.Size(217, 23)
+        Me.pnlStatus.TabIndex = 8
         '
-        'rdActiveNo
+        'rdInactive
         '
-        Me.rdActiveNo.AutoSize = True
-        Me.rdActiveNo.Location = New System.Drawing.Point(126, 1)
-        Me.rdActiveNo.Name = "rdActiveNo"
-        Me.rdActiveNo.Size = New System.Drawing.Size(41, 19)
-        Me.rdActiveNo.TabIndex = 1
-        Me.rdActiveNo.TabStop = True
-        Me.rdActiveNo.Text = "No"
-        Me.rdActiveNo.UseVisualStyleBackColor = True
+        Me.rdInactive.AutoSize = True
+        Me.rdInactive.Location = New System.Drawing.Point(126, 1)
+        Me.rdInactive.Name = "rdInactive"
+        Me.rdInactive.Size = New System.Drawing.Size(66, 19)
+        Me.rdInactive.TabIndex = 1
+        Me.rdInactive.TabStop = True
+        Me.rdInactive.Text = "Inactive"
+        Me.rdInactive.UseVisualStyleBackColor = True
         '
-        'rdActiveYes
+        'rdActive
         '
-        Me.rdActiveYes.AutoSize = True
-        Me.rdActiveYes.Location = New System.Drawing.Point(35, 1)
-        Me.rdActiveYes.Name = "rdActiveYes"
-        Me.rdActiveYes.Size = New System.Drawing.Size(42, 19)
-        Me.rdActiveYes.TabIndex = 0
-        Me.rdActiveYes.TabStop = True
-        Me.rdActiveYes.Text = "Yes"
-        Me.rdActiveYes.UseVisualStyleBackColor = True
+        Me.rdActive.AutoSize = True
+        Me.rdActive.Location = New System.Drawing.Point(35, 1)
+        Me.rdActive.Name = "rdActive"
+        Me.rdActive.Size = New System.Drawing.Size(58, 19)
+        Me.rdActive.TabIndex = 0
+        Me.rdActive.TabStop = True
+        Me.rdActive.Text = "Active"
+        Me.rdActive.UseVisualStyleBackColor = True
         '
         'SecUserDetail
         '
@@ -381,7 +381,7 @@ Partial Class SecUserDetail
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(324, 281)
-        Me.Controls.Add(Me.pnlIsActive)
+        Me.Controls.Add(Me.pnlStatus)
         Me.Controls.Add(Me.pnlIsAdmin)
         Me.Controls.Add(Me.lblWorkgroup)
         Me.Controls.Add(Me.lblSection)
@@ -390,7 +390,7 @@ Partial Class SecUserDetail
         Me.Controls.Add(Me.txtUserItem)
         Me.Controls.Add(Me.cmbWorkgroup)
         Me.Controls.Add(Me.lblIsAdmin)
-        Me.Controls.Add(Me.lblIsActive)
+        Me.Controls.Add(Me.lblRemarks)
         Me.Controls.Add(Me.lblNickname)
         Me.Controls.Add(Me.txtNickname)
         Me.Controls.Add(Me.lblPassword)
@@ -413,11 +413,11 @@ Partial Class SecUserDetail
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Profile Editor"
+        Me.Text = "User Editor"
         Me.pnlIsAdmin.ResumeLayout(False)
         Me.pnlIsAdmin.PerformLayout()
-        Me.pnlIsActive.ResumeLayout(False)
-        Me.pnlIsActive.PerformLayout()
+        Me.pnlStatus.ResumeLayout(False)
+        Me.pnlStatus.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -435,7 +435,7 @@ Partial Class SecUserDetail
     Friend WithEvents lblNickname As Label
     Friend WithEvents txtNickname As TextBox
     Friend WithEvents lblWorkgroup As Label
-    Friend WithEvents lblIsActive As Label
+    Friend WithEvents lblRemarks As Label
     Friend WithEvents lblIsAdmin As Label
     Friend WithEvents cmbWorkgroup As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblUserItem As Label
@@ -443,9 +443,9 @@ Partial Class SecUserDetail
     Friend WithEvents cmbSection As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblSection As Label
     Friend WithEvents pnlIsAdmin As Panel
-    Friend WithEvents pnlIsActive As Panel
+    Friend WithEvents pnlStatus As Panel
     Friend WithEvents rdAdminNo As RadioButton
     Friend WithEvents rdAdminYes As RadioButton
-    Friend WithEvents rdActiveNo As RadioButton
-    Friend WithEvents rdActiveYes As RadioButton
+    Friend WithEvents rdInactive As RadioButton
+    Friend WithEvents rdActive As RadioButton
 End Class

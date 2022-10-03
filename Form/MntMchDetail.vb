@@ -380,13 +380,13 @@ Public Class MntMchDetail
     End Sub
 
     Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
-        lblStatus.ForeColor = Color.White
-        lblStatus.BackColor = Color.DarkSlateGray
+        lblRemarks.ForeColor = Color.White
+        lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
 
     Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
-        lblStatus.ForeColor = Color.Black
-        lblStatus.BackColor = SystemColors.Control
+        lblRemarks.ForeColor = Color.Black
+        lblRemarks.BackColor = SystemColors.Control
     End Sub
 End Class

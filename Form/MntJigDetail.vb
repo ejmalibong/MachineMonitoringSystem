@@ -129,7 +129,7 @@ Public Class MntJigDetail
                     End If
                 End If
 
-                Dim prmJig(7) As SqlParameter
+                Dim prmJig(9) As SqlParameter
                 prmJig(0) = New SqlParameter("@JigId", SqlDbType.Int)
                 prmJig(0).Value = jigId
                 prmJig(1) = New SqlParameter("@JigName", SqlDbType.NVarChar)
@@ -146,6 +146,18 @@ Public Class MntJigDetail
                 prmJig(6).Value = cmbJigType.SelectedValue
                 prmJig(7) = New SqlParameter("@IsActive", SqlDbType.Bit)
                 prmJig(7).Value = IIf(rdActive.Checked = True, True, False)
+
+                If rdActive.Checked = True Then
+                    prmJig(8) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                    prmJig(8).Value = 1
+                    prmJig(9) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
+                    prmJig(9).Value = 1
+                Else
+                    prmJig(8) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                    prmJig(8).Value = 4
+                    prmJig(9) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
+                    prmJig(9).Value = 5
+                End If
 
                 dbMethod.ExecuteNonQuery("UpdMntJig", CommandType.StoredProcedure, prmJig)
                 pKey = jigId
@@ -453,13 +465,13 @@ Public Class MntJigDetail
     End Sub
 
     Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
-        lblStatus.ForeColor = Color.White
-        lblStatus.BackColor = Color.DarkSlateGray
+        lblRemarks.ForeColor = Color.White
+        lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
 
     Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
-        lblStatus.ForeColor = Color.Black
-        lblStatus.BackColor = SystemColors.Control
+        lblRemarks.ForeColor = Color.Black
+        lblRemarks.BackColor = SystemColors.Control
     End Sub
 End Class

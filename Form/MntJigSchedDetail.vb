@@ -257,7 +257,12 @@ Public Class MntJigSchedDetail
         Try
             cmbJigName.DisplayMember = "JigCompleteName"
             cmbJigName.ValueMember = "JigId"
-            dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJigName, "< Select Jig >")
+
+            Dim prmJig(0) As SqlParameter
+            prmJig(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+            prmJig(0).Value = True
+
+            dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJigName, "< Select Jig >", prmJig)
 
             AddHandler cmbJigName.SelectedValueChanged, AddressOf cmbJigName_SelectedValueChanged
         Catch ex As Exception
@@ -393,7 +398,7 @@ Public Class MntJigSchedDetail
         End If
 
         pnlChecklist.Enabled = False
-        pnlStatus.Enabled = False
+        pnlRemarks.Enabled = False
     End Sub
     Private Sub ResetForm()
         Try
@@ -624,14 +629,14 @@ Public Class MntJigSchedDetail
         lblChecklist.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
-        lblStatus.ForeColor = Color.White
-        lblStatus.BackColor = Color.DarkSlateGray
+    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlRemarks.Enter
+        lblRemarks.ForeColor = Color.White
+        lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
-        lblStatus.ForeColor = Color.Black
-        lblStatus.BackColor = SystemColors.Control
+    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlRemarks.Leave
+        lblRemarks.ForeColor = Color.Black
+        lblRemarks.BackColor = SystemColors.Control
     End Sub
 
 End Class
