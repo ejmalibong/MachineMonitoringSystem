@@ -14,6 +14,7 @@ Public Class FacTrxDetailMch
     Private adpTrxDetail As New SqlDataAdapter
     Private areaId As Integer = 0
     Private bite As Byte() 'the word `byte` is not a valid identifier
+    Private currentIndex As Integer
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
@@ -32,21 +33,19 @@ Public Class FacTrxDetailMch
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
 
+    Private imgDirectory As String = directory.ImgIniDirectoryFc
     Private imgTmp As String = String.Empty
     Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
-    Private lstImgAttachment As New List(Of ImgAttachment)
+
+    Private lstImg As New List(Of ImgAttachment)
+    Private lstImgFileTypes As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
+    Private lstImgForCopy As New List(Of ImgAttachment)
+    Private lstImgForDelete As New List(Of ImgAttachment)
     Private machineId As Integer = 0
     Private machinePartGroupId As Integer = 0
     Private monthId As Integer = 0
     Private mStream As New MemoryStream
-
-    Private directories As New Directory
-    Private atchDirectory As String = directories.AtchIniDirectoryFc
-    Private imgDirectory As String = directories.ImgIniDirectoryFc
-
-    Private currentIndex As Integer
-
     Private orgApp1Status As Integer = 0
     Private orgApp2Status As Integer = 0
     Private orgApp3Status As Integer = 0
@@ -65,10 +64,6 @@ Public Class FacTrxDetailMch
     Private userId As Integer
     Private weekId As Integer = 0
     Private workgroupId As Integer = 0
-
-    Private lstImageFiles As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
-    Private lstAttachmentForCopy As New List(Of ImgAttachment)
-
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _trxId As Integer = 0)
 
         ' This call is required by the designer.
@@ -96,6 +91,8 @@ Public Class FacTrxDetailMch
         InitializeContructor()
     End Sub
 
+    Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
+
     'sr mngr action
     Public Property fromPmCalendar As Boolean = False
     Public Sub DisableForm(isDisable As Boolean)
@@ -120,7 +117,6 @@ Public Class FacTrxDetailMch
             txtScheduleWeek.Enabled = False
 
             txtChecksheet.ReadOnly = True
-            ''txt4M.ReadOnly = True
 
             btnAddRow.Enabled = False
             btnRemoveRow.Enabled = False
@@ -129,8 +125,6 @@ Public Class FacTrxDetailMch
             btnRemoveImage.Enabled = False
             btnViewChecksheet.Enabled = False
             btnRemoveChecksheet.Enabled = False
-            ''btnView4M.Enabled = False
-            ''btnRemove4M.Enabled = False
 
             dgvDetail.ClearSelection()
             dgvDetail.Enabled = False
@@ -153,7 +147,6 @@ Public Class FacTrxDetailMch
         Else 'contains machine, enable form
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
-            'btnView4M.Enabled = True
 
             If trxId = 0 Then 'new transaction, enable all controls, enable approvers controls based on accesslevel
                 cmbTransactionStatus.Enabled = True
@@ -174,14 +167,12 @@ Public Class FacTrxDetailMch
                 txtJoRequestor.Enabled = True
 
                 txtChecksheet.ReadOnly = False
-                ''txt4M.ReadOnly = False
 
                 btnAddRow.Enabled = True
                 btnRemoveRow.Enabled = True
                 btnBrowseImage.Enabled = True
                 btnRemoveImage.Enabled = True
                 btnRemoveChecksheet.Enabled = True
-                ''btnRemove4M.Enabled = True
 
                 dgvDetail.ClearSelection()
                 dgvDetail.Enabled = True
@@ -263,13 +254,11 @@ Public Class FacTrxDetailMch
                     txtJoNumber.Enabled = True
                     txtJoRequestor.Enabled = True
                     txtChecksheet.ReadOnly = False
-                    'txt4M.ReadOnly = False
                     btnAddRow.Enabled = True
                     btnRemoveRow.Enabled = True
                     btnBrowseImage.Enabled = True
                     btnRemoveImage.Enabled = True
                     btnRemoveChecksheet.Enabled = True
-                    'btnRemove4M.Enabled = True
 
                     dgvDetail.ClearSelection()
                     dgvDetail.Enabled = True
@@ -306,14 +295,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -348,14 +335,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    'btnRemove4M.Enabled = True
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
@@ -461,14 +446,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -503,14 +486,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    'btnRemove4M.Enabled = True
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
@@ -611,14 +592,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    'btnRemove4M.Enabled = True
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = True
@@ -670,14 +649,12 @@ Public Class FacTrxDetailMch
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -739,7 +716,7 @@ Public Class FacTrxDetailMch
         LoadTransactionStatus()
         LoadMachine()
         GetSetting(My.Settings.SettingsId)
-        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -823,6 +800,66 @@ Public Class FacTrxDetailMch
     <DllImport("shell32.dll")>
     Private Shared Function FindExecutable(ByVal lpFile As String, ByVal lpDirectory As String, <Out> ByVal lpResult As StringBuilder) As Integer
     End Function
+
+    Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
+        Try
+            If lstImgForCopy.Count > 0 Then
+                Dim streamRead As System.IO.FileStream
+                Dim streamWrite As System.IO.FileStream
+
+                For i As Integer = 0 To lstImgForCopy.Count - 1
+                    streamRead = New System.IO.FileStream(lstImgForCopy(i).FileName, System.IO.FileMode.Open)
+                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstImgForCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+
+                    Dim lngLen As Long = streamRead.Length - 1
+                    Dim byteBuffer(4096) As Byte
+                    Dim intBytesRead As Integer
+
+                    ShowProgress("Uploading files : (0/" + (lngLen * 100).ToString + ")", lblProgress)
+
+                    While streamRead.Position < lngLen
+                        If (bgWorker.CancellationPending = True) Then
+                            e.Cancel = True
+                            Exit While
+                        End If
+
+                        bgWorker.ReportProgress(CInt(streamRead.Position / lngLen * 100))
+                        ShowProgress("Uploading files : (" + CInt(streamRead.Position).ToString + "/" + (lngLen * 100).ToString + ")", lblProgress)
+                        intBytesRead = (streamRead.Read(byteBuffer, 0, 4096))
+
+                        streamWrite.Write(byteBuffer, 0, intBytesRead)
+                    End While
+
+                    streamRead.Dispose()
+                    streamWrite.Dispose()
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub bgWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWorker.ProgressChanged
+        pbAttachment.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
+        If e.Cancelled = True Then
+            pbAttachment.Visible = False
+            lblProgress.Visible = False
+
+            btnPrevious.Enabled = True
+            btnNext.Enabled = True
+            btnViewImage.Enabled = True
+            btnBrowseImage.Enabled = True
+            btnRemoveImage.Enabled = True
+            btnSave.Enabled = True
+            btnDelete.Enabled = True
+            btnClose.Enabled = True
+        Else
+            Me.DialogResult = DialogResult.OK
+        End If
+    End Sub
 
     Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
         Try
@@ -962,12 +999,12 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
 
-    Private Sub btnRemove4M_Click(sender As Object, e As EventArgs)
-        Try
-            'txt4M.Text = String.Empty
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        NextImage(1)
+    End Sub
+
+    Private Sub btnPrevious_Click(sender As Object, e As EventArgs) Handles btnPrevious.Click
+        NextImage(-1)
     End Sub
 
     Private Sub btnRemoveChecksheet_Click(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Click
@@ -980,13 +1017,24 @@ Public Class FacTrxDetailMch
 
     Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
         Try
-            If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
+            If lstImg.Count = 0 Then
 
-            If Not picImage.Image Is Nothing Then
-                picImage.Image.Dispose()
-                picImage.Image = Nothing
-                txtImageName.Text = String.Empty
+            Else
+                If trxId = 0 Then
+                    lstImg.RemoveAt(currentIndex)
+                Else
+                    If Not lstImg(currentIndex).TrxId = 0 Then
+                        Dim forDeleteItem As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).FileName,
+                                                                   lstImg(currentIndex).SafeName,
+                                                                   Path.GetExtension(lstImg(currentIndex).SafeName),
+                                                                   lstImg(currentIndex).TrxId)
+                        lstImgForDelete.Add(forDeleteItem)
+                        lstImg.RemoveAt(currentIndex)
+                    End If
+                End If
             End If
+
+            NextImage(-1)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -1076,7 +1124,7 @@ Public Class FacTrxDetailMch
                 Return
             End If
 
-            If cmbDowntimeSubStatus.SelectedValue = 3 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
+            If cmbDowntimeSubStatus.SelectedValue = 1 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
                 If String.IsNullOrEmpty(txtScheduleMonth.Text) Then
                     MessageBox.Show("Please input the PM month schedule.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     txtScheduleMonth.Focus()
@@ -1150,7 +1198,7 @@ Public Class FacTrxDetailMch
                         Return
                     End If
 
-                    If lstImgAttachment.Count = 0 Then
+                    If lstImg.Count = 0 Then
                         MessageBox.Show("Please attach image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         btnBrowseImage.Focus()
                         Return
@@ -1443,8 +1491,8 @@ Public Class FacTrxDetailMch
 
                 dbMethod.ExecuteNonQuery("InsFacTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
-                If lstImgAttachment.Count > 0 Then
-                    For i As Integer = 0 To lstImgAttachment.Count - 1
+                If lstImg.Count > 0 Then
+                    For i As Integer = 0 To lstImg.Count - 1
                         Dim prmAttachment(2) As SqlParameter
                         prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
                         prmAttachment(0).Direction = ParameterDirection.Output
@@ -1457,7 +1505,7 @@ Public Class FacTrxDetailMch
 
                         Dim ext As String = String.Empty
                         Dim newName As String = String.Empty
-                        ext = Path.GetExtension(lstImgAttachment(i).FileName).ToLower
+                        ext = Path.GetExtension(lstImg(i).FileName).ToLower
 
                         newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
 
@@ -1474,8 +1522,8 @@ Public Class FacTrxDetailMch
                         pbAttachment.Visible = True
                         lblProgress.Visible = True
 
-                        Dim copyAttachment As New ImgAttachment(lstImgAttachment(i).FileName, newName, lstImgAttachment(i).FileName)
-                        lstAttachmentForCopy.Add(copyAttachment)
+                        Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
+                        lstImgForCopy.Add(copyAttachment)
                     Next
                 End If
 
@@ -2722,8 +2770,8 @@ Public Class FacTrxDetailMch
 
     Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
         Try
-            If lstImgAttachment.Count > 0 Then
-                Process.Start(lstImgAttachment(0).FileName)
+            If lstImg.Count > 0 Then
+                Process.Start(lstImg(currentIndex).FileName)
             Else
                 'https://stackoverflow.com/questions/14866603/a-generic-error-occurred-in-gdi-when-attempting-to-use-image-save
                 If Not picImage.Image Is Nothing Then
@@ -2941,8 +2989,45 @@ Public Class FacTrxDetailMch
                 cmbDowntimeSubStatus.Enabled = False
             Else
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
+
+                'If cmbDowntimeSubStatus.SelectedValue = 0 Then
+                '    txtScheduleMonth.Text = String.Empty
+                '    txtScheduleWeek.Text = String.Empty
+                '    txtScheduleMonth.Enabled = False
+                '    txtScheduleWeek.Enabled = False
+
+                '    scheduleId = 0
+                '    monthId = 0
+                '    weekId = 0
+                'Else
+                '    If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
+                '        GetMachineSchedule(cmbMachineName.SelectedValue)
+                '    Else
+                '        txtScheduleMonth.Text = String.Empty
+                '        txtScheduleWeek.Text = String.Empty
+                '        txtScheduleMonth.Enabled = False
+                '        txtScheduleWeek.Enabled = False
+
+                '        If orgMachineSubStatusId = 3 Then
+                '            Dim prmSched(1) As SqlParameter
+                '            prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                '            prmSched(0).Value = cmbMachineName.SelectedValue
+                '            prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                '            prmSched(1).Value = trxId
+
+                '            Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
+                '            Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
+
+                '            If rdrSched.Read Then
+                '                orgScheduleId = rdrSched.Item("ScheduleId")
+                '            End If
+                '            rdrSched.Close()
+                '        End If
+                '    End If
+                'End If
+
                 If trxId = 0 Then
-                    cmbDowntimeSubStatus.Enabled = True
+
                 Else
                     If isAdmin Or accessLevelId = 1 Then
                         cmbDowntimeSubStatus.Enabled = True
@@ -2977,41 +3062,41 @@ Public Class FacTrxDetailMch
 
     Private Sub cmbDowntimeSubStatus_SelectedValueChanged(sender As Object, e As EventArgs)
         Try
-            If cmbDowntimeSubStatus.SelectedValue = 0 Then
-                txtScheduleMonth.Text = String.Empty
-                txtScheduleWeek.Text = String.Empty
-                txtScheduleMonth.Enabled = False
-                txtScheduleWeek.Enabled = False
+            'If cmbDowntimeSubStatus.SelectedValue = 0 Then
+            '    txtScheduleMonth.Text = String.Empty
+            '    txtScheduleWeek.Text = String.Empty
+            '    txtScheduleMonth.Enabled = False
+            '    txtScheduleWeek.Enabled = False
 
-                scheduleId = 0
-                monthId = 0
-                weekId = 0
-            Else
-                If cmbDowntimeSubStatus.SelectedValue = 3 Then 'preventive maintenance
-                    GetMachineSchedule(cmbMachineName.SelectedValue)
-                Else
-                    txtScheduleMonth.Text = String.Empty
-                    txtScheduleWeek.Text = String.Empty
-                    txtScheduleMonth.Enabled = False
-                    txtScheduleWeek.Enabled = False
+            '    scheduleId = 0
+            '    monthId = 0
+            '    weekId = 0
+            'Else
+            '    If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
+            '        GetMachineSchedule(cmbMachineName.SelectedValue)
+            '    Else
+            '        txtScheduleMonth.Text = String.Empty
+            '        txtScheduleWeek.Text = String.Empty
+            '        txtScheduleMonth.Enabled = False
+            '        txtScheduleWeek.Enabled = False
 
-                    If orgMachineSubStatusId = 3 Then
-                        Dim prmSched(1) As SqlParameter
-                        prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                        prmSched(0).Value = cmbMachineName.SelectedValue
-                        prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmSched(1).Value = trxId
+            '        If orgMachineSubStatusId = 3 Then
+            '            Dim prmSched(1) As SqlParameter
+            '            prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+            '            prmSched(0).Value = cmbMachineName.SelectedValue
+            '            prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+            '            prmSched(1).Value = trxId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
-                        Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
+            '            Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
+            '            Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
 
-                        If rdrSched.Read Then
-                            orgScheduleId = rdrSched.Item("ScheduleId")
-                        End If
-                        rdrSched.Close()
-                    End If
-                End If
-            End If
+            '            If rdrSched.Read Then
+            '                orgScheduleId = rdrSched.Item("ScheduleId")
+            '            End If
+            '            rdrSched.Close()
+            '        End If
+            '    End If
+            'End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3039,9 +3124,9 @@ Public Class FacTrxDetailMch
                 LoadDowntimeStatus()
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
 
-                If trxId = 0 Then
-                    cmbDowntimeStatus.SelectedValue = 3
-                    cmbDowntimeSubStatus.SelectedValue = 5
+                If trxId = 0 Then 'default to preventive maintenance
+                    cmbDowntimeStatus.SelectedValue = 2
+                    cmbDowntimeSubStatus.SelectedValue = 2
                 Else
                     If isAdmin Or accessLevelId = 1 Then
                         If cmbMachinePart.Items.Count > 0 Then
@@ -3673,7 +3758,7 @@ Public Class FacTrxDetailMch
             prmMachineId(0) = New SqlParameter("@MachineId", SqlDbType.Int)
             prmMachineId(0).Value = machineId
 
-            Dim rdrMachine As IDataReader = dbMethod.ExecuteReader("RdMntMachine", CommandType.StoredProcedure, prmMachineId)
+            Dim rdrMachine As IDataReader = dbMethod.ExecuteReader("RdFacMachine", CommandType.StoredProcedure, prmMachineId)
 
             While rdrMachine.Read
                 areaId = rdrMachine.Item("AreaId")
@@ -3697,7 +3782,7 @@ Public Class FacTrxDetailMch
             prmMachineId(0) = New SqlParameter("@MachineId", SqlDbType.Int)
             prmMachineId(0).Value = machineId
 
-            Dim rdrPartGroup As IDataReader = dbMethod.ExecuteReader("RdMntMachine", CommandType.StoredProcedure, prmMachineId)
+            Dim rdrPartGroup As IDataReader = dbMethod.ExecuteReader("RdFacMachine", CommandType.StoredProcedure, prmMachineId)
 
             While rdrPartGroup.Read
                 If rdrPartGroup.Item("GroupId") Is DBNull.Value Then
@@ -3711,7 +3796,7 @@ Public Class FacTrxDetailMch
                     prmGroupId(0) = New SqlParameter("@GroupId", SqlDbType.Int)
                     prmGroupId(0).Value = machinePartGroupId
 
-                    dbMethod.FillCmbWithCaption("RdMntMachinePart", CommandType.StoredProcedure, "MachinePartId", "MachinePartName", cmbMachinePart, "< Select Machine Part >",
+                    dbMethod.FillCmbWithCaption("RdFacMachinePart", CommandType.StoredProcedure, "MachinePartId", "MachinePartName", cmbMachinePart, "< Select Machine Part >",
                                                 prmGroupId)
                 End If
             End While
@@ -3884,7 +3969,7 @@ Public Class FacTrxDetailMch
             prm(0) = New SqlParameter("@MachineId", SqlDbType.Int)
             prm(0).Value = machineId
 
-            Dim reader As IDataReader = dbMethod.ExecuteReader("RdMntMachineAccumulatedTime", CommandType.StoredProcedure, prm)
+            Dim reader As IDataReader = dbMethod.ExecuteReader("RdFacMachineAccumulatedTime", CommandType.StoredProcedure, prm)
 
             While reader.Read
                 If Not reader.Item("TrxFrom") Is DBNull.Value Then
@@ -4005,7 +4090,7 @@ Public Class FacTrxDetailMch
             prmMachineStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
             prmMachineStatus(0).Value = Nothing
 
-            dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbDowntimeStatus,
+            dbMethod.FillCmbWithCaption("RdFacMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbDowntimeStatus,
                                         "< Select Machine Status >", prmMachineStatus)
 
             AddHandler cmbDowntimeStatus.SelectedValueChanged, AddressOf cmbDowntimeStatus_SelectedValueChanged
@@ -4026,8 +4111,14 @@ Public Class FacTrxDetailMch
             prmMachineSubStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
             prmMachineSubStatus(0).Value = downtimeStatusId
 
-            dbMethod.FillCmbWithCaption("RdMntMachineSubStatus", CommandType.StoredProcedure, "MachineSubStatusId", "MachineSubStatusName",
+            dbMethod.FillCmbWithCaption("RdFacMachineSubStatus", CommandType.StoredProcedure, "MachineSubStatusId", "MachineSubStatusName",
                                         cmbDowntimeSubStatus, "< Select Sub-Status >", prmMachineSubStatus)
+
+            If downtimeStatusId = 2 Then
+                cmbDowntimeSubStatus.SelectedValue = 2
+            ElseIf downtimeStatusId = 3 Then
+                cmbDowntimeSubStatus.SelectedValue = 3
+            End If
 
             AddHandler cmbDowntimeSubStatus.SelectedValueChanged, AddressOf cmbDowntimeSubStatus_SelectedValueChanged
         Catch ex As Exception
@@ -4047,13 +4138,13 @@ Public Class FacTrxDetailMch
                 prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
                 prm(1).Value = 1
 
-                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "", prm)
+                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineCode", cmbMachineName, "", prm)
             Else
                 Dim prm(0) As SqlParameter
                 prm(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
                 prm(0).Value = Nothing
 
-                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "", prm)
+                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineCode", cmbMachineName, "", prm)
             End If
 
             AddHandler cmbMachineName.Validating, AddressOf cmbMachineName_Validating
@@ -4089,33 +4180,35 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
 
-    Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
+    Private Sub NextImage(val As Integer)
         Try
-            For i As Integer = 0 To ofdImage.FileNames.Length - 1
-                Dim newAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
-                lstImgAttachment.Add(newAttachment)
-                currentIndex = lstImgAttachment.Count - 1
-            Next
-            ShowAttachment()
+            If lstImg.Count < 1 Then
+                picImage.Image = Nothing
+                txtImageName.Text = String.Empty
+                lblAttachmentCount.Text = String.Empty
+                lblAttachmentCount.Visible = False
+                Exit Sub
+            End If
 
-            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImgAttachment(currentIndex).FileName)
-            lblAttachmentCount.Text = String.Format("{0}/{1}", currentIndex + 1, lstImgAttachment.Count)
+            currentIndex += val
+            If currentIndex < 0 Then currentIndex = lstImg.Count - 1
+            If currentIndex > lstImg.Count - 1 Then currentIndex = 0
+            If currentIndex = lstImg.Count - 1 Then currentIndex = lstImg.Count - 1
+            ShowAttachment()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
-    Private Sub ShowAttachment()
+    Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
-            If lstImageFiles.Contains(lstImgAttachment(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
-                picImage.Visible = True
+            For i As Integer = 0 To ofdImage.FileNames.Length - 1
+                Dim imgAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
+                lstImg.Add(imgAttachment)
+                currentIndex = lstImg.Count - 1
+            Next
+            ShowAttachment()
 
-                Using img As Image = Image.FromFile(lstImgAttachment(currentIndex).FileName)
-                    picImage.Image = New Bitmap(img)
-                End Using
-            End If
-
-            txtImageName.Text = lstImgAttachment(currentIndex).SafeName
+            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImg(currentIndex).FileName)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -4124,31 +4217,46 @@ Public Class FacTrxDetailMch
     Private Sub pnlImage_Enter(sender As Object, e As EventArgs) Handles pnlImage.Enter
         lblImageAttachment.ForeColor = Color.White
         lblImageAttachment.BackColor = Color.DarkSlateGray
+
+        lblAttachmentCount.ForeColor = Color.White
+        lblAttachmentCount.BackColor = Color.DarkSlateGray
     End Sub
 
     Private Sub pnlImage_Leave(sender As Object, e As EventArgs) Handles pnlImage.Leave
         lblImageAttachment.ForeColor = Color.Black
         lblImageAttachment.BackColor = SystemColors.Control
+
+        lblAttachmentCount.ForeColor = Color.Black
+        lblAttachmentCount.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub txt4M_Enter(sender As Object, e As EventArgs)
-        'lbl4M.ForeColor = Color.White
-        'lbl4M.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub txt4M_Leave(sender As Object, e As EventArgs)
-        'lbl4M.ForeColor = Color.Black
-        'lbl4M.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub txt4M_LinkClicked(sender As Object, e As LinkClickedEventArgs)
+    Private Sub ShowAttachment()
         Try
-            'If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
-            '    Process.Start(e.LinkText)
-            'End If
+            If lstImgFileTypes.Contains(lstImg(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
+                Using img As Image = Image.FromFile(lstImg(currentIndex).FileName)
+                    picImage.Image = New Bitmap(img)
+                End Using
+            End If
+
+            txtImageName.Text = lstImg(currentIndex).SafeName
+
+            If lstImg.Count > 0 Then
+                lblAttachmentCount.Visible = True
+                lblAttachmentCount.Text = String.Format("{0}/{1}", currentIndex + 1, lstImg.Count)
+            Else
+                lblAttachmentCount.Visible = False
+                lblAttachmentCount.Text = ""
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+    Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
+        If lbl.InvokeRequired Then
+            lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
+        Else
+            lbl.Text = text
+        End If
     End Sub
 
     Private Sub txtActionTaken_Enter(sender As Object, e As EventArgs) Handles txtActionTaken.Enter
@@ -4332,75 +4440,4 @@ Public Class FacTrxDetailMch
         lblScheduleWeek.ForeColor = Color.Black
         lblScheduleWeek.BackColor = SystemColors.Control
     End Sub
-
-    Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
-        Try
-            If lstAttachmentForCopy.Count > 0 Then
-                Dim streamRead As System.IO.FileStream
-                Dim streamWrite As System.IO.FileStream
-
-                For i As Integer = 0 To lstAttachmentForCopy.Count - 1
-                    streamRead = New System.IO.FileStream(lstAttachmentForCopy(i).FileName, System.IO.FileMode.Open)
-                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstAttachmentForCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
-
-                    Dim lngLen As Long = streamRead.Length - 1
-                    Dim byteBuffer(4096) As Byte
-                    Dim intBytesRead As Integer
-
-                    ShowProgress("Uploading files : (0/" + (lngLen * 100).ToString + ")", lblProgress)
-
-                    While streamRead.Position < lngLen
-                        If (bgWorker.CancellationPending = True) Then
-                            e.Cancel = True
-                            Exit While
-                        End If
-
-                        bgWorker.ReportProgress(CInt(streamRead.Position / lngLen * 100))
-                        ShowProgress("Uploading files : (" + CInt(streamRead.Position).ToString + "/" + (lngLen * 100).ToString + ")", lblProgress)
-                        intBytesRead = (streamRead.Read(byteBuffer, 0, 4096))
-
-                        streamWrite.Write(byteBuffer, 0, intBytesRead)
-                    End While
-
-                    streamRead.Dispose()
-                    streamWrite.Dispose()
-                Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
-        If lbl.InvokeRequired Then
-            lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
-        Else
-            lbl.Text = text
-        End If
-    End Sub
-
-    Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
-
-    Private Sub bgWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWorker.ProgressChanged
-        pbAttachment.Value = e.ProgressPercentage
-    End Sub
-
-    Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
-        If e.Cancelled = True Then
-            pbAttachment.Visible = False
-            lblProgress.Visible = False
-
-            btnPrevious.Enabled = True
-            btnNext.Enabled = True
-            btnViewImage.Enabled = True
-            btnBrowseImage.Enabled = True
-            btnRemoveImage.Enabled = True
-            btnSave.Enabled = True
-            btnDelete.Enabled = True
-            btnClose.Enabled = True
-        Else
-            Me.DialogResult = DialogResult.OK
-        End If
-    End Sub
-
 End Class

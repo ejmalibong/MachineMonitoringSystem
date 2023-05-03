@@ -22,12 +22,12 @@ Partial Class FacTrxDetailMch
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.lblRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.txtDowntimeAccumulated = New System.Windows.Forms.Label()
@@ -64,6 +64,10 @@ Partial Class FacTrxDetailMch
         Me.btnBrowseImage = New PinkieControls.ButtonXP()
         Me.btnRemoveImage = New PinkieControls.ButtonXP()
         Me.pnlImage = New System.Windows.Forms.Panel()
+        Me.lblProgress = New System.Windows.Forms.Label()
+        Me.pbAttachment = New System.Windows.Forms.ProgressBar()
+        Me.btnNext = New PinkieControls.ButtonXP()
+        Me.btnPrevious = New PinkieControls.ButtonXP()
         Me.btnViewImage = New PinkieControls.ButtonXP()
         Me.lblPic = New System.Windows.Forms.Label()
         Me.dgvPic = New System.Windows.Forms.DataGridView()
@@ -135,10 +139,6 @@ Partial Class FacTrxDetailMch
         Me.lblModifiedBy = New System.Windows.Forms.Label()
         Me.txtModifiedDate = New System.Windows.Forms.Label()
         Me.txtModifiedBy = New System.Windows.Forms.Label()
-        Me.btnPrevious = New PinkieControls.ButtonXP()
-        Me.btnNext = New PinkieControls.ButtonXP()
-        Me.pbAttachment = New System.Windows.Forms.ProgressBar()
-        Me.lblProgress = New System.Windows.Forms.Label()
         Me.lblAttachmentCount = New System.Windows.Forms.Label()
         Me.bgWorker = New System.ComponentModel.BackgroundWorker()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -272,7 +272,7 @@ Partial Class FacTrxDetailMch
         Me.lblTransactionStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblTransactionStatus.Size = New System.Drawing.Size(130, 23)
         Me.lblTransactionStatus.TabIndex = 211
-        Me.lblTransactionStatus.Text = "Activity Status"
+        Me.lblTransactionStatus.Text = "Activity Status *"
         Me.lblTransactionStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblRoutingStatus
@@ -302,7 +302,7 @@ Partial Class FacTrxDetailMch
         Me.lblMachineName.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblMachineName.Size = New System.Drawing.Size(130, 23)
         Me.lblMachineName.TabIndex = 220
-        Me.lblMachineName.Text = "Machine Name"
+        Me.lblMachineName.Text = "Machine Name *"
         Me.lblMachineName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblArea
@@ -343,7 +343,7 @@ Partial Class FacTrxDetailMch
         Me.lblDowntimeStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblDowntimeStatus.Size = New System.Drawing.Size(130, 23)
         Me.lblDowntimeStatus.TabIndex = 225
-        Me.lblDowntimeStatus.Text = "Downtime Status"
+        Me.lblDowntimeStatus.Text = "Downtime Status *"
         Me.lblDowntimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblMachinePart
@@ -410,7 +410,7 @@ Partial Class FacTrxDetailMch
         Me.lblActionTaken.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblActionTaken.Size = New System.Drawing.Size(379, 23)
         Me.lblActionTaken.TabIndex = 229
-        Me.lblActionTaken.Text = "Action Taken"
+        Me.lblActionTaken.Text = "Action Taken *"
         Me.lblActionTaken.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblPartsReplaced
@@ -595,7 +595,7 @@ Partial Class FacTrxDetailMch
         Me.lblImageAttachment.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblImageAttachment.Size = New System.Drawing.Size(280, 24)
         Me.lblImageAttachment.TabIndex = 243
-        Me.lblImageAttachment.Text = "Image"
+        Me.lblImageAttachment.Text = "Image *"
         Me.lblImageAttachment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'picImage
@@ -663,6 +663,60 @@ Partial Class FacTrxDetailMch
         Me.pnlImage.Name = "pnlImage"
         Me.pnlImage.Size = New System.Drawing.Size(280, 284)
         Me.pnlImage.TabIndex = 244
+        '
+        'lblProgress
+        '
+        Me.lblProgress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblProgress.AutoSize = True
+        Me.lblProgress.BackColor = System.Drawing.Color.Gainsboro
+        Me.lblProgress.Font = New System.Drawing.Font("Segoe UI", 8.5!)
+        Me.lblProgress.Location = New System.Drawing.Point(6, 232)
+        Me.lblProgress.Name = "lblProgress"
+        Me.lblProgress.Size = New System.Drawing.Size(24, 15)
+        Me.lblProgress.TabIndex = 577
+        Me.lblProgress.Text = "0/0"
+        Me.lblProgress.Visible = False
+        '
+        'pbAttachment
+        '
+        Me.pbAttachment.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.pbAttachment.Location = New System.Drawing.Point(4, 228)
+        Me.pbAttachment.Name = "pbAttachment"
+        Me.pbAttachment.Size = New System.Drawing.Size(270, 23)
+        Me.pbAttachment.TabIndex = 575
+        Me.pbAttachment.Visible = False
+        '
+        'btnNext
+        '
+        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnNext.DefaultScheme = False
+        Me.btnNext.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnNext.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnNext.Hint = "Next"
+        Me.btnNext.Location = New System.Drawing.Point(31, 253)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnNext.Size = New System.Drawing.Size(28, 28)
+        Me.btnNext.TabIndex = 4
+        Me.btnNext.TabStop = False
+        Me.btnNext.Text = ">"
+        '
+        'btnPrevious
+        '
+        Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnPrevious.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnPrevious.DefaultScheme = False
+        Me.btnPrevious.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnPrevious.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPrevious.Hint = "Previous"
+        Me.btnPrevious.Location = New System.Drawing.Point(2, 253)
+        Me.btnPrevious.Name = "btnPrevious"
+        Me.btnPrevious.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnPrevious.Size = New System.Drawing.Size(28, 28)
+        Me.btnPrevious.TabIndex = 3
+        Me.btnPrevious.TabStop = False
+        Me.btnPrevious.Text = "<"
         '
         'btnViewImage
         '
@@ -736,8 +790,8 @@ Partial Class FacTrxDetailMch
         '
         Me.ColUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColUserName.DataPropertyName = "UserName"
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle1
         Me.ColUserName.HeaderText = "NickName"
         Me.ColUserName.Name = "ColUserName"
         Me.ColUserName.ReadOnly = True
@@ -756,7 +810,7 @@ Partial Class FacTrxDetailMch
         Me.lblActivityLog.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblActivityLog.Size = New System.Drawing.Size(554, 32)
         Me.lblActivityLog.TabIndex = 279
-        Me.lblActivityLog.Text = "Activity Log"
+        Me.lblActivityLog.Text = "Activity Log *"
         Me.lblActivityLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'pnlApprovers
@@ -1193,13 +1247,13 @@ Partial Class FacTrxDetailMch
         Me.dgvDetail.AllowUserToResizeColumns = False
         Me.dgvDetail.AllowUserToResizeRows = False
         Me.dgvDetail.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle20.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxDetailId, Me.ColTrxId, Me.ColTrxDate, Me.ColUserIdLog, Me.ColShiftId, Me.ColTrxFrom, Me.ColTrxTo, Me.ColElapsedTime})
@@ -1249,8 +1303,8 @@ Partial Class FacTrxDetailMch
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -1261,9 +1315,9 @@ Partial Class FacTrxDetailMch
         'ColTrxFrom
         '
         Me.ColTrxFrom.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle22.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle22.NullValue = Nothing
-        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle4.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle4
         Me.ColTrxFrom.HeaderText = "From"
         Me.ColTrxFrom.Name = "ColTrxFrom"
         Me.ColTrxFrom.ReadOnly = True
@@ -1274,9 +1328,9 @@ Partial Class FacTrxDetailMch
         'ColTrxTo
         '
         Me.ColTrxTo.DataPropertyName = "TrxTo"
-        DataGridViewCellStyle23.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle23.NullValue = Nothing
-        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle5.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle5.NullValue = Nothing
+        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle5
         Me.ColTrxTo.HeaderText = "To"
         Me.ColTrxTo.Name = "ColTrxTo"
         Me.ColTrxTo.ReadOnly = True
@@ -1287,8 +1341,8 @@ Partial Class FacTrxDetailMch
         'ColElapsedTime
         '
         Me.ColElapsedTime.DataPropertyName = "ElapsedTime"
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColElapsedTime.HeaderText = "Minutes"
         Me.ColElapsedTime.Name = "ColElapsedTime"
         Me.ColElapsedTime.ReadOnly = True
@@ -1358,6 +1412,7 @@ Partial Class FacTrxDetailMch
         '
         Me.cmbDowntimeSubStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmbDowntimeSubStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbDowntimeSubStatus.Enabled = False
         Me.cmbDowntimeSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbDowntimeSubStatus.FormattingEnabled = True
         Me.cmbDowntimeSubStatus.Location = New System.Drawing.Point(431, 175)
@@ -1618,72 +1673,17 @@ Partial Class FacTrxDetailMch
         Me.txtModifiedBy.UseCompatibleTextRendering = True
         Me.txtModifiedBy.Visible = False
         '
-        'btnPrevious
-        '
-        Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPrevious.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
-        Me.btnPrevious.DefaultScheme = False
-        Me.btnPrevious.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnPrevious.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPrevious.Hint = "Previous"
-        Me.btnPrevious.Location = New System.Drawing.Point(2, 253)
-        Me.btnPrevious.Name = "btnPrevious"
-        Me.btnPrevious.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnPrevious.Size = New System.Drawing.Size(28, 28)
-        Me.btnPrevious.TabIndex = 3
-        Me.btnPrevious.TabStop = False
-        Me.btnPrevious.Text = "<"
-        '
-        'btnNext
-        '
-        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
-        Me.btnNext.DefaultScheme = False
-        Me.btnNext.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnNext.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnNext.Hint = "Next"
-        Me.btnNext.Location = New System.Drawing.Point(31, 253)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnNext.Size = New System.Drawing.Size(28, 28)
-        Me.btnNext.TabIndex = 4
-        Me.btnNext.TabStop = False
-        Me.btnNext.Text = ">"
-        '
-        'pbAttachment
-        '
-        Me.pbAttachment.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.pbAttachment.Location = New System.Drawing.Point(4, 228)
-        Me.pbAttachment.Name = "pbAttachment"
-        Me.pbAttachment.Size = New System.Drawing.Size(270, 23)
-        Me.pbAttachment.TabIndex = 575
-        Me.pbAttachment.Visible = False
-        '
-        'lblProgress
-        '
-        Me.lblProgress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblProgress.AutoSize = True
-        Me.lblProgress.BackColor = System.Drawing.Color.Gainsboro
-        Me.lblProgress.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.lblProgress.Location = New System.Drawing.Point(6, 232)
-        Me.lblProgress.Name = "lblProgress"
-        Me.lblProgress.Size = New System.Drawing.Size(24, 15)
-        Me.lblProgress.TabIndex = 577
-        Me.lblProgress.Text = "0/0"
-        Me.lblProgress.Visible = False
-        '
         'lblAttachmentCount
         '
         Me.lblAttachmentCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblAttachmentCount.AutoSize = True
         Me.lblAttachmentCount.BackColor = System.Drawing.Color.Gainsboro
         Me.lblAttachmentCount.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.lblAttachmentCount.Location = New System.Drawing.Point(933, 204)
+        Me.lblAttachmentCount.Location = New System.Drawing.Point(928, 204)
         Me.lblAttachmentCount.Name = "lblAttachmentCount"
-        Me.lblAttachmentCount.Size = New System.Drawing.Size(24, 15)
+        Me.lblAttachmentCount.Size = New System.Drawing.Size(30, 15)
         Me.lblAttachmentCount.TabIndex = 578
         Me.lblAttachmentCount.Text = "0/0"
-        Me.lblAttachmentCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblAttachmentCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblAttachmentCount.Visible = False
         '
         'bgWorker
