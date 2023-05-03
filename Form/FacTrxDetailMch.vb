@@ -1,11 +1,11 @@
-﻿Imports System.Data.SqlClient
+﻿Imports BlackCoffeeLibrary
+Imports System.Data.SqlClient
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
-Imports BlackCoffeeLibrary
 
-Public Class MntTrxDetailJig
+Public Class FacTrxDetailMch
     Private WithEvents bsSecUserLog As New BindingSource
     Private WithEvents bsTrxDetail As New BindingSource
     Private WithEvents bsTrxUser As New BindingSource
@@ -28,22 +28,31 @@ Public Class MntTrxDetailJig
     Private dtSecUserPic As New DataTable
     Private dtTrxDetail As New DataTable
     Private dtTrxHeader As New DataTable
+    Private dtTrxMachinePart As New DataTable
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
-    Private imgDirectory As String = directory.ImgIniDirectoryMt
+
     Private imgTmp As String = String.Empty
     Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
-    Private jigId As Integer = 0
     Private lstImgAttachment As New List(Of ImgAttachment)
+    Private machineId As Integer = 0
+    Private machinePartGroupId As Integer = 0
     Private monthId As Integer = 0
     Private mStream As New MemoryStream
+
+    Private directories As New Directory
+    Private atchDirectory As String = directories.AtchIniDirectoryFc
+    Private imgDirectory As String = directories.ImgIniDirectoryFc
+
+    Private currentIndex As Integer
 
     Private orgApp1Status As Integer = 0
     Private orgApp2Status As Integer = 0
     Private orgApp3Status As Integer = 0
-    Private orgJigId As Integer = 0
-    Private orgJigSubStatusId As Integer = 0
+    Private orgMachineGroupId As Integer = 0
+    Private orgMachineId As Integer = 0
+    Private orgMachineSubStatusId As Integer = 0
     Private orgModifiedBy As Nullable(Of Integer)
     Private orgModifiedDate As Nullable(Of Date)
     Private orgRoutingStatusId As Integer = 0
@@ -56,6 +65,9 @@ Public Class MntTrxDetailJig
     Private userId As Integer
     Private weekId As Integer = 0
     Private workgroupId As Integer = 0
+
+    Private lstImageFiles As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
+    Private lstAttachmentForCopy As New List(Of ImgAttachment)
 
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _trxId As Integer = 0)
 
@@ -71,11 +83,11 @@ Public Class MntTrxDetailJig
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
                 accessLevelId = 1
-            Case 35, 40 'mngr, asst mngr
+            Case 36 'am
                 accessLevelId = 2
-            Case 29, 30 'sv, asv
+            Case 31, 32 'sv, asv
                 accessLevelId = 3
-            Case 5 'sr tech
+            Case 9 'sr technician
                 accessLevelId = 4
             Case Else
                 accessLevelId = 99
@@ -84,12 +96,14 @@ Public Class MntTrxDetailJig
         InitializeContructor()
     End Sub
 
+    'sr mngr action
     Public Property fromPmCalendar As Boolean = False
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
             cmbTransactionStatus.Enabled = False
             txtArea.Text = String.Empty
 
+            cmbMachinePart.Enabled = False
             cmbDowntimeStatus.Enabled = False
             cmbDowntimeSubStatus.Enabled = False
             txtProblem.Enabled = False
@@ -106,7 +120,7 @@ Public Class MntTrxDetailJig
             txtScheduleWeek.Enabled = False
 
             txtChecksheet.ReadOnly = True
-            txt4M.ReadOnly = True
+            ''txt4M.ReadOnly = True
 
             btnAddRow.Enabled = False
             btnRemoveRow.Enabled = False
@@ -115,8 +129,8 @@ Public Class MntTrxDetailJig
             btnRemoveImage.Enabled = False
             btnViewChecksheet.Enabled = False
             btnRemoveChecksheet.Enabled = False
-            btnView4M.Enabled = False
-            btnRemove4M.Enabled = False
+            ''btnView4M.Enabled = False
+            ''btnRemove4M.Enabled = False
 
             dgvDetail.ClearSelection()
             dgvDetail.Enabled = False
@@ -139,10 +153,16 @@ Public Class MntTrxDetailJig
         Else 'contains machine, enable form
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
-            btnView4M.Enabled = True
+            'btnView4M.Enabled = True
 
             If trxId = 0 Then 'new transaction, enable all controls, enable approvers controls based on accesslevel
                 cmbTransactionStatus.Enabled = True
+
+                If cmbMachinePart.Items.Count > 0 Then
+                    cmbMachinePart.Enabled = True
+                Else
+                    cmbMachinePart.Enabled = False
+                End If
 
                 cmbDowntimeStatus.Enabled = True
                 cmbDowntimeSubStatus.Enabled = True
@@ -154,14 +174,14 @@ Public Class MntTrxDetailJig
                 txtJoRequestor.Enabled = True
 
                 txtChecksheet.ReadOnly = False
-                txt4M.ReadOnly = False
+                ''txt4M.ReadOnly = False
 
                 btnAddRow.Enabled = True
                 btnRemoveRow.Enabled = True
                 btnBrowseImage.Enabled = True
                 btnRemoveImage.Enabled = True
                 btnRemoveChecksheet.Enabled = True
-                btnRemove4M.Enabled = True
+                ''btnRemove4M.Enabled = True
 
                 dgvDetail.ClearSelection()
                 dgvDetail.Enabled = True
@@ -225,7 +245,7 @@ Public Class MntTrxDetailJig
             Else 'existing transaction
                 If isAdmin Or accessLevelId = 1 Then
                     cmbTransactionStatus.Enabled = False
-                    cmbJigName.Enabled = True
+                    cmbMachineName.Enabled = True
 
                     cmbDowntimeStatus.Enabled = True
                     cmbDowntimeSubStatus.Enabled = True
@@ -243,14 +263,13 @@ Public Class MntTrxDetailJig
                     txtJoNumber.Enabled = True
                     txtJoRequestor.Enabled = True
                     txtChecksheet.ReadOnly = False
-                    txt4M.ReadOnly = False
-
+                    'txt4M.ReadOnly = False
                     btnAddRow.Enabled = True
                     btnRemoveRow.Enabled = True
                     btnBrowseImage.Enabled = True
                     btnRemoveImage.Enabled = True
                     btnRemoveChecksheet.Enabled = True
-                    btnRemove4M.Enabled = True
+                    'btnRemove4M.Enabled = True
 
                     dgvDetail.ClearSelection()
                     dgvDetail.Enabled = True
@@ -274,7 +293,7 @@ Public Class MntTrxDetailJig
                             Select Case orgRoutingStatusId
                                 Case 1, 2 'from `for approval of approver 3` and `completed`, disable the form
                                     cmbTransactionStatus.Enabled = False
-                                    cmbJigName.Enabled = False
+                                    cmbMachineName.Enabled = False
 
                                     cmbDowntimeStatus.Enabled = False
                                     cmbDowntimeSubStatus.Enabled = False
@@ -287,14 +306,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    txt4M.ReadOnly = True
+                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    btnRemove4M.Enabled = False
+                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -317,7 +336,7 @@ Public Class MntTrxDetailJig
                                     btnDelete.Enabled = False
 
                                 Case Else
-                                    cmbJigName.Enabled = True
+                                    cmbMachineName.Enabled = True
 
                                     cmbDowntimeStatus.Enabled = True
                                     cmbDowntimeSubStatus.Enabled = True
@@ -329,14 +348,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    txt4M.ReadOnly = False
+                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    btnRemove4M.Enabled = True
+                                    'btnRemove4M.Enabled = True
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
@@ -429,7 +448,7 @@ Public Class MntTrxDetailJig
                             Select Case orgRoutingStatusId
                                 Case 1, 2 'from `for approval of approver 2` to `completed`, disable the form
                                     cmbTransactionStatus.Enabled = False
-                                    cmbJigName.Enabled = False
+                                    cmbMachineName.Enabled = False
 
                                     cmbDowntimeStatus.Enabled = False
                                     cmbDowntimeSubStatus.Enabled = False
@@ -442,14 +461,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    txt4M.ReadOnly = True
+                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    btnRemove4M.Enabled = False
+                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -472,7 +491,7 @@ Public Class MntTrxDetailJig
                                     btnDelete.Enabled = False
 
                                 Case Else
-                                    cmbJigName.Enabled = True
+                                    cmbMachineName.Enabled = True
 
                                     cmbDowntimeStatus.Enabled = True
                                     cmbDowntimeSubStatus.Enabled = True
@@ -484,14 +503,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    txt4M.ReadOnly = False
+                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    btnRemove4M.Enabled = True
+                                    'btnRemove4M.Enabled = True
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
@@ -573,7 +592,7 @@ Public Class MntTrxDetailJig
                             Select Case orgRoutingStatusId
                                 Case 6, 5 'from `returned to revision` to `on-going activity`
                                     cmbTransactionStatus.Enabled = True
-                                    cmbJigName.Enabled = True
+                                    cmbMachineName.Enabled = True
 
                                     If String.IsNullOrWhiteSpace(txtPartsReplaced.Text.Trim) Then
                                         txtPartsNo.Enabled = False
@@ -592,14 +611,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = True
 
                                     txtChecksheet.ReadOnly = False
-                                    txt4M.ReadOnly = False
+                                    'txt4M.ReadOnly = False
 
                                     btnAddRow.Enabled = True
                                     btnRemoveRow.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
                                     btnRemoveChecksheet.Enabled = True
-                                    btnRemove4M.Enabled = True
+                                    'btnRemove4M.Enabled = True
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = True
@@ -638,7 +657,7 @@ Public Class MntTrxDetailJig
 
                                 Case Else 'from `for approval of approver 1` to `completed`, disable the form once the activity is already on approvers
                                     cmbTransactionStatus.Enabled = False
-                                    cmbJigName.Enabled = False
+                                    cmbMachineName.Enabled = False
 
                                     cmbDowntimeStatus.Enabled = False
                                     cmbDowntimeSubStatus.Enabled = False
@@ -651,14 +670,14 @@ Public Class MntTrxDetailJig
                                     txtJoRequestor.Enabled = False
 
                                     txtChecksheet.ReadOnly = True
-                                    txt4M.ReadOnly = True
+                                    'txt4M.ReadOnly = True
 
                                     btnAddRow.Enabled = False
                                     btnRemoveRow.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
                                     btnRemoveChecksheet.Enabled = False
-                                    btnRemove4M.Enabled = False
+                                    'btnRemove4M.Enabled = False
 
                                     dgvDetail.ClearSelection()
                                     dgvDetail.Enabled = False
@@ -713,14 +732,14 @@ Public Class MntTrxDetailJig
 
         'pic table
         Me.bsTrxUser.DataSource = dtSecUserPic
-        Me.bsTrxUser.Filter = String.Format("SectionId = 2 AND IsActive = 1")
+        Me.bsTrxUser.Filter = String.Format("SectionId = 3 AND IsActive = 1")
         dgvPic.AutoGenerateColumns = False
         dgvPic.DataSource = Me.bsTrxUser
 
         LoadTransactionStatus()
-        LoadJig()
+        LoadMachine()
         GetSetting(My.Settings.SettingsId)
-        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -747,6 +766,12 @@ Public Class MntTrxDetailJig
             Me.bsTrxDetail.Sort = "TrxFrom"
             dgvDetail.AutoGenerateColumns = False
             dgvDetail.DataSource = Me.bsTrxDetail
+
+            'transaction machine part
+            Dim prmMchPart(0) As SqlParameter
+            prmMchPart(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+            prmMchPart(0).Value = trxId
+            dtTrxMachinePart = dbMethod.FillDataTable("RdMntTransactionMachinePartByTrxId", CommandType.StoredProcedure, prmMchPart)
 
             'transaction spare part
             Dim prmSparePart(0) As SqlParameter
@@ -802,7 +827,7 @@ Public Class MntTrxDetailJig
     Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog(userId)
+                Using frmDetailLog As New FacTrxActvityLog(userId)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -820,7 +845,7 @@ Public Class MntTrxDetailJig
                     End If
                 End Using
             Else
-                Using frmDetailLog As New MntTrxActvityLog(userId, trxId)
+                Using frmDetailLog As New FacTrxActvityLog(userId, trxId)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -867,6 +892,10 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
+    End Sub
+
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
             If btnDelete.Enabled = False Then
@@ -876,42 +905,47 @@ Public Class MntTrxDetailJig
             If trxId > 0 Then
                 Dim question As String = String.Format("Are you sure you want to delete this record?")
                 If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeJigSubStatusId") = 2 Then
-                        'orgSchedule was used because it deletes the actual data from the database, not from the ui
-                        Dim prmJigSchdOrg(5) As SqlParameter
-                        prmJigSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmJigSchdOrg(0).Value = DBNull.Value
-                        prmJigSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                        prmJigSchdOrg(1).Value = False
-                        prmJigSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                        prmJigSchdOrg(2).Value = False
-                        prmJigSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                        prmJigSchdOrg(3).Value = DBNull.Value
-                        prmJigSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                        prmJigSchdOrg(4).Value = DBNull.Value
-                        prmJigSchdOrg(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                        prmJigSchdOrg(5).Value = orgScheduleId
+                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeMachineSubStatusId") = 3 Then 'clear the pm schedule slot
+                        Dim prmMchSchdOrg(8) As SqlParameter
+                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchSchdOrg(0).Value = Nothing
+                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                        prmMchSchdOrg(1).Value = False
+                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                        prmMchSchdOrg(2).Value = False
+                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                        prmMchSchdOrg(3).Value = Nothing
+                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                        prmMchSchdOrg(4).Value = Nothing
+                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                        prmMchSchdOrg(5).Value = Nothing
+                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
+                        prmMchSchdOrg(6).Value = Nothing
+                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                        prmMchSchdOrg(7).Value = Nothing
+                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                        prmMchSchdOrg(8).Value = orgScheduleId
 
-                        dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmJigSchdOrg)
+                        dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
                     End If
 
-                    'set the jig to operational state if trx is on-going status and also last trx
+                    'set the machine to operational state if trx is on-going status and also last trx
                     Dim prmIsLast(0) As SqlParameter
                     prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmIsLast(0).Value = trxId
 
-                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
                        dtTrxHeader.Rows(0).Item("TrxStatusId") = 2 Then
 
-                        Dim prmJigStatus(2) As SqlParameter
-                        prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmJigStatus(0).Value = dtTrxHeader.Rows(0).Item("JigId")
-                        prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                        prmJigStatus(1).Value = 1
-                        prmJigStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                        prmJigStatus(2).Value = 1
+                        Dim prmMachineStatus(2) As SqlParameter
+                        prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatus(0).Value = dtTrxHeader.Rows(0).Item("MachineId")
+                        prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatus(1).Value = 1
+                        prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatus(2).Value = 1
 
-                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
+                        dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
                     End If
 
                     Dim prmDel(0) As SqlParameter
@@ -928,15 +962,15 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub btnRemove4M_Click(sender As Object, e As EventArgs) Handles btnRemove4M.Click
+    Private Sub btnRemove4M_Click(sender As Object, e As EventArgs)
         Try
-            txt4M.Text = String.Empty
+            'txt4M.Text = String.Empty
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub btnRemoveChecksheet_Click(sender As Object, e As EventArgs)
+    Private Sub btnRemoveChecksheet_Click(sender As Object, e As EventArgs) Handles btnRemoveChecksheet.Click
         Try
             txtChecksheet.Text = String.Empty
         Catch ex As Exception
@@ -949,7 +983,6 @@ Public Class MntTrxDetailJig
             If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
 
             If Not picImage.Image Is Nothing Then
-                If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
                 picImage.Image.Dispose()
                 picImage.Image = Nothing
                 txtImageName.Text = String.Empty
@@ -1019,9 +1052,15 @@ Public Class MntTrxDetailJig
                 Exit Sub
             End If
 
-            If cmbJigName.SelectedValue = 0 Then
-                MessageBox.Show("Please select a jig.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                cmbJigName.Focus()
+            If cmbMachineName.SelectedValue = 0 Then
+                MessageBox.Show("Please select a machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                cmbMachineName.Focus()
+                Return
+            End If
+
+            If cmbMachinePart.SelectedValue = 0 AndAlso Not machinePartGroupId = 0 Then
+                MessageBox.Show("Please select a machine part.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                cmbMachinePart.Focus()
                 Return
             End If
 
@@ -1037,9 +1076,9 @@ Public Class MntTrxDetailJig
                 Return
             End If
 
-            If cmbDowntimeSubStatus.SelectedValue = 2 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
+            If cmbDowntimeSubStatus.SelectedValue = 3 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
                 If String.IsNullOrEmpty(txtScheduleMonth.Text) Then
-                    MessageBox.Show("Please input the PM month schedule", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show("Please input the PM month schedule.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     txtScheduleMonth.Focus()
                     Return
                 End If
@@ -1070,227 +1109,192 @@ Public Class MntTrxDetailJig
                 prmHeader(2) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
                 prmHeader(2).Value = cmbTransactionStatus.SelectedValue
                 prmHeader(3) = New SqlParameter("@MachineId", SqlDbType.Int)
-                prmHeader(3).Value = Nothing
+                prmHeader(3).Value = cmbMachineName.SelectedValue
                 prmHeader(4) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
-                prmHeader(4).Value = Nothing
+                prmHeader(4).Value = cmbDowntimeStatus.SelectedValue
                 prmHeader(5) = New SqlParameter("@DowntimeMachineSubStatusId", SqlDbType.Int)
-                prmHeader(5).Value = Nothing
-                prmHeader(6) = New SqlParameter("@JigId", SqlDbType.Int)
-                prmHeader(6).Value = cmbJigName.SelectedValue
-                prmHeader(7) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
-                prmHeader(7).Value = cmbDowntimeStatus.SelectedValue
-                prmHeader(8) = New SqlParameter("@DowntimeJigSubStatusId", SqlDbType.Int)
-                prmHeader(8).Value = cmbDowntimeSubStatus.SelectedValue
-                prmHeader(9) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmHeader(9).Value = areaId
-                prmHeader(10) = New SqlParameter("@EncodeUserId", SqlDbType.Int)
-                prmHeader(10).Value = userId
+                prmHeader(5).Value = cmbDowntimeSubStatus.SelectedValue
+                prmHeader(6) = New SqlParameter("@AreaId", SqlDbType.Int)
+                prmHeader(6).Value = areaId
+                prmHeader(7) = New SqlParameter("@EncodeUserId", SqlDbType.Int)
+                prmHeader(7).Value = userId
 
                 If String.IsNullOrEmpty(txtRuntimeAccumulated.Text.Trim) Then
-                    prmHeader(11) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
-                    prmHeader(11).Value = Nothing
+                    prmHeader(8) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
+                    prmHeader(8).Value = Nothing
                 Else
-                    prmHeader(11) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
-                    prmHeader(11).Value = txtRuntimeAccumulated.Text.Trim
+                    prmHeader(8) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
+                    prmHeader(8).Value = txtRuntimeAccumulated.Text.Trim
                 End If
 
                 If String.IsNullOrEmpty(txtJoNumber.Text.Trim) Then
-                    prmHeader(12) = New SqlParameter("@JoNumber", SqlDbType.NChar)
-                    prmHeader(12).Value = Nothing
+                    prmHeader(9) = New SqlParameter("@JoNumber", SqlDbType.NChar)
+                    prmHeader(9).Value = Nothing
                 Else
-                    prmHeader(12) = New SqlParameter("@JoNumber", SqlDbType.NChar)
-                    prmHeader(12).Value = txtJoNumber.Text.Trim
+                    prmHeader(9) = New SqlParameter("@JoNumber", SqlDbType.NChar)
+                    prmHeader(9).Value = txtJoNumber.Text.Trim
                 End If
 
                 If String.IsNullOrEmpty(txtJoRequestor.Text.Trim) Then
-                    prmHeader(13) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
-                    prmHeader(13).Value = Nothing
+                    prmHeader(10) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
+                    prmHeader(10).Value = Nothing
                 Else
-                    prmHeader(13) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
-                    prmHeader(13).Value = txtJoRequestor.Text.Trim
+                    prmHeader(10) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
+                    prmHeader(10).Value = txtJoRequestor.Text.Trim
                 End If
 
                 If cmbTransactionStatus.SelectedValue = 1 Then 'transaction status - done
                     If dgvDetail.Rows.Count = 0 Then
-                        MessageBox.Show("Please input activity logs.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show("Please input the activity logs.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         btnAddRow.Focus()
                         Return
                     End If
 
+                    If lstImgAttachment.Count = 0 Then
+                        MessageBox.Show("Please attach image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        btnBrowseImage.Focus()
+                        Return
+                    End If
+
                     'approvers
-                    prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                    prmHeader(14).Value = 0
-                    prmHeader(15) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                    prmHeader(15).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
-                    prmHeader(16) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                    prmHeader(16).Value = Nothing
-                    prmHeader(17) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(11).Value = 0
+                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                    prmHeader(13).Value = Nothing
+                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(14).Value = Nothing
+
+                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(15).Value = 0
+                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
                     prmHeader(17).Value = Nothing
+                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(18).Value = Nothing
 
-                    prmHeader(18) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                    prmHeader(18).Value = 0
-                    prmHeader(19) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                    prmHeader(19).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
-                    prmHeader(20) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                    prmHeader(20).Value = Nothing
-                    prmHeader(21) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                    prmHeader(21).Value = Nothing
-
-                    prmHeader(22) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                    prmHeader(22).Value = 0
+                    prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(19).Value = 0
 
                     If cmbApp3Name.SelectedValue = 0 Then
                         MessageBox.Show("Please select one from approver 3.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         Return
                     Else
-                        prmHeader(23) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                        prmHeader(23).Value = cmbApp3Name.SelectedValue
+                        prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(20).Value = cmbApp3Name.SelectedValue
                     End If
 
                     If isAdmin Or accessLevelId = 1 Then
-                        prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                        prmHeader(24).Value = dbMethod.GetServerDate
+                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(21).Value = dbMethod.GetServerDate
                     Else
-                        prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                        prmHeader(24).Value = Nothing
+                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(21).Value = Nothing
                     End If
 
-                    prmHeader(25) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(22).Value = Nothing
+
+                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(23).Value = Nothing
+                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(24).Value = Nothing
+                    prmHeader(25) = New SqlParameter("@FileName", SqlDbType.NVarChar)
                     prmHeader(25).Value = Nothing
-
-                    prmHeader(26) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(26) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
                     prmHeader(26).Value = Nothing
-                    prmHeader(27) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                    prmHeader(27).Value = Nothing
-                    prmHeader(28) = New SqlParameter("@FileName", SqlDbType.NVarChar)
-                    prmHeader(28).Value = Nothing
-                    prmHeader(29) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                    prmHeader(29).Value = Nothing
 
-                    prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                    prmHeader(30).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
-                    prmHeader(31) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                    prmHeader(31).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                    prmHeader(32) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(32).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                    prmHeader(33) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
-                    prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                    prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
+                    prmHeader(27) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                    prmHeader(27).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
+                    prmHeader(28) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                    prmHeader(28).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                    prmHeader(29) = New SqlParameter("@UserId", SqlDbType.Int)
+                    prmHeader(29).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                    prmHeader(30) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                    prmHeader(30).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
+                    prmHeader(31) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                    prmHeader(31).Value = txtDowntimeAccumulated.Text.Trim
 
                     'routing status
                     If cmbApp1Name.SelectedValue = 0 Then
                         If cmbApp2Name.SelectedValue = 0 Then
                             If isAdmin Or accessLevelId = 1 Then
-                                prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                prmHeader(35).Value = 1
+                                prmHeader(32) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(32).Value = 1
                             Else
-                                prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                prmHeader(35).Value = 2
+                                prmHeader(32) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(32).Value = 2
                             End If
                         Else
-                            prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                            prmHeader(35).Value = 3
+                            prmHeader(32) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                            prmHeader(32).Value = 3
                         End If
                     Else
-                        prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                        prmHeader(35).Value = 4
+                        prmHeader(32) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                        prmHeader(32).Value = 4
                     End If
 
                     If cmbDowntimeStatus.SelectedValue = 2 Then 'scheduled
                         If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            prmHeader(36) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(36).Value = Nothing
+                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                            prmHeader(33).Value = Nothing
                         Else
-                            prmHeader(36) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(36).Value = txtProblem.Text.Trim
+                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                            prmHeader(33).Value = txtProblem.Text.Trim
                         End If
 
                         If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            prmHeader(37) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(37).Value = Nothing
+                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                            prmHeader(34).Value = Nothing
                         Else
-                            prmHeader(37) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(37).Value = txtRootCause.Text.Trim
+                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                            prmHeader(34).Value = txtRootCause.Text.Trim
                         End If
 
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
-                            prmHeader(38) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(38).Value = Nothing
+                            prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(35).Value = Nothing
                         Else
-                            prmHeader(38) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(38).Value = txtActionTaken.Text.Trim
+                            prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(35).Value = txtActionTaken.Text.Trim
                         End If
 
-                        If picImage.Image Is Nothing Then
-                            prmHeader(39) = New SqlParameter("@Image", SqlDbType.Image)
-                            prmHeader(39).Value = Nothing
-                            prmHeader(40) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                            prmHeader(40).Value = Nothing
-                        Else
-                            Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                            resImg.Save(mStream, ImageFormat.Jpeg)
-                            bite = mStream.GetBuffer
-                            prmHeader(39) = New SqlParameter("@Image", SqlDbType.Image)
-                            prmHeader(39).Value = bite
-                            prmHeader(40) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                            prmHeader(40).Value = txtImageName.Text.ToString.Trim
-                        End If
-
-                        If cmbDowntimeSubStatus.SelectedValue = 2 Then 'pm
+                        If cmbDowntimeSubStatus.SelectedValue = 3 Then 'pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                MessageBox.Show("Please input the link of Check Sheet.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                txtChecksheet.Focus()
-                                Return
+                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(36).Value = Nothing
                             Else
-                                prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(41).Value = txtChecksheet.Text.Trim
-                            End If
-
-                            If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                                MessageBox.Show("Please input the link of 4M Change.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                txt4M.Focus()
-                                Return
-                            Else
-                                prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(42).Value = txt4M.Text.Trim
+                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(36).Value = txtChecksheet.Text.Trim
                             End If
 
                         Else 'scheduled but not pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(41).Value = Nothing
+                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(36).Value = Nothing
                             Else
-                                prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(41).Value = txtChecksheet.Text.Trim
-                            End If
-
-                            If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                                prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(42).Value = Nothing
-                            Else
-                                prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(42).Value = txt4M.Text.Trim
+                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(36).Value = txtChecksheet.Text.Trim
                             End If
                         End If
 
                     ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled
                         If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtProblem.Focus()
-                            Return
+                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                            prmHeader(33).Value = Nothing
                         Else
-                            prmHeader(36) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(36).Value = txtProblem.Text.Trim
+                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                            prmHeader(33).Value = txtProblem.Text.Trim
                         End If
 
                         If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            MessageBox.Show("Please indicate the root cause.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtRootCause.Focus()
-                            Return
+                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                            prmHeader(34).Value = Nothing
                         Else
-                            prmHeader(37) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(37).Value = txtRootCause.Text.Trim
+                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                            prmHeader(34).Value = txtRootCause.Text.Trim
                         End If
 
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
@@ -1298,194 +1302,186 @@ Public Class MntTrxDetailJig
                             txtActionTaken.Focus()
                             Return
                         Else
-                            prmHeader(38) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(38).Value = txtActionTaken.Text.Trim
+                            prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(35).Value = txtActionTaken.Text.Trim
                         End If
-
-                        If picImage.Image Is Nothing Then
-                            MessageBox.Show("Please attach the image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            btnBrowseImage.Focus()
-                            Return
-                        End If
-
-                        Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                        resImg.Save(mStream, ImageFormat.Jpeg)
-                        bite = mStream.GetBuffer
-                        prmHeader(39) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(39).Value = bite
-                        prmHeader(40) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(40).Value = txtImageName.Text.ToString.Trim
 
                         If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                            prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(41).Value = Nothing
+                            prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                            prmHeader(36).Value = Nothing
                         Else
-                            prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(41).Value = txtChecksheet.Text.Trim
-                        End If
-
-                        If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                            prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            prmHeader(42).Value = Nothing
-                        Else
-                            prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            prmHeader(42).Value = txt4M.Text.Trim
+                            prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                            prmHeader(36).Value = txtChecksheet.Text.Trim
                         End If
                     End If
 
                 Else 'transaction status - on-going
                     'approvers
-                    prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                    prmHeader(14).Value = 0
-                    prmHeader(15) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                    prmHeader(15).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
-                    prmHeader(16) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                    prmHeader(16).Value = Nothing
-                    prmHeader(17) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(11).Value = 0
+                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                    prmHeader(13).Value = Nothing
+                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(14).Value = Nothing
+
+                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(15).Value = 0
+                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
                     prmHeader(17).Value = Nothing
+                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(18).Value = Nothing
 
-                    prmHeader(18) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                    prmHeader(18).Value = 0
-                    prmHeader(19) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                    prmHeader(19).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
-                    prmHeader(20) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                    prmHeader(20).Value = Nothing
-                    prmHeader(21) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                    prmHeader(21).Value = Nothing
-
-                    prmHeader(22) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                    prmHeader(22).Value = 0
+                    prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(19).Value = 0
 
                     If cmbApp3Name.SelectedValue = 3 Then
                         MessageBox.Show("Please select one for approver 3.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         cmbApp3Name.Focus()
                         Return
                     Else
-                        prmHeader(23) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                        prmHeader(23).Value = cmbApp3Name.SelectedValue
+                        prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(20).Value = cmbApp3Name.SelectedValue
                     End If
 
-                    prmHeader(24) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                    prmHeader(21).Value = Nothing
+                    prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(22).Value = Nothing
+
+                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(23).Value = Nothing
+                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
                     prmHeader(24).Value = Nothing
-                    prmHeader(25) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(25) = New SqlParameter("@FileName", SqlDbType.NVarChar)
                     prmHeader(25).Value = Nothing
-
-                    prmHeader(26) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(26) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
                     prmHeader(26).Value = Nothing
-                    prmHeader(27) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                    prmHeader(27).Value = Nothing
-                    prmHeader(28) = New SqlParameter("@FileName", SqlDbType.NVarChar)
-                    prmHeader(28).Value = Nothing
-                    prmHeader(29) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                    prmHeader(29).Value = Nothing
 
-                    If dgvDetail.Rows.Count > 0 Then 'save record (on-going activity) even no activity log yet
-                        prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                        prmHeader(30).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
-                        prmHeader(31) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                        prmHeader(31).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                        prmHeader(32) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmHeader(32).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                        prmHeader(33) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                        prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
-                        prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                        prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
+                    If dgvDetail.Rows.Count > 0 Then
+                        prmHeader(27) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                        prmHeader(27).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
+                        prmHeader(28) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                        prmHeader(28).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                        prmHeader(29) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmHeader(29).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                        prmHeader(30) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                        prmHeader(30).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
+                        prmHeader(31) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                        prmHeader(31).Value = txtDowntimeAccumulated.Text.Trim
 
                     Else 'no activity log yet - use current datetime as datetimestarted, logged in user as trx owner
-                        prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                        prmHeader(30).Value = dbMethod.GetServerDate
-                        prmHeader(31) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                        prmHeader(31).Value = Nothing
-                        prmHeader(32) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmHeader(32).Value = userId
+                        prmHeader(27) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                        prmHeader(27).Value = dbMethod.GetServerDate
+                        prmHeader(28) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                        prmHeader(28).Value = Nothing
+                        prmHeader(29) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmHeader(29).Value = userId
 
                         If DateTime.Now.Hour >= 7 And DateTime.Now.Hour <= 17 Then
-                            prmHeader(33) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                            prmHeader(33).Value = "D"
+                            prmHeader(30) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                            prmHeader(30).Value = "D"
                         Else
-                            prmHeader(33) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                            prmHeader(33).Value = "N"
+                            prmHeader(30) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                            prmHeader(30).Value = "N"
                         End If
 
-                        prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                        prmHeader(34).Value = Nothing
+                        prmHeader(31) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                        prmHeader(31).Value = Nothing
                     End If
 
-                    prmHeader(35) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmHeader(35).Value = 5
+                    'routing status
+                    prmHeader(32) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                    prmHeader(32).Value = 5
 
                     If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                        prmHeader(36) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                        prmHeader(36).Value = Nothing
+                        prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(33).Value = Nothing
                     Else
-                        prmHeader(36) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                        prmHeader(36).Value = txtProblem.Text.Trim
+                        prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(33).Value = txtProblem.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                        prmHeader(37) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                        prmHeader(37).Value = Nothing
+                        prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(34).Value = Nothing
                     Else
-                        prmHeader(37) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                        prmHeader(37).Value = txtRootCause.Text.Trim
+                        prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(34).Value = txtRootCause.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
-                        prmHeader(38) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                        prmHeader(38).Value = Nothing
+                        prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                        prmHeader(35).Value = Nothing
                     Else
-                        prmHeader(38) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                        prmHeader(38).Value = txtActionTaken.Text.Trim
-                    End If
-
-                    If picImage.Image Is Nothing Then
-                        prmHeader(39) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(39).Value = Nothing
-                        prmHeader(40) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(40).Value = Nothing
-                    Else
-                        Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                        resImg.Save(mStream, ImageFormat.Jpeg)
-                        bite = mStream.GetBuffer
-                        prmHeader(39) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(39).Value = bite
-                        prmHeader(40) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(40).Value = txtImageName.Text.ToString.Trim
+                        prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                        prmHeader(35).Value = txtActionTaken.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                        prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                        prmHeader(41).Value = Nothing
+                        prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(36).Value = Nothing
                     Else
-                        prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                        prmHeader(41).Value = txtChecksheet.Text.Trim
+                        prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(36).Value = txtChecksheet.Text.Trim
                     End If
 
-                    If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                        prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        prmHeader(42).Value = Nothing
-                    Else
-                        prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        prmHeader(42).Value = txt4M.Text.Trim
-                    End If
+                    'set machine status to downtime
+                    Dim prmMchStatus(2) As SqlParameter
+                    prmMchStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmMchStatus(0).Value = cmbMachineName.SelectedValue
+                    prmMchStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                    prmMchStatus(1).Value = cmbDowntimeStatus.SelectedValue
+                    prmMchStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                    prmMchStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
 
-                    'set jig status to downtime
-                    Dim prmJigStatus(2) As SqlParameter
-                    prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmJigStatus(0).Value = cmbJigName.SelectedValue
-                    prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                    prmJigStatus(1).Value = cmbDowntimeStatus.SelectedValue
-                    prmJigStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                    prmJigStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
-
-                    dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
                 End If
 
-                dbMethod.ExecuteNonQuery("InsMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
+                dbMethod.ExecuteNonQuery("InsFacTransactionHeader", CommandType.StoredProcedure, prmHeader)
+
+                If lstImgAttachment.Count > 0 Then
+                    For i As Integer = 0 To lstImgAttachment.Count - 1
+                        Dim prmAttachment(2) As SqlParameter
+                        prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                        prmAttachment(0).Direction = ParameterDirection.Output
+                        prmAttachment(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmAttachment(1).Value = prmHeader(0).Value
+                        prmAttachment(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                        prmAttachment(2).Value = ""
+
+                        dbMethod.ExecuteNonQuery("InsFacTransactionAttachment", CommandType.StoredProcedure, prmAttachment)
+
+                        Dim ext As String = String.Empty
+                        Dim newName As String = String.Empty
+                        ext = Path.GetExtension(lstImgAttachment(i).FileName).ToLower
+
+                        newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
+
+                        Dim prmUpd(2) As SqlParameter
+                        prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                        prmUpd(0).Value = prmAttachment(0).Value
+                        prmUpd(1) = New SqlParameter("@RecordId", SqlDbType.Int)
+                        prmUpd(1).Value = prmHeader(0).Value
+                        prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                        prmUpd(2).Value = newName
+
+                        dbMethod.ExecuteNonQuery("UpdFacTransactionAttachment", CommandType.StoredProcedure, prmUpd)
+
+                        pbAttachment.Visible = True
+                        lblProgress.Visible = True
+
+                        Dim copyAttachment As New ImgAttachment(lstImgAttachment(i).FileName, newName, lstImgAttachment(i).FileName)
+                        lstAttachmentForCopy.Add(copyAttachment)
+                    Next
+                End If
 
                 'fill the pm schedule slot
                 'should be place here, before the update of dtTrxDetail so dgvDetail still have the data
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
                     Dim prmMchSchd(5) As SqlParameter
                     prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmMchSchd(0).Value = prmHeader(0).Value
@@ -1503,7 +1499,7 @@ Public Class MntTrxDetailJig
                         prmMchSchd(3).Value = userId
                     End If
 
-                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    prmMchSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime2)
                     If dgvDetail.Rows.Count > 0 Then
                         prmMchSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
                     Else
@@ -1513,7 +1509,7 @@ Public Class MntTrxDetailJig
                     prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
                     prmMchSchd(5).Value = scheduleId
 
-                    dbMethod.ExecuteNonQuery("UpdMntJigSchedule", CommandType.StoredProcedure, prmMchSchd)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmMchSchd)
                 End If
 
                 'transaction details
@@ -1531,6 +1527,20 @@ Public Class MntTrxDetailJig
                     Next
                     adpTrxDetail.Update(dtTrxDetail)
                 End If
+
+                'transaction machine part
+                Dim prmMchPart(1) As SqlParameter
+                prmMchPart(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmMchPart(0).Value = prmHeader(0).Value
+
+                If cmbMachinePart.SelectedValue = 0 AndAlso cmbMachinePart.Enabled Then
+                    prmMchPart(1) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                    prmMchPart(1).Value = Nothing
+                Else
+                    prmMchPart(1) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                    prmMchPart(1).Value = cmbMachinePart.SelectedValue
+                End If
+                dbMethod.ExecuteNonQuery("InsMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
 
                 'transaction spare part
                 Dim prmSparePart(2) As SqlParameter
@@ -1563,6 +1573,19 @@ Public Class MntTrxDetailJig
                     End If
                 Next
 
+                btnPrevious.Enabled = False
+                btnNext.Enabled = False
+                btnViewImage.Enabled = False
+                btnBrowseImage.Enabled = False
+                btnRemoveImage.Enabled = False
+                btnSave.Enabled = False
+                btnCancel.Enabled = False
+                btnDelete.Enabled = False
+                btnClose.Enabled = False
+                Me.ControlBox = False
+
+                bgWorker.RunWorkerAsync()
+
                 'existing transaction
             Else
                 'transaction header
@@ -1570,17 +1593,17 @@ Public Class MntTrxDetailJig
                 prmHeader(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                 prmHeader(0).Value = trxId
                 prmHeader(1) = New SqlParameter("@MachineId", SqlDbType.Int)
-                prmHeader(1).Value = Nothing
+                prmHeader(1).Value = cmbMachineName.SelectedValue
                 prmHeader(2) = New SqlParameter("@DowntimeMachineStatusId", SqlDbType.Int)
-                prmHeader(2).Value = Nothing
+                prmHeader(2).Value = cmbDowntimeStatus.SelectedValue
                 prmHeader(3) = New SqlParameter("@DowntimeMachineSubStatusId", SqlDbType.Int)
-                prmHeader(3).Value = Nothing
+                prmHeader(3).Value = cmbDowntimeSubStatus.SelectedValue
                 prmHeader(4) = New SqlParameter("@JigId", SqlDbType.Int)
-                prmHeader(4).Value = cmbJigName.SelectedValue
+                prmHeader(4).Value = Nothing
                 prmHeader(5) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
-                prmHeader(5).Value = cmbDowntimeStatus.SelectedValue
+                prmHeader(5).Value = Nothing
                 prmHeader(6) = New SqlParameter("@DowntimeJigSubStatusId", SqlDbType.Int)
-                prmHeader(6).Value = cmbDowntimeSubStatus.SelectedValue
+                prmHeader(6).Value = Nothing
                 prmHeader(7) = New SqlParameter("@AreaId", SqlDbType.Int)
                 prmHeader(7).Value = areaId
 
@@ -2199,7 +2222,7 @@ Public Class MntTrxDetailJig
                             prmHeader(38).Value = txtImageName.Text.Trim
                         End If
 
-                        If cmbDowntimeSubStatus.SelectedValue = 2 Then 'pm
+                        If cmbDowntimeSubStatus.SelectedValue = 3 Then 'pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
                                 MessageBox.Show("Please input the link of Check Sheet.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                                 txtChecksheet.Focus()
@@ -2209,31 +2232,31 @@ Public Class MntTrxDetailJig
                                 prmHeader(39).Value = txtChecksheet.Text.Trim
                             End If
 
-                            If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                                MessageBox.Show("Please input the link of 4M Change.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                txt4M.Focus()
-                                Return
-                            Else
-                                prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(40).Value = txt4M.Text.Trim
-                            End If
+                            'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
+                            '    MessageBox.Show("Please input the link of 4M Change.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            '    'txt4M.Focus()
+                            '    Return
+                            'Else
+                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                            '    prmHeader(40).Value = txt4M.Text.Trim
+                            'End If
 
-                        Else 'scheduled but not pm
+                        Else 'scheduled but no pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(41).Value = Nothing
+                                prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(39).Value = Nothing
                             Else
-                                prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(41).Value = txtChecksheet.Text.Trim
+                                prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                                prmHeader(39).Value = txtChecksheet.Text.Trim
                             End If
 
-                            If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                                prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(42).Value = Nothing
-                            Else
-                                prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                                prmHeader(42).Value = txt4M.Text.Trim
-                            End If
+                            'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
+                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                            '    prmHeader(40).Value = Nothing
+                            'Else
+                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                            '    prmHeader(40).Value = txt4M.Text.Trim
+                            'End If
                         End If
 
                     ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled
@@ -2286,39 +2309,40 @@ Public Class MntTrxDetailJig
                             prmHeader(39).Value = txtChecksheet.Text.Trim
                         End If
 
-                        If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                            prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            prmHeader(40).Value = Nothing
-                        Else
-                            prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            prmHeader(40).Value = txt4M.Text.Trim
-                        End If
+                        'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
+                        '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                        '    prmHeader(40).Value = Nothing
+                        'Else
+                        '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                        '    prmHeader(40).Value = txt4M.Text.Trim
+                        'End If
                     End If
 
-                    'set jig to operational
-                    Dim prmJigStatus(2) As SqlParameter
-                    prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmJigStatus(0).Value = cmbJigName.SelectedValue
-                    prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                    prmJigStatus(1).Value = 1
-                    prmJigStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                    prmJigStatus(2).Value = 1
+                    'set machine to operational
+                    Dim prmMachineStatus(2) As SqlParameter
+                    prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmMachineStatus(0).Value = cmbMachineName.SelectedValue
+                    prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                    prmMachineStatus(1).Value = 1
+                    prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                    prmMachineStatus(2).Value = 1
 
-                    dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
 
-                    If orgJigId <> cmbJigName.SelectedValue Then
-                        Dim prmJigStatusOrg(2) As SqlParameter
-                        prmJigStatusOrg(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmJigStatusOrg(0).Value = orgJigId
-                        prmJigStatusOrg(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                        prmJigStatusOrg(1).Value = 1
-                        prmJigStatusOrg(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                        prmJigStatusOrg(2).Value = 1
+                    If orgMachineId <> cmbMachineName.SelectedValue Then
+                        Dim prmMachineStatusOrg(2) As SqlParameter
+                        prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatusOrg(0).Value = orgMachineId
+                        prmMachineStatusOrg(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(1).Value = 1
+                        prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(2).Value = 1
 
-                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
+                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
 
                 Else 'transaction status - on-going
+                    'approvers
                     prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
                     prmHeader(11).Value = If(cmbApp1Status.SelectedValue = 1, 1, 0)
                     prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
@@ -2460,93 +2484,94 @@ Public Class MntTrxDetailJig
                         prmHeader(39).Value = txtChecksheet.Text.Trim
                     End If
 
-                    If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                        prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        prmHeader(40).Value = Nothing
-                    Else
-                        prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        prmHeader(40).Value = txt4M.Text.Trim
-                    End If
+                    'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
+                    '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                    '    prmHeader(40).Value = Nothing
+                    'Else
+                    '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
+                    '    prmHeader(40).Value = txt4M.Text.Trim
+                    'End If
 
-                    'set jig status to downtime
-                    Dim prmJigStatus(2) As SqlParameter
-                    prmJigStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmJigStatus(0).Value = cmbJigName.SelectedValue
-                    prmJigStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                    prmJigStatus(1).Value = cmbDowntimeStatus.SelectedValue
-                    prmJigStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                    prmJigStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
+                    'set machine status to downtime
+                    Dim prmMchStatus(2) As SqlParameter
+                    prmMchStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmMchStatus(0).Value = cmbMachineName.SelectedValue
+                    prmMchStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                    prmMchStatus(1).Value = cmbDowntimeStatus.SelectedValue
+                    prmMchStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                    prmMchStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
 
-                    dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatus)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
 
-                    If orgJigId <> cmbJigName.SelectedValue Then
-                        Dim prmJigStatusOrg(2) As SqlParameter
-                        prmJigStatusOrg(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmJigStatusOrg(0).Value = orgJigId
-                        prmJigStatusOrg(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-                        prmJigStatusOrg(1).Value = 1
-                        prmJigStatusOrg(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-                        prmJigStatusOrg(2).Value = 1
+                    'selected machine was changed, set original machine to operational
+                    If orgMachineId <> cmbMachineName.SelectedValue Then
+                        Dim prmMachineStatusOrg(2) As SqlParameter
+                        prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatusOrg(0).Value = orgMachineId
+                        prmMachineStatusOrg(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(1).Value = 1
+                        prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatusOrg(2).Value = 1
 
-                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
+                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
                 End If
 
                 dbMethod.ExecuteNonQuery("UpdMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
                 If orgScheduleId > 0 Then 'clear up the orig pm schedule slot
-                    Dim prmMchSchdOrg(8) As SqlParameter
-                    prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmMchSchdOrg(0).Value = Nothing
-                    prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    prmMchSchdOrg(1).Value = False
-                    prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmMchSchdOrg(2).Value = False
-                    prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-                    prmMchSchdOrg(3).Value = Nothing
-                    prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-                    prmMchSchdOrg(4).Value = Nothing
-                    prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                    prmMchSchdOrg(5).Value = Nothing
-                    prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-                    prmMchSchdOrg(6).Value = Nothing
-                    prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-                    prmMchSchdOrg(7).Value = Nothing
-                    prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmMchSchdOrg(8).Value = orgScheduleId
+                    Dim prmOrgSchedule(8) As SqlParameter
+                    prmOrgSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmOrgSchedule(0).Value = Nothing
+                    prmOrgSchedule(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    prmOrgSchedule(1).Value = False
+                    prmOrgSchedule(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmOrgSchedule(2).Value = False
+                    prmOrgSchedule(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    prmOrgSchedule(3).Value = Nothing
+                    prmOrgSchedule(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime2)
+                    prmOrgSchedule(4).Value = Nothing
+                    prmOrgSchedule(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmOrgSchedule(5).Value = Nothing
+                    prmOrgSchedule(6) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmOrgSchedule(6).Value = Nothing
+                    prmOrgSchedule(7) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmOrgSchedule(7).Value = orgScheduleId
+                    prmOrgSchedule(8) = New SqlParameter("@Remarks", SqlDbType.Int)
+                    prmOrgSchedule(8).Value = Nothing
 
-                    dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmOrgSchedule)
                 End If
 
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
-                    Dim prmJigSchd(5) As SqlParameter
-                    prmJigSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmJigSchd(0).Value = trxId
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
+                    Dim prmNewSchedule(5) As SqlParameter
+                    prmNewSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmNewSchedule(0).Value = trxId
 
-                    prmJigSchd(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-                    If cmbTransactionStatus.SelectedValue = 1 Then prmJigSchd(1).Value = True Else prmJigSchd(1).Value = False
+                    prmNewSchedule(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                    If cmbTransactionStatus.SelectedValue = 1 Then prmNewSchedule(1).Value = True Else prmNewSchedule(1).Value = False
 
-                    prmJigSchd(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-                    prmJigSchd(2).Value = False
+                    prmNewSchedule(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                    prmNewSchedule(2).Value = False
 
-                    prmJigSchd(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                    prmNewSchedule(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
                     If dgvDetail.Rows.Count > 0 Then
-                        prmJigSchd(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                        prmNewSchedule(3).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
                     Else
-                        prmJigSchd(3).Value = userId
+                        prmNewSchedule(3).Value = userId
                     End If
 
-                    prmJigSchd(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                    prmNewSchedule(4) = New SqlParameter("@ActivityDate", SqlDbType.DateTime)
                     If dgvDetail.Rows.Count > 0 Then
-                        prmJigSchd(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                        prmNewSchedule(4).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
                     Else
-                        prmJigSchd(4).Value = dbMethod.GetServerDate
+                        prmNewSchedule(4).Value = dbMethod.GetServerDate
                     End If
 
-                    prmJigSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                    prmJigSchd(5).Value = scheduleId
+                    prmNewSchedule(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                    prmNewSchedule(5).Value = scheduleId
 
-                    dbMethod.ExecuteNonQuery("UpdMntJigSchedule", CommandType.StoredProcedure, prmJigSchd)
+                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmNewSchedule)
                 End If
 
                 'transaction details
@@ -2556,6 +2581,25 @@ Public Class MntTrxDetailJig
                 Next
                 Me.bsTrxDetail.EndEdit()
                 Me.adpTrxDetail.Update(dtTrxDetail)
+
+                'transaction machine part
+                If cmbMachinePart.SelectedValue = 0 AndAlso Not cmbMachinePart.Enabled Then
+                    Dim prmMchPart(1) As SqlParameter
+                    prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                    prmMchPart(0).Value = Nothing
+                    prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmMchPart(1).Value = trxId
+
+                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                Else
+                    Dim prmMchPart(1) As SqlParameter
+                    prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
+                    prmMchPart(0).Value = cmbMachinePart.SelectedValue
+                    prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmMchPart(1).Value = trxId
+
+                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                End If
 
                 'transaction spare part
                 If String.IsNullOrEmpty(txtPartsReplaced.Text.Trim) Then
@@ -2656,11 +2700,11 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub btnView4M_Click(sender As Object, e As EventArgs) Handles btnView4M.Click
+    Private Sub btnView4M_Click(sender As Object, e As EventArgs)
         Try
-            If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                Process.Start(txt4M.Text)
-            End If
+            'If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
+            '    Process.Start(txt4M.Text)
+            'End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -2943,22 +2987,22 @@ Public Class MntTrxDetailJig
                 monthId = 0
                 weekId = 0
             Else
-                If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
-                    GetJigSchedule(cmbJigName.SelectedValue)
+                If cmbDowntimeSubStatus.SelectedValue = 3 Then 'preventive maintenance
+                    GetMachineSchedule(cmbMachineName.SelectedValue)
                 Else
                     txtScheduleMonth.Text = String.Empty
                     txtScheduleWeek.Text = String.Empty
                     txtScheduleMonth.Enabled = False
                     txtScheduleWeek.Enabled = False
 
-                    If orgJigSubStatusId = 2 Then
+                    If orgMachineSubStatusId = 3 Then
                         Dim prmSched(1) As SqlParameter
-                        prmSched(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmSched(0).Value = cmbJigName.SelectedValue
+                        prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSched(0).Value = cmbMachineName.SelectedValue
                         prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmSched(1).Value = trxId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND TrxId = @TrxId"
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
                         Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
 
                         If rdrSched.Read Then
@@ -2973,38 +3017,86 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub cmbJigName_Enter(sender As Object, e As EventArgs) Handles cmbJigName.Enter
-        lblJigName.ForeColor = Color.White
-        lblJigName.BackColor = Color.DarkSlateGray
+    Private Sub cmbMachineName_Enter(sender As Object, e As EventArgs) Handles cmbMachineName.Enter
+        lblMachineName.ForeColor = Color.White
+        lblMachineName.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub cmbJigName_Leave(sender As Object, e As EventArgs) Handles cmbJigName.Leave
-        lblJigName.ForeColor = Color.Black
-        lblJigName.BackColor = SystemColors.Control
+    Private Sub cmbMachineName_Leave(sender As Object, e As EventArgs) Handles cmbMachineName.Leave
+        lblMachineName.ForeColor = Color.Black
+        lblMachineName.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub cmbJigName_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub cmbMachineName_SelectedValueChanged(sender As Object, e As EventArgs)
         Try
-            If cmbJigName.SelectedValue = 0 Then
+            If cmbMachineName.SelectedValue = 0 Then
                 DisableForm(True)
             Else
                 DisableForm(False)
-                GetJigArea(cmbJigName.SelectedValue)
-                GetTotalRuntime(cmbJigName.SelectedValue)
+                GetMachineArea(cmbMachineName.SelectedValue)
+                GetMachinePartGroup(cmbMachineName.SelectedValue)
+                GetTotalRuntime(cmbMachineName.SelectedValue)
                 LoadDowntimeStatus()
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
 
                 If trxId = 0 Then
                     cmbDowntimeStatus.SelectedValue = 3
-                    cmbDowntimeSubStatus.SelectedValue = 4
+                    cmbDowntimeSubStatus.SelectedValue = 5
+                Else
+                    If isAdmin Or accessLevelId = 1 Then
+                        If cmbMachinePart.Items.Count > 0 Then
+                            cmbMachinePart.Enabled = True
+                        Else
+                            cmbMachinePart.Enabled = False
+                        End If
+                    Else
+                        Select Case accessLevelId
+                            Case 2
+                                Select Case orgRoutingStatusId
+                                    Case 1, 2
+                                        cmbMachinePart.Enabled = False
+                                    Case Else
+                                        If cmbMachinePart.Items.Count > 0 Then
+                                            cmbMachinePart.Enabled = True
+                                        Else
+                                            cmbMachinePart.Enabled = False
+                                        End If
+                                End Select
+
+                            Case 3
+                                Select Case orgRoutingStatusId
+                                    Case 1, 2
+                                        cmbMachinePart.Enabled = False
+                                    Case Else
+                                        If cmbMachinePart.Items.Count > 0 Then
+                                            cmbMachinePart.Enabled = True
+                                        Else
+                                            cmbMachinePart.Enabled = False
+                                        End If
+                                End Select
+
+                            Case Else
+                                Select Case orgRoutingStatusId
+                                    Case 5, 6
+                                        If cmbMachinePart.Items.Count > 0 Then
+                                            cmbMachinePart.Enabled = True
+                                        Else
+                                            cmbMachinePart.Enabled = False
+                                        End If
+                                    Case Else
+                                        cmbMachinePart.Enabled = False
+                                End Select
+                        End Select
+                    End If
                 End If
 
-                If orgJigId = cmbJigName.SelectedValue AndAlso trxId <> 0 Then
+                'selected another machine then select again the orig machine
+                If orgMachineId = cmbMachineName.SelectedValue AndAlso trxId <> 0 Then
                     If Not dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime") Is DBNull.Value Then
                         txtRuntimeAccumulated.Text = dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime")
                     End If
                 Else
-                    GetTotalRuntime(cmbJigName.SelectedValue)
+                    GetTotalRuntime(cmbMachineName.SelectedValue)
                 End If
             End If
         Catch ex As Exception
@@ -3012,9 +3104,34 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub cmbJigName_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+    Private Sub cmbMachineName_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
         Try
-            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbJigName.Text)
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbMachineName.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbMachinePart_Enter(sender As Object, e As EventArgs) Handles cmbMachinePart.Enter
+        lblMachinePart.ForeColor = Color.White
+        lblMachinePart.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbMachinePart_Leave(sender As Object, e As EventArgs) Handles cmbMachinePart.Leave
+        lblMachinePart.ForeColor = Color.Black
+        lblMachinePart.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbMachinePart_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            If cmbMachinePart.Text.Trim.Length = 0 Then
+                cmbMachinePart.SelectedValue = 0
+                e.Cancel = False
+            Else
+                e.Cancel = sender.FindStringExact(sender.text) < 0
+            End If
+
             If e.Cancel Then Beep()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -3096,7 +3213,6 @@ Public Class MntTrxDetailJig
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
     Private Sub cmbTransactionStatus_Enter(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Enter
         lblTransactionStatus.ForeColor = Color.White
         lblTransactionStatus.BackColor = Color.DarkSlateGray
@@ -3112,7 +3228,7 @@ Public Class MntTrxDetailJig
 
         Try
             Dim con As New SqlConnection(dbConnection.GetConnectionString)
-            Dim query As String = "SELECT TrxDetailId, TrxId, TrxDate, TrxFrom, TrxTo, ElapsedTime, UserId, ShiftId FROM dbo.MntTransactionDetail"
+            Dim query As String = "SELECT TrxDetailId, TrxId, TrxDate, TrxFrom, TrxTo, ElapsedTime, UserId, ShiftId FROM dbo.FacTransactionDetail"
             Dim cmd As New SqlCommand(query, con)
             adpTrxDetail = New SqlDataAdapter(cmd)
             Dim cbTrxDetail As New SqlCommandBuilder(adpTrxDetail)
@@ -3208,7 +3324,7 @@ Public Class MntTrxDetailJig
     Private Sub FilterPicTable()
         Try
             If dgvDetail.Rows.Count > 0 Then
-                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 2 AND IsActive = 1 AND UserId NOT IN (")
+                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 3 AND IsActive = 1 AND UserId NOT IN (")
 
                 For i As Integer = 0 To dgvDetail.Rows.Count - 1
                     If i > 0 Then
@@ -3251,18 +3367,24 @@ Public Class MntTrxDetailJig
 
                 LoadRoutingStatus(5)
 
+                cmbTransactionStatus.SelectedValue = 1
+
                 btnDelete.Enabled = False
 
                 DisableForm(True)
-                Me.ActiveControl = cmbJigName
+                Me.ActiveControl = cmbMachineName
             Else
                 Me.Text = "Activity No. " & trxId
 
                 For Each row As DataRow In dtTrxHeader.Rows
-                    orgJigId = row("JigId")
-                    orgJigSubStatusId = row("DowntimeJigSubStatusId")
+                    orgMachineId = row("MachineId")
+                    orgMachineSubStatusId = row("DowntimeMachineSubStatusId")
 
                     'transaction header
+                    'Dim dRow As DataRow = dtRoutingStatus.Select("RoutingStatusId = " & row("RoutingStatusId") & "")(0)
+                    'txtRoutingStatus.Text = dRow("RoutingStatusName").ToString.Trim
+                    'orgRoutingStatusId = dRow("RoutingStatusId")
+
                     LoadRoutingStatus(row("RoutingStatusId"))
                     orgRoutingStatusId = row("RoutingStatusId")
 
@@ -3273,9 +3395,9 @@ Public Class MntTrxDetailJig
 
                     txtTransactionDate.Text = String.Format("{0:MMMM dd, yyyy HH:mm}", row("TrxDate"))
                     cmbTransactionStatus.SelectedValue = row("TrxStatusId")
-                    cmbJigName.SelectedValue = row("JigId")
-                    cmbDowntimeStatus.SelectedValue = row("DowntimeJigStatusId")
-                    cmbDowntimeSubStatus.SelectedValue = row("DowntimeJigSubStatusId")
+                    cmbMachineName.SelectedValue = row("MachineId")
+                    cmbDowntimeStatus.SelectedValue = row("DowntimeMachineStatusId")
+                    cmbDowntimeSubStatus.SelectedValue = row("DowntimeMachineSubStatusId")
 
                     If Not row("TotalAccumulatedRuntime") Is DBNull.Value Then
                         txtRuntimeAccumulated.Text = row("TotalAccumulatedRuntime")
@@ -3298,7 +3420,7 @@ Public Class MntTrxDetailJig
                     End If
 
                     If Not row("JoNumber") Is DBNull.Value Then
-                        txtJoNumber.Text = row("JoNumber")
+                        txtJoNumber.Text = row("JoNumber").ToString.Trim
                     End If
 
                     If Not row("JoRequestor") Is DBNull.Value Then
@@ -3321,7 +3443,7 @@ Public Class MntTrxDetailJig
                     End If
 
                     If Not row("Link4M") Is DBNull.Value Then
-                        txt4M.Text = row("Link4M")
+                        'txt4M.Text = row("Link4M")
                     End If
 
                     If Not row("ModifiedBy") Is DBNull.Value Then
@@ -3421,6 +3543,15 @@ Public Class MntTrxDetailJig
                     End If
                 Next
 
+                For Each row As DataRow In dtTrxMachinePart.Rows
+                    If Not row("MachinePartId") Is DBNull.Value Then
+                        cmbMachinePart.SelectedValue = row("MachinePartId")
+                        orgMachineGroupId = row("MachinePartId")
+                    Else
+                        orgMachineGroupId = 0
+                    End If
+                Next
+
                 For Each row As DataRow In dtTrxSparePart.Rows
                     If Not row("SparePartName") Is DBNull.Value AndAlso Not row("SparePartNo") Is DBNull.Value Then
                         txtPartsReplaced.Text = row("SparePartName")
@@ -3476,8 +3607,8 @@ Public Class MntTrxDetailJig
 
             If fromPmCalendar = True Then
                 cmbTransactionStatus.Enabled = False
-                cmbJigName.Enabled = False
-                pnlJigPart.Enabled = False
+                cmbMachineName.Enabled = False
+                cmbMachinePart.Enabled = False
                 cmbDowntimeStatus.Enabled = False
                 cmbDowntimeSubStatus.Enabled = False
                 txtScheduleMonth.Enabled = False
@@ -3490,17 +3621,17 @@ Public Class MntTrxDetailJig
                 txtJoNumber.Enabled = False
                 txtJoRequestor.Enabled = False
                 txtChecksheet.Enabled = False
-                txt4M.Enabled = False
+                'txt4M.Enabled = False
 
                 btnAddRow.Enabled = False
                 btnRemoveRow.Enabled = False
                 btnBrowseImage.Enabled = False
                 btnRemoveImage.Enabled = False
                 btnRemoveChecksheet.Enabled = False
-                btnRemove4M.Enabled = False
+                'btnRemove4M.Enabled = False
 
                 btnViewChecksheet.Enabled = True
-                btnView4M.Enabled = True
+                'btnView4M.Enabled = True
                 btnViewImage.Enabled = True
 
                 dgvPic.ClearSelection()
@@ -3533,35 +3664,73 @@ Public Class MntTrxDetailJig
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub frmMntTrxDetailJig_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         impersonation.UndoImpersonateUser()
     End Sub
-    Private Sub GetJigArea(jigId As Integer)
+    Private Sub GetMachineArea(machineId As Integer)
         Try
-            Dim prmJigId(0) As SqlParameter
-            prmJigId(0) = New SqlParameter("@JigId", SqlDbType.Int)
-            prmJigId(0).Value = jigId
+            Dim prmMachineId(0) As SqlParameter
+            prmMachineId(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+            prmMachineId(0).Value = machineId
 
-            Dim rdrJig As IDataReader = dbMethod.ExecuteReader("RdMntJig", CommandType.StoredProcedure, prmJigId)
+            Dim rdrMachine As IDataReader = dbMethod.ExecuteReader("RdMntMachine", CommandType.StoredProcedure, prmMachineId)
 
-            While rdrJig.Read
-                areaId = rdrJig.Item("AreaId")
-                txtArea.Text = rdrJig.Item("AreaName").ToString.Replace("&", "&&")
+            While rdrMachine.Read
+                areaId = rdrMachine.Item("AreaId")
+                txtArea.Text = rdrMachine.Item("AreaName").ToString.Replace("&", "&&")
             End While
-            rdrJig.Close()
+            rdrMachine.Close()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub GetJigSchedule(jigId As Integer)
+    Private Sub GetMachinePartGroup(machineId As Integer)
+        Try
+            cmbMachinePart.DisplayMember = "MachinePartName"
+            cmbMachinePart.ValueMember = "MachinePartId"
+
+            cmbMachinePart.DataSource = Nothing
+            cmbMachinePart.Items.Clear()
+
+            Dim prmMachineId(0) As SqlParameter
+            prmMachineId(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+            prmMachineId(0).Value = machineId
+
+            Dim rdrPartGroup As IDataReader = dbMethod.ExecuteReader("RdMntMachine", CommandType.StoredProcedure, prmMachineId)
+
+            While rdrPartGroup.Read
+                If rdrPartGroup.Item("GroupId") Is DBNull.Value Then
+                    machinePartGroupId = 0
+                    cmbMachinePart.Enabled = False
+                Else
+                    machinePartGroupId = rdrPartGroup.Item("GroupId")
+                    cmbMachinePart.Enabled = True
+
+                    Dim prmGroupId(0) As SqlParameter
+                    prmGroupId(0) = New SqlParameter("@GroupId", SqlDbType.Int)
+                    prmGroupId(0).Value = machinePartGroupId
+
+                    dbMethod.FillCmbWithCaption("RdMntMachinePart", CommandType.StoredProcedure, "MachinePartId", "MachinePartName", cmbMachinePart, "< Select Machine Part >",
+                                                prmGroupId)
+                End If
+            End While
+            rdrPartGroup.Close()
+
+            AddHandler cmbMachinePart.Validating, AddressOf cmbMachinePart_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub GetMachineSchedule(machineId As Integer)
         Try
             If trxId = 0 Then
                 Dim prmSchedule(0) As SqlParameter
-                prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                prmSchedule(0).Value = jigId
+                prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                prmSchedule(0).Value = machineId
 
-                Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
                 Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                 If rdrSchedule.Read Then
@@ -3571,7 +3740,7 @@ Public Class MntTrxDetailJig
                     txtScheduleMonth.Text = MonthName(monthId)
                     txtScheduleWeek.Text = weekId
                 Else
-                    MessageBox.Show("No PM schedule found for this jig.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     cmbDowntimeSubStatus.SelectedValue = 0
                     txtScheduleMonth.Text = String.Empty
                     txtScheduleWeek.Text = String.Empty
@@ -3582,15 +3751,15 @@ Public Class MntTrxDetailJig
                 End If
                 rdrSchedule.Close()
             Else
-                If orgJigId = jigId Then 'same jig
-                    If orgJigSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
+                If orgMachineId = machineId Then 'same machine
+                    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
                         Dim prmSchedule(1) As SqlParameter
-                        prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmSchedule(0).Value = jigId
+                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSchedule(0).Value = machineId
                         prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmSchedule(1).Value = trxId
 
-                        Dim query As String = "SELECT ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND TrxId = @TrxId"
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId ORDER BY YearId, MonthId, WeekId"
                         Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                         If rdrSchedule.Read Then
@@ -3603,10 +3772,11 @@ Public Class MntTrxDetailJig
                         rdrSchedule.Close()
                     Else 'non-pm to pm
                         Dim prmSchedule(0) As SqlParameter
-                        prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prmSchedule(0).Value = jigId
+                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSchedule(0).Value = machineId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND " &
+                                              "ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
                         Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                         If rdrSchedule.Read Then
@@ -3616,19 +3786,17 @@ Public Class MntTrxDetailJig
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
                         End If
-                        rdrSchedule.Close()
                     End If
-                Else 'selected jig was changed
-                    Dim prmSchedule(0) As SqlParameter
-                    prmSchedule(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                    prmSchedule(0).Value = jigId
+                Else 'selected machine was changed
+                    Dim prmNewSched(0) As SqlParameter
+                    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmNewSched(0).Value = machineId
 
-                    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntJigSchedule WHERE JigId = @JigId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
-                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
 
                     If rdrSchedule.Read Then 'non-pm to pm
                         scheduleId = rdrSchedule.Item("ScheduleId")
-                        orgScheduleId = rdrSchedule.Item("ScheduleId")
                         monthId = rdrSchedule.Item("MonthId")
                         weekId = rdrSchedule.Item("WeekId")
                         txtScheduleMonth.Text = MonthName(monthId)
@@ -3638,7 +3806,7 @@ Public Class MntTrxDetailJig
                         prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmOrgSched(0).Value = trxId
 
-                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntJigSchedule WHERE TrxId = @TrxId"
+                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
                         Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
 
                         While rdrOrgSched.Read
@@ -3646,7 +3814,7 @@ Public Class MntTrxDetailJig
                         End While
                         rdrOrgSched.Close()
                     Else
-                        MessageBox.Show("No PM schedule found for this jig.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         cmbDowntimeSubStatus.SelectedValue = 0
                         txtScheduleMonth.Text = String.Empty
                         txtScheduleWeek.Text = String.Empty
@@ -3703,7 +3871,7 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub GetTotalRuntime(jigId As Integer)
+    Private Sub GetTotalRuntime(machineId As Integer)
         Try
             Dim lastDatetime As DateTime = Nothing
             Dim span As TimeSpan = Nothing
@@ -3713,10 +3881,10 @@ Public Class MntTrxDetailJig
             Dim totalMinutes As Integer = 0
 
             Dim prm(0) As SqlParameter
-            prm(0) = New SqlParameter("@JigId", SqlDbType.Int)
-            prm(0).Value = jigId
+            prm(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+            prm(0).Value = machineId
 
-            Dim reader As IDataReader = dbMethod.ExecuteReader("RdMntJigAccumulatedTime", CommandType.StoredProcedure, prm)
+            Dim reader As IDataReader = dbMethod.ExecuteReader("RdMntMachineAccumulatedTime", CommandType.StoredProcedure, prm)
 
             While reader.Read
                 If Not reader.Item("TrxFrom") Is DBNull.Value Then
@@ -3790,7 +3958,7 @@ Public Class MntTrxDetailJig
             prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
             prmApp2(0).Value = 2
             prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmApp2(1).Value = 2
+            prmApp2(1).Value = 3
 
             dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
 
@@ -3798,7 +3966,7 @@ Public Class MntTrxDetailJig
             prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
             prmApp1(0).Value = 3
             prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmApp1(1).Value = 2
+            prmApp1(1).Value = 3
 
             dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< None >", prmApp1)
 
@@ -3830,15 +3998,15 @@ Public Class MntTrxDetailJig
 
     Private Sub LoadDowntimeStatus()
         Try
-            cmbDowntimeStatus.DisplayMember = "JigStatusName"
-            cmbDowntimeStatus.ValueMember = "JigStatusId"
+            cmbDowntimeStatus.DisplayMember = "MachineStatusName"
+            cmbDowntimeStatus.ValueMember = "MachineStatusId"
 
-            Dim prmJigStatus(0) As SqlParameter
-            prmJigStatus(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-            prmJigStatus(0).Value = Nothing
+            Dim prmMachineStatus(0) As SqlParameter
+            prmMachineStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+            prmMachineStatus(0).Value = Nothing
 
-            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbDowntimeStatus, "< Select Jig Status >",
-                                        prmJigStatus)
+            dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbDowntimeStatus,
+                                        "< Select Machine Status >", prmMachineStatus)
 
             AddHandler cmbDowntimeStatus.SelectedValueChanged, AddressOf cmbDowntimeStatus_SelectedValueChanged
         Catch ex As Exception
@@ -3846,20 +4014,20 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub LoadDowntimeSubStatus(jigStatusId As Integer)
+    Private Sub LoadDowntimeSubStatus(downtimeStatusId As Integer)
         Try
-            cmbDowntimeSubStatus.DisplayMember = "JigSubStatusName"
-            cmbDowntimeSubStatus.ValueMember = "JigSubStatusId"
+            cmbDowntimeSubStatus.DisplayMember = "MachineSubStatusName"
+            cmbDowntimeSubStatus.ValueMember = "MachineSubStatusId"
 
             cmbDowntimeSubStatus.DataSource = Nothing
             cmbDowntimeSubStatus.Items.Clear()
 
-            Dim prmJigSubStatus(0) As SqlParameter
-            prmJigSubStatus(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-            prmJigSubStatus(0).Value = jigStatusId
+            Dim prmMachineSubStatus(0) As SqlParameter
+            prmMachineSubStatus(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+            prmMachineSubStatus(0).Value = downtimeStatusId
 
-            dbMethod.FillCmbWithCaption("RdMntJigSubStatus", CommandType.StoredProcedure, "JigSubStatusId", "JigSubStatusName",
-                                        cmbDowntimeSubStatus, "< Select Sub-Status >", prmJigSubStatus)
+            dbMethod.FillCmbWithCaption("RdMntMachineSubStatus", CommandType.StoredProcedure, "MachineSubStatusId", "MachineSubStatusName",
+                                        cmbDowntimeSubStatus, "< Select Sub-Status >", prmMachineSubStatus)
 
             AddHandler cmbDowntimeSubStatus.SelectedValueChanged, AddressOf cmbDowntimeSubStatus_SelectedValueChanged
         Catch ex As Exception
@@ -3867,27 +4035,29 @@ Public Class MntTrxDetailJig
         End Try
     End Sub
 
-    Private Sub LoadJig()
+    Private Sub LoadMachine()
         Try
-            cmbJigName.DisplayMember = "JigCompleteName"
-            cmbJigName.ValueMember = "JigId"
+            cmbMachineName.DisplayMember = "MachineName"
+            cmbMachineName.ValueMember = "MachineId"
 
             If trxId = 0 Then
-                Dim prm(0) As SqlParameter
-                prm(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                Dim prm(1) As SqlParameter
+                prm(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
                 prm(0).Value = 1
+                prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
+                prm(1).Value = 1
 
-                dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJigName, "", prm)
+                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "", prm)
             Else
                 Dim prm(0) As SqlParameter
-                prm(0) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                prm(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
                 prm(0).Value = Nothing
 
-                dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbJigName, "", prm)
+                dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbMachineName, "", prm)
             End If
 
-            AddHandler cmbJigName.Validating, AddressOf cmbJigName_Validating
-            AddHandler cmbJigName.SelectedValueChanged, AddressOf cmbJigName_SelectedValueChanged
+            AddHandler cmbMachineName.Validating, AddressOf cmbMachineName_Validating
+            AddHandler cmbMachineName.SelectedValueChanged, AddressOf cmbMachineName_SelectedValueChanged
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3912,6 +4082,7 @@ Public Class MntTrxDetailJig
         Try
             cmbTransactionStatus.DisplayMember = "TrxStatusName"
             cmbTransactionStatus.ValueMember = "TrxStatusId"
+
             dbMethod.FillCmb("RdGenTransactionStatus", CommandType.StoredProcedure, "TrxStatusId", "TrxStatusName", cmbTransactionStatus)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -3920,35 +4091,31 @@ Public Class MntTrxDetailJig
 
     Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
-            If Not picImage.Image Is Nothing Then
-                If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
-                picImage.Image.Dispose()
-                picImage.Image = Nothing
-                txtImageName.Text = String.Empty
+            For i As Integer = 0 To ofdImage.FileNames.Length - 1
+                Dim newAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
+                lstImgAttachment.Add(newAttachment)
+                currentIndex = lstImgAttachment.Count - 1
+            Next
+            ShowAttachment()
+
+            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImgAttachment(currentIndex).FileName)
+            lblAttachmentCount.Text = String.Format("{0}/{1}", currentIndex + 1, lstImgAttachment.Count)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ShowAttachment()
+        Try
+            If lstImageFiles.Contains(lstImgAttachment(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
+                picImage.Visible = True
+
+                Using img As Image = Image.FromFile(lstImgAttachment(currentIndex).FileName)
+                    picImage.Image = New Bitmap(img)
+                End Using
             End If
 
-            Dim attachment As New ImgAttachment(ofdImage.FileName, ofdImage.SafeFileName, Path.GetExtension(ofdImage.SafeFileName).ToLower)
-            lstImgAttachment.Add(attachment)
-
-            Using ms As New MemoryStream
-                Using bmp As New Bitmap(lstImgAttachment(0).FileName)
-                    Dim jpgEncoder As ImageCodecInfo = dbMain.GetEncoder(ImageFormat.Jpeg)
-                    Dim myEncoder As Imaging.Encoder = System.Drawing.Imaging.Encoder.Quality
-
-                    'create an encoder parameters object
-                    'an encoder parameters object has an array of encoderparameter objects; in this case, there is only one encoderparameter object in the array.
-                    Dim myEncoderParameters As New EncoderParameters(1)
-                    'save the bitmap as a JPG file with quality level compression
-                    Dim myEncoderParameter = New EncoderParameter(myEncoder, 500L)
-                    myEncoderParameters.Param(0) = myEncoderParameter
-                    bmp.Save(ms, jpgEncoder, myEncoderParameters)
-                End Using
-
-                picImage.Image = Image.FromStream(ms)
-            End Using
-
-            txtImageName.Text = lstImgAttachment(0).SafeName
-            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImgAttachment(0).FileName)
+            txtImageName.Text = lstImgAttachment(currentIndex).SafeName
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3964,21 +4131,21 @@ Public Class MntTrxDetailJig
         lblImageAttachment.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub txt4M_Enter(sender As Object, e As EventArgs) Handles txt4M.Enter
-        lbl4M.ForeColor = Color.White
-        lbl4M.BackColor = Color.DarkSlateGray
+    Private Sub txt4M_Enter(sender As Object, e As EventArgs)
+        'lbl4M.ForeColor = Color.White
+        'lbl4M.BackColor = Color.DarkSlateGray
     End Sub
 
-    Private Sub txt4M_Leave(sender As Object, e As EventArgs) Handles txt4M.Leave
-        lbl4M.ForeColor = Color.Black
-        lbl4M.BackColor = SystemColors.Control
+    Private Sub txt4M_Leave(sender As Object, e As EventArgs)
+        'lbl4M.ForeColor = Color.Black
+        'lbl4M.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub txt4M_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles txt4M.LinkClicked
+    Private Sub txt4M_LinkClicked(sender As Object, e As LinkClickedEventArgs)
         Try
-            If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                Process.Start(e.LinkText)
-            End If
+            'If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
+            '    Process.Start(e.LinkText)
+            'End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -4165,4 +4332,75 @@ Public Class MntTrxDetailJig
         lblScheduleWeek.ForeColor = Color.Black
         lblScheduleWeek.BackColor = SystemColors.Control
     End Sub
+
+    Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
+        Try
+            If lstAttachmentForCopy.Count > 0 Then
+                Dim streamRead As System.IO.FileStream
+                Dim streamWrite As System.IO.FileStream
+
+                For i As Integer = 0 To lstAttachmentForCopy.Count - 1
+                    streamRead = New System.IO.FileStream(lstAttachmentForCopy(i).FileName, System.IO.FileMode.Open)
+                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstAttachmentForCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+
+                    Dim lngLen As Long = streamRead.Length - 1
+                    Dim byteBuffer(4096) As Byte
+                    Dim intBytesRead As Integer
+
+                    ShowProgress("Uploading files : (0/" + (lngLen * 100).ToString + ")", lblProgress)
+
+                    While streamRead.Position < lngLen
+                        If (bgWorker.CancellationPending = True) Then
+                            e.Cancel = True
+                            Exit While
+                        End If
+
+                        bgWorker.ReportProgress(CInt(streamRead.Position / lngLen * 100))
+                        ShowProgress("Uploading files : (" + CInt(streamRead.Position).ToString + "/" + (lngLen * 100).ToString + ")", lblProgress)
+                        intBytesRead = (streamRead.Read(byteBuffer, 0, 4096))
+
+                        streamWrite.Write(byteBuffer, 0, intBytesRead)
+                    End While
+
+                    streamRead.Dispose()
+                    streamWrite.Dispose()
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
+        If lbl.InvokeRequired Then
+            lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
+        Else
+            lbl.Text = text
+        End If
+    End Sub
+
+    Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
+
+    Private Sub bgWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles bgWorker.ProgressChanged
+        pbAttachment.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
+        If e.Cancelled = True Then
+            pbAttachment.Visible = False
+            lblProgress.Visible = False
+
+            btnPrevious.Enabled = True
+            btnNext.Enabled = True
+            btnViewImage.Enabled = True
+            btnBrowseImage.Enabled = True
+            btnRemoveImage.Enabled = True
+            btnSave.Enabled = True
+            btnDelete.Enabled = True
+            btnClose.Enabled = True
+        Else
+            Me.DialogResult = DialogResult.OK
+        End If
+    End Sub
+
 End Class

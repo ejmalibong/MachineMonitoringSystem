@@ -165,13 +165,13 @@ Public Class Main
 
             Case 2 'maintenance
                 Select Case wgroupId
-                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                    Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
                         accessLevelId = 1
-                    Case 35, 40 'mngr, asst mngr
+                    Case 35, 40 'mt mngr, asst mngr
                         accessLevelId = 2
-                    Case 29, 30 'sv, asv
+                    Case 29, 30 'mt sv, asv
                         accessLevelId = 3
-                    Case 5 'sr tech
+                    Case 5 'mt sr tech
                         accessLevelId = 4
                     Case Else
                         accessLevelId = 99
@@ -182,16 +182,52 @@ Public Class Main
 
                     Case 2, 3
                         dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                        'dbMain.FormLoader(Me, New MntMchCs)
+                        'dbMain.FormLoader(Me, MntTrxPartsIssuance)
 
                     Case Else
                         SecUserToolStripMenuItem.Visible = False
-                        MntModelExtensionSeparator.Visible = False
+                        tssMaintenance2.Visible = False
 
                         dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                 End Select
 
+            Case 3 'facility
+                Select Case wgroupId
+                    Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
+                        accessLevelId = 1
+                    Case 36 'fc asst mngr
+                        accessLevelId = 2
+                    Case 31, 32, 8 'fc sv, asv, engg
+                        accessLevelId = 3
+                    Case 9 'fc sr tech
+                        accessLevelId = 4
+                    Case Else
+                        accessLevelId = 99
+                End Select
+
+                Select Case accessLevelId
+                    Case 1
+
+                    Case 2, 3
+                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+
+                    Case Else
+                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        SecUserToolStripMenuItem.Visible = False
+                        tssMaintenance2.Visible = False
+
+                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                End Select
+
             Case 4 'it
+                Select Case wgroupId
+                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                        accessLevelId = 1
+                    Case 13, 14 'it sr staff
+                        accessLevelId = 2
+                    Case Else
+                        accessLevelId = 99
+                End Select
 
             Case Else
                 Application.Exit()
@@ -219,6 +255,10 @@ Public Class Main
         End If
 
         MyBase.WndProc(m)
+    End Sub
+
+    Private Sub FacTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionConsoleToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
     End Sub
 
 End Class

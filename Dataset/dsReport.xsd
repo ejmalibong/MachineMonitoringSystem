@@ -9,7 +9,7 @@
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="RptMntActivityReportTableAdapter" GeneratorDataComponentClassName="RptMntActivityReportTableAdapter" Name="RptMntActivityReport" UserDataComponentName="RptMntActivityReportTableAdapter">
             <MainSource>
-              <DbSource ConnectionRef="MachineMonitoringConnectionString (MySettings)" DbObjectName="MachineMonitoring.dbo.RptMntActivityReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+              <DbSource ConnectionRef="MachineMonitoringConnectionString (MySettings)" DbObjectName="MachineMonitoring.dbo.RptMntActivityReport" DbObjectType="StoredProcedure" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="StoredProcedure" ModifiedByUser="false">
                     <CommandText>dbo.RptMntActivityReport</CommandText>
@@ -60,6 +60,8 @@
               <Mapping SourceColumn="TrxStatusId" DataSetColumn="TrxStatusId" />
               <Mapping SourceColumn="TrxStatusName" DataSetColumn="TrxStatusName" />
               <Mapping SourceColumn="Image" DataSetColumn="Image" />
+              <Mapping SourceColumn="SparePartName" DataSetColumn="SparePartName" />
+              <Mapping SourceColumn="SparePartNo" DataSetColumn="SparePartNo" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -71,7 +73,7 @@
   <xs:element name="dsReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsReport" msprop:Generator_UserDSName="dsReport">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="RptMntActivityReport" msprop:Generator_TableClassName="RptMntActivityReportDataTable" msprop:Generator_TableVarName="tableRptMntActivityReport" msprop:Generator_TablePropName="RptMntActivityReport" msprop:Generator_RowDeletingName="RptMntActivityReportRowDeleting" msprop:Generator_RowChangingName="RptMntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="RptMntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="RptMntActivityReportRowDeleted" msprop:Generator_UserTableName="RptMntActivityReport" msprop:Generator_RowChangedName="RptMntActivityReportRowChanged" msprop:Generator_RowEvArgName="RptMntActivityReportRowChangeEvent" msprop:Generator_RowClassName="RptMntActivityReportRow">
+        <xs:element name="RptMntActivityReport" msprop:Generator_TableClassName="RptMntActivityReportDataTable" msprop:Generator_TableVarName="tableRptMntActivityReport" msprop:Generator_RowChangedName="RptMntActivityReportRowChanged" msprop:Generator_TablePropName="RptMntActivityReport" msprop:Generator_RowDeletingName="RptMntActivityReportRowDeleting" msprop:Generator_RowChangingName="RptMntActivityReportRowChanging" msprop:Generator_RowEvHandlerName="RptMntActivityReportRowChangeEventHandler" msprop:Generator_RowDeletedName="RptMntActivityReportRowDeleted" msprop:Generator_RowClassName="RptMntActivityReportRow" msprop:Generator_UserTableName="RptMntActivityReport" msprop:Generator_RowEvArgName="RptMntActivityReportRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="TrxDate" msprop:Generator_ColumnVarNameInTable="columnTrxDate" msprop:Generator_ColumnPropNameInRow="TrxDate" msprop:Generator_ColumnPropNameInTable="TrxDateColumn" msprop:Generator_UserColumnName="TrxDate" type="xs:dateTime" />
@@ -193,6 +195,20 @@
                 </xs:simpleType>
               </xs:element>
               <xs:element name="Image" msprop:Generator_ColumnVarNameInTable="columnImage" msprop:Generator_ColumnPropNameInRow="Image" msprop:Generator_ColumnPropNameInTable="ImageColumn" msprop:Generator_UserColumnName="Image" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="SparePartName" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnSparePartName" msprop:Generator_ColumnPropNameInRow="SparePartName" msprop:Generator_ColumnPropNameInTable="SparePartNameColumn" msprop:Generator_UserColumnName="SparePartName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SparePartNo" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnSparePartNo" msprop:Generator_ColumnPropNameInRow="SparePartNo" msprop:Generator_ColumnPropNameInTable="SparePartNoColumn" msprop:Generator_UserColumnName="SparePartNo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

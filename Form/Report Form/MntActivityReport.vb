@@ -11,9 +11,11 @@ Public Class MntActivityReport
 
     Private Sub frmMntActivityReport_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            Dim prmTechnician(0) As SqlParameter
+            Dim prmTechnician(1) As SqlParameter
             prmTechnician(0) = New SqlParameter("@SectionId", SqlDbType.Int)
             prmTechnician(0).Value = 2
+            prmTechnician(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+            prmTechnician(1).Value = True
             dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbUserName, "< All > ", prmTechnician)
             AddHandler cmbUserName.Validated, AddressOf cmbUserName_Validated
 

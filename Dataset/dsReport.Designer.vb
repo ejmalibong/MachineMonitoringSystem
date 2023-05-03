@@ -341,6 +341,10 @@ Partial Public Class dsReport
         
         Private columnImage As Global.System.Data.DataColumn
         
+        Private columnSparePartName As Global.System.Data.DataColumn
+        
+        Private columnSparePartNo As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Sub New()
@@ -609,6 +613,22 @@ Partial Public Class dsReport
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartNo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -674,9 +694,11 @@ Partial Public Class dsReport
                     ByVal JoRequestor As String,  _
                     ByVal TrxStatusId As Integer,  _
                     ByVal TrxStatusName As String,  _
-                    ByVal Image() As Byte) As RptMntActivityReportRow
+                    ByVal Image() As Byte,  _
+                    ByVal SparePartName As String,  _
+                    ByVal SparePartNo As String) As RptMntActivityReportRow
             Dim rowRptMntActivityReportRow As RptMntActivityReportRow = CType(Me.NewRow,RptMntActivityReportRow)
-            Dim columnValuesArray() As Object = New Object() {TrxDate, ShiftId, AreaId, AreaName, MachineId, MachineName, DowntimeMachineStatusId, MachineStatusName, DowntimeMachineSubStatusId, MachineSubStatusName, JigId, JigName, DowntimeJigStatusId, JigStatusName, DowntimeJigSubStatusId, JigSubStatusName, DatetimeStarted, DatetimeEnded, TotalAccumulatedDowntime, UserId, PicName, Problem, RootCause, ActionTaken, JoNumber, JoRequestor, TrxStatusId, TrxStatusName, Image}
+            Dim columnValuesArray() As Object = New Object() {TrxDate, ShiftId, AreaId, AreaName, MachineId, MachineName, DowntimeMachineStatusId, MachineStatusName, DowntimeMachineSubStatusId, MachineSubStatusName, JigId, JigName, DowntimeJigStatusId, JigStatusName, DowntimeJigSubStatusId, JigSubStatusName, DatetimeStarted, DatetimeEnded, TotalAccumulatedDowntime, UserId, PicName, Problem, RootCause, ActionTaken, JoNumber, JoRequestor, TrxStatusId, TrxStatusName, Image, SparePartName, SparePartNo}
             rowRptMntActivityReportRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowRptMntActivityReportRow)
             Return rowRptMntActivityReportRow
@@ -728,6 +750,8 @@ Partial Public Class dsReport
             Me.columnTrxStatusId = MyBase.Columns("TrxStatusId")
             Me.columnTrxStatusName = MyBase.Columns("TrxStatusName")
             Me.columnImage = MyBase.Columns("Image")
+            Me.columnSparePartName = MyBase.Columns("SparePartName")
+            Me.columnSparePartNo = MyBase.Columns("SparePartNo")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -791,6 +815,10 @@ Partial Public Class dsReport
             MyBase.Columns.Add(Me.columnTrxStatusName)
             Me.columnImage = New Global.System.Data.DataColumn("Image", GetType(Byte()), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnImage)
+            Me.columnSparePartName = New Global.System.Data.DataColumn("SparePartName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartName)
+            Me.columnSparePartNo = New Global.System.Data.DataColumn("SparePartNo", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartNo)
             Me.columnTrxDate.AllowDBNull = false
             Me.columnShiftId.MaxLength = 1
             Me.columnAreaId.AllowDBNull = false
@@ -824,6 +852,10 @@ Partial Public Class dsReport
             Me.columnTrxStatusId.AllowDBNull = false
             Me.columnTrxStatusName.ReadOnly = true
             Me.columnTrxStatusName.MaxLength = 10
+            Me.columnSparePartName.ReadOnly = true
+            Me.columnSparePartName.MaxLength = 2147483647
+            Me.columnSparePartNo.ReadOnly = true
+            Me.columnSparePartNo.MaxLength = 50
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1397,6 +1429,36 @@ Partial Public Class dsReport
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptMntActivityReport.SparePartNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartName' in table 'RptMntActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptMntActivityReport.SparePartNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartNo() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptMntActivityReport.SparePartNoColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartNo' in table 'RptMntActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptMntActivityReport.SparePartNoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Function IsShiftIdNull() As Boolean
             Return Me.IsNull(Me.tableRptMntActivityReport.ShiftIdColumn)
         End Function
@@ -1694,6 +1756,30 @@ Partial Public Class dsReport
         Public Sub SetImageNull()
             Me(Me.tableRptMntActivityReport.ImageColumn) = Global.System.Convert.DBNull
         End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptMntActivityReport.SparePartNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNameNull()
+            Me(Me.tableRptMntActivityReport.SparePartNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNoNull() As Boolean
+            Return Me.IsNull(Me.tableRptMntActivityReport.SparePartNoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNoNull()
+            Me(Me.tableRptMntActivityReport.SparePartNoColumn) = Global.System.Convert.DBNull
+        End Sub
     End Class
     
     '''<summary>
@@ -1891,6 +1977,8 @@ Namespace dsReportTableAdapters
             tableMapping.ColumnMappings.Add("TrxStatusId", "TrxStatusId")
             tableMapping.ColumnMappings.Add("TrxStatusName", "TrxStatusName")
             tableMapping.ColumnMappings.Add("Image", "Image")
+            tableMapping.ColumnMappings.Add("SparePartName", "SparePartName")
+            tableMapping.ColumnMappings.Add("SparePartNo", "SparePartNo")
             Me._adapter.TableMappings.Add(tableMapping)
         End Sub
         

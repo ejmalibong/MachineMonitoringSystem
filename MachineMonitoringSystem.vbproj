@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>66</ApplicationRevision>
+    <ApplicationRevision>73</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,7 +79,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\SysIcon2.ico</ApplicationIcon>
@@ -245,6 +245,12 @@
     <Compile Include="Form\MntMchDetail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\FacTrxActvityLog.Designer.vb">
+      <DependentUpon>FacTrxActvityLog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacTrxActvityLog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntTrxActvityLog.Designer.vb">
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </Compile>
@@ -255,6 +261,12 @@
       <DependentUpon>MntTrxApproval.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\MntTrxApproval.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FacTrxConsole.Designer.vb">
+      <DependentUpon>FacTrxConsole.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacTrxConsole.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntTrxConsole.Designer.vb">
@@ -269,6 +281,12 @@
     <Compile Include="Form\MntTrxDetailJig.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\FacTrxDetailMch.Designer.vb">
+      <DependentUpon>FacTrxDetailMch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacTrxDetailMch.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntTrxDetailMch.Designer.vb">
       <DependentUpon>MntTrxDetailMch.vb</DependentUpon>
     </Compile>
@@ -279,6 +297,12 @@
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\MntTrxDetailOth.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntTrxPartsIssuance.Designer.vb">
+      <DependentUpon>MntTrxPartsIssuance.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntTrxPartsIssuance.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\Report Form\MntActivityReport.Designer.vb">
@@ -329,6 +353,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\clear-filter.ico" />
+    <None Include="Resources\clear-bookmark.png" />
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="Dataset\dsReport.xsc">
@@ -760,11 +786,17 @@
     <EmbeddedResource Include="Form\MntMchDetail.resx">
       <DependentUpon>MntMchDetail.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacTrxActvityLog.resx">
+      <DependentUpon>FacTrxActvityLog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxActvityLog.resx">
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxApproval.resx">
       <DependentUpon>MntTrxApproval.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacTrxConsole.resx">
+      <DependentUpon>FacTrxConsole.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxConsole.resx">
       <DependentUpon>MntTrxConsole.vb</DependentUpon>
@@ -772,11 +804,17 @@
     <EmbeddedResource Include="Form\MntTrxDetailJig.resx">
       <DependentUpon>MntTrxDetailJig.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacTrxDetailMch.resx">
+      <DependentUpon>FacTrxDetailMch.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxDetailMch.resx">
       <DependentUpon>MntTrxDetailMch.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxDetailOth.resx">
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntTrxPartsIssuance.resx">
+      <DependentUpon>MntTrxPartsIssuance.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\Report Form\MntActivityReport.resx">
       <DependentUpon>MntActivityReport.vb</DependentUpon>
@@ -795,9 +833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <Content Include="ReportFile\MntActivityReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

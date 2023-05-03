@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class MntTrxConsole
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+Partial Class FacTrxConsole
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class MntTrxConsole
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -33,9 +33,7 @@ Partial Class MntTrxConsole
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxConsole))
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacTrxConsole))
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
@@ -72,16 +70,6 @@ Partial Class MntTrxConsole
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.tabCtrl = New System.Windows.Forms.TabControl()
         Me.pgMachine = New System.Windows.Forms.TabPage()
-        Me.pgJig = New System.Windows.Forms.TabPage()
-        Me.dgvJig = New System.Windows.Forms.DataGridView()
-        Me.ColJig = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigStatusId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigLastTransaction = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigElapsedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
@@ -107,8 +95,6 @@ Partial Class MntTrxConsole
         Me.bindingNavigator.SuspendLayout()
         Me.tabCtrl.SuspendLayout()
         Me.pgMachine.SuspendLayout()
-        Me.pgJig.SuspendLayout()
-        CType(Me.dgvJig, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlSearchByDate.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByText.SuspendLayout()
@@ -459,6 +445,7 @@ Partial Class MntTrxConsole
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -507,7 +494,6 @@ Partial Class MntTrxConsole
         'tabCtrl
         '
         Me.tabCtrl.Controls.Add(Me.pgMachine)
-        Me.tabCtrl.Controls.Add(Me.pgJig)
         Me.tabCtrl.Dock = System.Windows.Forms.DockStyle.Left
         Me.tabCtrl.Location = New System.Drawing.Point(0, 0)
         Me.tabCtrl.Margin = New System.Windows.Forms.Padding(0)
@@ -529,110 +515,6 @@ Partial Class MntTrxConsole
         Me.pgMachine.TabIndex = 0
         Me.pgMachine.Text = "Machine"
         Me.pgMachine.UseVisualStyleBackColor = True
-        '
-        'pgJig
-        '
-        Me.pgJig.Controls.Add(Me.dgvJig)
-        Me.pgJig.Location = New System.Drawing.Point(4, 24)
-        Me.pgJig.Name = "pgJig"
-        Me.pgJig.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgJig.Size = New System.Drawing.Size(342, 572)
-        Me.pgJig.TabIndex = 1
-        Me.pgJig.Text = "Jig"
-        Me.pgJig.UseVisualStyleBackColor = True
-        '
-        'dgvJig
-        '
-        Me.dgvJig.AllowUserToAddRows = False
-        Me.dgvJig.AllowUserToDeleteRows = False
-        Me.dgvJig.AllowUserToResizeColumns = False
-        Me.dgvJig.AllowUserToResizeRows = False
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvJig.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
-        Me.dgvJig.ColumnHeadersHeight = 25
-        Me.dgvJig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvJig.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJig, Me.ColJigCompleteName, Me.ColJigAreaName, Me.ColJigStatusId, Me.ColJigModelId, Me.ColJigExtensionId, Me.ColJigLastTransaction, Me.ColJigElapsedTime})
-        Me.dgvJig.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgvJig.Location = New System.Drawing.Point(3, 3)
-        Me.dgvJig.MultiSelect = False
-        Me.dgvJig.Name = "dgvJig"
-        Me.dgvJig.ReadOnly = True
-        Me.dgvJig.RowHeadersVisible = False
-        Me.dgvJig.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 8.5!)
-        Me.dgvJig.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.dgvJig.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvJig.Size = New System.Drawing.Size(336, 566)
-        Me.dgvJig.TabIndex = 0
-        '
-        'ColJig
-        '
-        Me.ColJig.DataPropertyName = "JigId"
-        Me.ColJig.HeaderText = "JigId"
-        Me.ColJig.Name = "ColJig"
-        Me.ColJig.ReadOnly = True
-        Me.ColJig.Visible = False
-        '
-        'ColJigCompleteName
-        '
-        Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
-        Me.ColJigCompleteName.HeaderText = "Jig Name"
-        Me.ColJigCompleteName.Name = "ColJigCompleteName"
-        Me.ColJigCompleteName.ReadOnly = True
-        Me.ColJigCompleteName.Width = 205
-        '
-        'ColJigAreaName
-        '
-        Me.ColJigAreaName.DataPropertyName = "AreaName"
-        Me.ColJigAreaName.HeaderText = "Area"
-        Me.ColJigAreaName.Name = "ColJigAreaName"
-        Me.ColJigAreaName.ReadOnly = True
-        Me.ColJigAreaName.Width = 90
-        '
-        'ColJigStatusId
-        '
-        Me.ColJigStatusId.DataPropertyName = "JigStatusId"
-        Me.ColJigStatusId.HeaderText = "JigStatusId"
-        Me.ColJigStatusId.Name = "ColJigStatusId"
-        Me.ColJigStatusId.ReadOnly = True
-        Me.ColJigStatusId.Visible = False
-        '
-        'ColJigModelId
-        '
-        Me.ColJigModelId.DataPropertyName = "ModelId"
-        Me.ColJigModelId.HeaderText = "JigModelId"
-        Me.ColJigModelId.Name = "ColJigModelId"
-        Me.ColJigModelId.ReadOnly = True
-        Me.ColJigModelId.Visible = False
-        '
-        'ColJigExtensionId
-        '
-        Me.ColJigExtensionId.DataPropertyName = "ExtensionId"
-        Me.ColJigExtensionId.HeaderText = "JigExtensionId"
-        Me.ColJigExtensionId.Name = "ColJigExtensionId"
-        Me.ColJigExtensionId.ReadOnly = True
-        Me.ColJigExtensionId.Visible = False
-        '
-        'ColJigLastTransaction
-        '
-        Me.ColJigLastTransaction.DataPropertyName = "TrxFrom"
-        Me.ColJigLastTransaction.HeaderText = "LastTransaction"
-        Me.ColJigLastTransaction.Name = "ColJigLastTransaction"
-        Me.ColJigLastTransaction.ReadOnly = True
-        Me.ColJigLastTransaction.Visible = False
-        '
-        'ColJigElapsedTime
-        '
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColJigElapsedTime.DefaultCellStyle = DataGridViewCellStyle12
-        Me.ColJigElapsedTime.HeaderText = "Time"
-        Me.ColJigElapsedTime.Name = "ColJigElapsedTime"
-        Me.ColJigElapsedTime.ReadOnly = True
-        Me.ColJigElapsedTime.Width = 70
         '
         'lblStatus
         '
@@ -821,7 +703,7 @@ Partial Class MntTrxConsole
         Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.OthersToolStripMenuItem.Text = "Others"
         '
-        'MntTrxConsole
+        'FacTrxConsole
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -847,7 +729,7 @@ Partial Class MntTrxConsole
         Me.Controls.Add(Me.tabCtrl)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Name = "MntTrxConsole"
+        Me.Name = "FacTrxConsole"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
@@ -859,8 +741,6 @@ Partial Class MntTrxConsole
         Me.bindingNavigator.PerformLayout()
         Me.tabCtrl.ResumeLayout(False)
         Me.pgMachine.ResumeLayout(False)
-        Me.pgJig.ResumeLayout(False)
-        CType(Me.dgvJig, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlSearchByDate.ResumeLayout(False)
         Me.pnlSearchByDate.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
@@ -892,7 +772,6 @@ Partial Class MntTrxConsole
     Friend WithEvents btnGo As System.Windows.Forms.ToolStripButton
     Friend WithEvents tabCtrl As System.Windows.Forms.TabControl
     Friend WithEvents pgMachine As System.Windows.Forms.TabPage
-    Friend WithEvents pgJig As System.Windows.Forms.TabPage
     Friend WithEvents lblStatus As System.Windows.Forms.Label
     Friend WithEvents cmbStatus As System.Windows.Forms.ComboBox
     Friend WithEvents cmbSearchCriteria As System.Windows.Forms.ComboBox
@@ -900,21 +779,12 @@ Partial Class MntTrxConsole
     Friend WithEvents btnReset As PinkieControls.ButtonXP
     Friend WithEvents pnlSearchByDate As System.Windows.Forms.Panel
     Friend WithEvents tmrElapsedTime As System.Windows.Forms.Timer
-    Friend WithEvents dgvJig As System.Windows.Forms.DataGridView
     Friend WithEvents ColMachineId As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColMachineName As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColAreaName As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColMachineStatusId As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColMachineLastTransaction As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ColMachineElapsedTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJig As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigCompleteName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigAreaName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigStatusId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigModelId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigExtensionId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigLastTransaction As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigElapsedTime As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents pnlSearchByCmb As System.Windows.Forms.Panel
     Friend WithEvents cmbCommonCmb As SergeUtils.EasyCompletionComboBox
     Friend WithEvents pnlSearchByText As System.Windows.Forms.Panel

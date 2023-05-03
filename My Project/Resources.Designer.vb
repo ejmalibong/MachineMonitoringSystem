@@ -63,16 +63,6 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property _3d_bar_chart_16_x_16() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("_3d_bar_chart_16_x_16", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
         Friend ReadOnly Property _3d_bar_chart_24_x_24() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("_3d_bar_chart_24_x_24", resourceCulture)
@@ -586,6 +576,26 @@ Namespace My.Resources
         Friend ReadOnly Property CD_24_x_24() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CD_24_x_24", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property clear_bookmark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("clear-bookmark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property clear_filter() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("clear-filter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

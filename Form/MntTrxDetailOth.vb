@@ -32,8 +32,8 @@ Public Class MntTrxDetailOth
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
 
-    Private attDirectory As String = directory.AttachmentInitialDirectory
-    Private imgDirectory As String = directory.ImageInitialDirectory
+    Private attDirectory As String = directory.AtchIniDirectoryMt
+    Private imgDirectory As String = directory.ImgIniDirectoryMt
 
     Private imgTmp As String = String.Empty
     Private impersonation As New UserImpersonation.UserImpersonation
@@ -668,7 +668,7 @@ Public Class MntTrxDetailOth
 
         'pic table
         Me.bsTrxUser.DataSource = dtSecUserPic
-        Me.bsTrxUser.Filter = String.Format("SectionId = 2")
+        Me.bsTrxUser.Filter = String.Format("SectionId = 2 AND IsActive = 1")
         dgvPic.AutoGenerateColumns = False
         dgvPic.DataSource = Me.bsTrxUser
 
@@ -2862,7 +2862,7 @@ Public Class MntTrxDetailOth
     Private Sub FilterPicTable()
         Try
             If dgvDetail.Rows.Count > 0 Then
-                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 2 AND UserId NOT IN (")
+                Dim filterBuilder As New System.Text.StringBuilder("SectionId = 2 AND IsActive = 1 AND UserId NOT IN (")
 
                 For i As Integer = 0 To dgvDetail.Rows.Count - 1
                     If i > 0 Then

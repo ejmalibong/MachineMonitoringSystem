@@ -446,25 +446,29 @@ Public Class MntJigSchedDetail
             Select Case frequencyId
                 Case "M"
                     If scheduleId = 0 Then
-                        Dim prm(1) As SqlParameter
-                        prm(0) = New SqlParameter("@JigId", SqlDbType.Int)
-                        prm(0).Value = jigId
-                        prm(1) = New SqlParameter("@MonthId", SqlDbType.Int)
-                        prm(1).Value = monthId
-
-                        count = dbMethod.ExecuteScalar("SELECT COUNT(ScheduleId) FROM dbo.MntJigSchedule " &
-                                                       "WHERE JigId = @JigId AND MonthId = @MonthId", CommandType.Text, prm)
-                    Else
                         Dim prm(2) As SqlParameter
                         prm(0) = New SqlParameter("@JigId", SqlDbType.Int)
                         prm(0).Value = jigId
-                        prm(1) = New SqlParameter("@MonthId", SqlDbType.Int)
-                        prm(1).Value = monthId
-                        prm(2) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-                        prm(2).Value = scheduleId
+                        prm(1) = New SqlParameter("@YearId", SqlDbType.Int)
+                        prm(1).Value = yearId
+                        prm(2) = New SqlParameter("@MonthId", SqlDbType.Int)
+                        prm(2).Value = monthId
 
                         count = dbMethod.ExecuteScalar("SELECT COUNT(ScheduleId) FROM dbo.MntJigSchedule " &
-                                                       "WHERE JigId = @JigId AND MonthId = @MonthId AND ScheduleId <> @ScheduleId", CommandType.Text, prm)
+                                                       "WHERE JigId = @JigId AND YearId = @YearId AND MonthId = @MonthId", CommandType.Text, prm)
+                    Else
+                        Dim prm(3) As SqlParameter
+                        prm(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                        prm(0).Value = jigId
+                        prm(1) = New SqlParameter("@YearId", SqlDbType.Int)
+                        prm(1).Value = yearId
+                        prm(2) = New SqlParameter("@MonthId", SqlDbType.Int)
+                        prm(2).Value = monthId
+                        prm(3) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                        prm(3).Value = scheduleId
+
+                        count = dbMethod.ExecuteScalar("SELECT COUNT(ScheduleId) FROM dbo.MntJigSchedule " &
+                                                       "WHERE JigId = @JigId AND YearId = @YearId AND MonthId = @MonthId AND ScheduleId <> @ScheduleId", CommandType.Text, prm)
                     End If
 
                     If count > 0 Then
