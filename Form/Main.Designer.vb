@@ -127,6 +127,7 @@ Partial Class Main
         Me.FacActivtyApprovalToolStripMenuItem.Name = "FacActivtyApprovalToolStripMenuItem"
         Me.FacActivtyApprovalToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.FacActivtyApprovalToolStripMenuItem.Text = "FC Activity Approval"
+        Me.FacActivtyApprovalToolStripMenuItem.Visible = False
         '
         'FacMachineScheduleToolStripMenuItem
         '
@@ -192,30 +193,30 @@ Partial Class Main
         'FacActivityReportToolStripMenuItem
         '
         Me.FacActivityReportToolStripMenuItem.Name = "FacActivityReportToolStripMenuItem"
-        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.FacActivityReportToolStripMenuItem.Text = "FC Activity Report"
         '
         'FacPmReportToolStripMenuItem
         '
         Me.FacPmReportToolStripMenuItem.Name = "FacPmReportToolStripMenuItem"
-        Me.FacPmReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FacPmReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.FacPmReportToolStripMenuItem.Text = "FC PM Report"
         '
         'tssReport
         '
         Me.tssReport.Name = "tssReport"
-        Me.tssReport.Size = New System.Drawing.Size(177, 6)
+        Me.tssReport.Size = New System.Drawing.Size(169, 6)
         '
         'MntActivityReportToolStripMenuItem
         '
         Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
-        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.MntActivityReportToolStripMenuItem.Text = "MT Activity Report"
         '
         'MntPmReportToolStripMenuItem
         '
         Me.MntPmReportToolStripMenuItem.Name = "MntPmReportToolStripMenuItem"
-        Me.MntPmReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntPmReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.MntPmReportToolStripMenuItem.Text = "MT PM Report"
         Me.MntPmReportToolStripMenuItem.Visible = False
         '

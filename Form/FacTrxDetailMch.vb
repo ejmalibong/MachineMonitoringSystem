@@ -80,7 +80,7 @@ Public Class FacTrxDetailMch
                 accessLevelId = 1
             Case 36 'am
                 accessLevelId = 2
-            Case 31, 32 'sv, asv
+            Case 31, 32, 8, 7 'sv, asv, engr, sr engr
                 accessLevelId = 3
             Case 9 'sr technician
                 accessLevelId = 4
@@ -158,7 +158,6 @@ Public Class FacTrxDetailMch
                 End If
 
                 cmbDowntimeStatus.Enabled = True
-                cmbDowntimeSubStatus.Enabled = True
                 txtProblem.Enabled = True
                 txtRootCause.Enabled = True
                 txtActionTaken.Enabled = True
@@ -920,6 +919,11 @@ Public Class FacTrxDetailMch
 
     Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
         Try
+            If lstImg.Count = 3 Then
+                MessageBox.Show("Maximum number of attachment is 3 only.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
             ofdImage.Filter = "JPEGs (*.jpg, *.jpeg) | *.jpg; *.jpeg |GIFs (*.gif) | *.gif |Bitmaps (*.bmp) | *.bmp | All Images (*.*) | *.jpg; *.jpeg; *.gif; *.bmp; *.png; *.tif; *.tiff"
             ofdImage.FilterIndex = 7
             ofdImage.ShowDialog()
@@ -1124,7 +1128,7 @@ Public Class FacTrxDetailMch
                 Return
             End If
 
-            If cmbDowntimeSubStatus.SelectedValue = 1 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
+            If cmbDowntimeStatus.SelectedValue = 2 AndAlso (String.IsNullOrEmpty(txtScheduleMonth.Text) Or String.IsNullOrEmpty(txtScheduleWeek.Text)) Then
                 If String.IsNullOrEmpty(txtScheduleMonth.Text) Then
                     MessageBox.Show("Please input the PM month schedule.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     txtScheduleMonth.Focus()
@@ -1149,7 +1153,7 @@ Public Class FacTrxDetailMch
             'new transaction
             If trxId = 0 Then
                 'transaction header
-                Dim prmHeader(42) As SqlParameter
+                Dim prmHeader(36) As SqlParameter
                 prmHeader(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                 prmHeader(0).Direction = ParameterDirection.Output
                 prmHeader(1) = New SqlParameter("@TrxDate", SqlDbType.DateTime2)
@@ -1507,12 +1511,12 @@ Public Class FacTrxDetailMch
                         Dim newName As String = String.Empty
                         ext = Path.GetExtension(lstImg(i).FileName).ToLower
 
-                        newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
+                        newName = prmHeader(0).Value & "-" & i + 1 & ext
 
                         Dim prmUpd(2) As SqlParameter
                         prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
                         prmUpd(0).Value = prmAttachment(0).Value
-                        prmUpd(1) = New SqlParameter("@RecordId", SqlDbType.Int)
+                        prmUpd(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmUpd(1).Value = prmHeader(0).Value
                         prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
                         prmUpd(2).Value = newName
@@ -1527,9 +1531,9 @@ Public Class FacTrxDetailMch
                     Next
                 End If
 
-                'fill the pm schedule slot
+                'get the pm schedule slot
                 'should be place here, before the update of dtTrxDetail so dgvDetail still have the data
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
                     Dim prmMchSchd(5) As SqlParameter
                     prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmMchSchd(0).Value = prmHeader(0).Value
@@ -1557,7 +1561,7 @@ Public Class FacTrxDetailMch
                     prmMchSchd(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
                     prmMchSchd(5).Value = scheduleId
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmMchSchd)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineSchedule", CommandType.StoredProcedure, prmMchSchd)
                 End If
 
                 'transaction details
@@ -1571,7 +1575,7 @@ Public Class FacTrxDetailMch
                         prmUser(0).Value = prmHeader(0).Value
                         prmUser(1) = New SqlParameter("@UserId", SqlDbType.Int)
                         prmUser(1).Value = row.Item("UserId")
-                        dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmUser)
+                        dbMethod.ExecuteNonQuery("InsFacTransactionUser", CommandType.StoredProcedure, prmUser)
                     Next
                     adpTrxDetail.Update(dtTrxDetail)
                 End If
@@ -1588,7 +1592,7 @@ Public Class FacTrxDetailMch
                     prmMchPart(1) = New SqlParameter("@MachinePartId", SqlDbType.Int)
                     prmMchPart(1).Value = cmbMachinePart.SelectedValue
                 End If
-                dbMethod.ExecuteNonQuery("InsMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                dbMethod.ExecuteNonQuery("InsFacTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
 
                 'transaction spare part
                 Dim prmSparePart(2) As SqlParameter
@@ -1606,7 +1610,7 @@ Public Class FacTrxDetailMch
                     prmSparePart(2) = New SqlParameter("@SparePartNo", SqlDbType.NVarChar)
                     prmSparePart(2).Value = txtPartsNo.Text.Trim
                 End If
-                dbMethod.ExecuteNonQuery("InsMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
+                dbMethod.ExecuteNonQuery("InsFacTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
 
                 'transaction user
                 For Each row As DataGridViewRow In dgvPic.Rows
@@ -1617,7 +1621,7 @@ Public Class FacTrxDetailMch
                         prmUser(0).Value = prmHeader(0).Value
                         prmUser(1) = New SqlParameter("@UserId", SqlDbType.Int)
                         prmUser(1).Value = row.Cells("ColUserId").Value
-                        dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmUser)
+                        dbMethod.ExecuteNonQuery("InsFacTransactionUser", CommandType.StoredProcedure, prmUser)
                     End If
                 Next
 
@@ -2741,8 +2745,6 @@ Public Class FacTrxDetailMch
                     End If
                 Next
             End If
-
-            Me.DialogResult = DialogResult.OK
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -2987,44 +2989,42 @@ Public Class FacTrxDetailMch
                 cmbDowntimeSubStatus.DataSource = Nothing
                 cmbDowntimeSubStatus.Items.Clear()
                 cmbDowntimeSubStatus.Enabled = False
+
+                txtScheduleMonth.Text = String.Empty
+                txtScheduleWeek.Text = String.Empty
+                txtScheduleMonth.Enabled = False
+                txtScheduleWeek.Enabled = False
+
+                scheduleId = 0
+                monthId = 0
+                weekId = 0
             Else
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
 
-                'If cmbDowntimeSubStatus.SelectedValue = 0 Then
-                '    txtScheduleMonth.Text = String.Empty
-                '    txtScheduleWeek.Text = String.Empty
-                '    txtScheduleMonth.Enabled = False
-                '    txtScheduleWeek.Enabled = False
+                If cmbDowntimeSubStatus.SelectedValue = 2 Then 'scheduled - preventive maintenance
+                    GetMachineSchedule(cmbMachineName.SelectedValue)
+                Else 'unscheduled - under repair
+                    txtScheduleMonth.Text = String.Empty
+                    txtScheduleWeek.Text = String.Empty
+                    txtScheduleMonth.Enabled = False
+                    txtScheduleWeek.Enabled = False
 
-                '    scheduleId = 0
-                '    monthId = 0
-                '    weekId = 0
-                'Else
-                '    If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
-                '        GetMachineSchedule(cmbMachineName.SelectedValue)
-                '    Else
-                '        txtScheduleMonth.Text = String.Empty
-                '        txtScheduleWeek.Text = String.Empty
-                '        txtScheduleMonth.Enabled = False
-                '        txtScheduleWeek.Enabled = False
+                    'If orgMachineSubStatusId = 3 Then
+                    '    Dim prmSched(1) As SqlParameter
+                    '    prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    '    prmSched(0).Value = cmbMachineName.SelectedValue
+                    '    prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    '    prmSched(1).Value = trxId
 
-                '        If orgMachineSubStatusId = 3 Then
-                '            Dim prmSched(1) As SqlParameter
-                '            prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                '            prmSched(0).Value = cmbMachineName.SelectedValue
-                '            prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                '            prmSched(1).Value = trxId
+                    '    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
+                    '    Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
 
-                '            Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
-                '            Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
-
-                '            If rdrSched.Read Then
-                '                orgScheduleId = rdrSched.Item("ScheduleId")
-                '            End If
-                '            rdrSched.Close()
-                '        End If
-                '    End If
-                'End If
+                    '    If rdrSched.Read Then
+                    '        orgScheduleId = rdrSched.Item("ScheduleId")
+                    '    End If
+                    '    rdrSched.Close()
+                    'End If
+                End If
 
                 If trxId = 0 Then
 
@@ -3060,48 +3060,6 @@ Public Class FacTrxDetailMch
         lblDowntimeSubStatus.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub cmbDowntimeSubStatus_SelectedValueChanged(sender As Object, e As EventArgs)
-        Try
-            'If cmbDowntimeSubStatus.SelectedValue = 0 Then
-            '    txtScheduleMonth.Text = String.Empty
-            '    txtScheduleWeek.Text = String.Empty
-            '    txtScheduleMonth.Enabled = False
-            '    txtScheduleWeek.Enabled = False
-
-            '    scheduleId = 0
-            '    monthId = 0
-            '    weekId = 0
-            'Else
-            '    If cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
-            '        GetMachineSchedule(cmbMachineName.SelectedValue)
-            '    Else
-            '        txtScheduleMonth.Text = String.Empty
-            '        txtScheduleWeek.Text = String.Empty
-            '        txtScheduleMonth.Enabled = False
-            '        txtScheduleWeek.Enabled = False
-
-            '        If orgMachineSubStatusId = 3 Then
-            '            Dim prmSched(1) As SqlParameter
-            '            prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            '            prmSched(0).Value = cmbMachineName.SelectedValue
-            '            prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmSched(1).Value = trxId
-
-            '            Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
-            '            Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
-
-            '            If rdrSched.Read Then
-            '                orgScheduleId = rdrSched.Item("ScheduleId")
-            '            End If
-            '            rdrSched.Close()
-            '        End If
-            '    End If
-            'End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub cmbMachineName_Enter(sender As Object, e As EventArgs) Handles cmbMachineName.Enter
         lblMachineName.ForeColor = Color.White
         lblMachineName.BackColor = Color.DarkSlateGray
@@ -3124,9 +3082,8 @@ Public Class FacTrxDetailMch
                 LoadDowntimeStatus()
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
 
-                If trxId = 0 Then 'default to preventive maintenance
-                    cmbDowntimeStatus.SelectedValue = 2
-                    cmbDowntimeSubStatus.SelectedValue = 2
+                If trxId = 0 Then
+
                 Else
                     If isAdmin Or accessLevelId = 1 Then
                         If cmbMachinePart.Items.Count > 0 Then
@@ -3815,7 +3772,10 @@ Public Class FacTrxDetailMch
                 prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmSchedule(0).Value = machineId
 
-                Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                Dim query As String =
+                    "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule " &
+                    "WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+
                 Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
                 If rdrSchedule.Read Then
@@ -3826,6 +3786,7 @@ Public Class FacTrxDetailMch
                     txtScheduleWeek.Text = weekId
                 Else
                     MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    cmbDowntimeStatus.SelectedValue = 0
                     cmbDowntimeSubStatus.SelectedValue = 0
                     txtScheduleMonth.Text = String.Empty
                     txtScheduleWeek.Text = String.Empty
@@ -3833,83 +3794,86 @@ Public Class FacTrxDetailMch
                     scheduleId = 0
                     monthId = 0
                     weekId = 0
+
+                    Return
                 End If
-                rdrSchedule.Close()
+
             Else
-                If orgMachineId = machineId Then 'same machine
-                    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
-                        Dim prmSchedule(1) As SqlParameter
-                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                        prmSchedule(0).Value = machineId
-                        prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmSchedule(1).Value = trxId
+                'If orgMachineId = machineId Then 'same machine
+                '    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
+                '        Dim prmSchedule(1) As SqlParameter
+                '        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                '        prmSchedule(0).Value = machineId
+                '        prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                '        prmSchedule(1).Value = trxId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId ORDER BY YearId, MonthId, WeekId"
-                        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                '        Dim query As String =
+                '            "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId ORDER BY YearId, MonthId, WeekId"
+                '        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
-                        If rdrSchedule.Read Then
-                            scheduleId = rdrSchedule.Item("ScheduleId")
-                            monthId = rdrSchedule.Item("MonthId")
-                            weekId = rdrSchedule.Item("WeekId")
-                            txtScheduleMonth.Text = MonthName(monthId)
-                            txtScheduleWeek.Text = weekId
-                        End If
-                        rdrSchedule.Close()
-                    Else 'non-pm to pm
-                        Dim prmSchedule(0) As SqlParameter
-                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                        prmSchedule(0).Value = machineId
+                '        If rdrSchedule.Read Then
+                '            scheduleId = rdrSchedule.Item("ScheduleId")
+                '            monthId = rdrSchedule.Item("MonthId")
+                '            weekId = rdrSchedule.Item("WeekId")
+                '            txtScheduleMonth.Text = MonthName(monthId)
+                '            txtScheduleWeek.Text = weekId
+                '        End If
+                '        rdrSchedule.Close()
+                '    Else 'non-pm to pm
+                '        Dim prmSchedule(0) As SqlParameter
+                '        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                '        prmSchedule(0).Value = machineId
 
-                        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND " &
-                                              "ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
-                        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                '        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND " &
+                '                              "ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                '        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
-                        If rdrSchedule.Read Then
-                            scheduleId = rdrSchedule.Item("ScheduleId")
-                            monthId = rdrSchedule.Item("MonthId")
-                            weekId = rdrSchedule.Item("WeekId")
-                            txtScheduleMonth.Text = MonthName(monthId)
-                            txtScheduleWeek.Text = weekId
-                        End If
-                    End If
-                Else 'selected machine was changed
-                    Dim prmNewSched(0) As SqlParameter
-                    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                    prmNewSched(0).Value = machineId
+                '        If rdrSchedule.Read Then
+                '            scheduleId = rdrSchedule.Item("ScheduleId")
+                '            monthId = rdrSchedule.Item("MonthId")
+                '            weekId = rdrSchedule.Item("WeekId")
+                '            txtScheduleMonth.Text = MonthName(monthId)
+                '            txtScheduleWeek.Text = weekId
+                '        End If
+                '    End If
+                'Else 'selected machine was changed
+                '    Dim prmNewSched(0) As SqlParameter
+                '    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                '    prmNewSched(0).Value = machineId
 
-                    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
-                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
+                '    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+                '    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
 
-                    If rdrSchedule.Read Then 'non-pm to pm
-                        scheduleId = rdrSchedule.Item("ScheduleId")
-                        monthId = rdrSchedule.Item("MonthId")
-                        weekId = rdrSchedule.Item("WeekId")
-                        txtScheduleMonth.Text = MonthName(monthId)
-                        txtScheduleWeek.Text = weekId
+                '    If rdrSchedule.Read Then 'non-pm to pm
+                '        scheduleId = rdrSchedule.Item("ScheduleId")
+                '        monthId = rdrSchedule.Item("MonthId")
+                '        weekId = rdrSchedule.Item("WeekId")
+                '        txtScheduleMonth.Text = MonthName(monthId)
+                '        txtScheduleWeek.Text = weekId
 
-                        Dim prmOrgSched(0) As SqlParameter 'pm to pm
-                        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmOrgSched(0).Value = trxId
+                '        Dim prmOrgSched(0) As SqlParameter 'pm to pm
+                '        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                '        prmOrgSched(0).Value = trxId
 
-                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
-                        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
+                '        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
+                '        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
 
-                        While rdrOrgSched.Read
-                            orgScheduleId = rdrOrgSched.Item("ScheduleId")
-                        End While
-                        rdrOrgSched.Close()
-                    Else
-                        MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        cmbDowntimeSubStatus.SelectedValue = 0
-                        txtScheduleMonth.Text = String.Empty
-                        txtScheduleWeek.Text = String.Empty
+                '        While rdrOrgSched.Read
+                '            orgScheduleId = rdrOrgSched.Item("ScheduleId")
+                '        End While
+                '        rdrOrgSched.Close()
+                '    Else
+                '        MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                '        cmbDowntimeSubStatus.SelectedValue = 0
+                '        txtScheduleMonth.Text = String.Empty
+                '        txtScheduleWeek.Text = String.Empty
 
-                        scheduleId = 0
-                        monthId = 0
-                        weekId = 0
-                    End If
-                    rdrSchedule.Close()
-                End If
+                '        scheduleId = 0
+                '        monthId = 0
+                '        weekId = 0
+                '    End If
+                '    rdrSchedule.Close()
+                'End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -4064,13 +4028,21 @@ Public Class FacTrxDetailMch
             If cmbApp2Name.Items.Count = 2 Then
                 cmbApp2Name.SelectedIndex = 1
             ElseIf cmbApp2Name.Items.Count > 2 Then
-                cmbApp2Name.SelectedValue = 0
+                For Each item In cmbApp2Name.Items
+                    If InStr(item.Row(1).ToString, 11) > 0 Then 'sir tony
+                        cmbApp2Name.SelectedValue = 11
+                    End If
+                Next
             End If
 
             If cmbApp1Name.Items.Count = 2 Then
                 cmbApp1Name.SelectedIndex = 1
             ElseIf cmbApp1Name.Items.Count > 2 Then
-                cmbApp1Name.SelectedValue = 0
+                For Each item In cmbApp2Name.Items
+                    If InStr(item.Row(1).ToString, 12) > 0 Then 'mam liza
+                        cmbApp1Name.SelectedValue = 12
+                    End If
+                Next
             End If
 
             AddHandler cmbApp3Name.Validating, AddressOf cmbApp3Name_Validating
@@ -4119,8 +4091,6 @@ Public Class FacTrxDetailMch
             ElseIf downtimeStatusId = 3 Then
                 cmbDowntimeSubStatus.SelectedValue = 3
             End If
-
-            AddHandler cmbDowntimeSubStatus.SelectedValueChanged, AddressOf cmbDowntimeSubStatus_SelectedValueChanged
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
