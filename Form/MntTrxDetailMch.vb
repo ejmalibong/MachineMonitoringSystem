@@ -892,6 +892,11 @@ Public Class MntTrxDetailMch
                 Exit Sub
             End If
 
+            If accessLevelId >= 4 Then 'technician and below
+                MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
             If trxId > 0 Then
                 Dim question As String = String.Format("Are you sure you want to delete this record?")
                 If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
@@ -919,13 +924,12 @@ Public Class MntTrxDetailMch
                         dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
                     End If
 
-                    'set the machine to operational state if trx is on-going status and also last trx
+                    'if this is the last on-going transaction, revert the machine to operational status
                     Dim prmIsLast(0) As SqlParameter
-                    prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmIsLast(0).Value = trxId
+                    prmIsLast(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmIsLast(0).Value = orgMachineId
 
-                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
-                       dtTrxHeader.Rows(0).Item("TrxStatusId") = 2 Then
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY TrxId DESC", CommandType.Text, prmIsLast) Then
 
                         Dim prmMachineStatus(2) As SqlParameter
                         prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)

@@ -209,14 +209,14 @@ Public Class Main
                     Case 1
 
                     Case 2, 3
-                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
 
                     Case Else
                         dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                         SecUserToolStripMenuItem.Visible = False
                         tssMaintenance2.Visible = False
 
-                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                 End Select
 
             Case 4 'it

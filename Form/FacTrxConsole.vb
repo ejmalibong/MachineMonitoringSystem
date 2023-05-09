@@ -112,7 +112,7 @@ Public Class FacTrxConsole
         Me.dgvList.Columns(5).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Me.dgvMachine.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 
-        cmbStatus.SelectedValue = 1
+        cmbStatus.SelectedValue = 7
     End Sub
 
     Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -223,36 +223,28 @@ Public Class FacTrxConsole
 
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Try
-            'If Me.dgvList.Rows.Count > 0 Then
-            '    Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
+            If Me.dgvList.Rows.Count > 0 Then
+                Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
-            '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
-            '        Using frmDetail As New MntTrxDetailMch(userId, workgroupId, isAdmin, trxId)
-            '            frmDetail.ShowDialog(Me)
-            '            If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-            '                Reload()
-            '                LoadMachine()
-            '            End If
-            '        End Using
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                    Using frmDetail As New MntTrxDetailMch(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            Reload()
+                            LoadMachine()
+                        End If
+                    End Using
 
-            '    ElseIf Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId") Is DBNull.Value Then
-            '        Using frmDetail As New MntTrxDetailJig(userId, workgroupId, isAdmin, trxId)
-            '            frmDetail.ShowDialog(Me)
-            '            If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-            '                Reload()
-            '                LoadMachine()
-            '            End If
-            '        End Using
-            '    Else
-            '        Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
-            '            frmDetail.ShowDialog(Me)
-            '            If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-            '                Reload()
-            '                LoadMachine()
-            '            End If
-            '        End Using
-            '    End If
-            'End If
+                Else
+                    Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            Reload()
+                            LoadMachine()
+                        End If
+                    End Using
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -260,94 +252,84 @@ Public Class FacTrxConsole
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
-            'Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
-            'Dim trxStatusId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId")
-            'Dim routingStatusId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("RoutingStatusId")
+            'allow delete function from senior technician and above only
+            If accessLevelId >= 4 Then 'technician and below
+                MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
 
-            'If isAdmin Or accessLevelId = 1 Then
+            Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
-            'Else
-            '    Select Case accessLevelId
-            '        Case 2
-            '            If routingStatusId = 1 Or routingStatusId = 2 Then
-            '                MessageBox.Show("")
-            '            Else
+            If MessageBox.Show("Are you sure you want to delete this record?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) =
+    Windows.Forms.DialogResult.Yes Then
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                    Dim prmCnt(0) As SqlParameter
+                    prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmCnt(0).Value = trxId
 
-            '            End If
-            '        Case 3
+                    'revert pm schedule to pending
+                    If dbMethod.ExecuteScalar("CntFacMachineSchedule", CommandType.StoredProcedure, prmCnt) > 0 Then
+                        Dim prmSch(0) As SqlParameter
+                        prmSch(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSch(0).Value = trxId
 
+                        Dim scheduleId As Integer = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.FacMachineSchedule WHERE TrxId = @TrxId", CommandType.Text)
 
-            '        Case 4
+                        Dim prmMchSchdOrg(8) As SqlParameter
+                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchSchdOrg(0).Value = Nothing
+                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                        prmMchSchdOrg(1).Value = False
+                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                        prmMchSchdOrg(2).Value = False
+                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                        prmMchSchdOrg(3).Value = Nothing
+                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                        prmMchSchdOrg(4).Value = Nothing
+                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                        prmMchSchdOrg(5).Value = Nothing
+                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
+                        prmMchSchdOrg(6).Value = Nothing
+                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                        prmMchSchdOrg(7).Value = Nothing
+                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                        prmMchSchdOrg(8).Value = scheduleId
 
-            '        Case Else
+                        dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
+                    End If
 
-            '    End Select
-            'End If
+                    'if this is the last on-going transaction, revert the machine to operational status
+                    Dim machineId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
 
-            'Dim question = String.Format("Are you sure you want to delete this record?")
+                    'if this is the last transaction, revert the machine status to operational
+                    Dim prmIsLast(0) As SqlParameter
+                    prmIsLast(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmIsLast(0).Value = machineId
 
-            'If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-            '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
-            '        Dim prmCnt(0) As SqlParameter
-            '        prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmCnt(0).Value = trxId
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY TrxId DESC",
+                                                      CommandType.Text, prmIsLast) Then
 
-            '        'revert pm schedule to pending
-            '        If dbMethod.ExecuteScalar("CntFacMachineSchedule", CommandType.StoredProcedure, prmCnt) > 0 AndAlso
-            '            CType(Me.bsTransactionHeader.Current, DataRowView).Item("DowntimeMachineSubStatusId") = 2 Then
+                        Dim prmMachineStatus(2) As SqlParameter
+                        prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
+                        prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatus(1).Value = 1
+                        prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatus(2).Value = 1
 
-            '            Dim prmMchSchdOrg(8) As SqlParameter
-            '            prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmMchSchdOrg(0).Value = Nothing
-            '            prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-            '            prmMchSchdOrg(1).Value = False
-            '            prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-            '            prmMchSchdOrg(2).Value = False
-            '            prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-            '            prmMchSchdOrg(3).Value = Nothing
-            '            prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-            '            prmMchSchdOrg(4).Value = Nothing
-            '            prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-            '            prmMchSchdOrg(5).Value = Nothing
-            '            prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-            '            prmMchSchdOrg(6).Value = Nothing
-            '            prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-            '            prmMchSchdOrg(7).Value = Nothing
-            '            prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-            '            prmMchSchdOrg(8).Value = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.FacMachineSchedule WHERE TrxId = " & trxId & "", CommandType.Text)
+                        dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
+                    End If
+                End If
 
-            '            dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
-            '        End If
+                Dim prmDel(0) As SqlParameter
+                prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmDel(0).Value = trxId
 
-            '        'if this is the last transaction, revert the machine status to operational
-            '        Dim prmIsLast(0) As SqlParameter
-            '        prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmIsLast(0).Value = trxId
+                dbMethod.ExecuteNonQuery("DelFacTransactionHeader", CommandType.StoredProcedure, prmDel)
 
-            '        If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
-            '                CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId") = 2 Then
-
-            '            Dim prmMachineStatus(2) As SqlParameter
-            '            prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            '            prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
-            '            prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-            '            prmMachineStatus(1).Value = 1
-            '            prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-            '            prmMachineStatus(2).Value = 1
-
-            '            dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
-            '        End If
-            '    End If
-
-            '    Dim prmDel(0) As SqlParameter
-            '    prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '    prmDel(0).Value = trxId
-
-            '    dbMethod.ExecuteNonQuery("DelFacTransactionHeader", CommandType.StoredProcedure, prmDel)
-
-            '    Reload()
-            '    LoadMachine()
-            'End If
+                Reload()
+                LoadMachine()
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

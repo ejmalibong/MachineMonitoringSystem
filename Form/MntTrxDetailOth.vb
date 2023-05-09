@@ -924,6 +924,11 @@ Public Class MntTrxDetailOth
                 Exit Sub
             End If
 
+            If accessLevelId >= 4 Then 'technician and below
+                MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
             If trxId > 0 Then
                 Dim question As String = String.Format("Are you sure you want to delete this record?")
 

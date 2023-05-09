@@ -943,10 +943,15 @@ Public Class FacTrxDetailMch
                 Exit Sub
             End If
 
+            If accessLevelId >= 4 Then 'technician and below
+                MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
             If trxId > 0 Then
                 Dim question As String = String.Format("Are you sure you want to delete this record?")
                 If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeMachineSubStatusId") = 3 Then 'clear the pm schedule slot
+                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeJigSubStatusId") = 2 Then 'clear the pm schedule slot
                         Dim prmMchSchdOrg(8) As SqlParameter
                         prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmMchSchdOrg(0).Value = Nothing
@@ -970,13 +975,12 @@ Public Class FacTrxDetailMch
                         dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
                     End If
 
-                    'set the machine to operational state if trx is on-going status and also last trx
+                    'if this is the last on-going transaction, revert the machine to operational status
                     Dim prmIsLast(0) As SqlParameter
                     prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmIsLast(0).Value = trxId
 
-                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
-                       dtTrxHeader.Rows(0).Item("TrxStatusId") = 2 Then
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY TrxId DESC", CommandType.Text, prmIsLast) Then
 
                         Dim prmMachineStatus(2) As SqlParameter
                         prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -993,7 +997,7 @@ Public Class FacTrxDetailMch
                     prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmDel(0).Value = trxId
 
-                    dbMethod.ExecuteNonQuery("DelMntTransactionHeader", CommandType.StoredProcedure, prmDel)
+                    dbMethod.ExecuteNonQuery("DelFacTransactionHeader", CommandType.StoredProcedure, prmDel)
 
                     Me.DialogResult = Windows.Forms.DialogResult.OK
                 End If
@@ -3484,9 +3488,6 @@ Public Class FacTrxDetailMch
                         txtChecksheet.Text = row("LinkChecksheet")
                     End If
 
-                    If Not row("Link4M") Is DBNull.Value Then
-                        'txt4M.Text = row("Link4M")
-                    End If
 
                     If Not row("ModifiedBy") Is DBNull.Value Then
                         orgModifiedBy = row("ModifiedBy")
@@ -4410,4 +4411,6 @@ Public Class FacTrxDetailMch
         lblScheduleWeek.ForeColor = Color.Black
         lblScheduleWeek.BackColor = SystemColors.Control
     End Sub
+
+
 End Class

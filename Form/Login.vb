@@ -52,12 +52,15 @@ Public Class Login
             'txtPassword.Text = "belen"
 
             'karlin
-            txtEmployeeId.Text = "2106-020"
-            txtPassword.Text = "tano"
+            'txtEmployeeId.Text = "2106-020"
+            'txtPassword.Text = "tano"
 
             'noriel
             'txtEmployeeId.Text = "1901-033"
             'txtPassword.Text = "aquino"
+
+            txtEmployeeId.Text = "2009-015"
+            txtPassword.Text = "pastrana"
         End If
 
         picPassword.Image = imgHide

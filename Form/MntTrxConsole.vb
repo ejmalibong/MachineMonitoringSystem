@@ -112,7 +112,7 @@ Public Class MntTrxConsole
         Me.dgvMachine.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
         Me.dgvJig.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 
-        cmbStatus.SelectedValue = 1
+        cmbStatus.SelectedValue = 7
     End Sub
 
     Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -302,140 +302,138 @@ Public Class MntTrxConsole
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
             'allow delete function from senior technician and above only
-            If accessLevelId > 4 Then 'technician and below
+            If accessLevelId >= 4 Then 'technician and below
                 MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
 
-            'Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
-            'Dim question1 As String = String.Format("Are you sure you want to delete this record?" & Environment.NewLine & "NOTE: The attached PM schedule will revert to pending status.")
-            'Dim question2 As String = String.Format("Are you sure you want to delete this record?")
+            If MessageBox.Show("Are you sure you want to delete this record?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) =
+                Windows.Forms.DialogResult.Yes Then
 
-            'If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-            '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
-            '        Dim prmCnt(0) As SqlParameter
-            '        prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmCnt(0).Value = trxId
+                Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
-            '        If dbMethod.ExecuteScalar("CntMntMachineSchedule", CommandType.StoredProcedure, prmCnt) > 0 AndAlso
-            '            CType(Me.bsTransactionHeader.Current, DataRowView).Item("DowntimeMachineSubStatusId") = 3 Then
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
+                    Dim prmCnt(0) As SqlParameter
+                    prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmCnt(0).Value = trxId
 
-            '            Dim prmSch(0) As SqlParameter
-            '            prmSch(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmSch(0).Value = trxId
+                    If dbMethod.ExecuteScalar("CntMntMachineSchedule", CommandType.StoredProcedure, prmCnt) > 0 Then
+                        Dim prmSch(0) As SqlParameter
+                        prmSch(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSch(0).Value = trxId
 
-            '            Dim scheduleId As Integer = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId", CommandType.Text)
+                        Dim scheduleId As Integer = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId", CommandType.Text)
 
-            '            Dim prmMchSchdOrg(8) As SqlParameter
-            '            prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmMchSchdOrg(0).Value = Nothing
-            '            prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-            '            prmMchSchdOrg(1).Value = False
-            '            prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-            '            prmMchSchdOrg(2).Value = False
-            '            prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-            '            prmMchSchdOrg(3).Value = Nothing
-            '            prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-            '            prmMchSchdOrg(4).Value = Nothing
-            '            prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-            '            prmMchSchdOrg(5).Value = Nothing
-            '            prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-            '            prmMchSchdOrg(6).Value = Nothing
-            '            prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-            '            prmMchSchdOrg(7).Value = Nothing
-            '            prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-            '            prmMchSchdOrg(8).Value = scheduleId
+                        Dim prmMchSchdOrg(8) As SqlParameter 'revert schedule to pending
+                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchSchdOrg(0).Value = Nothing
+                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                        prmMchSchdOrg(1).Value = False
+                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                        prmMchSchdOrg(2).Value = False
+                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                        prmMchSchdOrg(3).Value = Nothing
+                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                        prmMchSchdOrg(4).Value = Nothing
+                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                        prmMchSchdOrg(5).Value = Nothing
+                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
+                        prmMchSchdOrg(6).Value = Nothing
+                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                        prmMchSchdOrg(7).Value = Nothing
+                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                        prmMchSchdOrg(8).Value = scheduleId
 
-            '            dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
-            '        End If
+                        dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
+                    End If
 
-            '        'if this is the last on-going transaction, revert the machine/jig to operational status
-            '        Dim prmIsLast(0) As SqlParameter
-            '        prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmIsLast(0).Value = trxId
+                    'if this is the last on-going transaction, revert the machine to operational status
+                    Dim machineId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
 
-            '        If trxId =
-            '            dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
-            '            CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId") = 2 Then
+                    Dim prmIsLast(0) As SqlParameter
+                    prmIsLast(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmIsLast(0).Value = machineId
 
-            '            Dim prmMachineStatus(2) As SqlParameter
-            '            prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            '            prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
-            '            prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-            '            prmMachineStatus(1).Value = 1
-            '            prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-            '            prmMachineStatus(2).Value = 1
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY TrxId DESC",
+                                                  CommandType.Text, prmIsLast) Then
+                        Dim prmMachineStatus(2) As SqlParameter
+                        prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId")
+                        prmMachineStatus(1) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                        prmMachineStatus(1).Value = 1
+                        prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                        prmMachineStatus(2).Value = 1
 
-            '            dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
-            '        End If
-            '    End If
+                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
+                    End If
+                End If
 
-            '    If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId") Is DBNull.Value Then
-            '        Dim prmCnt(0) As SqlParameter
-            '        prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmCnt(0).Value = trxId
+                If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId") Is DBNull.Value Then
+                    Dim prmCnt(0) As SqlParameter
+                    prmCnt(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmCnt(0).Value = trxId
 
-            '        If dbMethod.ExecuteScalar("CntMntJigSchedule", CommandType.StoredProcedure, prmCnt) > 0 AndAlso
-            '            CType(Me.bsTransactionHeader.Current, DataRowView).Item("DowntimeJigSubStatusId") = 3 Then
+                    If dbMethod.ExecuteScalar("CntMntJigSchedule", CommandType.StoredProcedure, prmCnt) > 0 Then
+                        Dim prmSch(0) As SqlParameter
+                        prmSch(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSch(0).Value = trxId
 
-            '            Dim prmSch(0) As SqlParameter
-            '            prmSch(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmSch(0).Value = trxId
+                        Dim scheduleId As Integer = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.MntJigSchedule WHERE TrxId = @TrxId", CommandType.Text)
 
-            '            Dim scheduleId As Integer = dbMethod.ExecuteScalar("SELECT ScheduleId FROM dbo.MntJigSchedule WHERE TrxId = @TrxId", CommandType.Text)
+                        Dim prmMchSchdOrg(8) As SqlParameter
+                        prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmMchSchdOrg(0).Value = Nothing
+                        prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
+                        prmMchSchdOrg(1).Value = False
+                        prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
+                        prmMchSchdOrg(2).Value = False
+                        prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
+                        prmMchSchdOrg(3).Value = Nothing
+                        prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
+                        prmMchSchdOrg(4).Value = Nothing
+                        prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                        prmMchSchdOrg(5).Value = Nothing
+                        prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
+                        prmMchSchdOrg(6).Value = Nothing
+                        prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                        prmMchSchdOrg(7).Value = Nothing
+                        prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
+                        prmMchSchdOrg(8).Value = scheduleId
 
-            '            Dim prmMchSchdOrg(8) As SqlParameter
-            '            prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '            prmMchSchdOrg(0).Value = Nothing
-            '            prmMchSchdOrg(1) = New SqlParameter("@IsDone", SqlDbType.Bit)
-            '            prmMchSchdOrg(1).Value = False
-            '            prmMchSchdOrg(2) = New SqlParameter("@IsChecklistCompleted", SqlDbType.Bit)
-            '            prmMchSchdOrg(2).Value = False
-            '            prmMchSchdOrg(3) = New SqlParameter("@ActivityBy", SqlDbType.Int)
-            '            prmMchSchdOrg(3).Value = Nothing
-            '            prmMchSchdOrg(4) = New SqlParameter("@ActivityDate", SqlDbType.Date)
-            '            prmMchSchdOrg(4).Value = Nothing
-            '            prmMchSchdOrg(5) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-            '            prmMchSchdOrg(5).Value = Nothing
-            '            prmMchSchdOrg(6) = New SqlParameter("@ModifiedDate", SqlDbType.Date)
-            '            prmMchSchdOrg(6).Value = Nothing
-            '            prmMchSchdOrg(7) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-            '            prmMchSchdOrg(7).Value = Nothing
-            '            prmMchSchdOrg(8) = New SqlParameter("@ScheduleId", SqlDbType.Int)
-            '            prmMchSchdOrg(8).Value = scheduleId
+                        dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
+                    End If
 
-            '            dbMethod.ExecuteNonQuery("UpdMntJigScheduleByScheduleId", CommandType.StoredProcedure, prmMchSchdOrg)
-            '        End If
+                    'if this is the last on-going transaction, revert the machine to operational status
+                    Dim jigId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId")
 
-            '        Dim prmIsLast(0) As SqlParameter
-            '        prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prmIsLast(0).Value = trxId
+                    Dim prmIsLast(0) As SqlParameter
+                    prmIsLast(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                    prmIsLast(0).Value = jigId
 
-            '        If trxId =
-            '            dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader ORDER BY TrxId DESC", CommandType.Text, prmIsLast) AndAlso
-            '            CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxStatusId") = 2 Then
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.MntTransactionHeader WHERE JigId = @JigId AND TrxStatusId = 2 ORDER BY TrxId DESC",
+                                                  CommandType.Text, prmIsLast) Then
 
-            '            Dim prmMachineStatus(2) As SqlParameter
-            '            prmMachineStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
-            '            prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId")
-            '            prmMachineStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
-            '            prmMachineStatus(1).Value = 1
-            '            prmMachineStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
-            '            prmMachineStatus(2).Value = 1
+                        Dim prmMachineStatus(2) As SqlParameter
+                        prmMachineStatus(0) = New SqlParameter("@JigId", SqlDbType.Int)
+                        prmMachineStatus(0).Value = CType(Me.bsTransactionHeader.Current, DataRowView).Item("JigId")
+                        prmMachineStatus(1) = New SqlParameter("@JigStatusId", SqlDbType.Int)
+                        prmMachineStatus(1).Value = 1
+                        prmMachineStatus(2) = New SqlParameter("@JigSubStatusId", SqlDbType.Int)
+                        prmMachineStatus(2).Value = 1
 
-            '            dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmMachineStatus)
-            '        End If
-            '    End If
+                        dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmMachineStatus)
+                    End If
+                End If
 
-            '    Dim prmDel(0) As SqlParameter
-            '    prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '    prmDel(0).Value = trxId
+                Dim prmDel(0) As SqlParameter
+                prmDel(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmDel(0).Value = trxId
 
-            '    dbMethod.ExecuteNonQuery("DelMntTransactionHeader", CommandType.StoredProcedure, prmDel)
+                dbMethod.ExecuteNonQuery("DelMntTransactionHeader", CommandType.StoredProcedure, prmDel)
 
-            '    Reload()
-            '    LoadJig()
-            '    LoadMachine()
+                Reload()
+                LoadJig()
+                LoadMachine()
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
