@@ -283,6 +283,7 @@ Public Class MntTrxConsole
                             LoadMachine()
                         End If
                     End Using
+
                 Else
                     Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
                         frmDetail.ShowDialog(Me)

@@ -24,22 +24,37 @@ Partial Class FacTrxConsole
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacTrxConsole))
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacTrxConsole))
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnCreate = New PinkieControls.ButtonXP()
         Me.dgvMachine = New System.Windows.Forms.DataGridView()
+        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineStatusId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineLastTransaction = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineElapsedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTechnician = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColShiftId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivity = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColDatetimeEnded = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTotalAccumulatedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColRoutingStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnRefresh = New PinkieControls.ButtonXP()
         Me.lblSearchCriteria = New System.Windows.Forms.Label()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
@@ -72,23 +87,7 @@ Partial Class FacTrxConsole
         Me.txtCommonTxt = New System.Windows.Forms.TextBox()
         Me.cmsConsole = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.MachineRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.JigRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OthersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineStatusId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineLastTransaction = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineElapsedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColTechnician = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColShiftId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColActivity = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColDatetimeEnded = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColTotalAccumulatedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColRoutingStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvMachine, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -193,6 +192,63 @@ Partial Class FacTrxConsole
         Me.dgvMachine.Size = New System.Drawing.Size(336, 566)
         Me.dgvMachine.TabIndex = 156
         '
+        'ColMachineId
+        '
+        Me.ColMachineId.DataPropertyName = "MachineId"
+        Me.ColMachineId.HeaderText = "MachineId"
+        Me.ColMachineId.Name = "ColMachineId"
+        Me.ColMachineId.ReadOnly = True
+        Me.ColMachineId.Visible = False
+        '
+        'ColMachineName
+        '
+        Me.ColMachineName.DataPropertyName = "MachineCode"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColMachineName.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.Name = "ColMachineName"
+        Me.ColMachineName.ReadOnly = True
+        Me.ColMachineName.Width = 120
+        '
+        'ColAreaName
+        '
+        Me.ColAreaName.DataPropertyName = "AreaName"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColAreaName.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColAreaName.HeaderText = "Area"
+        Me.ColAreaName.Name = "ColAreaName"
+        Me.ColAreaName.ReadOnly = True
+        Me.ColAreaName.Width = 120
+        '
+        'ColMachineStatusId
+        '
+        Me.ColMachineStatusId.DataPropertyName = "MachineStatusId"
+        Me.ColMachineStatusId.HeaderText = "MachineStatusId"
+        Me.ColMachineStatusId.Name = "ColMachineStatusId"
+        Me.ColMachineStatusId.ReadOnly = True
+        Me.ColMachineStatusId.Visible = False
+        '
+        'ColMachineLastTransaction
+        '
+        Me.ColMachineLastTransaction.DataPropertyName = "TrxFrom"
+        DataGridViewCellStyle4.Format = "G"
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColMachineLastTransaction.HeaderText = "Last Transaction"
+        Me.ColMachineLastTransaction.Name = "ColMachineLastTransaction"
+        Me.ColMachineLastTransaction.ReadOnly = True
+        Me.ColMachineLastTransaction.Visible = False
+        '
+        'ColMachineElapsedTime
+        '
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle5.NullValue = Nothing
+        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColMachineElapsedTime.HeaderText = "Time"
+        Me.ColMachineElapsedTime.Name = "ColMachineElapsedTime"
+        Me.ColMachineElapsedTime.ReadOnly = True
+        Me.ColMachineElapsedTime.Width = 75
+        '
         'dgvList
         '
         Me.dgvList.AllowUserToAddRows = False
@@ -222,6 +278,87 @@ Partial Class FacTrxConsole
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvList.Size = New System.Drawing.Size(1048, 529)
         Me.dgvList.TabIndex = 158
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "#"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Width = 50
+        '
+        'ColTechnician
+        '
+        Me.ColTechnician.DataPropertyName = "Nickname"
+        Me.ColTechnician.HeaderText = "Technician"
+        Me.ColTechnician.Name = "ColTechnician"
+        Me.ColTechnician.ReadOnly = True
+        '
+        'ColShiftId
+        '
+        Me.ColShiftId.DataPropertyName = "ShiftId"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle7
+        Me.ColShiftId.HeaderText = "Shift"
+        Me.ColShiftId.Name = "ColShiftId"
+        Me.ColShiftId.ReadOnly = True
+        Me.ColShiftId.Width = 50
+        '
+        'ColMachineName2
+        '
+        Me.ColMachineName2.DataPropertyName = "SubjectName"
+        Me.ColMachineName2.HeaderText = "Machine/Equipment"
+        Me.ColMachineName2.Name = "ColMachineName2"
+        Me.ColMachineName2.ReadOnly = True
+        Me.ColMachineName2.Width = 170
+        '
+        'ColDatetimeStarted
+        '
+        Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
+        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle8
+        Me.ColDatetimeStarted.HeaderText = "Start"
+        Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
+        Me.ColDatetimeStarted.ReadOnly = True
+        Me.ColDatetimeStarted.Width = 120
+        '
+        'ColActivity
+        '
+        Me.ColActivity.DataPropertyName = "ActionTaken"
+        Me.ColActivity.HeaderText = "Activity"
+        Me.ColActivity.Name = "ColActivity"
+        Me.ColActivity.ReadOnly = True
+        Me.ColActivity.Width = 130
+        '
+        'ColDatetimeEnded
+        '
+        Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
+        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle9.NullValue = Nothing
+        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle9
+        Me.ColDatetimeEnded.HeaderText = "End"
+        Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
+        Me.ColDatetimeEnded.ReadOnly = True
+        Me.ColDatetimeEnded.Width = 120
+        '
+        'ColTotalAccumulatedTime
+        '
+        Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle10
+        Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
+        Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
+        Me.ColTotalAccumulatedTime.ReadOnly = True
+        Me.ColTotalAccumulatedTime.Width = 65
+        '
+        'ColRoutingStatusName
+        '
+        Me.ColRoutingStatusName.DataPropertyName = "RoutingStatusName"
+        Me.ColRoutingStatusName.HeaderText = "Status"
+        Me.ColRoutingStatusName.Name = "ColRoutingStatusName"
+        Me.ColRoutingStatusName.ReadOnly = True
+        Me.ColRoutingStatusName.Width = 200
         '
         'btnRefresh
         '
@@ -309,7 +446,6 @@ Partial Class FacTrxConsole
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -545,165 +681,21 @@ Partial Class FacTrxConsole
         '
         'cmsConsole
         '
-        Me.cmsConsole.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MachineRelatedToolStripMenuItem, Me.JigRelatedToolStripMenuItem, Me.OthersToolStripMenuItem})
+        Me.cmsConsole.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MachineRelatedToolStripMenuItem, Me.OthersToolStripMenuItem})
         Me.cmsConsole.Name = "cmsConsole"
-        Me.cmsConsole.Size = New System.Drawing.Size(165, 70)
+        Me.cmsConsole.Size = New System.Drawing.Size(181, 70)
         '
         'MachineRelatedToolStripMenuItem
         '
         Me.MachineRelatedToolStripMenuItem.Name = "MachineRelatedToolStripMenuItem"
-        Me.MachineRelatedToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.MachineRelatedToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MachineRelatedToolStripMenuItem.Text = "Machine-Related"
-        '
-        'JigRelatedToolStripMenuItem
-        '
-        Me.JigRelatedToolStripMenuItem.Name = "JigRelatedToolStripMenuItem"
-        Me.JigRelatedToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
-        Me.JigRelatedToolStripMenuItem.Text = "Jig-Related"
         '
         'OthersToolStripMenuItem
         '
         Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
-        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OthersToolStripMenuItem.Text = "Others"
-        '
-        'ColMachineId
-        '
-        Me.ColMachineId.DataPropertyName = "MachineId"
-        Me.ColMachineId.HeaderText = "MachineId"
-        Me.ColMachineId.Name = "ColMachineId"
-        Me.ColMachineId.ReadOnly = True
-        Me.ColMachineId.Visible = False
-        '
-        'ColMachineName
-        '
-        Me.ColMachineName.DataPropertyName = "MachineCode"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColMachineName.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColMachineName.HeaderText = "Machine"
-        Me.ColMachineName.Name = "ColMachineName"
-        Me.ColMachineName.ReadOnly = True
-        Me.ColMachineName.Width = 120
-        '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColAreaName.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
-        Me.ColAreaName.Width = 120
-        '
-        'ColMachineStatusId
-        '
-        Me.ColMachineStatusId.DataPropertyName = "MachineStatusId"
-        Me.ColMachineStatusId.HeaderText = "MachineStatusId"
-        Me.ColMachineStatusId.Name = "ColMachineStatusId"
-        Me.ColMachineStatusId.ReadOnly = True
-        Me.ColMachineStatusId.Visible = False
-        '
-        'ColMachineLastTransaction
-        '
-        Me.ColMachineLastTransaction.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle4.Format = "G"
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColMachineLastTransaction.HeaderText = "Last Transaction"
-        Me.ColMachineLastTransaction.Name = "ColMachineLastTransaction"
-        Me.ColMachineLastTransaction.ReadOnly = True
-        Me.ColMachineLastTransaction.Visible = False
-        '
-        'ColMachineElapsedTime
-        '
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle5.NullValue = Nothing
-        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColMachineElapsedTime.HeaderText = "Time"
-        Me.ColMachineElapsedTime.Name = "ColMachineElapsedTime"
-        Me.ColMachineElapsedTime.ReadOnly = True
-        Me.ColMachineElapsedTime.Width = 75
-        '
-        'ColTrxId
-        '
-        Me.ColTrxId.DataPropertyName = "TrxId"
-        Me.ColTrxId.HeaderText = "#"
-        Me.ColTrxId.Name = "ColTrxId"
-        Me.ColTrxId.ReadOnly = True
-        Me.ColTrxId.Width = 50
-        '
-        'ColTechnician
-        '
-        Me.ColTechnician.DataPropertyName = "Nickname"
-        Me.ColTechnician.HeaderText = "Technician"
-        Me.ColTechnician.Name = "ColTechnician"
-        Me.ColTechnician.ReadOnly = True
-        '
-        'ColShiftId
-        '
-        Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle7
-        Me.ColShiftId.HeaderText = "Shift"
-        Me.ColShiftId.Name = "ColShiftId"
-        Me.ColShiftId.ReadOnly = True
-        Me.ColShiftId.Width = 50
-        '
-        'ColMachineName2
-        '
-        Me.ColMachineName2.DataPropertyName = "SubjectName"
-        Me.ColMachineName2.HeaderText = "Machine/Equipment"
-        Me.ColMachineName2.Name = "ColMachineName2"
-        Me.ColMachineName2.ReadOnly = True
-        Me.ColMachineName2.Width = 170
-        '
-        'ColDatetimeStarted
-        '
-        Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
-        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle8
-        Me.ColDatetimeStarted.HeaderText = "Start"
-        Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
-        Me.ColDatetimeStarted.ReadOnly = True
-        Me.ColDatetimeStarted.Width = 120
-        '
-        'ColActivity
-        '
-        Me.ColActivity.DataPropertyName = "ActionTaken"
-        Me.ColActivity.HeaderText = "Activity"
-        Me.ColActivity.Name = "ColActivity"
-        Me.ColActivity.ReadOnly = True
-        Me.ColActivity.Width = 130
-        '
-        'ColDatetimeEnded
-        '
-        Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
-        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle9.NullValue = Nothing
-        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle9
-        Me.ColDatetimeEnded.HeaderText = "End"
-        Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
-        Me.ColDatetimeEnded.ReadOnly = True
-        Me.ColDatetimeEnded.Width = 120
-        '
-        'ColTotalAccumulatedTime
-        '
-        Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle10
-        Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
-        Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
-        Me.ColTotalAccumulatedTime.ReadOnly = True
-        Me.ColTotalAccumulatedTime.Width = 65
-        '
-        'ColRoutingStatusName
-        '
-        Me.ColRoutingStatusName.DataPropertyName = "RoutingStatusName"
-        Me.ColRoutingStatusName.HeaderText = "Status"
-        Me.ColRoutingStatusName.Name = "ColRoutingStatusName"
-        Me.ColRoutingStatusName.ReadOnly = True
-        Me.ColRoutingStatusName.Width = 200
         '
         'FacTrxConsole
         '
@@ -787,7 +779,6 @@ Partial Class FacTrxConsole
     Friend WithEvents txtCommonTxt As System.Windows.Forms.TextBox
     Friend WithEvents cmsConsole As ContextMenuStrip
     Friend WithEvents MachineRelatedToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents JigRelatedToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OthersToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents dtpEndDate As DateTimePicker
     Friend WithEvents lblSearchEndDate As Label

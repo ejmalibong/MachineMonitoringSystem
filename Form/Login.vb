@@ -31,6 +31,9 @@ Public Class Login
             'txtEmployeeId.Text = "1506-001"
             'txtPassword.Text = "bayani"
 
+            'txtEmployeeId.Text = "1605-002"
+            'txtPassword.Text = "atienza"
+
             'sir emman
             'txtEmployeeId.Text = "1701-066"
             'txtPassword.Text = "ESandoval"
@@ -56,11 +59,11 @@ Public Class Login
             'txtPassword.Text = "tano"
 
             'noriel
-            'txtEmployeeId.Text = "1901-033"
-            'txtPassword.Text = "aquino"
+            txtEmployeeId.Text = "1901-033"
+            txtPassword.Text = "aquino"
 
-            txtEmployeeId.Text = "2009-015"
-            txtPassword.Text = "pastrana"
+            'txtEmployeeId.Text = "2009-015"
+            'txtPassword.Text = "pastrana"
         End If
 
         picPassword.Image = imgHide

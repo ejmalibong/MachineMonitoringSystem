@@ -91,8 +91,6 @@ Public Class FacTrxConsole
             Case Else
                 accessLevelId = 99
         End Select
-
-        JigRelatedToolStripMenuItem.Visible = False
     End Sub
 
     Private Sub MntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -209,7 +207,7 @@ Public Class FacTrxConsole
 
     Private Sub OthersToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OthersToolStripMenuItem.Click
         Try
-            Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin)
+            Using frmDetail As New FacTrxDetailOth(userId, workgroupId, isAdmin)
                 frmDetail.ShowDialog(Me)
                 If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
                     Reload()
@@ -227,7 +225,7 @@ Public Class FacTrxConsole
                 Dim trxId As Integer = CType(Me.bsTransactionHeader.Current, DataRowView).Item("TrxId")
 
                 If Not CType(Me.bsTransactionHeader.Current, DataRowView).Item("MachineId") Is DBNull.Value Then
-                    Using frmDetail As New MntTrxDetailMch(userId, workgroupId, isAdmin, trxId)
+                    Using frmDetail As New FacTrxDetailMch(userId, workgroupId, isAdmin, trxId)
                         frmDetail.ShowDialog(Me)
                         If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
                             Reload()
@@ -236,13 +234,13 @@ Public Class FacTrxConsole
                     End Using
 
                 Else
-                    Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
-                        frmDetail.ShowDialog(Me)
-                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-                            Reload()
-                            LoadMachine()
-                        End If
-                    End Using
+                    'Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
+                    '    frmDetail.ShowDialog(Me)
+                    '    If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                    '        Reload()
+                    '        LoadMachine()
+                    '    End If
+                    'End Using
                 End If
             End If
         Catch ex As Exception

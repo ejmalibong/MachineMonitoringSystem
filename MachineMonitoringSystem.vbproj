@@ -293,6 +293,12 @@
     <Compile Include="Form\MntTrxDetailMch.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\FacTrxDetailOth.Designer.vb">
+      <DependentUpon>FacTrxDetailOth.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacTrxDetailOth.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntTrxDetailOth.Designer.vb">
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
     </Compile>
@@ -809,6 +815,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxDetailMch.resx">
       <DependentUpon>MntTrxDetailMch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacTrxDetailOth.resx">
+      <DependentUpon>FacTrxDetailOth.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxDetailOth.resx">
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>

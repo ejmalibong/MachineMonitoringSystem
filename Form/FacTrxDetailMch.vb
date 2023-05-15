@@ -32,6 +32,7 @@ Public Class FacTrxDetailMch
     Private dtTrxMachinePart As New DataTable
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
+    Private dtTrxAttachment As New DataTable
 
     Private imgDirectory As String = directory.ImgIniDirectoryFc
     Private imgTmp As String = String.Empty
@@ -148,7 +149,8 @@ Public Class FacTrxDetailMch
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
 
-            If trxId = 0 Then 'new transaction, enable all controls, enable approvers controls based on accesslevel
+            'new transaction, enable all controls, enable approvers controls based on accesslevel
+            If trxId = 0 Then
                 cmbTransactionStatus.Enabled = True
 
                 If cmbMachinePart.Items.Count > 0 Then
@@ -238,7 +240,6 @@ Public Class FacTrxDetailMch
                     cmbMachineName.Enabled = True
 
                     cmbDowntimeStatus.Enabled = True
-                    cmbDowntimeSubStatus.Enabled = True
                     txtProblem.Enabled = True
                     txtRootCause.Enabled = True
                     txtActionTaken.Enabled = True
@@ -325,7 +326,6 @@ Public Class FacTrxDetailMch
                                     cmbMachineName.Enabled = True
 
                                     cmbDowntimeStatus.Enabled = True
-                                    cmbDowntimeSubStatus.Enabled = True
                                     txtProblem.Enabled = True
                                     txtRootCause.Enabled = True
                                     txtActionTaken.Enabled = True
@@ -476,7 +476,6 @@ Public Class FacTrxDetailMch
                                     cmbMachineName.Enabled = True
 
                                     cmbDowntimeStatus.Enabled = True
-                                    cmbDowntimeSubStatus.Enabled = True
                                     txtProblem.Enabled = True
                                     txtRootCause.Enabled = True
                                     txtActionTaken.Enabled = True
@@ -581,7 +580,6 @@ Public Class FacTrxDetailMch
                                     End If
 
                                     cmbDowntimeStatus.Enabled = True
-                                    cmbDowntimeSubStatus.Enabled = True
                                     txtProblem.Enabled = True
                                     txtRootCause.Enabled = True
                                     txtActionTaken.Enabled = True
@@ -730,13 +728,13 @@ Public Class FacTrxDetailMch
             Dim prmHeader(0) As SqlParameter
             prmHeader(0) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmHeader(0).Value = trxId
-            dtTrxHeader = dbMethod.FillDataTable("RdMntTransactionHeaderByTrxId", CommandType.StoredProcedure, prmHeader)
+            dtTrxHeader = dbMethod.FillDataTable("RdFacTransactionHeaderByTrxId", CommandType.StoredProcedure, prmHeader)
 
             'transaction detail
             Dim prmDetail(0) As SqlParameter
             prmDetail(0) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmDetail(0).Value = trxId
-            dtTrxDetail = dbMethod.FillDataTable("RdMntTransactionDetailByTrxId", CommandType.StoredProcedure, prmDetail)
+            dtTrxDetail = dbMethod.FillDataTable("RdFacTransactionDetailByTrxId", CommandType.StoredProcedure, prmDetail)
             Me.bsTrxDetail.DataSource = dtTrxDetail
             Me.bsTrxDetail.Position = Me.bsTrxDetail.Find("TrxId", trxId)
             Me.bsTrxDetail.Sort = "TrxFrom"
@@ -747,19 +745,19 @@ Public Class FacTrxDetailMch
             Dim prmMchPart(0) As SqlParameter
             prmMchPart(0) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmMchPart(0).Value = trxId
-            dtTrxMachinePart = dbMethod.FillDataTable("RdMntTransactionMachinePartByTrxId", CommandType.StoredProcedure, prmMchPart)
+            dtTrxMachinePart = dbMethod.FillDataTable("RdFacTransactionMachinePartByTrxId", CommandType.StoredProcedure, prmMchPart)
 
             'transaction spare part
             Dim prmSparePart(0) As SqlParameter
             prmSparePart(0) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmSparePart(0).Value = trxId
-            dtTrxSparePart = dbMethod.FillDataTable("RdMntTransactionSparePartByTrxId", CommandType.StoredProcedure, prmSparePart)
+            dtTrxSparePart = dbMethod.FillDataTable("RdFacTransactionSparePartByTrxId", CommandType.StoredProcedure, prmSparePart)
 
             'transaction user
             Dim prmUser(0) As SqlParameter
             prmUser(0) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmUser(0).Value = trxId
-            dtTrxUser = dbMethod.FillDataTable("RdMntTransactionUserByTrxId", CommandType.StoredProcedure, prmUser)
+            dtTrxUser = dbMethod.FillDataTable("RdFacTransactionUserByTrxId", CommandType.StoredProcedure, prmUser)
 
             FilterPicTable()
         End If
@@ -1031,11 +1029,11 @@ Public Class FacTrxDetailMch
                 If trxId = 0 Then
                     lstImg.RemoveAt(currentIndex)
                 Else
-                    If Not lstImg(currentIndex).TrxId = 0 Then
+                    If Not lstImg(currentIndex).AttachmentId = 0 Then
                         Dim forDeleteItem As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).FileName,
-                                                                   lstImg(currentIndex).SafeName,
-                                                                   Path.GetExtension(lstImg(currentIndex).SafeName),
-                                                                   lstImg(currentIndex).TrxId)
+                                                               lstImg(currentIndex).SafeName,
+                                                               Path.GetExtension(lstImg(currentIndex).SafeName),
+                                                               lstImg(currentIndex).AttachmentId)
                         lstImgForDelete.Add(forDeleteItem)
                         lstImg.RemoveAt(currentIndex)
                     End If
@@ -1292,23 +1290,23 @@ Public Class FacTrxDetailMch
                         prmHeader(32).Value = 4
                     End If
 
+                    If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                        prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(33).Value = Nothing
+                    Else
+                        prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(33).Value = txtProblem.Text.Trim
+                    End If
+
+                    If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
+                        prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(34).Value = Nothing
+                    Else
+                        prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(34).Value = txtRootCause.Text.Trim
+                    End If
+
                     If cmbDowntimeStatus.SelectedValue = 2 Then 'scheduled
-                        If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(33).Value = Nothing
-                        Else
-                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(33).Value = txtProblem.Text.Trim
-                        End If
-
-                        If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(34).Value = Nothing
-                        Else
-                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(34).Value = txtRootCause.Text.Trim
-                        End If
-
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
                             prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                             prmHeader(35).Value = Nothing
@@ -1317,42 +1315,7 @@ Public Class FacTrxDetailMch
                             prmHeader(35).Value = txtActionTaken.Text.Trim
                         End If
 
-                        If cmbDowntimeSubStatus.SelectedValue = 3 Then 'pm
-                            If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(36).Value = Nothing
-                            Else
-                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(36).Value = txtChecksheet.Text.Trim
-                            End If
-
-                        Else 'scheduled but not pm
-                            If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(36).Value = Nothing
-                            Else
-                                prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(36).Value = txtChecksheet.Text.Trim
-                            End If
-                        End If
-
                     ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled
-                        If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(33).Value = Nothing
-                        Else
-                            prmHeader(33) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(33).Value = txtProblem.Text.Trim
-                        End If
-
-                        If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(34).Value = Nothing
-                        Else
-                            prmHeader(34) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(34).Value = txtRootCause.Text.Trim
-                        End If
-
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
                             MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             txtActionTaken.Focus()
@@ -1361,14 +1324,14 @@ Public Class FacTrxDetailMch
                             prmHeader(35) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                             prmHeader(35).Value = txtActionTaken.Text.Trim
                         End If
+                    End If
 
-                        If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                            prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(36).Value = Nothing
-                        Else
-                            prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(36).Value = txtChecksheet.Text.Trim
-                        End If
+                    If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
+                        prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(36).Value = Nothing
+                    Else
+                        prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(36).Value = txtChecksheet.Text.Trim
                     End If
 
                 Else 'transaction status - on-going
@@ -1515,7 +1478,7 @@ Public Class FacTrxDetailMch
                         Dim newName As String = String.Empty
                         ext = Path.GetExtension(lstImg(i).FileName).ToLower
 
-                        newName = prmHeader(0).Value & "-" & i + 1 & ext
+                        newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
 
                         Dim prmUpd(2) As SqlParameter
                         prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
@@ -1568,7 +1531,7 @@ Public Class FacTrxDetailMch
                     dbMethod.ExecuteNonQuery("UpdFacMachineSchedule", CommandType.StoredProcedure, prmMchSchd)
                 End If
 
-                'transaction details
+                'transaction detail
                 If dgvDetail.Rows.Count > 0 Then
                     For Each dataRowView As DataRowView In Me.bsTrxDetail
                         Dim row = dataRowView.Row
@@ -1645,7 +1608,7 @@ Public Class FacTrxDetailMch
                 'existing transaction
             Else
                 'transaction header
-                Dim prmHeader(40) As SqlParameter
+                Dim prmHeader(34) As SqlParameter
                 prmHeader(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                 prmHeader(0).Value = trxId
                 prmHeader(1) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -1654,37 +1617,31 @@ Public Class FacTrxDetailMch
                 prmHeader(2).Value = cmbDowntimeStatus.SelectedValue
                 prmHeader(3) = New SqlParameter("@DowntimeMachineSubStatusId", SqlDbType.Int)
                 prmHeader(3).Value = cmbDowntimeSubStatus.SelectedValue
-                prmHeader(4) = New SqlParameter("@JigId", SqlDbType.Int)
-                prmHeader(4).Value = Nothing
-                prmHeader(5) = New SqlParameter("@DowntimeJigStatusId", SqlDbType.Int)
-                prmHeader(5).Value = Nothing
-                prmHeader(6) = New SqlParameter("@DowntimeJigSubStatusId", SqlDbType.Int)
-                prmHeader(6).Value = Nothing
-                prmHeader(7) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmHeader(7).Value = areaId
+                prmHeader(4) = New SqlParameter("@AreaId", SqlDbType.Int)
+                prmHeader(4).Value = areaId
 
                 If String.IsNullOrEmpty(txtRuntimeAccumulated.Text.Trim) Then
-                    prmHeader(8) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
-                    prmHeader(8).Value = Nothing
+                    prmHeader(5) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
+                    prmHeader(5).Value = Nothing
                 Else
-                    prmHeader(8) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
-                    prmHeader(8).Value = txtRuntimeAccumulated.Text.Trim
+                    prmHeader(5) = New SqlParameter("@TotalAccumulatedRuntime", SqlDbType.Int)
+                    prmHeader(5).Value = txtRuntimeAccumulated.Text.Trim
                 End If
 
                 If String.IsNullOrEmpty(txtJoNumber.Text.Trim) Then
-                    prmHeader(9) = New SqlParameter("@JoNumber", SqlDbType.NChar)
-                    prmHeader(9).Value = Nothing
+                    prmHeader(6) = New SqlParameter("@JoNumber", SqlDbType.NChar)
+                    prmHeader(6).Value = Nothing
                 Else
-                    prmHeader(9) = New SqlParameter("@JoNumber", SqlDbType.NChar)
-                    prmHeader(9).Value = txtJoNumber.Text.Trim
+                    prmHeader(6) = New SqlParameter("@JoNumber", SqlDbType.NChar)
+                    prmHeader(6).Value = txtJoNumber.Text.Trim
                 End If
 
                 If String.IsNullOrEmpty(txtJoRequestor.Text.Trim) Then
-                    prmHeader(10) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
-                    prmHeader(10).Value = Nothing
+                    prmHeader(7) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
+                    prmHeader(7).Value = Nothing
                 Else
-                    prmHeader(10) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
-                    prmHeader(10).Value = txtJoRequestor.Text.Trim
+                    prmHeader(7) = New SqlParameter("@JoRequestor", SqlDbType.NVarChar)
+                    prmHeader(7).Value = txtJoRequestor.Text.Trim
                 End If
 
                 If cmbTransactionStatus.SelectedValue = 1 Then 'transaction status - done
@@ -1697,448 +1654,448 @@ Public Class FacTrxDetailMch
                     'approvers
                     If isAdmin Or accessLevelId = 1 Then
                         If cmbApp1Name.SelectedValue = 0 Then
-                            prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                            prmHeader(11).Value = 0
-                            prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                            prmHeader(12).Value = Nothing
-                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                            prmHeader(13).Value = Nothing
-                            prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                            prmHeader(14).Value = Nothing
+                            prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                            prmHeader(8).Value = 0
+                            prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                            prmHeader(9).Value = Nothing
+                            prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                            prmHeader(10).Value = Nothing
+                            prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                            prmHeader(11).Value = Nothing
                         Else
-                            prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                            prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
-                            prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                            prmHeader(12).Value = cmbApp1Name.SelectedValue
+                            prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                            prmHeader(8).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                            prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                            prmHeader(9).Value = cmbApp1Name.SelectedValue
 
                             If cmbApp1Status.SelectedValue = 0 Then
-                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                prmHeader(13).Value = Nothing
+                                prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                prmHeader(10).Value = Nothing
                             Else
                                 If cmbApp1Status.SelectedValue = orgApp1Status Then
                                     If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                        prmHeader(13).Value = Nothing
+                                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(10).Value = Nothing
                                     Else
-                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                        prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(10).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
                                     End If
                                 Else
-                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                    prmHeader(13).Value = dbMethod.GetServerDate
+                                    prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(10).Value = dbMethod.GetServerDate
                                 End If
                             End If
 
-                            prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                            prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                            prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                            prmHeader(11).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
                         End If
 
                         If cmbApp2Name.SelectedValue = 0 Then
-                            prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                            prmHeader(15).Value = 0
-                            prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                            prmHeader(16).Value = Nothing
-                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                            prmHeader(17).Value = Nothing
-                            prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                            prmHeader(18).Value = Nothing
+                            prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                            prmHeader(12).Value = 0
+                            prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                            prmHeader(13).Value = Nothing
+                            prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                            prmHeader(14).Value = Nothing
+                            prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                            prmHeader(15).Value = Nothing
                         Else
-                            prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                            prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
-                            prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                            prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                            prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                            prmHeader(12).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                            prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                            prmHeader(13).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
 
                             If cmbApp2Status.SelectedValue = 0 Then
-                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                prmHeader(17).Value = Nothing
+                                prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                prmHeader(14).Value = Nothing
                             Else
                                 If cmbApp2Status.SelectedValue = orgApp2Status Then
                                     If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                        prmHeader(17).Value = Nothing
+                                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(14).Value = Nothing
                                     Else
-                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                        prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(14).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
                                     End If
                                 Else
-                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                    prmHeader(17).Value = dbMethod.GetServerDate
+                                    prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(14).Value = dbMethod.GetServerDate
                                 End If
                             End If
 
-                            prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                            prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                            prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                            prmHeader(15).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
                         End If
 
-                        prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                        prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
-                        prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                        prmHeader(20).Value = cmbApp3Name.SelectedValue
+                        prmHeader(16) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                        prmHeader(16).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                        prmHeader(17) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                        prmHeader(17).Value = cmbApp3Name.SelectedValue
 
                         If cmbApp3Status.SelectedValue = 0 Then
-                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                            prmHeader(21).Value = Nothing
+                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                            prmHeader(18).Value = Nothing
                         Else
                             If cmbApp3Status.SelectedValue = orgApp3Status Then
                                 If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                    prmHeader(21).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(18).Value = Nothing
                                 Else
-                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                    prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                    prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(18).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
                                 End If
                             Else
-                                prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                prmHeader(21).Value = dbMethod.GetServerDate
+                                prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                prmHeader(18).Value = dbMethod.GetServerDate
                             End If
                         End If
 
-                        prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                        prmHeader(22).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                        prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                        prmHeader(19).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
 
                     Else 'other access level
                         Select Case accessLevelId
                             Case 2 'mngr, asm
                                 If cmbApp1Name.SelectedValue = 0 Then
-                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                                    prmHeader(11).Value = 0
-                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                                    prmHeader(12).Value = Nothing
-                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                    prmHeader(13).Value = Nothing
-                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                                    prmHeader(14).Value = Nothing
+                                    prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(8).Value = 0
+                                    prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(9).Value = Nothing
+                                    prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(10).Value = Nothing
+                                    prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(11).Value = Nothing
                                 Else
-                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                                    prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
-                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                                    prmHeader(12).Value = cmbApp1Name.SelectedValue
+                                    prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(8).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(9).Value = cmbApp1Name.SelectedValue
 
                                     If cmbApp1Status.SelectedValue = 0 Then
-                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                        prmHeader(13).Value = Nothing
+                                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(10).Value = Nothing
                                     Else
                                         If cmbApp1Status.SelectedValue = orgApp1Status Then
                                             If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                                prmHeader(13).Value = Nothing
+                                                prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(10).Value = Nothing
                                             Else
-                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                                prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                                prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(10).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
                                             End If
                                         Else
-                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                            prmHeader(13).Value = dbMethod.GetServerDate
+                                            prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(10).Value = dbMethod.GetServerDate
                                         End If
                                     End If
 
-                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                                    prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                                    prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(11).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
                                 End If
 
-                                prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                                prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
-                                prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                                prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                                prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                prmHeader(12).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                prmHeader(13).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
 
                                 If cmbApp2Status.SelectedValue = 0 Then
-                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                    prmHeader(17).Value = Nothing
+                                    prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(14).Value = Nothing
                                 Else
                                     If cmbApp2Status.SelectedValue = orgApp2Status Then
                                         If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                            prmHeader(17).Value = Nothing
+                                            prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(14).Value = Nothing
                                         Else
-                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                            prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                            prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(14).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
                                         End If
                                     Else
-                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                        prmHeader(17).Value = dbMethod.GetServerDate
+                                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(14).Value = dbMethod.GetServerDate
                                     End If
                                 End If
 
-                                prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                                prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                                prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                prmHeader(15).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
 
-                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
-                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+                                prmHeader(16) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(16).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(17) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(17).Value = cmbApp3Name.SelectedValue
 
                                 If cmbApp3Status.SelectedValue = 0 Then
-                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                    prmHeader(21).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(18).Value = Nothing
                                 Else
                                     If cmbApp3Status.SelectedValue = orgApp3Status Then
                                         If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Nothing
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Nothing
                                         Else
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
                                         End If
                                     Else
-                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                        prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(18).Value = dbMethod.GetServerDate
                                     End If
                                 End If
 
-                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                                prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(19).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
 
                             Case 3 'sv, asv
-                                prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                                prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
-                                prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                                prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                                prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                prmHeader(8).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                prmHeader(9).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
 
                                 If cmbApp1Status.SelectedValue = 0 Then 'no action selected
-                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                    prmHeader(13).Value = Nothing
+                                    prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(10).Value = Nothing
                                 Else
                                     If cmbApp1Status.SelectedValue = orgApp1Status Then 'did not change action
                                         If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                            prmHeader(13).Value = Nothing
+                                            prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(10).Value = Nothing
                                         Else
-                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                            prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                            prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(10).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
                                         End If
                                     Else 'change an action
-                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                        prmHeader(13).Value = dbMethod.GetServerDate
+                                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(10).Value = dbMethod.GetServerDate
                                     End If
                                 End If
 
-                                prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                                prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                                prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                prmHeader(11).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
 
                                 If cmbApp2Name.SelectedValue = 0 Then
-                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                                    prmHeader(15).Value = 0
-                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                                    prmHeader(16).Value = Nothing
-                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                    prmHeader(17).Value = Nothing
-                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                                    prmHeader(18).Value = Nothing
+                                    prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(12).Value = 0
+                                    prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(13).Value = Nothing
+                                    prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(14).Value = Nothing
+                                    prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(15).Value = Nothing
                                 Else
-                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                                    prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
-                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                                    prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(12).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(13).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
 
                                     If cmbApp2Status.SelectedValue = 0 Then 'no action selected
-                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                        prmHeader(17).Value = Nothing
+                                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(14).Value = Nothing
                                     Else
                                         If cmbApp2Status.SelectedValue = orgApp2Status Then 'did not change action
                                             If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                                prmHeader(17).Value = Nothing
+                                                prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(14).Value = Nothing
                                             Else
-                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                                prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                                prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(14).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
                                             End If
                                         Else 'change an action
-                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                            prmHeader(17).Value = dbMethod.GetServerDate
+                                            prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(14).Value = dbMethod.GetServerDate
                                         End If
                                     End If
 
-                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                                    prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                                    prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(15).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
                                 End If
 
-                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
-                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+                                prmHeader(16) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(16).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(17) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(17).Value = cmbApp3Name.SelectedValue
 
                                 If cmbApp3Status.SelectedValue = 0 Then 'no action selected
-                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                    prmHeader(21).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(18).Value = Nothing
                                 Else
                                     If cmbApp3Status.SelectedValue = orgApp3Status Then 'did not change action
                                         If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Nothing
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Nothing
                                         Else
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
                                         End If
                                     Else 'change an action
-                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                        prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(18).Value = dbMethod.GetServerDate
                                     End If
                                 End If
 
-                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                                prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(19).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
 
                             Case Else 'technician
                                 If cmbApp1Name.SelectedValue = 0 Then
-                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                                    prmHeader(11).Value = 0
-                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                                    prmHeader(12).Value = Nothing
-                                    prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                    prmHeader(13).Value = Nothing
-                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                                    prmHeader(14).Value = Nothing
+                                    prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(8).Value = 0
+                                    prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(9).Value = Nothing
+                                    prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                    prmHeader(10).Value = Nothing
+                                    prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(11).Value = Nothing
                                 Else
-                                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                                    prmHeader(11).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
-                                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                                    prmHeader(12).Value = cmbApp1Name.SelectedValue
+                                    prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                                    prmHeader(8).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                                    prmHeader(9).Value = cmbApp1Name.SelectedValue
 
                                     If cmbApp1Status.SelectedValue = 0 Then
-                                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                        prmHeader(13).Value = Nothing
+                                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                        prmHeader(10).Value = Nothing
                                     Else
                                         If cmbApp1Status.SelectedValue = orgApp1Status Then
                                             If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                                prmHeader(13).Value = Nothing
+                                                prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(10).Value = Nothing
                                             Else
-                                                prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                                prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                                                prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                                prmHeader(10).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
                                             End If
                                         Else
-                                            prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                                            prmHeader(13).Value = dbMethod.GetServerDate
+                                            prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                                            prmHeader(10).Value = dbMethod.GetServerDate
                                         End If
                                     End If
 
-                                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                                    prmHeader(14).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                                    prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                                    prmHeader(11).Value = IIf(String.IsNullOrEmpty(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
                                 End If
 
                                 If cmbApp2Name.SelectedValue = 0 Then
-                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                                    prmHeader(15).Value = 0
-                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                                    prmHeader(16).Value = Nothing
-                                    prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                    prmHeader(17).Value = Nothing
-                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                                    prmHeader(18).Value = Nothing
+                                    prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(12).Value = 0
+                                    prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(13).Value = Nothing
+                                    prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                    prmHeader(14).Value = Nothing
+                                    prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(15).Value = Nothing
                                 Else
-                                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                                    prmHeader(15).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
-                                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                                    prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                                    prmHeader(12).Value = IIf(cmbApp2Status.SelectedValue = 1, 1, 0)
+                                    prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                                    prmHeader(13).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
 
                                     If cmbApp2Status.SelectedValue = 0 Then
-                                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                        prmHeader(17).Value = Nothing
+                                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                        prmHeader(14).Value = Nothing
                                     Else
                                         If cmbApp2Status.SelectedValue = orgApp2Status Then
                                             If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                                prmHeader(17).Value = Nothing
+                                                prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(14).Value = Nothing
                                             Else
-                                                prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                                prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                                                prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                                prmHeader(14).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
                                             End If
                                         Else
-                                            prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                                            prmHeader(17).Value = dbMethod.GetServerDate
+                                            prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                                            prmHeader(14).Value = dbMethod.GetServerDate
                                         End If
                                     End If
 
-                                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                                    prmHeader(18).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                                    prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                                    prmHeader(15).Value = IIf(String.IsNullOrEmpty(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
                                 End If
 
-                                prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                                prmHeader(19).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
-                                prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                                prmHeader(20).Value = cmbApp3Name.SelectedValue
+                                prmHeader(16) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                                prmHeader(16).Value = IIf(cmbApp3Status.SelectedValue = 1, 1, 0)
+                                prmHeader(17) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                                prmHeader(17).Value = cmbApp3Name.SelectedValue
 
                                 If cmbApp3Status.SelectedValue = 0 Then
-                                    prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                    prmHeader(21).Value = Nothing
+                                    prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                    prmHeader(18).Value = Nothing
                                 Else
                                     If cmbApp3Status.SelectedValue = orgApp3Status Then
                                         If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Nothing
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Nothing
                                         Else
-                                            prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                            prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                                            prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                            prmHeader(18).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
                                         End If
                                     Else
-                                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                                        prmHeader(21).Value = dbMethod.GetServerDate
+                                        prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                                        prmHeader(18).Value = dbMethod.GetServerDate
                                     End If
                                 End If
 
-                                prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                                prmHeader(22).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                                prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                                prmHeader(19).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
                         End Select
                     End If
 
-                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                    prmHeader(23).Value = userId
-                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                    prmHeader(24).Value = dbMethod.GetServerDate
+                    prmHeader(20) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(20).Value = userId
+                    prmHeader(21) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(21).Value = dbMethod.GetServerDate
 
-                    prmHeader(25) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                    prmHeader(25).Value = Nothing
-                    prmHeader(26) = New SqlParameter("@FileName", SqlDbType.NVarChar)
-                    prmHeader(26).Value = Nothing
+                    prmHeader(22) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(22).Value = Nothing
+                    prmHeader(23) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(23).Value = Nothing
 
                     'trx status
                     If isAdmin Or accessLevelId = 1 Then 'will be based on routing status
-                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                        prmHeader(24).Value = cmbTransactionStatus.SelectedValue
                     Else
                         Select Case accessLevelId
                             Case 2
                                 Select Case cmbApp2Status.SelectedValue
                                     Case 0 'no selected action
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = cmbTransactionStatus.SelectedValue
                                     Case 1 'selected approve
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = 1
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = 1
                                     Case 2 'selected `returned for revision`
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = 2
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = 2
                                 End Select
 
                             Case 3
                                 Select Case cmbApp1Status.SelectedValue
                                     Case 0 'no selected action
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = cmbTransactionStatus.SelectedValue
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = cmbTransactionStatus.SelectedValue
                                     Case 1 'selected approve
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = 1
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = 1
                                     Case 2 'selected `returned for revision`
-                                        prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                        prmHeader(27).Value = 2
+                                        prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                        prmHeader(24).Value = 2
                                 End Select
 
                             Case Else
-                                prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                                prmHeader(27).Value = 1 'selected done
+                                prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                                prmHeader(24).Value = 1 'selected done
                         End Select
                     End If
 
-                    prmHeader(28) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                    prmHeader(28).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
-                    prmHeader(29) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                    prmHeader(29).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                    prmHeader(30) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(30).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                    prmHeader(31) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                    prmHeader(31).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
-                    prmHeader(32) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                    prmHeader(32).Value = txtDowntimeAccumulated.Text.Trim
+                    prmHeader(25) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                    prmHeader(25).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
+                    prmHeader(26) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                    prmHeader(26).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                    prmHeader(27) = New SqlParameter("@UserId", SqlDbType.Int)
+                    prmHeader(27).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                    prmHeader(28) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                    prmHeader(28).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
+                    prmHeader(29) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                    prmHeader(29).Value = txtDowntimeAccumulated.Text.Trim
 
                     'routingstatus
                     If isAdmin Or accessLevelId = 1 Then
@@ -2146,22 +2103,22 @@ Public Class FacTrxDetailMch
                             If cmbRoutingStatus.SelectedValue = 2 Then 'for approval of approver 3
                                 Select Case cmbApp3Status.SelectedValue
                                     Case 0
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = orgRoutingStatusId
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = orgRoutingStatusId
                                     Case 1
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = 1
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = 1
                                     Case 2
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = 6
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = 6
                                 End Select
                             Else
-                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                prmHeader(33).Value = cmbRoutingStatus.SelectedValue
+                                prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                prmHeader(30).Value = cmbRoutingStatus.SelectedValue
                             End If
                         Else
-                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                            prmHeader(33).Value = cmbRoutingStatus.SelectedValue
+                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                            prmHeader(30).Value = cmbRoutingStatus.SelectedValue
                         End If
                     Else
                         Select Case accessLevelId
@@ -2169,209 +2126,123 @@ Public Class FacTrxDetailMch
                                 If orgRoutingStatusId = 3 Then
                                     Select Case cmbApp2Status.SelectedValue
                                         Case 0
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = orgRoutingStatusId
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = orgRoutingStatusId
                                         Case 1
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = 2
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = 2
                                         Case 2
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = 6
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = 6
                                     End Select
                                 ElseIf orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
-                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                    prmHeader(33).Value = 2
+                                    prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(30).Value = 2
                                 Else
-                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                    prmHeader(33).Value = orgRoutingStatusId
+                                    prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(30).Value = orgRoutingStatusId
                                 End If
 
                             Case 3
                                 If orgRoutingStatusId = 4 Then 'for approval of approver 1
                                     Select Case cmbApp1Status.SelectedValue
                                         Case 0
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = orgRoutingStatusId
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = orgRoutingStatusId
                                         Case 1
                                             If cmbApp2Name.SelectedValue = 0 Then
-                                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                                prmHeader(33).Value = 2
+                                                prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                                prmHeader(30).Value = 2
                                             Else
-                                                prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                                prmHeader(33).Value = 3
+                                                prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                                prmHeader(30).Value = 3
                                             End If
                                         Case 2
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = 6
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = 6
                                     End Select
                                 ElseIf orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then 'on-going or returned for revision
                                     If cmbApp2Name.SelectedValue = 0 Then 'no approver 2, directed to approver 3
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = 2
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = 2
                                     Else 'with approver 2
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = 3
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = 3
                                     End If
                                 Else 'other routing status
-                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                    prmHeader(33).Value = orgRoutingStatusId
+                                    prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(30).Value = orgRoutingStatusId
                                 End If
 
                             Case Else
                                 If orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then 'on-going or returned for revision
                                     If cmbApp1Name.SelectedValue = 0 Then 'no approver 1
                                         If cmbApp2Name.SelectedValue = 0 Then 'no approver 2, directed to approver 3
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = 2
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = 2
                                         Else 'with approver 2
-                                            prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                            prmHeader(33).Value = 3
+                                            prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                            prmHeader(30).Value = 3
                                         End If
                                     Else 'with approver 1
-                                        prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                        prmHeader(33).Value = 4
+                                        prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                        prmHeader(30).Value = 4
                                     End If
                                 Else 'other routing status
-                                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                                    prmHeader(33).Value = orgRoutingStatusId
+                                    prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                                    prmHeader(30).Value = orgRoutingStatusId
                                 End If
                         End Select
                     End If
 
+                    If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
+                        prmHeader(31) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(31).Value = Nothing
+                    Else
+                        prmHeader(31) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(31).Value = txtProblem.Text.Trim
+                    End If
+
+                    If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
+                        prmHeader(32) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(32).Value = Nothing
+                    Else
+                        prmHeader(32) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(32).Value = txtRootCause.Text.Trim
+                    End If
+
                     If cmbDowntimeStatus.SelectedValue = 2 Then 'scheduled
-                        If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(34).Value = Nothing
-                        Else
-                            prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(34).Value = txtProblem.Text.Trim
-                        End If
-
-                        If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            prmHeader(35) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(35).Value = Nothing
-                        Else
-                            prmHeader(35) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(35).Value = txtRootCause.Text.Trim
-                        End If
-
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
-                            prmHeader(36) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(36).Value = Nothing
+                            prmHeader(33) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(33).Value = Nothing
                         Else
-                            prmHeader(36) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(36).Value = txtActionTaken.Text.Trim
-                        End If
-
-                        If picImage.Image Is Nothing Then
-                            prmHeader(37) = New SqlParameter("@Image", SqlDbType.Image)
-                            prmHeader(37).Value = Nothing
-                            prmHeader(38) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                            prmHeader(38).Value = Nothing
-                        Else
-                            Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                            resImg.Save(mStream, ImageFormat.Jpeg)
-                            bite = mStream.GetBuffer
-                            prmHeader(37) = New SqlParameter("@Image", SqlDbType.Image)
-                            prmHeader(37).Value = bite
-                            prmHeader(38) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                            prmHeader(38).Value = txtImageName.Text.Trim
-                        End If
-
-                        If cmbDowntimeSubStatus.SelectedValue = 3 Then 'pm
-                            If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                MessageBox.Show("Please input the link of Check Sheet.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                txtChecksheet.Focus()
-                                Return
-                            Else
-                                prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(39).Value = txtChecksheet.Text.Trim
-                            End If
-
-                            'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                            '    MessageBox.Show("Please input the link of 4M Change.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            '    'txt4M.Focus()
-                            '    Return
-                            'Else
-                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            '    prmHeader(40).Value = txt4M.Text.Trim
-                            'End If
-
-                        Else 'scheduled but no pm
-                            If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                                prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(39).Value = Nothing
-                            Else
-                                prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                                prmHeader(39).Value = txtChecksheet.Text.Trim
-                            End If
-
-                            'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            '    prmHeader(40).Value = Nothing
-                            'Else
-                            '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                            '    prmHeader(40).Value = txt4M.Text.Trim
-                            'End If
+                            prmHeader(33) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(33).Value = txtActionTaken.Text.Trim
                         End If
 
                     ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled
-                        If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                            MessageBox.Show("Please indicate the problem.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtProblem.Focus()
-                            Return
-                        Else
-                            prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                            prmHeader(34).Value = txtProblem.Text.Trim
-                        End If
-
-                        If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                            MessageBox.Show("Please indicate the root cause.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            txtRootCause.Focus()
-                            Return
-                        Else
-                            prmHeader(35) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                            prmHeader(35).Value = txtRootCause.Text.Trim
-                        End If
-
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
                             MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             txtActionTaken.Focus()
                             Return
                         Else
-                            prmHeader(36) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                            prmHeader(36).Value = txtActionTaken.Text.Trim
+                            prmHeader(33) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                            prmHeader(33).Value = txtActionTaken.Text.Trim
                         End If
+                    End If
 
-                        If picImage.Image Is Nothing Then
-                            MessageBox.Show("Please attach an image.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                            btnBrowseImage.Focus()
-                            Return
-                        End If
+                    If picImage.Image Is Nothing Then
+                        MessageBox.Show("Please attach image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        btnBrowseImage.Focus()
+                        Return
+                    End If
 
-                        Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                        resImg.Save(mStream, ImageFormat.Jpeg)
-                        bite = mStream.GetBuffer
-                        prmHeader(37) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(37).Value = bite
-                        prmHeader(38) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(38).Value = txtImageName.Text.Trim
-
-                        If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                            prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(39).Value = Nothing
-                        Else
-                            prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                            prmHeader(39).Value = txtChecksheet.Text.Trim
-                        End If
-
-                        'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                        '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        '    prmHeader(40).Value = Nothing
-                        'Else
-                        '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                        '    prmHeader(40).Value = txt4M.Text.Trim
-                        'End If
+                    If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
+                        prmHeader(34) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(34).Value = Nothing
+                    Else
+                        prmHeader(34) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(34).Value = txtChecksheet.Text.Trim
                     End If
 
                     'set machine to operational
@@ -2383,8 +2254,9 @@ Public Class FacTrxDetailMch
                     prmMachineStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                     prmMachineStatus(2).Value = 1
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
 
+                    'if selected machine is different from the original selection, set the original machine to operational
                     If orgMachineId <> cmbMachineName.SelectedValue Then
                         Dim prmMachineStatusOrg(2) As SqlParameter
                         prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -2394,159 +2266,136 @@ Public Class FacTrxDetailMch
                         prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                         prmMachineStatusOrg(2).Value = 1
 
-                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
+                        dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
 
                 Else 'transaction status - on-going
                     'approvers
-                    prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
-                    prmHeader(11).Value = If(cmbApp1Status.SelectedValue = 1, 1, 0)
-                    prmHeader(12) = New SqlParameter("@ApproverId1", SqlDbType.Int)
-                    prmHeader(12).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
+                    prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
+                    prmHeader(8).Value = If(cmbApp1Status.SelectedValue = 1, 1, 0)
+                    prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
+                    prmHeader(9).Value = IIf(cmbApp1Name.SelectedValue = 0, Nothing, cmbApp1Name.SelectedValue)
 
                     If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                        prmHeader(13).Value = Nothing
+                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                        prmHeader(10).Value = Nothing
                     Else
-                        prmHeader(13) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
-                        prmHeader(13).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
+                        prmHeader(10) = New SqlParameter("@ApproverDate1", SqlDbType.DateTime2)
+                        prmHeader(10).Value = Convert.ToDateTime(txtApp1Date.Text.Trim)
                     End If
 
-                    prmHeader(14) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
-                    prmHeader(14).Value = If(String.IsNullOrWhiteSpace(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
+                    prmHeader(11) = New SqlParameter("@ApproverRemarks1", SqlDbType.NVarChar)
+                    prmHeader(11).Value = If(String.IsNullOrWhiteSpace(txtApp1Remarks.Text.Trim), Nothing, txtApp1Remarks.Text.Trim)
 
-                    prmHeader(15) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
-                    prmHeader(15).Value = If(cmbApp2Status.SelectedValue = 1, 1, 0)
-                    prmHeader(16) = New SqlParameter("@ApproverId2", SqlDbType.Int)
-                    prmHeader(16).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
+                    prmHeader(12) = New SqlParameter("@ApproverIsApproved2", SqlDbType.Bit)
+                    prmHeader(12).Value = If(cmbApp2Status.SelectedValue = 1, 1, 0)
+                    prmHeader(13) = New SqlParameter("@ApproverId2", SqlDbType.Int)
+                    prmHeader(13).Value = IIf(cmbApp2Name.SelectedValue = 0, Nothing, cmbApp2Name.SelectedValue)
 
                     If String.IsNullOrEmpty(txtApp2Date.Text.Trim) Then
-                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                        prmHeader(17).Value = Nothing
+                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                        prmHeader(14).Value = Nothing
                     Else
-                        prmHeader(17) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
-                        prmHeader(17).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
+                        prmHeader(14) = New SqlParameter("@ApproverDate2", SqlDbType.DateTime2)
+                        prmHeader(14).Value = Convert.ToDateTime(txtApp2Date.Text.Trim)
                     End If
 
-                    prmHeader(18) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
-                    prmHeader(18).Value = If(String.IsNullOrWhiteSpace(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
+                    prmHeader(15) = New SqlParameter("@ApproverRemarks2", SqlDbType.NVarChar)
+                    prmHeader(15).Value = If(String.IsNullOrWhiteSpace(txtApp2Remarks.Text.Trim), Nothing, txtApp2Remarks.Text.Trim)
 
-                    prmHeader(19) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
-                    prmHeader(19).Value = If(cmbApp3Status.SelectedValue = 1, 1, 0)
-                    prmHeader(20) = New SqlParameter("@ApproverId3", SqlDbType.Int)
-                    prmHeader(20).Value = cmbApp3Name.SelectedValue
+                    prmHeader(16) = New SqlParameter("@ApproverIsApproved3", SqlDbType.Bit)
+                    prmHeader(16).Value = If(cmbApp3Status.SelectedValue = 1, 1, 0)
+                    prmHeader(17) = New SqlParameter("@ApproverId3", SqlDbType.Int)
+                    prmHeader(17).Value = cmbApp3Name.SelectedValue
 
                     If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                        prmHeader(21).Value = Nothing
+                        prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(18).Value = Nothing
                     Else
-                        prmHeader(21) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
-                        prmHeader(21).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
+                        prmHeader(18) = New SqlParameter("@ApproverDate3", SqlDbType.DateTime2)
+                        prmHeader(18).Value = Convert.ToDateTime(txtApp3Date.Text.Trim)
                     End If
 
-                    prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
-                    prmHeader(22).Value = If(String.IsNullOrWhiteSpace(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
+                    prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
+                    prmHeader(19).Value = If(String.IsNullOrWhiteSpace(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
 
-                    prmHeader(23) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
-                    prmHeader(23).Value = userId
-                    prmHeader(24) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
-                    prmHeader(24).Value = dbMethod.GetServerDate
-                    prmHeader(25) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
-                    prmHeader(25).Value = Nothing
-                    prmHeader(26) = New SqlParameter("@FileName", SqlDbType.NVarChar)
-                    prmHeader(26).Value = Nothing
+                    prmHeader(20) = New SqlParameter("@ModifiedBy", SqlDbType.Int)
+                    prmHeader(20).Value = userId
+                    prmHeader(21) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime2)
+                    prmHeader(21).Value = dbMethod.GetServerDate
+                    prmHeader(22) = New SqlParameter("@FileAttachment", SqlDbType.VarBinary)
+                    prmHeader(22).Value = Nothing
+                    prmHeader(23) = New SqlParameter("@FileName", SqlDbType.NVarChar)
+                    prmHeader(23).Value = Nothing
 
-                    prmHeader(27) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
-                    prmHeader(27).Value = 2
+                    prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
+                    prmHeader(24).Value = 2
 
                     If dgvDetail.Rows.Count > 0 Then
-                        prmHeader(28) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                        prmHeader(28).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
-                        prmHeader(29) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                        prmHeader(29).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
-                        prmHeader(30) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmHeader(30).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
-                        prmHeader(31) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                        prmHeader(31).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
-                        prmHeader(32) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                        prmHeader(32).Value = txtDowntimeAccumulated.Text.Trim
+                        prmHeader(25) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                        prmHeader(25).Value = dgvDetail.Rows(0).Cells("ColTrxFrom").Value
+                        prmHeader(26) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                        prmHeader(26).Value = dgvDetail.Rows(rowCount - 1).Cells("ColTrxTo").Value
+                        prmHeader(27) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmHeader(27).Value = dgvDetail.Rows(rowCount - 1).Cells("ColUserIdLog").Value
+                        prmHeader(28) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                        prmHeader(28).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
+                        prmHeader(29) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                        prmHeader(29).Value = txtDowntimeAccumulated.Text.Trim
                     Else
-                        prmHeader(28) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
-                        prmHeader(28).Value = dtTrxHeader.Rows(0).Item("DatetimeStarted")
-                        prmHeader(29) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
-                        prmHeader(29).Value = Nothing
-                        prmHeader(30) = New SqlParameter("@UserId", SqlDbType.Int)
-                        prmHeader(30).Value = userId
+                        prmHeader(25) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
+                        prmHeader(25).Value = dtTrxHeader.Rows(0).Item("DatetimeStarted")
+                        prmHeader(26) = New SqlParameter("@DatetimeEnded", SqlDbType.DateTime2)
+                        prmHeader(26).Value = Nothing
+                        prmHeader(27) = New SqlParameter("@UserId", SqlDbType.Int)
+                        prmHeader(27).Value = userId
 
                         If DateTime.Now.Hour >= 7 And DateTime.Now.Hour <= 17 Then
-                            prmHeader(31) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                            prmHeader(31).Value = "D"
+                            prmHeader(28) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                            prmHeader(28).Value = "D"
                         Else
-                            prmHeader(31) = New SqlParameter("@ShiftId", SqlDbType.Char)
-                            prmHeader(31).Value = "N"
+                            prmHeader(28) = New SqlParameter("@ShiftId", SqlDbType.Char)
+                            prmHeader(28).Value = "N"
                         End If
 
-                        prmHeader(32) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
-                        prmHeader(32).Value = Nothing
+                        prmHeader(29) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
+                        prmHeader(29).Value = Nothing
                     End If
 
-                    prmHeader(33) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
-                    prmHeader(33).Value = orgRoutingStatusId
+                    prmHeader(30) = New SqlParameter("@RoutingStatusId", SqlDbType.Int)
+                    prmHeader(30).Value = orgRoutingStatusId
 
                     If String.IsNullOrEmpty(txtProblem.Text.Trim) Then
-                        prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                        prmHeader(34).Value = Nothing
+                        prmHeader(31) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(31).Value = Nothing
                     Else
-                        prmHeader(34) = New SqlParameter("@Problem", SqlDbType.NVarChar)
-                        prmHeader(34).Value = txtProblem.Text.Trim
+                        prmHeader(31) = New SqlParameter("@Problem", SqlDbType.NVarChar)
+                        prmHeader(31).Value = txtProblem.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtRootCause.Text.Trim) Then
-                        prmHeader(35) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                        prmHeader(35).Value = Nothing
+                        prmHeader(32) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(32).Value = Nothing
                     Else
-                        prmHeader(35) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
-                        prmHeader(35).Value = txtRootCause.Text.Trim
+                        prmHeader(32) = New SqlParameter("@RootCause", SqlDbType.NVarChar)
+                        prmHeader(32).Value = txtRootCause.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
-                        prmHeader(36) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                        prmHeader(36).Value = Nothing
+                        prmHeader(33) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                        prmHeader(33).Value = Nothing
                     Else
-                        prmHeader(36) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
-                        prmHeader(36).Value = txtActionTaken.Text.Trim
-                    End If
-
-                    If picImage.Image Is Nothing Then
-                        prmHeader(37) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(37).Value = Nothing
-                        prmHeader(38) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(38).Value = Nothing
-                    Else
-                        Dim resImg As Image = dbMain.ResizeImage(picImage.Image, New Size(1024, 768))
-                        resImg.Save(mStream, ImageFormat.Jpeg)
-                        bite = mStream.GetBuffer
-                        prmHeader(37) = New SqlParameter("@Image", SqlDbType.Image)
-                        prmHeader(37).Value = bite
-                        prmHeader(38) = New SqlParameter("@ImageName", SqlDbType.NVarChar)
-                        prmHeader(38).Value = txtImageName.Text.Trim
+                        prmHeader(33) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
+                        prmHeader(33).Value = txtActionTaken.Text.Trim
                     End If
 
                     If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
-                        prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                        prmHeader(39).Value = Nothing
+                        prmHeader(34) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(34).Value = Nothing
                     Else
-                        prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
-                        prmHeader(39).Value = txtChecksheet.Text.Trim
+                        prmHeader(34) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
+                        prmHeader(34).Value = txtChecksheet.Text.Trim
                     End If
-
-                    'If String.IsNullOrEmpty(txt4M.Text.Trim) Then
-                    '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                    '    prmHeader(40).Value = Nothing
-                    'Else
-                    '    prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
-                    '    prmHeader(40).Value = txt4M.Text.Trim
-                    'End If
 
                     'set machine status to downtime
                     Dim prmMchStatus(2) As SqlParameter
@@ -2557,7 +2406,7 @@ Public Class FacTrxDetailMch
                     prmMchStatus(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                     prmMchStatus(2).Value = cmbDowntimeSubStatus.SelectedValue
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
 
                     'selected machine was changed, set original machine to operational
                     If orgMachineId <> cmbMachineName.SelectedValue Then
@@ -2569,11 +2418,11 @@ Public Class FacTrxDetailMch
                         prmMachineStatusOrg(2) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                         prmMachineStatusOrg(2).Value = 1
 
-                        dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
+                        dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
                 End If
 
-                dbMethod.ExecuteNonQuery("UpdMntTransactionHeader", CommandType.StoredProcedure, prmHeader)
+                dbMethod.ExecuteNonQuery("UpdFacTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
                 If orgScheduleId > 0 Then 'clear up the orig pm schedule slot
                     Dim prmOrgSchedule(8) As SqlParameter
@@ -2596,7 +2445,7 @@ Public Class FacTrxDetailMch
                     prmOrgSchedule(8) = New SqlParameter("@Remarks", SqlDbType.Int)
                     prmOrgSchedule(8).Value = Nothing
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineScheduleByScheduleId", CommandType.StoredProcedure, prmOrgSchedule)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmOrgSchedule)
                 End If
 
                 If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
@@ -2627,7 +2476,7 @@ Public Class FacTrxDetailMch
                     prmNewSchedule(5) = New SqlParameter("@ScheduleId", SqlDbType.Int)
                     prmNewSchedule(5).Value = scheduleId
 
-                    dbMethod.ExecuteNonQuery("UpdMntMachineSchedule", CommandType.StoredProcedure, prmNewSchedule)
+                    dbMethod.ExecuteNonQuery("UpdFacMachineSchedule", CommandType.StoredProcedure, prmNewSchedule)
                 End If
 
                 'transaction details
@@ -2646,7 +2495,7 @@ Public Class FacTrxDetailMch
                     prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmMchPart(1).Value = trxId
 
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                    dbMethod.ExecuteNonQuery("UpdFacTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
                 Else
                     Dim prmMchPart(1) As SqlParameter
                     prmMchPart(0) = New SqlParameter("@MachinePartId", SqlDbType.Int)
@@ -2654,7 +2503,7 @@ Public Class FacTrxDetailMch
                     prmMchPart(1) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmMchPart(1).Value = trxId
 
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
+                    dbMethod.ExecuteNonQuery("UpdFacTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
                 End If
 
                 'transaction spare part
@@ -2667,7 +2516,7 @@ Public Class FacTrxDetailMch
                     prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmSparePart(2).Value = trxId
 
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
+                    dbMethod.ExecuteNonQuery("UpdFacTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
                 Else
                     If String.IsNullOrEmpty(txtPartsNo.Text.Trim) Then
                         MessageBox.Show("Please indicate the part number.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -2683,7 +2532,7 @@ Public Class FacTrxDetailMch
                     prmSparePart(2) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmSparePart(2).Value = trxId
 
-                    dbMethod.ExecuteNonQuery("UpdMntTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
+                    dbMethod.ExecuteNonQuery("UpdFacTransactionSparePart", CommandType.StoredProcedure, prmSparePart)
                 End If
 
                 'transaction user - insert from pic gridview
@@ -2697,7 +2546,7 @@ Public Class FacTrxDetailMch
                     prmCount(1) = New SqlParameter("@UserId", SqlDbType.Int)
                     prmCount(1).Value = userId
 
-                    trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmCount)
+                    trxCount = dbMethod.ExecuteScalar("CntFacTransactionUser", CommandType.StoredProcedure, prmCount)
 
                     If trxCount > 0 Then
                         If isSelected Then
@@ -2710,7 +2559,7 @@ Public Class FacTrxDetailMch
                             prmDel(1) = New SqlParameter("@UserId", SqlDbType.Int)
                             prmDel(1).Value = userId
 
-                            dbMethod.ExecuteNonQuery("DelMntTransactionUserByUserId", CommandType.StoredProcedure, prmDel)
+                            dbMethod.ExecuteNonQuery("DelFacTransactionUserByUserId", CommandType.StoredProcedure, prmDel)
                         End If
                     Else
                         If isSelected Then
@@ -2721,7 +2570,7 @@ Public Class FacTrxDetailMch
                             prmIns(1) = New SqlParameter("@UserId", SqlDbType.Int)
                             prmIns(1).Value = userId
 
-                            dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns)
+                            dbMethod.ExecuteNonQuery("InsFacTransactionUser", CommandType.StoredProcedure, prmIns)
                         Else
                             'not selected - do nothing
                         End If
@@ -2736,7 +2585,7 @@ Public Class FacTrxDetailMch
                     prmIns1(1) = New SqlParameter("@UserId", SqlDbType.Int)
                     prmIns1(1).Value = row.Item("UserId")
 
-                    trxCount = dbMethod.ExecuteScalar("CntMntTransactionUser", CommandType.StoredProcedure, prmIns1)
+                    trxCount = dbMethod.ExecuteScalar("CntFacTransactionUser", CommandType.StoredProcedure, prmIns1)
 
                     If Not trxCount > 0 Then
                         Dim prmIns2(1) As SqlParameter
@@ -2745,20 +2594,79 @@ Public Class FacTrxDetailMch
                         prmIns2(1) = New SqlParameter("@UserId", SqlDbType.Int)
                         prmIns2(1).Value = row.Item("UserId")
 
-                        dbMethod.ExecuteNonQuery("InsMntTransactionUser", CommandType.StoredProcedure, prmIns2)
+                        dbMethod.ExecuteNonQuery("InsFacTransactionUser", CommandType.StoredProcedure, prmIns2)
                     End If
                 Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
 
-    Private Sub btnView4M_Click(sender As Object, e As EventArgs)
-        Try
-            'If Not String.IsNullOrEmpty(txt4M.Text.Trim) Then
-            '    Process.Start(txt4M.Text)
-            'End If
+                'transaction attachment
+                If lstImgForDelete.Count > 0 Then
+                    For i As Integer = 0 To lstImgForDelete.Count - 1
+                        Dim ext As String = String.Empty
+                        Dim newName As String = String.Empty
+                        ext = Path.GetExtension(lstImgForDelete(i).FileName).ToLower
+
+                        newName = trxId & "-" & lstImgForDelete(i).AttachmentId & ext
+
+                        File.Delete(imgDirectory & "\" & newName)
+                        Dim prmDel(0) As SqlParameter
+                        prmDel(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                        prmDel(0).Value = lstImgForDelete(i).AttachmentId
+
+                        dbMethod.ExecuteNonQuery("DelFacTransactionAttachmentByAttachmentId", CommandType.StoredProcedure, prmDel)
+                    Next
+                End If
+
+                If lstImg.Count > 0 Then
+                    For i As Integer = 0 To lstImg.Count - 1
+                        If lstImg(i).AttachmentId = 0 Then
+                            Dim prmAttachment(2) As SqlParameter
+                            prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                            prmAttachment(0).Direction = ParameterDirection.Output
+                            prmAttachment(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                            prmAttachment(1).Value = trxId
+                            prmAttachment(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                            prmAttachment(2).Value = ""
+
+                            dbMethod.ExecuteNonQuery("InsFacTransactionAttachment", CommandType.StoredProcedure, prmAttachment)
+
+                            Dim ext As String = String.Empty
+                            Dim newName As String = String.Empty
+                            ext = Path.GetExtension(lstImg(i).FileName).ToLower
+
+                            newName = trxId & "-" & prmAttachment(0).Value & ext
+
+                            Dim prmUpd(2) As SqlParameter
+                            prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                            prmUpd(0).Value = prmAttachment(0).Value
+                            prmUpd(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                            prmUpd(1).Value = prmHeader(0).Value
+                            prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                            prmUpd(2).Value = newName
+
+                            dbMethod.ExecuteNonQuery("UpdFacTransactionAttachment", CommandType.StoredProcedure, prmUpd)
+
+                            pbAttachment.Visible = True
+                            lblProgress.Visible = True
+
+                            Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
+                            lstImgForCopy.Add(copyAttachment)
+                        End If
+                    Next
+                End If
+
+                btnPrevious.Enabled = False
+                btnNext.Enabled = False
+                btnViewImage.Enabled = False
+                btnBrowseImage.Enabled = False
+                btnRemoveImage.Enabled = False
+                btnSave.Enabled = False
+                btnCancel.Enabled = False
+                btnDelete.Enabled = False
+                btnClose.Enabled = False
+                Me.ControlBox = False
+
+                bgWorker.RunWorkerAsync()
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3012,38 +2920,22 @@ Public Class FacTrxDetailMch
                     txtScheduleWeek.Text = String.Empty
                     txtScheduleMonth.Enabled = False
                     txtScheduleWeek.Enabled = False
-
-                    'If orgMachineSubStatusId = 3 Then
-                    '    Dim prmSched(1) As SqlParameter
-                    '    prmSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                    '    prmSched(0).Value = cmbMachineName.SelectedValue
-                    '    prmSched(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    '    prmSched(1).Value = trxId
-
-                    '    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId"
-                    '    Dim rdrSched As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSched)
-
-                    '    If rdrSched.Read Then
-                    '        orgScheduleId = rdrSched.Item("ScheduleId")
-                    '    End If
-                    '    rdrSched.Close()
-                    'End If
                 End If
 
                 If trxId = 0 Then
 
                 Else
                     If isAdmin Or accessLevelId = 1 Then
-                        cmbDowntimeSubStatus.Enabled = True
+
                     Else
                         Select Case accessLevelId
                             Case 2, 3
                                 If orgRoutingStatusId = 3 Or orgRoutingStatusId = 4 Then
-                                    cmbDowntimeSubStatus.Enabled = True
+
                                 End If
                             Case Else
                                 If orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
-                                    cmbDowntimeSubStatus.Enabled = True
+
                                 End If
                         End Select
                     End If
@@ -3422,14 +3314,10 @@ Public Class FacTrxDetailMch
             Else
                 Me.Text = "Activity No. " & trxId
 
+                'FacTransactionHeader
                 For Each row As DataRow In dtTrxHeader.Rows
                     orgMachineId = row("MachineId")
                     orgMachineSubStatusId = row("DowntimeMachineSubStatusId")
-
-                    'transaction header
-                    'Dim dRow As DataRow = dtRoutingStatus.Select("RoutingStatusId = " & row("RoutingStatusId") & "")(0)
-                    'txtRoutingStatus.Text = dRow("RoutingStatusName").ToString.Trim
-                    'orgRoutingStatusId = dRow("RoutingStatusId")
 
                     LoadRoutingStatus(row("RoutingStatusId"))
                     orgRoutingStatusId = row("RoutingStatusId")
@@ -3471,17 +3359,6 @@ Public Class FacTrxDetailMch
 
                     If Not row("JoRequestor") Is DBNull.Value Then
                         txtJoRequestor.Text = row("JoRequestor")
-                    End If
-
-                    If Not row("Image") Is DBNull.Value Then
-                        bite = row("Image")
-                        Using ms As New MemoryStream(bite)
-                            picImage.Image = Image.FromStream(ms)
-                        End Using
-                    End If
-
-                    If Not row("ImageName") Is DBNull.Value Then
-                        txtImageName.Text = row("ImageName")
                     End If
 
                     If Not row("LinkChecksheet") Is DBNull.Value Then
@@ -3586,6 +3463,33 @@ Public Class FacTrxDetailMch
                     End If
                 Next
 
+                'FacTransactionAttachment
+                Dim aCount As Integer = 0
+                Dim prmCount(0) As SqlParameter
+                prmCount(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmCount(0).Value = trxId
+
+                aCount = dbMethod.ExecuteScalar("CntTransactionAttachmentByTrxId", CommandType.StoredProcedure, prmCount)
+
+                If aCount > 0 Then
+                    Dim prmRead(0) As SqlParameter
+                    prmRead(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmRead(0).Value = trxId
+
+                    dtTrxAttachment = dbMethod.FillDataTable("RdFacTransactionAttachmentByTrxId", CommandType.StoredProcedure, prmRead)
+
+                    For i As Integer = 0 To dtTrxAttachment.Rows.Count - 1
+                        Dim oldAttachment As New ImgAttachment(Path.Combine(imgDirectory, dtTrxAttachment.Rows(i).Item("Filename").ToString),
+                                                           dtTrxAttachment.Rows(i).Item("Filename").ToString,
+                                                           Path.GetExtension(Path.Combine(imgDirectory, dtTrxAttachment.Rows(i).Item("Filename").ToString)),
+                                                           dtTrxAttachment.Rows(i).Item("AttachmentId"))
+                        lstImg.Add(oldAttachment)
+                        currentIndex = 0
+                    Next
+                    ShowAttachment()
+                End If
+
+                'FacTransactionMachinePart
                 For Each row As DataRow In dtTrxMachinePart.Rows
                     If Not row("MachinePartId") Is DBNull.Value Then
                         cmbMachinePart.SelectedValue = row("MachinePartId")
@@ -3595,6 +3499,7 @@ Public Class FacTrxDetailMch
                     End If
                 Next
 
+                'FacTransactionSparePart
                 For Each row As DataRow In dtTrxSparePart.Rows
                     If Not row("SparePartName") Is DBNull.Value AndAlso Not row("SparePartNo") Is DBNull.Value Then
                         txtPartsReplaced.Text = row("SparePartName")
@@ -3664,17 +3569,14 @@ Public Class FacTrxDetailMch
                 txtJoNumber.Enabled = False
                 txtJoRequestor.Enabled = False
                 txtChecksheet.Enabled = False
-                'txt4M.Enabled = False
 
                 btnAddRow.Enabled = False
                 btnRemoveRow.Enabled = False
                 btnBrowseImage.Enabled = False
                 btnRemoveImage.Enabled = False
                 btnRemoveChecksheet.Enabled = False
-                'btnRemove4M.Enabled = False
 
                 btnViewChecksheet.Enabled = True
-                'btnView4M.Enabled = True
                 btnViewImage.Enabled = True
 
                 dgvPic.ClearSelection()
@@ -3783,6 +3685,7 @@ Public Class FacTrxDetailMch
                     scheduleId = rdrSchedule.Item("ScheduleId")
                     monthId = rdrSchedule.Item("MonthId")
                     weekId = rdrSchedule.Item("WeekId")
+
                     txtScheduleMonth.Text = MonthName(monthId)
                     txtScheduleWeek.Text = weekId
                 Else
@@ -3798,83 +3701,112 @@ Public Class FacTrxDetailMch
 
                     Return
                 End If
+                rdrSchedule.Close()
 
-            Else
-                'If orgMachineId = machineId Then 'same machine
-                '    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'pm to pm
-                '        Dim prmSchedule(1) As SqlParameter
-                '        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                '        prmSchedule(0).Value = machineId
-                '        prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                '        prmSchedule(1).Value = trxId
+            Else 'existing record
+                If orgMachineId = machineId Then 'same machine
+                    If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'same sub status (pm)
+                        Dim prmSchedule(1) As SqlParameter
+                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSchedule(0).Value = machineId
+                        prmSchedule(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmSchedule(1).Value = trxId
 
-                '        Dim query As String =
-                '            "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId ORDER BY YearId, MonthId, WeekId"
-                '        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                        Dim query As String =
+                            "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule WHERE MachineId = @MachineId AND TrxId = @TrxId ORDER BY YearId, MonthId, WeekId"
 
-                '        If rdrSchedule.Read Then
-                '            scheduleId = rdrSchedule.Item("ScheduleId")
-                '            monthId = rdrSchedule.Item("MonthId")
-                '            weekId = rdrSchedule.Item("WeekId")
-                '            txtScheduleMonth.Text = MonthName(monthId)
-                '            txtScheduleWeek.Text = weekId
-                '        End If
-                '        rdrSchedule.Close()
-                '    Else 'non-pm to pm
-                '        Dim prmSchedule(0) As SqlParameter
-                '        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                '        prmSchedule(0).Value = machineId
+                        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
-                '        Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND " &
-                '                              "ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
-                '        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
+                        If rdrSchedule.Read Then
+                            scheduleId = rdrSchedule.Item("ScheduleId")
+                            monthId = rdrSchedule.Item("MonthId")
+                            weekId = rdrSchedule.Item("WeekId")
 
-                '        If rdrSchedule.Read Then
-                '            scheduleId = rdrSchedule.Item("ScheduleId")
-                '            monthId = rdrSchedule.Item("MonthId")
-                '            weekId = rdrSchedule.Item("WeekId")
-                '            txtScheduleMonth.Text = MonthName(monthId)
-                '            txtScheduleWeek.Text = weekId
-                '        End If
-                '    End If
-                'Else 'selected machine was changed
-                '    Dim prmNewSched(0) As SqlParameter
-                '    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-                '    prmNewSched(0).Value = machineId
+                            txtScheduleMonth.Text = MonthName(monthId)
+                            txtScheduleWeek.Text = weekId
+                        End If
+                        rdrSchedule.Close()
 
-                '    Dim query As String = "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwMntMachineSchedule WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
-                '    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
+                    Else 'non-pm to pm and/or vice versa
+                        Dim prmSchedule(0) As SqlParameter
+                        prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                        prmSchedule(0).Value = machineId
 
-                '    If rdrSchedule.Read Then 'non-pm to pm
-                '        scheduleId = rdrSchedule.Item("ScheduleId")
-                '        monthId = rdrSchedule.Item("MonthId")
-                '        weekId = rdrSchedule.Item("WeekId")
-                '        txtScheduleMonth.Text = MonthName(monthId)
-                '        txtScheduleWeek.Text = weekId
+                        Dim query As String =
+                            "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule " &
+                            "WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
 
-                '        Dim prmOrgSched(0) As SqlParameter 'pm to pm
-                '        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                '        prmOrgSched(0).Value = trxId
+                        Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmSchedule)
 
-                '        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
-                '        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
+                        If rdrSchedule.Read Then
+                            scheduleId = rdrSchedule.Item("ScheduleId")
+                            monthId = rdrSchedule.Item("MonthId")
+                            weekId = rdrSchedule.Item("WeekId")
 
-                '        While rdrOrgSched.Read
-                '            orgScheduleId = rdrOrgSched.Item("ScheduleId")
-                '        End While
-                '        rdrOrgSched.Close()
-                '    Else
-                '        MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                '        cmbDowntimeSubStatus.SelectedValue = 0
-                '        txtScheduleMonth.Text = String.Empty
-                '        txtScheduleWeek.Text = String.Empty
+                            txtScheduleMonth.Text = MonthName(monthId)
+                            txtScheduleWeek.Text = weekId
 
-                '        scheduleId = 0
-                '        monthId = 0
-                '        weekId = 0
-                '    End If
-                '    rdrSchedule.Close()
-                'End If
+                        Else
+                            MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            cmbDowntimeStatus.SelectedValue = 0
+                            cmbDowntimeSubStatus.SelectedValue = 0
+                            txtScheduleMonth.Text = String.Empty
+                            txtScheduleWeek.Text = String.Empty
+
+                            scheduleId = 0
+                            monthId = 0
+                            weekId = 0
+
+                            Return
+                        End If
+                        rdrSchedule.Close()
+                    End If
+
+                Else 'selected machine was changed
+                    Dim prmNewSched(0) As SqlParameter
+                    prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                    prmNewSched(0).Value = machineId
+
+                    Dim query As String =
+                        "SELECT TOP 1 ScheduleId, MonthId, WeekId FROM VwFacMachineSchedule " &
+                        "WHERE MachineId = @MachineId AND ActivityDate IS NULL AND IsDone = 0 ORDER BY YearId, MonthId, WeekId"
+
+                    Dim rdrSchedule As IDataReader = dbMethod.ExecuteReader(query, CommandType.Text, prmNewSched)
+
+                    If rdrSchedule.Read Then
+                        scheduleId = rdrSchedule.Item("ScheduleId")
+                        monthId = rdrSchedule.Item("MonthId")
+                        weekId = rdrSchedule.Item("WeekId")
+
+                        txtScheduleMonth.Text = MonthName(monthId)
+                        txtScheduleWeek.Text = weekId
+
+                        Dim prmOrgSched(0) As SqlParameter 'pm to pm
+                        prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmOrgSched(0).Value = trxId
+
+                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
+
+                        Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
+
+                        While rdrOrgSched.Read
+                            orgScheduleId = rdrOrgSched.Item("ScheduleId")
+                        End While
+                        rdrOrgSched.Close()
+
+                    Else
+                        MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        cmbDowntimeSubStatus.SelectedValue = 0
+                        txtScheduleMonth.Text = String.Empty
+                        txtScheduleWeek.Text = String.Empty
+
+                        scheduleId = 0
+                        monthId = 0
+                        weekId = 0
+
+                        Return
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -4173,8 +4105,8 @@ Public Class FacTrxDetailMch
     Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
             For i As Integer = 0 To ofdImage.FileNames.Length - 1
-                Dim imgAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
-                lstImg.Add(imgAttachment)
+                Dim newAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
+                lstImg.Add(newAttachment)
                 currentIndex = lstImg.Count - 1
             Next
             ShowAttachment()
@@ -4411,6 +4343,5 @@ Public Class FacTrxDetailMch
         lblScheduleWeek.ForeColor = Color.Black
         lblScheduleWeek.BackColor = SystemColors.Control
     End Sub
-
 
 End Class
