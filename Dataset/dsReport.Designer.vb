@@ -27,6 +27,10 @@ Partial Public Class dsReport
     
     Private tableRptMntActivityReport As RptMntActivityReportDataTable
     
+    Private tableRptFacActivityReport As RptFacActivityReportDataTable
+    
+    Private tableRptFacActivityReport2 As RptFacActivityReport2DataTable
+    
     Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -59,6 +63,12 @@ Partial Public Class dsReport
             If (Not (ds.Tables("RptMntActivityReport")) Is Nothing) Then
                 MyBase.Tables.Add(New RptMntActivityReportDataTable(ds.Tables("RptMntActivityReport")))
             End If
+            If (Not (ds.Tables("RptFacActivityReport")) Is Nothing) Then
+                MyBase.Tables.Add(New RptFacActivityReportDataTable(ds.Tables("RptFacActivityReport")))
+            End If
+            If (Not (ds.Tables("RptFacActivityReport2")) Is Nothing) Then
+                MyBase.Tables.Add(New RptFacActivityReport2DataTable(ds.Tables("RptFacActivityReport2")))
+            End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
             Me.Namespace = ds.Namespace
@@ -83,6 +93,26 @@ Partial Public Class dsReport
     Public ReadOnly Property RptMntActivityReport() As RptMntActivityReportDataTable
         Get
             Return Me.tableRptMntActivityReport
+        End Get
+    End Property
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+     Global.System.ComponentModel.Browsable(false),  _
+     Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+    Public ReadOnly Property RptFacActivityReport() As RptFacActivityReportDataTable
+        Get
+            Return Me.tableRptFacActivityReport
+        End Get
+    End Property
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+     Global.System.ComponentModel.Browsable(false),  _
+     Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+    Public ReadOnly Property RptFacActivityReport2() As RptFacActivityReport2DataTable
+        Get
+            Return Me.tableRptFacActivityReport2
         End Get
     End Property
     
@@ -156,6 +186,12 @@ Partial Public Class dsReport
             If (Not (ds.Tables("RptMntActivityReport")) Is Nothing) Then
                 MyBase.Tables.Add(New RptMntActivityReportDataTable(ds.Tables("RptMntActivityReport")))
             End If
+            If (Not (ds.Tables("RptFacActivityReport")) Is Nothing) Then
+                MyBase.Tables.Add(New RptFacActivityReportDataTable(ds.Tables("RptFacActivityReport")))
+            End If
+            If (Not (ds.Tables("RptFacActivityReport2")) Is Nothing) Then
+                MyBase.Tables.Add(New RptFacActivityReport2DataTable(ds.Tables("RptFacActivityReport2")))
+            End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
             Me.Namespace = ds.Namespace
@@ -194,6 +230,18 @@ Partial Public Class dsReport
                 Me.tableRptMntActivityReport.InitVars
             End If
         End If
+        Me.tableRptFacActivityReport = CType(MyBase.Tables("RptFacActivityReport"),RptFacActivityReportDataTable)
+        If (initTable = true) Then
+            If (Not (Me.tableRptFacActivityReport) Is Nothing) Then
+                Me.tableRptFacActivityReport.InitVars
+            End If
+        End If
+        Me.tableRptFacActivityReport2 = CType(MyBase.Tables("RptFacActivityReport2"),RptFacActivityReport2DataTable)
+        If (initTable = true) Then
+            If (Not (Me.tableRptFacActivityReport2) Is Nothing) Then
+                Me.tableRptFacActivityReport2.InitVars
+            End If
+        End If
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -206,11 +254,27 @@ Partial Public Class dsReport
         Me.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         Me.tableRptMntActivityReport = New RptMntActivityReportDataTable()
         MyBase.Tables.Add(Me.tableRptMntActivityReport)
+        Me.tableRptFacActivityReport = New RptFacActivityReportDataTable()
+        MyBase.Tables.Add(Me.tableRptFacActivityReport)
+        Me.tableRptFacActivityReport2 = New RptFacActivityReport2DataTable()
+        MyBase.Tables.Add(Me.tableRptFacActivityReport2)
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
     Private Function ShouldSerializeRptMntActivityReport() As Boolean
+        Return false
+    End Function
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Private Function ShouldSerializeRptFacActivityReport() As Boolean
+        Return false
+    End Function
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Private Function ShouldSerializeRptFacActivityReport2() As Boolean
         Return false
     End Function
     
@@ -274,6 +338,12 @@ Partial Public Class dsReport
     
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
     Public Delegate Sub RptMntActivityReportRowChangeEventHandler(ByVal sender As Object, ByVal e As RptMntActivityReportRowChangeEvent)
+    
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Public Delegate Sub RptFacActivityReportRowChangeEventHandler(ByVal sender As Object, ByVal e As RptFacActivityReportRowChangeEvent)
+    
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Public Delegate Sub RptFacActivityReport2RowChangeEventHandler(ByVal sender As Object, ByVal e As RptFacActivityReport2RowChangeEvent)
     
     '''<summary>
     '''Represents the strongly named DataTable class.
@@ -942,6 +1012,1248 @@ Partial Public Class dsReport
             Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
             attribute2.Name = "tableTypeName"
             attribute2.FixedValue = "RptMntActivityReportDataTable"
+            type.Attributes.Add(attribute2)
+            type.Particle = sequence
+            Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+            If xs.Contains(dsSchema.TargetNamespace) Then
+                Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Try 
+                    Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                    dsSchema.Write(s1)
+                    Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                    Do While schemas.MoveNext
+                        schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                        s2.SetLength(0)
+                        schema.Write(s2)
+                        If (s1.Length = s2.Length) Then
+                            s1.Position = 0
+                            s2.Position = 0
+                            
+                            Do While ((s1.Position <> s1.Length)  _
+                                        AndAlso (s1.ReadByte = s2.ReadByte))
+                                
+                                
+                            Loop
+                            If (s1.Position = s1.Length) Then
+                                Return type
+                            End If
+                        End If
+                        
+                    Loop
+                Finally
+                    If (Not (s1) Is Nothing) Then
+                        s1.Close
+                    End If
+                    If (Not (s2) Is Nothing) Then
+                        s2.Close
+                    End If
+                End Try
+            End If
+            xs.Add(dsSchema)
+            Return type
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the strongly named DataTable class.
+    '''</summary>
+    <Global.System.Serializable(),  _
+     Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+    Partial Public Class RptFacActivityReportDataTable
+        Inherits Global.System.Data.TypedTableBase(Of RptFacActivityReportRow)
+        
+        Private columnTrxId As Global.System.Data.DataColumn
+        
+        Private columnTrxDate As Global.System.Data.DataColumn
+        
+        Private columnShiftId As Global.System.Data.DataColumn
+        
+        Private columnAreaId As Global.System.Data.DataColumn
+        
+        Private columnAreaName As Global.System.Data.DataColumn
+        
+        Private columnMachineId As Global.System.Data.DataColumn
+        
+        Private columnMachineName As Global.System.Data.DataColumn
+        
+        Private columnDowntimeMachineSubStatusId As Global.System.Data.DataColumn
+        
+        Private columnMachineSubStatusName As Global.System.Data.DataColumn
+        
+        Private columnDatetimeStarted As Global.System.Data.DataColumn
+        
+        Private columnDatetimeEnded As Global.System.Data.DataColumn
+        
+        Private columnTrxFrom As Global.System.Data.DataColumn
+        
+        Private columnTrxTo As Global.System.Data.DataColumn
+        
+        Private columnElapsedTime As Global.System.Data.DataColumn
+        
+        Private columnTotalAccumulatedDowntime As Global.System.Data.DataColumn
+        
+        Private columnUserId As Global.System.Data.DataColumn
+        
+        Private columnPicName As Global.System.Data.DataColumn
+        
+        Private columnProblem As Global.System.Data.DataColumn
+        
+        Private columnRootCause As Global.System.Data.DataColumn
+        
+        Private columnActionTaken As Global.System.Data.DataColumn
+        
+        Private columnJoNumber As Global.System.Data.DataColumn
+        
+        Private columnJoRequestor As Global.System.Data.DataColumn
+        
+        Private columnTrxStatusId As Global.System.Data.DataColumn
+        
+        Private columnTrxStatusName As Global.System.Data.DataColumn
+        
+        Private columnSparePartName As Global.System.Data.DataColumn
+        
+        Private columnSparePartNo As Global.System.Data.DataColumn
+        
+        Private columnFilename As Global.System.Data.DataColumn
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.TableName = "RptFacActivityReport"
+            Me.BeginInit
+            Me.InitClass
+            Me.EndInit
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub New(ByVal table As Global.System.Data.DataTable)
+            MyBase.New
+            Me.TableName = table.TableName
+            If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                Me.CaseSensitive = table.CaseSensitive
+            End If
+            If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                Me.Locale = table.Locale
+            End If
+            If (table.Namespace <> table.DataSet.Namespace) Then
+                Me.Namespace = table.Namespace
+            End If
+            Me.Prefix = table.Prefix
+            Me.MinimumCapacity = table.MinimumCapacity
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+            Me.InitVars
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxDateColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxDate
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ShiftIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnShiftId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property AreaIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAreaId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property AreaNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAreaName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DowntimeMachineSubStatusIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDowntimeMachineSubStatusId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineSubStatusNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineSubStatusName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DatetimeStartedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDatetimeStarted
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DatetimeEndedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDatetimeEnded
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxFromColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxFrom
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxToColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxTo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ElapsedTimeColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnElapsedTime
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TotalAccumulatedDowntimeColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTotalAccumulatedDowntime
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property UserIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnUserId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property PicNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnPicName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ProblemColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnProblem
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property RootCauseColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnRootCause
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ActionTakenColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnActionTaken
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property JoNumberColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnJoNumber
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property JoRequestorColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnJoRequestor
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxStatusIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxStatusId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxStatusNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxStatusName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartNo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property FilenameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnFilename
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false)>  _
+        Public ReadOnly Property Count() As Integer
+            Get
+                Return Me.Rows.Count
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Default ReadOnly Property Item(ByVal index As Integer) As RptFacActivityReportRow
+            Get
+                Return CType(Me.Rows(index),RptFacActivityReportRow)
+            End Get
+        End Property
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReportRowChanging As RptFacActivityReportRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReportRowChanged As RptFacActivityReportRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReportRowDeleting As RptFacActivityReportRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReportRowDeleted As RptFacActivityReportRowChangeEventHandler
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overloads Sub AddRptFacActivityReportRow(ByVal row As RptFacActivityReportRow)
+            Me.Rows.Add(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overloads Function AddRptFacActivityReportRow( _
+                    ByVal TrxDate As Date,  _
+                    ByVal ShiftId As String,  _
+                    ByVal AreaId As Integer,  _
+                    ByVal AreaName As String,  _
+                    ByVal MachineId As Integer,  _
+                    ByVal MachineName As String,  _
+                    ByVal DowntimeMachineSubStatusId As Integer,  _
+                    ByVal MachineSubStatusName As String,  _
+                    ByVal DatetimeStarted As Date,  _
+                    ByVal DatetimeEnded As Date,  _
+                    ByVal TrxFrom As Date,  _
+                    ByVal TrxTo As Date,  _
+                    ByVal ElapsedTime As Integer,  _
+                    ByVal TotalAccumulatedDowntime As Integer,  _
+                    ByVal UserId As Integer,  _
+                    ByVal PicName As String,  _
+                    ByVal Problem As String,  _
+                    ByVal RootCause As String,  _
+                    ByVal ActionTaken As String,  _
+                    ByVal JoNumber As String,  _
+                    ByVal JoRequestor As String,  _
+                    ByVal TrxStatusId As Integer,  _
+                    ByVal TrxStatusName As String,  _
+                    ByVal SparePartName As String,  _
+                    ByVal SparePartNo As String,  _
+                    ByVal Filename As String) As RptFacActivityReportRow
+            Dim rowRptFacActivityReportRow As RptFacActivityReportRow = CType(Me.NewRow,RptFacActivityReportRow)
+            Dim columnValuesArray() As Object = New Object() {Nothing, TrxDate, ShiftId, AreaId, AreaName, MachineId, MachineName, DowntimeMachineSubStatusId, MachineSubStatusName, DatetimeStarted, DatetimeEnded, TrxFrom, TrxTo, ElapsedTime, TotalAccumulatedDowntime, UserId, PicName, Problem, RootCause, ActionTaken, JoNumber, JoRequestor, TrxStatusId, TrxStatusName, SparePartName, SparePartNo, Filename}
+            rowRptFacActivityReportRow.ItemArray = columnValuesArray
+            Me.Rows.Add(rowRptFacActivityReportRow)
+            Return rowRptFacActivityReportRow
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function FindByTrxId(ByVal TrxId As Integer) As RptFacActivityReportRow
+            Return CType(Me.Rows.Find(New Object() {TrxId}),RptFacActivityReportRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overrides Function Clone() As Global.System.Data.DataTable
+            Dim cln As RptFacActivityReportDataTable = CType(MyBase.Clone,RptFacActivityReportDataTable)
+            cln.InitVars
+            Return cln
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+            Return New RptFacActivityReportDataTable()
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub InitVars()
+            Me.columnTrxId = MyBase.Columns("TrxId")
+            Me.columnTrxDate = MyBase.Columns("TrxDate")
+            Me.columnShiftId = MyBase.Columns("ShiftId")
+            Me.columnAreaId = MyBase.Columns("AreaId")
+            Me.columnAreaName = MyBase.Columns("AreaName")
+            Me.columnMachineId = MyBase.Columns("MachineId")
+            Me.columnMachineName = MyBase.Columns("MachineName")
+            Me.columnDowntimeMachineSubStatusId = MyBase.Columns("DowntimeMachineSubStatusId")
+            Me.columnMachineSubStatusName = MyBase.Columns("MachineSubStatusName")
+            Me.columnDatetimeStarted = MyBase.Columns("DatetimeStarted")
+            Me.columnDatetimeEnded = MyBase.Columns("DatetimeEnded")
+            Me.columnTrxFrom = MyBase.Columns("TrxFrom")
+            Me.columnTrxTo = MyBase.Columns("TrxTo")
+            Me.columnElapsedTime = MyBase.Columns("ElapsedTime")
+            Me.columnTotalAccumulatedDowntime = MyBase.Columns("TotalAccumulatedDowntime")
+            Me.columnUserId = MyBase.Columns("UserId")
+            Me.columnPicName = MyBase.Columns("PicName")
+            Me.columnProblem = MyBase.Columns("Problem")
+            Me.columnRootCause = MyBase.Columns("RootCause")
+            Me.columnActionTaken = MyBase.Columns("ActionTaken")
+            Me.columnJoNumber = MyBase.Columns("JoNumber")
+            Me.columnJoRequestor = MyBase.Columns("JoRequestor")
+            Me.columnTrxStatusId = MyBase.Columns("TrxStatusId")
+            Me.columnTrxStatusName = MyBase.Columns("TrxStatusName")
+            Me.columnSparePartName = MyBase.Columns("SparePartName")
+            Me.columnSparePartNo = MyBase.Columns("SparePartNo")
+            Me.columnFilename = MyBase.Columns("Filename")
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Private Sub InitClass()
+            Me.columnTrxId = New Global.System.Data.DataColumn("TrxId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxId)
+            Me.columnTrxDate = New Global.System.Data.DataColumn("TrxDate", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxDate)
+            Me.columnShiftId = New Global.System.Data.DataColumn("ShiftId", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnShiftId)
+            Me.columnAreaId = New Global.System.Data.DataColumn("AreaId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAreaId)
+            Me.columnAreaName = New Global.System.Data.DataColumn("AreaName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAreaName)
+            Me.columnMachineId = New Global.System.Data.DataColumn("MachineId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineId)
+            Me.columnMachineName = New Global.System.Data.DataColumn("MachineName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineName)
+            Me.columnDowntimeMachineSubStatusId = New Global.System.Data.DataColumn("DowntimeMachineSubStatusId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDowntimeMachineSubStatusId)
+            Me.columnMachineSubStatusName = New Global.System.Data.DataColumn("MachineSubStatusName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineSubStatusName)
+            Me.columnDatetimeStarted = New Global.System.Data.DataColumn("DatetimeStarted", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDatetimeStarted)
+            Me.columnDatetimeEnded = New Global.System.Data.DataColumn("DatetimeEnded", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDatetimeEnded)
+            Me.columnTrxFrom = New Global.System.Data.DataColumn("TrxFrom", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxFrom)
+            Me.columnTrxTo = New Global.System.Data.DataColumn("TrxTo", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxTo)
+            Me.columnElapsedTime = New Global.System.Data.DataColumn("ElapsedTime", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnElapsedTime)
+            Me.columnTotalAccumulatedDowntime = New Global.System.Data.DataColumn("TotalAccumulatedDowntime", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTotalAccumulatedDowntime)
+            Me.columnUserId = New Global.System.Data.DataColumn("UserId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnUserId)
+            Me.columnPicName = New Global.System.Data.DataColumn("PicName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnPicName)
+            Me.columnProblem = New Global.System.Data.DataColumn("Problem", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnProblem)
+            Me.columnRootCause = New Global.System.Data.DataColumn("RootCause", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnRootCause)
+            Me.columnActionTaken = New Global.System.Data.DataColumn("ActionTaken", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnActionTaken)
+            Me.columnJoNumber = New Global.System.Data.DataColumn("JoNumber", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnJoNumber)
+            Me.columnJoRequestor = New Global.System.Data.DataColumn("JoRequestor", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnJoRequestor)
+            Me.columnTrxStatusId = New Global.System.Data.DataColumn("TrxStatusId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxStatusId)
+            Me.columnTrxStatusName = New Global.System.Data.DataColumn("TrxStatusName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxStatusName)
+            Me.columnSparePartName = New Global.System.Data.DataColumn("SparePartName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartName)
+            Me.columnSparePartNo = New Global.System.Data.DataColumn("SparePartNo", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartNo)
+            Me.columnFilename = New Global.System.Data.DataColumn("Filename", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnFilename)
+            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnTrxId}, true))
+            Me.columnTrxId.AutoIncrement = true
+            Me.columnTrxId.AllowDBNull = false
+            Me.columnTrxId.ReadOnly = true
+            Me.columnTrxId.Unique = true
+            Me.columnTrxDate.AllowDBNull = false
+            Me.columnShiftId.MaxLength = 1
+            Me.columnAreaId.AllowDBNull = false
+            Me.columnAreaName.ReadOnly = true
+            Me.columnAreaName.MaxLength = 100
+            Me.columnMachineName.ReadOnly = true
+            Me.columnMachineName.MaxLength = 50
+            Me.columnMachineSubStatusName.ReadOnly = true
+            Me.columnMachineSubStatusName.MaxLength = 50
+            Me.columnDatetimeStarted.AllowDBNull = false
+            Me.columnPicName.ReadOnly = true
+            Me.columnPicName.MaxLength = 2147483647
+            Me.columnProblem.ReadOnly = true
+            Me.columnProblem.MaxLength = 2147483647
+            Me.columnRootCause.ReadOnly = true
+            Me.columnRootCause.MaxLength = 2147483647
+            Me.columnActionTaken.ReadOnly = true
+            Me.columnActionTaken.MaxLength = 2147483647
+            Me.columnJoNumber.ReadOnly = true
+            Me.columnJoNumber.MaxLength = 15
+            Me.columnJoRequestor.ReadOnly = true
+            Me.columnJoRequestor.MaxLength = 50
+            Me.columnTrxStatusId.AllowDBNull = false
+            Me.columnTrxStatusName.ReadOnly = true
+            Me.columnTrxStatusName.MaxLength = 10
+            Me.columnSparePartName.ReadOnly = true
+            Me.columnSparePartName.MaxLength = 2147483647
+            Me.columnSparePartNo.ReadOnly = true
+            Me.columnSparePartNo.MaxLength = 50
+            Me.columnFilename.ReadOnly = true
+            Me.columnFilename.MaxLength = 2147483647
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function NewRptFacActivityReportRow() As RptFacActivityReportRow
+            Return CType(Me.NewRow,RptFacActivityReportRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+            Return New RptFacActivityReportRow(builder)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function GetRowType() As Global.System.Type
+            Return GetType(RptFacActivityReportRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanged(e)
+            If (Not (Me.RptFacActivityReportRowChangedEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReportRowChanged(Me, New RptFacActivityReportRowChangeEvent(CType(e.Row,RptFacActivityReportRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanging(e)
+            If (Not (Me.RptFacActivityReportRowChangingEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReportRowChanging(Me, New RptFacActivityReportRowChangeEvent(CType(e.Row,RptFacActivityReportRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleted(e)
+            If (Not (Me.RptFacActivityReportRowDeletedEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReportRowDeleted(Me, New RptFacActivityReportRowChangeEvent(CType(e.Row,RptFacActivityReportRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleting(e)
+            If (Not (Me.RptFacActivityReportRowDeletingEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReportRowDeleting(Me, New RptFacActivityReportRowChangeEvent(CType(e.Row,RptFacActivityReportRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub RemoveRptFacActivityReportRow(ByVal row As RptFacActivityReportRow)
+            Me.Rows.Remove(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+            Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+            Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+            Dim ds As dsReport = New dsReport()
+            Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+            any1.MinOccurs = New Decimal(0)
+            any1.MaxOccurs = Decimal.MaxValue
+            any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any1)
+            Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+            any2.MinOccurs = New Decimal(1)
+            any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any2)
+            Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute1.Name = "namespace"
+            attribute1.FixedValue = ds.Namespace
+            type.Attributes.Add(attribute1)
+            Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute2.Name = "tableTypeName"
+            attribute2.FixedValue = "RptFacActivityReportDataTable"
+            type.Attributes.Add(attribute2)
+            type.Particle = sequence
+            Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+            If xs.Contains(dsSchema.TargetNamespace) Then
+                Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Try 
+                    Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                    dsSchema.Write(s1)
+                    Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                    Do While schemas.MoveNext
+                        schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                        s2.SetLength(0)
+                        schema.Write(s2)
+                        If (s1.Length = s2.Length) Then
+                            s1.Position = 0
+                            s2.Position = 0
+                            
+                            Do While ((s1.Position <> s1.Length)  _
+                                        AndAlso (s1.ReadByte = s2.ReadByte))
+                                
+                                
+                            Loop
+                            If (s1.Position = s1.Length) Then
+                                Return type
+                            End If
+                        End If
+                        
+                    Loop
+                Finally
+                    If (Not (s1) Is Nothing) Then
+                        s1.Close
+                    End If
+                    If (Not (s2) Is Nothing) Then
+                        s2.Close
+                    End If
+                End Try
+            End If
+            xs.Add(dsSchema)
+            Return type
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the strongly named DataTable class.
+    '''</summary>
+    <Global.System.Serializable(),  _
+     Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+    Partial Public Class RptFacActivityReport2DataTable
+        Inherits Global.System.Data.TypedTableBase(Of RptFacActivityReport2Row)
+        
+        Private columnTrxId As Global.System.Data.DataColumn
+        
+        Private columnTrxDate As Global.System.Data.DataColumn
+        
+        Private columnShiftId As Global.System.Data.DataColumn
+        
+        Private columnAreaId As Global.System.Data.DataColumn
+        
+        Private columnAreaName As Global.System.Data.DataColumn
+        
+        Private columnMachineId As Global.System.Data.DataColumn
+        
+        Private columnMachineName As Global.System.Data.DataColumn
+        
+        Private columnDowntimeMachineSubStatusId As Global.System.Data.DataColumn
+        
+        Private columnMachineSubStatusName As Global.System.Data.DataColumn
+        
+        Private columnDatetimeStarted As Global.System.Data.DataColumn
+        
+        Private columnDatetimeEnded As Global.System.Data.DataColumn
+        
+        Private columnUserId As Global.System.Data.DataColumn
+        
+        Private columnFilename As Global.System.Data.DataColumn
+        
+        Private columnDuration As Global.System.Data.DataColumn
+        
+        Private columnPicName As Global.System.Data.DataColumn
+        
+        Private columnProblem As Global.System.Data.DataColumn
+        
+        Private columnRootCause As Global.System.Data.DataColumn
+        
+        Private columnActionTaken As Global.System.Data.DataColumn
+        
+        Private columnJoNumber As Global.System.Data.DataColumn
+        
+        Private columnJoRequestor As Global.System.Data.DataColumn
+        
+        Private columnTrxStatusId As Global.System.Data.DataColumn
+        
+        Private columnTrxStatusName As Global.System.Data.DataColumn
+        
+        Private columnSparePartName As Global.System.Data.DataColumn
+        
+        Private columnSparePartNo As Global.System.Data.DataColumn
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.TableName = "RptFacActivityReport2"
+            Me.BeginInit
+            Me.InitClass
+            Me.EndInit
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub New(ByVal table As Global.System.Data.DataTable)
+            MyBase.New
+            Me.TableName = table.TableName
+            If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                Me.CaseSensitive = table.CaseSensitive
+            End If
+            If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                Me.Locale = table.Locale
+            End If
+            If (table.Namespace <> table.DataSet.Namespace) Then
+                Me.Namespace = table.Namespace
+            End If
+            Me.Prefix = table.Prefix
+            Me.MinimumCapacity = table.MinimumCapacity
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+            Me.InitVars
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxDateColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxDate
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ShiftIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnShiftId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property AreaIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAreaId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property AreaNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnAreaName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DowntimeMachineSubStatusIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDowntimeMachineSubStatusId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property MachineSubStatusNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnMachineSubStatusName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DatetimeStartedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDatetimeStarted
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DatetimeEndedColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDatetimeEnded
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property UserIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnUserId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property FilenameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnFilename
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property DurationColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnDuration
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property PicNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnPicName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ProblemColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnProblem
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property RootCauseColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnRootCause
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property ActionTakenColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnActionTaken
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property JoNumberColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnJoNumber
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property JoRequestorColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnJoRequestor
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxStatusIdColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxStatusId
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property TrxStatusNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnTrxStatusName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNameColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartName
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property SparePartNoColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnSparePartNo
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false)>  _
+        Public ReadOnly Property Count() As Integer
+            Get
+                Return Me.Rows.Count
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Default ReadOnly Property Item(ByVal index As Integer) As RptFacActivityReport2Row
+            Get
+                Return CType(Me.Rows(index),RptFacActivityReport2Row)
+            End Get
+        End Property
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReport2RowChanging As RptFacActivityReport2RowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReport2RowChanged As RptFacActivityReport2RowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReport2RowDeleting As RptFacActivityReport2RowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Event RptFacActivityReport2RowDeleted As RptFacActivityReport2RowChangeEventHandler
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overloads Sub AddRptFacActivityReport2Row(ByVal row As RptFacActivityReport2Row)
+            Me.Rows.Add(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overloads Function AddRptFacActivityReport2Row( _
+                    ByVal TrxId As Integer,  _
+                    ByVal TrxDate As Date,  _
+                    ByVal ShiftId As System.TimeSpan,  _
+                    ByVal AreaId As Integer,  _
+                    ByVal AreaName As String,  _
+                    ByVal MachineId As Integer,  _
+                    ByVal MachineName As String,  _
+                    ByVal DowntimeMachineSubStatusId As Integer,  _
+                    ByVal MachineSubStatusName As String,  _
+                    ByVal DatetimeStarted As Date,  _
+                    ByVal DatetimeEnded As Date,  _
+                    ByVal UserId As Integer,  _
+                    ByVal Filename() As Byte,  _
+                    ByVal Duration As String,  _
+                    ByVal PicName As String,  _
+                    ByVal Problem As String,  _
+                    ByVal RootCause As String,  _
+                    ByVal ActionTaken As String,  _
+                    ByVal JoNumber As String,  _
+                    ByVal JoRequestor As String,  _
+                    ByVal TrxStatusId As Integer,  _
+                    ByVal TrxStatusName As String,  _
+                    ByVal SparePartName As String,  _
+                    ByVal SparePartNo As String) As RptFacActivityReport2Row
+            Dim rowRptFacActivityReport2Row As RptFacActivityReport2Row = CType(Me.NewRow,RptFacActivityReport2Row)
+            Dim columnValuesArray() As Object = New Object() {TrxId, TrxDate, ShiftId, AreaId, AreaName, MachineId, MachineName, DowntimeMachineSubStatusId, MachineSubStatusName, DatetimeStarted, DatetimeEnded, UserId, Filename, Duration, PicName, Problem, RootCause, ActionTaken, JoNumber, JoRequestor, TrxStatusId, TrxStatusName, SparePartName, SparePartNo}
+            rowRptFacActivityReport2Row.ItemArray = columnValuesArray
+            Me.Rows.Add(rowRptFacActivityReport2Row)
+            Return rowRptFacActivityReport2Row
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function FindByTrxId(ByVal TrxId As Integer) As RptFacActivityReport2Row
+            Return CType(Me.Rows.Find(New Object() {TrxId}),RptFacActivityReport2Row)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Overrides Function Clone() As Global.System.Data.DataTable
+            Dim cln As RptFacActivityReport2DataTable = CType(MyBase.Clone,RptFacActivityReport2DataTable)
+            cln.InitVars
+            Return cln
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+            Return New RptFacActivityReport2DataTable()
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub InitVars()
+            Me.columnTrxId = MyBase.Columns("TrxId")
+            Me.columnTrxDate = MyBase.Columns("TrxDate")
+            Me.columnShiftId = MyBase.Columns("ShiftId")
+            Me.columnAreaId = MyBase.Columns("AreaId")
+            Me.columnAreaName = MyBase.Columns("AreaName")
+            Me.columnMachineId = MyBase.Columns("MachineId")
+            Me.columnMachineName = MyBase.Columns("MachineName")
+            Me.columnDowntimeMachineSubStatusId = MyBase.Columns("DowntimeMachineSubStatusId")
+            Me.columnMachineSubStatusName = MyBase.Columns("MachineSubStatusName")
+            Me.columnDatetimeStarted = MyBase.Columns("DatetimeStarted")
+            Me.columnDatetimeEnded = MyBase.Columns("DatetimeEnded")
+            Me.columnUserId = MyBase.Columns("UserId")
+            Me.columnFilename = MyBase.Columns("Filename")
+            Me.columnDuration = MyBase.Columns("Duration")
+            Me.columnPicName = MyBase.Columns("PicName")
+            Me.columnProblem = MyBase.Columns("Problem")
+            Me.columnRootCause = MyBase.Columns("RootCause")
+            Me.columnActionTaken = MyBase.Columns("ActionTaken")
+            Me.columnJoNumber = MyBase.Columns("JoNumber")
+            Me.columnJoRequestor = MyBase.Columns("JoRequestor")
+            Me.columnTrxStatusId = MyBase.Columns("TrxStatusId")
+            Me.columnTrxStatusName = MyBase.Columns("TrxStatusName")
+            Me.columnSparePartName = MyBase.Columns("SparePartName")
+            Me.columnSparePartNo = MyBase.Columns("SparePartNo")
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Private Sub InitClass()
+            Me.columnTrxId = New Global.System.Data.DataColumn("TrxId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxId)
+            Me.columnTrxDate = New Global.System.Data.DataColumn("TrxDate", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxDate)
+            Me.columnShiftId = New Global.System.Data.DataColumn("ShiftId", GetType(Global.System.TimeSpan), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnShiftId)
+            Me.columnAreaId = New Global.System.Data.DataColumn("AreaId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAreaId)
+            Me.columnAreaName = New Global.System.Data.DataColumn("AreaName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnAreaName)
+            Me.columnMachineId = New Global.System.Data.DataColumn("MachineId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineId)
+            Me.columnMachineName = New Global.System.Data.DataColumn("MachineName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineName)
+            Me.columnDowntimeMachineSubStatusId = New Global.System.Data.DataColumn("DowntimeMachineSubStatusId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDowntimeMachineSubStatusId)
+            Me.columnMachineSubStatusName = New Global.System.Data.DataColumn("MachineSubStatusName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnMachineSubStatusName)
+            Me.columnDatetimeStarted = New Global.System.Data.DataColumn("DatetimeStarted", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDatetimeStarted)
+            Me.columnDatetimeEnded = New Global.System.Data.DataColumn("DatetimeEnded", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDatetimeEnded)
+            Me.columnUserId = New Global.System.Data.DataColumn("UserId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnUserId)
+            Me.columnFilename = New Global.System.Data.DataColumn("Filename", GetType(Byte()), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnFilename)
+            Me.columnDuration = New Global.System.Data.DataColumn("Duration", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnDuration)
+            Me.columnPicName = New Global.System.Data.DataColumn("PicName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnPicName)
+            Me.columnProblem = New Global.System.Data.DataColumn("Problem", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnProblem)
+            Me.columnRootCause = New Global.System.Data.DataColumn("RootCause", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnRootCause)
+            Me.columnActionTaken = New Global.System.Data.DataColumn("ActionTaken", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnActionTaken)
+            Me.columnJoNumber = New Global.System.Data.DataColumn("JoNumber", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnJoNumber)
+            Me.columnJoRequestor = New Global.System.Data.DataColumn("JoRequestor", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnJoRequestor)
+            Me.columnTrxStatusId = New Global.System.Data.DataColumn("TrxStatusId", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxStatusId)
+            Me.columnTrxStatusName = New Global.System.Data.DataColumn("TrxStatusName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnTrxStatusName)
+            Me.columnSparePartName = New Global.System.Data.DataColumn("SparePartName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartName)
+            Me.columnSparePartNo = New Global.System.Data.DataColumn("SparePartNo", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnSparePartNo)
+            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnTrxId}, true))
+            Me.columnTrxId.AllowDBNull = false
+            Me.columnTrxId.Unique = true
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function NewRptFacActivityReport2Row() As RptFacActivityReport2Row
+            Return CType(Me.NewRow,RptFacActivityReport2Row)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+            Return New RptFacActivityReport2Row(builder)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Function GetRowType() As Global.System.Type
+            Return GetType(RptFacActivityReport2Row)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanged(e)
+            If (Not (Me.RptFacActivityReport2RowChangedEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReport2RowChanged(Me, New RptFacActivityReport2RowChangeEvent(CType(e.Row,RptFacActivityReport2Row), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanging(e)
+            If (Not (Me.RptFacActivityReport2RowChangingEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReport2RowChanging(Me, New RptFacActivityReport2RowChangeEvent(CType(e.Row,RptFacActivityReport2Row), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleted(e)
+            If (Not (Me.RptFacActivityReport2RowDeletedEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReport2RowDeleted(Me, New RptFacActivityReport2RowChangeEvent(CType(e.Row,RptFacActivityReport2Row), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleting(e)
+            If (Not (Me.RptFacActivityReport2RowDeletingEvent) Is Nothing) Then
+                RaiseEvent RptFacActivityReport2RowDeleting(Me, New RptFacActivityReport2RowChangeEvent(CType(e.Row,RptFacActivityReport2Row), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub RemoveRptFacActivityReport2Row(ByVal row As RptFacActivityReport2Row)
+            Me.Rows.Remove(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+            Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+            Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+            Dim ds As dsReport = New dsReport()
+            Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+            any1.MinOccurs = New Decimal(0)
+            any1.MaxOccurs = Decimal.MaxValue
+            any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any1)
+            Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+            any2.MinOccurs = New Decimal(1)
+            any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any2)
+            Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute1.Name = "namespace"
+            attribute1.FixedValue = ds.Namespace
+            type.Attributes.Add(attribute1)
+            Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute2.Name = "tableTypeName"
+            attribute2.FixedValue = "RptFacActivityReport2DataTable"
             type.Attributes.Add(attribute2)
             type.Particle = sequence
             Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
@@ -1783,6 +3095,1325 @@ Partial Public Class dsReport
     End Class
     
     '''<summary>
+    '''Represents strongly named DataRow class.
+    '''</summary>
+    Partial Public Class RptFacActivityReportRow
+        Inherits Global.System.Data.DataRow
+        
+        Private tableRptFacActivityReport As RptFacActivityReportDataTable
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+            MyBase.New(rb)
+            Me.tableRptFacActivityReport = CType(Me.Table,RptFacActivityReportDataTable)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxId() As Integer
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport.TrxIdColumn),Integer)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxDate() As Date
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport.TrxDateColumn),Date)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxDateColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ShiftId() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.ShiftIdColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'ShiftId' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.ShiftIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property AreaId() As Integer
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport.AreaIdColumn),Integer)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.AreaIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property AreaName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.AreaNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'AreaName' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.AreaNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.MachineIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineId' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.MachineIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.MachineNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineName' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.MachineNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DowntimeMachineSubStatusId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.DowntimeMachineSubStatusIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'DowntimeMachineSubStatusId' in table 'RptFacActivityReport'"& _ 
+                            " is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.DowntimeMachineSubStatusIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineSubStatusName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.MachineSubStatusNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineSubStatusName' in table 'RptFacActivityReport' is DB"& _ 
+                            "Null.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.MachineSubStatusNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DatetimeStarted() As Date
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport.DatetimeStartedColumn),Date)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.DatetimeStartedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DatetimeEnded() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.DatetimeEndedColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'DatetimeEnded' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.DatetimeEndedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxFrom() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.TrxFromColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxFrom' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxFromColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxTo() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.TrxToColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxTo' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxToColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ElapsedTime() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.ElapsedTimeColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'ElapsedTime' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.ElapsedTimeColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TotalAccumulatedDowntime() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.TotalAccumulatedDowntimeColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TotalAccumulatedDowntime' in table 'RptFacActivityReport' i"& _ 
+                            "s DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TotalAccumulatedDowntimeColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property UserId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.UserIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'UserId' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.UserIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property PicName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.PicNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'PicName' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.PicNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property Problem() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.ProblemColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Problem' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.ProblemColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property RootCause() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.RootCauseColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'RootCause' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.RootCauseColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ActionTaken() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.ActionTakenColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'ActionTaken' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.ActionTakenColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property JoNumber() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.JoNumberColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'JoNumber' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.JoNumberColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property JoRequestor() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.JoRequestorColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'JoRequestor' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.JoRequestorColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxStatusId() As Integer
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport.TrxStatusIdColumn),Integer)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxStatusIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxStatusName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.TrxStatusNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxStatusName' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.TrxStatusNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.SparePartNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartName' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.SparePartNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartNo() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.SparePartNoColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartNo' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.SparePartNoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property Filename() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport.FilenameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Filename' in table 'RptFacActivityReport' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport.FilenameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsShiftIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.ShiftIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetShiftIdNull()
+            Me(Me.tableRptFacActivityReport.ShiftIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsAreaNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.AreaNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetAreaNameNull()
+            Me(Me.tableRptFacActivityReport.AreaNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.MachineIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineIdNull()
+            Me(Me.tableRptFacActivityReport.MachineIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.MachineNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineNameNull()
+            Me(Me.tableRptFacActivityReport.MachineNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDowntimeMachineSubStatusIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.DowntimeMachineSubStatusIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDowntimeMachineSubStatusIdNull()
+            Me(Me.tableRptFacActivityReport.DowntimeMachineSubStatusIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineSubStatusNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.MachineSubStatusNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineSubStatusNameNull()
+            Me(Me.tableRptFacActivityReport.MachineSubStatusNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDatetimeEndedNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.DatetimeEndedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDatetimeEndedNull()
+            Me(Me.tableRptFacActivityReport.DatetimeEndedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxFromNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.TrxFromColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxFromNull()
+            Me(Me.tableRptFacActivityReport.TrxFromColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxToNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.TrxToColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxToNull()
+            Me(Me.tableRptFacActivityReport.TrxToColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsElapsedTimeNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.ElapsedTimeColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetElapsedTimeNull()
+            Me(Me.tableRptFacActivityReport.ElapsedTimeColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTotalAccumulatedDowntimeNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.TotalAccumulatedDowntimeColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTotalAccumulatedDowntimeNull()
+            Me(Me.tableRptFacActivityReport.TotalAccumulatedDowntimeColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsUserIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.UserIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetUserIdNull()
+            Me(Me.tableRptFacActivityReport.UserIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsPicNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.PicNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetPicNameNull()
+            Me(Me.tableRptFacActivityReport.PicNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsProblemNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.ProblemColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetProblemNull()
+            Me(Me.tableRptFacActivityReport.ProblemColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsRootCauseNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.RootCauseColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetRootCauseNull()
+            Me(Me.tableRptFacActivityReport.RootCauseColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsActionTakenNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.ActionTakenColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetActionTakenNull()
+            Me(Me.tableRptFacActivityReport.ActionTakenColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsJoNumberNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.JoNumberColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetJoNumberNull()
+            Me(Me.tableRptFacActivityReport.JoNumberColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsJoRequestorNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.JoRequestorColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetJoRequestorNull()
+            Me(Me.tableRptFacActivityReport.JoRequestorColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxStatusNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.TrxStatusNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxStatusNameNull()
+            Me(Me.tableRptFacActivityReport.TrxStatusNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.SparePartNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNameNull()
+            Me(Me.tableRptFacActivityReport.SparePartNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNoNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.SparePartNoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNoNull()
+            Me(Me.tableRptFacActivityReport.SparePartNoColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsFilenameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport.FilenameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetFilenameNull()
+            Me(Me.tableRptFacActivityReport.FilenameColumn) = Global.System.Convert.DBNull
+        End Sub
+    End Class
+    
+    '''<summary>
+    '''Represents strongly named DataRow class.
+    '''</summary>
+    Partial Public Class RptFacActivityReport2Row
+        Inherits Global.System.Data.DataRow
+        
+        Private tableRptFacActivityReport2 As RptFacActivityReport2DataTable
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+            MyBase.New(rb)
+            Me.tableRptFacActivityReport2 = CType(Me.Table,RptFacActivityReport2DataTable)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxId() As Integer
+            Get
+                Return CType(Me(Me.tableRptFacActivityReport2.TrxIdColumn),Integer)
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.TrxIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxDate() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.TrxDateColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxDate' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.TrxDateColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ShiftId() As System.TimeSpan
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.ShiftIdColumn),Global.System.TimeSpan)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'ShiftId' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.ShiftIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property AreaId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.AreaIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'AreaId' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.AreaIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property AreaName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.AreaNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'AreaName' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.AreaNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.MachineIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineId' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.MachineIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.MachineNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineName' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.MachineNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DowntimeMachineSubStatusId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.DowntimeMachineSubStatusIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'DowntimeMachineSubStatusId' in table 'RptFacActivityReport2"& _ 
+                            "' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.DowntimeMachineSubStatusIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property MachineSubStatusName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.MachineSubStatusNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'MachineSubStatusName' in table 'RptFacActivityReport2' is D"& _ 
+                            "BNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.MachineSubStatusNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DatetimeStarted() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.DatetimeStartedColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'DatetimeStarted' in table 'RptFacActivityReport2' is DBNull"& _ 
+                            ".", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.DatetimeStartedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property DatetimeEnded() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.DatetimeEndedColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'DatetimeEnded' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.DatetimeEndedColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property UserId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.UserIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'UserId' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.UserIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property Filename() As Byte()
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.FilenameColumn),Byte())
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Filename' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.FilenameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property Duration() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.DurationColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Duration' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.DurationColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property PicName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.PicNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'PicName' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.PicNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property Problem() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.ProblemColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Problem' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.ProblemColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property RootCause() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.RootCauseColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'RootCause' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.RootCauseColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ActionTaken() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.ActionTakenColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'ActionTaken' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.ActionTakenColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property JoNumber() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.JoNumberColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'JoNumber' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.JoNumberColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property JoRequestor() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.JoRequestorColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'JoRequestor' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.JoRequestorColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxStatusId() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.TrxStatusIdColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxStatusId' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.TrxStatusIdColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property TrxStatusName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.TrxStatusNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'TrxStatusName' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.TrxStatusNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartName() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.SparePartNameColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartName' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.SparePartNameColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property SparePartNo() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableRptFacActivityReport2.SparePartNoColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'SparePartNo' in table 'RptFacActivityReport2' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableRptFacActivityReport2.SparePartNoColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxDateNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.TrxDateColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxDateNull()
+            Me(Me.tableRptFacActivityReport2.TrxDateColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsShiftIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.ShiftIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetShiftIdNull()
+            Me(Me.tableRptFacActivityReport2.ShiftIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsAreaIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.AreaIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetAreaIdNull()
+            Me(Me.tableRptFacActivityReport2.AreaIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsAreaNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.AreaNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetAreaNameNull()
+            Me(Me.tableRptFacActivityReport2.AreaNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.MachineIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineIdNull()
+            Me(Me.tableRptFacActivityReport2.MachineIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.MachineNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineNameNull()
+            Me(Me.tableRptFacActivityReport2.MachineNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDowntimeMachineSubStatusIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.DowntimeMachineSubStatusIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDowntimeMachineSubStatusIdNull()
+            Me(Me.tableRptFacActivityReport2.DowntimeMachineSubStatusIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsMachineSubStatusNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.MachineSubStatusNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetMachineSubStatusNameNull()
+            Me(Me.tableRptFacActivityReport2.MachineSubStatusNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDatetimeStartedNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.DatetimeStartedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDatetimeStartedNull()
+            Me(Me.tableRptFacActivityReport2.DatetimeStartedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDatetimeEndedNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.DatetimeEndedColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDatetimeEndedNull()
+            Me(Me.tableRptFacActivityReport2.DatetimeEndedColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsUserIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.UserIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetUserIdNull()
+            Me(Me.tableRptFacActivityReport2.UserIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsFilenameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.FilenameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetFilenameNull()
+            Me(Me.tableRptFacActivityReport2.FilenameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsDurationNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.DurationColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetDurationNull()
+            Me(Me.tableRptFacActivityReport2.DurationColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsPicNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.PicNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetPicNameNull()
+            Me(Me.tableRptFacActivityReport2.PicNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsProblemNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.ProblemColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetProblemNull()
+            Me(Me.tableRptFacActivityReport2.ProblemColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsRootCauseNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.RootCauseColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetRootCauseNull()
+            Me(Me.tableRptFacActivityReport2.RootCauseColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsActionTakenNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.ActionTakenColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetActionTakenNull()
+            Me(Me.tableRptFacActivityReport2.ActionTakenColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsJoNumberNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.JoNumberColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetJoNumberNull()
+            Me(Me.tableRptFacActivityReport2.JoNumberColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsJoRequestorNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.JoRequestorColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetJoRequestorNull()
+            Me(Me.tableRptFacActivityReport2.JoRequestorColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxStatusIdNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.TrxStatusIdColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxStatusIdNull()
+            Me(Me.tableRptFacActivityReport2.TrxStatusIdColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsTrxStatusNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.TrxStatusNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetTrxStatusNameNull()
+            Me(Me.tableRptFacActivityReport2.TrxStatusNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNameNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.SparePartNameColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNameNull()
+            Me(Me.tableRptFacActivityReport2.SparePartNameColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IsSparePartNoNull() As Boolean
+            Return Me.IsNull(Me.tableRptFacActivityReport2.SparePartNoColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetSparePartNoNull()
+            Me(Me.tableRptFacActivityReport2.SparePartNoColumn) = Global.System.Convert.DBNull
+        End Sub
+    End Class
+    
+    '''<summary>
     '''Row event argument class
     '''</summary>
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
@@ -1804,6 +4435,78 @@ Partial Public Class dsReport
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public ReadOnly Property Row() As RptMntActivityReportRow
+            Get
+                Return Me.eventRow
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+            Get
+                Return Me.eventAction
+            End Get
+        End Property
+    End Class
+    
+    '''<summary>
+    '''Row event argument class
+    '''</summary>
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Public Class RptFacActivityReportRowChangeEvent
+        Inherits Global.System.EventArgs
+        
+        Private eventRow As RptFacActivityReportRow
+        
+        Private eventAction As Global.System.Data.DataRowAction
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub New(ByVal row As RptFacActivityReportRow, ByVal action As Global.System.Data.DataRowAction)
+            MyBase.New
+            Me.eventRow = row
+            Me.eventAction = action
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property Row() As RptFacActivityReportRow
+            Get
+                Return Me.eventRow
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+            Get
+                Return Me.eventAction
+            End Get
+        End Property
+    End Class
+    
+    '''<summary>
+    '''Row event argument class
+    '''</summary>
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+    Public Class RptFacActivityReport2RowChangeEvent
+        Inherits Global.System.EventArgs
+        
+        Private eventRow As RptFacActivityReport2Row
+        
+        Private eventAction As Global.System.Data.DataRowAction
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub New(ByVal row As RptFacActivityReport2Row, ByVal action As Global.System.Data.DataRowAction)
+            MyBase.New
+            Me.eventRow = row
+            Me.eventAction = action
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property Row() As RptFacActivityReport2Row
             Get
                 Return Me.eventRow
             End Get
@@ -2130,6 +4833,294 @@ Namespace dsReportTableAdapters
                 Me.Adapter.SelectCommand.Parameters(10).Value = Global.System.DBNull.Value
             End If
             Dim dataTable As dsReport.RptMntActivityReportDataTable = New dsReport.RptMntActivityReportDataTable()
+            Me.Adapter.Fill(dataTable)
+            Return dataTable
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the connection and commands used to retrieve and save data.
+    '''</summary>
+    <Global.System.ComponentModel.DesignerCategoryAttribute("code"),  _
+     Global.System.ComponentModel.ToolboxItem(true),  _
+     Global.System.ComponentModel.DataObjectAttribute(true),  _
+     Global.System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner"& _ 
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),  _
+     Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+    Partial Public Class RptFacActivityReportTableAdapter
+        Inherits Global.System.ComponentModel.Component
+        
+        Private WithEvents _adapter As Global.System.Data.SqlClient.SqlDataAdapter
+        
+        Private _connection As Global.System.Data.SqlClient.SqlConnection
+        
+        Private _transaction As Global.System.Data.SqlClient.SqlTransaction
+        
+        Private _commandCollection() As Global.System.Data.SqlClient.SqlCommand
+        
+        Private _clearBeforeFill As Boolean
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.ClearBeforeFill = true
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected Friend ReadOnly Property Adapter() As Global.System.Data.SqlClient.SqlDataAdapter
+            Get
+                If (Me._adapter Is Nothing) Then
+                    Me.InitAdapter
+                End If
+                Return Me._adapter
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Property Connection() As Global.System.Data.SqlClient.SqlConnection
+            Get
+                If (Me._connection Is Nothing) Then
+                    Me.InitConnection
+                End If
+                Return Me._connection
+            End Get
+            Set
+                Me._connection = value
+                If (Not (Me.Adapter.InsertCommand) Is Nothing) Then
+                    Me.Adapter.InsertCommand.Connection = value
+                End If
+                If (Not (Me.Adapter.DeleteCommand) Is Nothing) Then
+                    Me.Adapter.DeleteCommand.Connection = value
+                End If
+                If (Not (Me.Adapter.UpdateCommand) Is Nothing) Then
+                    Me.Adapter.UpdateCommand.Connection = value
+                End If
+                Dim i As Integer = 0
+                Do While (i < Me.CommandCollection.Length)
+                    If (Not (Me.CommandCollection(i)) Is Nothing) Then
+                        CType(Me.CommandCollection(i),Global.System.Data.SqlClient.SqlCommand).Connection = value
+                    End If
+                    i = (i + 1)
+                Loop
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Friend Property Transaction() As Global.System.Data.SqlClient.SqlTransaction
+            Get
+                Return Me._transaction
+            End Get
+            Set
+                Me._transaction = value
+                Dim i As Integer = 0
+                Do While (i < Me.CommandCollection.Length)
+                    Me.CommandCollection(i).Transaction = Me._transaction
+                    i = (i + 1)
+                Loop
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.DeleteCommand) Is Nothing)) Then
+                    Me.Adapter.DeleteCommand.Transaction = Me._transaction
+                End If
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.InsertCommand) Is Nothing)) Then
+                    Me.Adapter.InsertCommand.Transaction = Me._transaction
+                End If
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.UpdateCommand) Is Nothing)) Then
+                    Me.Adapter.UpdateCommand.Transaction = Me._transaction
+                End If
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Protected ReadOnly Property CommandCollection() As Global.System.Data.SqlClient.SqlCommand()
+            Get
+                If (Me._commandCollection Is Nothing) Then
+                    Me.InitCommandCollection
+                End If
+                Return Me._commandCollection
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property ClearBeforeFill() As Boolean
+            Get
+                Return Me._clearBeforeFill
+            End Get
+            Set
+                Me._clearBeforeFill = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Private Sub InitAdapter()
+            Me._adapter = New Global.System.Data.SqlClient.SqlDataAdapter()
+            Dim tableMapping As Global.System.Data.Common.DataTableMapping = New Global.System.Data.Common.DataTableMapping()
+            tableMapping.SourceTable = "Table"
+            tableMapping.DataSetTable = "RptFacActivityReport"
+            tableMapping.ColumnMappings.Add("TrxId", "TrxId")
+            tableMapping.ColumnMappings.Add("TrxDate", "TrxDate")
+            tableMapping.ColumnMappings.Add("ShiftId", "ShiftId")
+            tableMapping.ColumnMappings.Add("AreaId", "AreaId")
+            tableMapping.ColumnMappings.Add("AreaName", "AreaName")
+            tableMapping.ColumnMappings.Add("MachineId", "MachineId")
+            tableMapping.ColumnMappings.Add("MachineName", "MachineName")
+            tableMapping.ColumnMappings.Add("DowntimeMachineSubStatusId", "DowntimeMachineSubStatusId")
+            tableMapping.ColumnMappings.Add("MachineSubStatusName", "MachineSubStatusName")
+            tableMapping.ColumnMappings.Add("DatetimeStarted", "DatetimeStarted")
+            tableMapping.ColumnMappings.Add("DatetimeEnded", "DatetimeEnded")
+            tableMapping.ColumnMappings.Add("TrxFrom", "TrxFrom")
+            tableMapping.ColumnMappings.Add("TrxTo", "TrxTo")
+            tableMapping.ColumnMappings.Add("ElapsedTime", "ElapsedTime")
+            tableMapping.ColumnMappings.Add("TotalAccumulatedDowntime", "TotalAccumulatedDowntime")
+            tableMapping.ColumnMappings.Add("UserId", "UserId")
+            tableMapping.ColumnMappings.Add("PicName", "PicName")
+            tableMapping.ColumnMappings.Add("Problem", "Problem")
+            tableMapping.ColumnMappings.Add("RootCause", "RootCause")
+            tableMapping.ColumnMappings.Add("ActionTaken", "ActionTaken")
+            tableMapping.ColumnMappings.Add("JoNumber", "JoNumber")
+            tableMapping.ColumnMappings.Add("JoRequestor", "JoRequestor")
+            tableMapping.ColumnMappings.Add("TrxStatusId", "TrxStatusId")
+            tableMapping.ColumnMappings.Add("TrxStatusName", "TrxStatusName")
+            tableMapping.ColumnMappings.Add("SparePartName", "SparePartName")
+            tableMapping.ColumnMappings.Add("SparePartNo", "SparePartNo")
+            tableMapping.ColumnMappings.Add("Filename", "Filename")
+            Me._adapter.TableMappings.Add(tableMapping)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Private Sub InitConnection()
+            Me._connection = New Global.System.Data.SqlClient.SqlConnection()
+            Me._connection.ConnectionString = Global.MachineMonitoringSystem.My.MySettings.Default.MachineMonitoringConnectionString2
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Private Sub InitCommandCollection()
+            Me._commandCollection = New Global.System.Data.SqlClient.SqlCommand(0) {}
+            Me._commandCollection(0) = New Global.System.Data.SqlClient.SqlCommand()
+            Me._commandCollection(0).Connection = Me.Connection
+            Me._commandCollection(0).CommandText = "dbo.RptFacActivityReport"
+            Me._commandCollection(0).CommandType = Global.System.Data.CommandType.StoredProcedure
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@RETURN_VALUE", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.ReturnValue, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@StartDate", Global.System.Data.SqlDbType.[Date], 3, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@EndDate", Global.System.Data.SqlDbType.[Date], 3, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@ShiftId", Global.System.Data.SqlDbType.[Char], 1, Global.System.Data.ParameterDirection.Input, 0, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@AreaId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@TrxStatusId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@DowntimeMachineSubStatusId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@MachineId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+            Me._commandCollection(0).Parameters.Add(New Global.System.Data.SqlClient.SqlParameter("@UserId", Global.System.Data.SqlDbType.Int, 4, Global.System.Data.ParameterDirection.Input, 10, 0, Nothing, Global.System.Data.DataRowVersion.Current, false, Nothing, "", "", ""))
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, true)>  _
+        Public Overloads Overridable Function Fill(ByVal dataTable As dsReport.RptFacActivityReportDataTable, ByVal StartDate As Global.System.Nullable(Of Date), ByVal EndDate As Global.System.Nullable(Of Date), ByVal ShiftId As String, ByVal AreaId As Global.System.Nullable(Of Integer), ByVal TrxStatusId As Global.System.Nullable(Of Integer), ByVal DowntimeMachineSubStatusId As Global.System.Nullable(Of Integer), ByVal MachineId As Global.System.Nullable(Of Integer), ByVal UserId As Global.System.Nullable(Of Integer)) As Integer
+            Me.Adapter.SelectCommand = Me.CommandCollection(0)
+            If (StartDate.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(StartDate.Value,Date)
+            Else
+                Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
+            End If
+            If (EndDate.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(2).Value = CType(EndDate.Value,Date)
+            Else
+                Me.Adapter.SelectCommand.Parameters(2).Value = Global.System.DBNull.Value
+            End If
+            If (ShiftId Is Nothing) Then
+                Me.Adapter.SelectCommand.Parameters(3).Value = Global.System.DBNull.Value
+            Else
+                Me.Adapter.SelectCommand.Parameters(3).Value = CType(ShiftId,String)
+            End If
+            If (AreaId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(4).Value = CType(AreaId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(4).Value = Global.System.DBNull.Value
+            End If
+            If (TrxStatusId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(5).Value = CType(TrxStatusId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(5).Value = Global.System.DBNull.Value
+            End If
+            If (DowntimeMachineSubStatusId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(6).Value = CType(DowntimeMachineSubStatusId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
+            If (MachineId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(7).Value = CType(MachineId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(7).Value = Global.System.DBNull.Value
+            End If
+            If (UserId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(8).Value = CType(UserId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(8).Value = Global.System.DBNull.Value
+            End If
+            If (Me.ClearBeforeFill = true) Then
+                dataTable.Clear
+            End If
+            Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
+            Return returnValue
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], true)>  _
+        Public Overloads Overridable Function GetData(ByVal StartDate As Global.System.Nullable(Of Date), ByVal EndDate As Global.System.Nullable(Of Date), ByVal ShiftId As String, ByVal AreaId As Global.System.Nullable(Of Integer), ByVal TrxStatusId As Global.System.Nullable(Of Integer), ByVal DowntimeMachineSubStatusId As Global.System.Nullable(Of Integer), ByVal MachineId As Global.System.Nullable(Of Integer), ByVal UserId As Global.System.Nullable(Of Integer)) As dsReport.RptFacActivityReportDataTable
+            Me.Adapter.SelectCommand = Me.CommandCollection(0)
+            If (StartDate.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(1).Value = CType(StartDate.Value,Date)
+            Else
+                Me.Adapter.SelectCommand.Parameters(1).Value = Global.System.DBNull.Value
+            End If
+            If (EndDate.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(2).Value = CType(EndDate.Value,Date)
+            Else
+                Me.Adapter.SelectCommand.Parameters(2).Value = Global.System.DBNull.Value
+            End If
+            If (ShiftId Is Nothing) Then
+                Me.Adapter.SelectCommand.Parameters(3).Value = Global.System.DBNull.Value
+            Else
+                Me.Adapter.SelectCommand.Parameters(3).Value = CType(ShiftId,String)
+            End If
+            If (AreaId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(4).Value = CType(AreaId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(4).Value = Global.System.DBNull.Value
+            End If
+            If (TrxStatusId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(5).Value = CType(TrxStatusId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(5).Value = Global.System.DBNull.Value
+            End If
+            If (DowntimeMachineSubStatusId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(6).Value = CType(DowntimeMachineSubStatusId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(6).Value = Global.System.DBNull.Value
+            End If
+            If (MachineId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(7).Value = CType(MachineId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(7).Value = Global.System.DBNull.Value
+            End If
+            If (UserId.HasValue = true) Then
+                Me.Adapter.SelectCommand.Parameters(8).Value = CType(UserId.Value,Integer)
+            Else
+                Me.Adapter.SelectCommand.Parameters(8).Value = Global.System.DBNull.Value
+            End If
+            Dim dataTable As dsReport.RptFacActivityReportDataTable = New dsReport.RptFacActivityReportDataTable()
             Me.Adapter.Fill(dataTable)
             Return dataTable
         End Function

@@ -234,13 +234,13 @@ Public Class FacTrxConsole
                     End Using
 
                 Else
-                    'Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
-                    '    frmDetail.ShowDialog(Me)
-                    '    If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
-                    '        Reload()
-                    '        LoadMachine()
-                    '    End If
-                    'End Using
+                    Using frmDetail As New FacTrxDetailOth(userId, workgroupId, isAdmin, trxId)
+                        frmDetail.ShowDialog(Me)
+                        If frmDetail.DialogResult = Windows.Forms.DialogResult.OK Then
+                            Reload()
+                            LoadMachine()
+                        End If
+                    End Using
                 End If
             End If
         Catch ex As Exception

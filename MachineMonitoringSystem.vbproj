@@ -6,15 +6,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{93190413-11F0-401C-A366-890C90C70425}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Sub Main</StartupObject>
+    <StartupObject>MachineMonitoringSystem.My.MyApplication</StartupObject>
     <RootNamespace>MachineMonitoringSystem</RootNamespace>
     <AssemblyName>MachineMonitoringSystem</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>\\nbc-filesvr02\Engineering\IT System\Machine Monitoring System\</PublishUrl>
+    <PublishUrl>\\192.168.20.11\Engineering\IT System\Machine Monitoring System\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>73</ApplicationRevision>
+    <ApplicationRevision>75</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -98,7 +98,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Be.Windows.Forms.RichTextBoxEx">
@@ -151,7 +151,7 @@
   <ItemGroup>
     <Compile Include="Class\Connection.vb" />
     <Compile Include="Class\ImgAttachment.vb" />
-    <Compile Include="Class\CsAttachment.vb" />
+    <Compile Include="Class\FileAttachment.vb" />
     <Compile Include="Class\Directory.vb" />
     <Compile Include="Class\DataGridViewNullableComboBoxColumn.vb" />
     <Compile Include="Class\KeyValidation.vb" />
@@ -183,6 +183,18 @@
       <DependentUpon>MntMchCs.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\MntMchCs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FacMchSched.Designer.vb">
+      <DependentUpon>FacMchSched.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacMchSched.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FacMchSchedDetail.Designer.vb">
+      <DependentUpon>FacMchSchedDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FacMchSchedDetail.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntModelExtensionDetail.Designer.vb">
@@ -311,6 +323,12 @@
     <Compile Include="Form\MntTrxPartsIssuance.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\Report Form\FacActivityReport.Designer.vb">
+      <DependentUpon>FacActivityReport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Report Form\FacActivityReport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\Report Form\MntActivityReport.Designer.vb">
       <DependentUpon>MntActivityReport.vb</DependentUpon>
     </Compile>
@@ -359,6 +377,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ReportFile\FacActivityReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\clear-filter.ico" />
     <None Include="Resources\clear-bookmark.png" />
     <None Include=".gitattributes" />
@@ -762,6 +783,12 @@
     <EmbeddedResource Include="Form\MntMchCs.resx">
       <DependentUpon>MntMchCs.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacMchSched.resx">
+      <DependentUpon>FacMchSched.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FacMchSchedDetail.resx">
+      <DependentUpon>FacMchSchedDetail.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntModelExtensionDetail.resx">
       <DependentUpon>MntModelExtensionDetail.vb</DependentUpon>
     </EmbeddedResource>
@@ -824,6 +851,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxPartsIssuance.resx">
       <DependentUpon>MntTrxPartsIssuance.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Report Form\FacActivityReport.resx">
+      <DependentUpon>FacActivityReport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\Report Form\MntActivityReport.resx">
       <DependentUpon>MntActivityReport.vb</DependentUpon>

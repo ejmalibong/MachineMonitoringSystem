@@ -39,9 +39,9 @@ Public Class MntTrxDetailOth
     Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
 
-    Private lstAttachment As New List(Of CsAttachment)
-    Private lstAttachmentCopy As New List(Of CsAttachment)
-    Private lstAttachmentDelete As New List(Of CsAttachment)
+    Private lstAttachment As New List(Of FileAttachment)
+    Private lstAttachmentCopy As New List(Of FileAttachment)
+    Private lstAttachmentDelete As New List(Of FileAttachment)
     Private lstImgAttachment As New List(Of ImgAttachment)
 
     Private mStream As New MemoryStream
@@ -1435,7 +1435,7 @@ Public Class MntTrxDetailOth
                         progBar.Visible = True
                         lblProgress.Visible = True
 
-                        Dim copyChecksheet As New CsAttachment(lstAttachment(i).FileName, filename, Path.GetExtension(lstAttachment(i).FileName).ToLower)
+                        Dim copyChecksheet As New FileAttachment(lstAttachment(i).FileName, filename, Path.GetExtension(lstAttachment(i).FileName).ToLower)
                         lstAttachmentCopy.Add(copyChecksheet)
                     Next
                 End If
@@ -2229,7 +2229,7 @@ Public Class MntTrxDetailOth
                             extension = Path.GetExtension(dtTrxHeader.Rows(0).Item("FileName").ToString.Trim).ToLower
                             filename = trxId & extension
 
-                            Dim delChecksheet As New CsAttachment(attDirectory & "\" & dtTrxHeader.Rows(0).Item("FileName").ToString.Trim, filename, Path.GetExtension(Path.Combine(attDirectory, filename)))
+                            Dim delChecksheet As New FileAttachment(attDirectory & "\" & dtTrxHeader.Rows(0).Item("FileName").ToString.Trim, filename, Path.GetExtension(Path.Combine(attDirectory, filename)))
                             lstAttachmentDelete.Add(delChecksheet)
 
                             For i As Integer = 0 To lstAttachment.Count - 1
@@ -2249,7 +2249,7 @@ Public Class MntTrxDetailOth
                                 progBar.Visible = True
                                 lblProgress.Visible = True
 
-                                Dim copyChecksheet As New CsAttachment(lstAttachment(i).FileName, filename1, Path.GetExtension(lstAttachment(i).FileName).ToLower)
+                                Dim copyChecksheet As New FileAttachment(lstAttachment(i).FileName, filename1, Path.GetExtension(lstAttachment(i).FileName).ToLower)
                                 lstAttachmentCopy.Add(copyChecksheet)
                             Next
 
@@ -2275,7 +2275,7 @@ Public Class MntTrxDetailOth
                             progBar.Visible = True
                             lblProgress.Visible = True
 
-                            Dim copyChecksheet As New CsAttachment(lstAttachment(i).FileName, filename2, Path.GetExtension(lstAttachment(i).FileName).ToLower)
+                            Dim copyChecksheet As New FileAttachment(lstAttachment(i).FileName, filename2, Path.GetExtension(lstAttachment(i).FileName).ToLower)
                             lstAttachmentCopy.Add(copyChecksheet)
                         Next
                     End If
@@ -2287,7 +2287,7 @@ Public Class MntTrxDetailOth
                         extension = Path.GetExtension(dtTrxHeader.Rows(0).Item("FileName").ToString.Trim).ToLower
                         filename = trxId & extension
 
-                        Dim delChecksheet As New CsAttachment(attDirectory & "\" & dtTrxHeader.Rows(0).Item("FileName").ToString.Trim, filename, Path.GetExtension(Path.Combine(attDirectory, filename)))
+                        Dim delChecksheet As New FileAttachment(attDirectory & "\" & dtTrxHeader.Rows(0).Item("FileName").ToString.Trim, filename, Path.GetExtension(Path.Combine(attDirectory, filename)))
                         lstAttachmentDelete.Add(delChecksheet)
 
                         Dim prmUpd(1) As SqlParameter
@@ -3078,7 +3078,7 @@ Public Class MntTrxDetailOth
 
                 If Not dtTrxHeader.Rows(0).Item("FileName") Is DBNull.Value Then
                     Dim fileName As String = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
-                    Dim oldAttachment As New CsAttachment(Path.Combine(attDirectory, fileName), fileName, Path.GetExtension(Path.Combine(attDirectory, fileName)))
+                    Dim oldAttachment As New FileAttachment(Path.Combine(attDirectory, fileName), fileName, Path.GetExtension(Path.Combine(attDirectory, fileName)))
                     lstAttachment.Add(oldAttachment)
                     txtAttachment.Text = fileName
                     orgFilename = dtTrxHeader.Rows(0).Item("FileName").ToString.Trim
@@ -3320,7 +3320,7 @@ Public Class MntTrxDetailOth
                 txtAttachment.Text = String.Empty
             End If
 
-            Dim checksheet As New CsAttachment(ofdAttachment.FileName, ofdAttachment.SafeFileName, Path.GetExtension(ofdAttachment.SafeFileName).ToLower)
+            Dim checksheet As New FileAttachment(ofdAttachment.FileName, ofdAttachment.SafeFileName, Path.GetExtension(ofdAttachment.SafeFileName).ToLower)
             lstAttachment.Add(checksheet)
 
             txtAttachment.Text = Path.GetFileName(ofdAttachment.FileName)

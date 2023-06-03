@@ -22,12 +22,12 @@ Partial Class FacTrxDetailMch
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.lblRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.txtDowntimeAccumulated = New System.Windows.Forms.Label()
@@ -790,8 +790,8 @@ Partial Class FacTrxDetailMch
         '
         Me.ColUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColUserName.DataPropertyName = "UserName"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle7
         Me.ColUserName.HeaderText = "NickName"
         Me.ColUserName.Name = "ColUserName"
         Me.ColUserName.ReadOnly = True
@@ -1247,13 +1247,13 @@ Partial Class FacTrxDetailMch
         Me.dgvDetail.AllowUserToResizeColumns = False
         Me.dgvDetail.AllowUserToResizeRows = False
         Me.dgvDetail.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle14.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxDetailId, Me.ColTrxId, Me.ColTrxDate, Me.ColUserIdLog, Me.ColShiftId, Me.ColTrxFrom, Me.ColTrxTo, Me.ColElapsedTime})
@@ -1303,8 +1303,8 @@ Partial Class FacTrxDetailMch
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -1315,9 +1315,9 @@ Partial Class FacTrxDetailMch
         'ColTrxFrom
         '
         Me.ColTrxFrom.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle16.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle16.NullValue = Nothing
-        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle10.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle10.NullValue = Nothing
+        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle10
         Me.ColTrxFrom.HeaderText = "From"
         Me.ColTrxFrom.Name = "ColTrxFrom"
         Me.ColTrxFrom.ReadOnly = True
@@ -1328,9 +1328,9 @@ Partial Class FacTrxDetailMch
         'ColTrxTo
         '
         Me.ColTrxTo.DataPropertyName = "TrxTo"
-        DataGridViewCellStyle17.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle17.NullValue = Nothing
-        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle11.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle11.NullValue = Nothing
+        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle11
         Me.ColTrxTo.HeaderText = "To"
         Me.ColTrxTo.Name = "ColTrxTo"
         Me.ColTrxTo.ReadOnly = True
@@ -1341,8 +1341,8 @@ Partial Class FacTrxDetailMch
         'ColElapsedTime
         '
         Me.ColElapsedTime.DataPropertyName = "ElapsedTime"
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle12
         Me.ColElapsedTime.HeaderText = "Minutes"
         Me.ColElapsedTime.Name = "ColElapsedTime"
         Me.ColElapsedTime.ReadOnly = True
@@ -1426,14 +1426,14 @@ Partial Class FacTrxDetailMch
         Me.lblChecksheet.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblChecksheet.BackColor = System.Drawing.SystemColors.Control
         Me.lblChecksheet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblChecksheet.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblChecksheet.Font = New System.Drawing.Font("Segoe UI", 7.5!)
         Me.lblChecksheet.ForeColor = System.Drawing.Color.Black
         Me.lblChecksheet.Location = New System.Drawing.Point(683, 534)
         Me.lblChecksheet.Name = "lblChecksheet"
         Me.lblChecksheet.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblChecksheet.Size = New System.Drawing.Size(100, 23)
         Me.lblChecksheet.TabIndex = 551
-        Me.lblChecksheet.Text = "Check Sheet"
+        Me.lblChecksheet.Text = "Check Sheet Link"
         Me.lblChecksheet.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblScheduleMonth

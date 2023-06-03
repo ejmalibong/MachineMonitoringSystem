@@ -161,13 +161,48 @@ Public Class Main
 
     Private Sub GetWorkgroupAccess(wgroupId As Integer, sectId As Integer)
         Select Case sectId
-            Case 1 'manager, sys admin
+            Case 1, 4 'manager, sys admin
+                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Text = "FA " & itm.Text
+                        End If
+
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Text = "MT " & itm.Text
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Text = "FA " & itm.Text
+                        End If
+
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Text = "MT " & itm.Text
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Text = "FA " & itm.Text
+                        End If
+
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Text = "MT " & itm.Text
+                        End If
+                    End If
+                Next
 
             Case 2 'maintenance
                 Select Case wgroupId
                     Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
                         accessLevelId = 1
-                    Case 35, 40 'mt mngr, asst mngr
+                    Case 35, 40 'mt mgr, am
                         accessLevelId = 2
                     Case 29, 30 'mt sv, asv
                         accessLevelId = 3
@@ -176,6 +211,48 @@ Public Class Main
                     Case Else
                         accessLevelId = 99
                 End Select
+
+                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
 
                 Select Case accessLevelId
                     Case 1
@@ -193,17 +270,59 @@ Public Class Main
 
             Case 3 'facility
                 Select Case wgroupId
-                    Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
+                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
                         accessLevelId = 1
-                    Case 36 'fc asst mngr
+                    Case 36 'fc am
                         accessLevelId = 2
-                    Case 31, 32, 8 'fc sv, asv, engg
+                    Case 31, 32, 7, 8 'fc sv, asv, sr engr, engr
                         accessLevelId = 3
                     Case 9 'fc sr tech
                         accessLevelId = 4
                     Case Else
                         accessLevelId = 99
                 End Select
+
+                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
+
+                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    If TypeOf (itm) Is ToolStripMenuItem Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+
+                    If TypeOf (itm) Is ToolStripSeparator Then
+                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                            itm.Visible = False
+                        End If
+                    End If
+                Next
 
                 Select Case accessLevelId
                     Case 1
@@ -217,16 +336,6 @@ Public Class Main
                         tssMaintenance2.Visible = False
 
                         dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                End Select
-
-            Case 4 'it
-                Select Case wgroupId
-                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
-                        accessLevelId = 1
-                    Case 13, 14 'it sr staff
-                        accessLevelId = 2
-                    Case Else
-                        accessLevelId = 99
                 End Select
 
             Case Else
@@ -259,6 +368,30 @@ Public Class Main
 
     Private Sub FacTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionConsoleToolStripMenuItem.Click
         dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+    End Sub
+
+    Private Sub MntPmReportToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub FacActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacActivityReportToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacActivityReport)
+    End Sub
+
+    Private Sub FacMachineScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacMachineScheduleToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacMchSched(userId))
+    End Sub
+
+    Private Sub MntActivityReportToolStripMenuItem_VisibleChanged(sender As Object, e As EventArgs) Handles MntActivityReportToolStripMenuItem.VisibleChanged
+        If FacActivityReportToolStripMenuItem.Visible = False Or MntActivityReportToolStripMenuItem.Visible = False Then
+            tssReport.Visible = False
+        End If
+    End Sub
+
+    Private Sub FacActivityReportToolStripMenuItem_VisibleChanged(sender As Object, e As EventArgs) Handles FacActivityReportToolStripMenuItem.VisibleChanged
+        If FacActivityReportToolStripMenuItem.Visible = False Or MntActivityReportToolStripMenuItem.Visible = False Then
+            tssReport.Visible = False
+        End If
     End Sub
 
 End Class

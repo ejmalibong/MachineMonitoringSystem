@@ -13,7 +13,6 @@ Public Class FacTrxDetailMch
 
     Private adpTrxDetail As New SqlDataAdapter
     Private areaId As Integer = 0
-    Private bite As Byte() 'the word `byte` is not a valid identifier
     Private currentIndex As Integer
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -27,26 +26,24 @@ Public Class FacTrxDetailMch
     Private dtRoutingStatus As New DataTable
     Private dtSecUserLog As New DataTable
     Private dtSecUserPic As New DataTable
+    Private dtTrxImgAttachment As New DataTable
     Private dtTrxDetail As New DataTable
     Private dtTrxHeader As New DataTable
     Private dtTrxMachinePart As New DataTable
     Private dtTrxSparePart As New DataTable
     Private dtTrxUser As New DataTable
-    Private dtTrxAttachment As New DataTable
-
     Private imgDirectory As String = directory.ImgIniDirectoryFc
     Private imgTmp As String = String.Empty
-    Private impersonation As New UserImpersonation.UserImpersonation
+    'Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
 
     Private lstImg As New List(Of ImgAttachment)
-    Private lstImgFileTypes As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
-    Private lstImgForCopy As New List(Of ImgAttachment)
-    Private lstImgForDelete As New List(Of ImgAttachment)
+    Private lstImgCopy As New List(Of ImgAttachment)
+    Private lstImgDelete As New List(Of ImgAttachment)
+    Private lstImgTypes As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
     Private machineId As Integer = 0
     Private machinePartGroupId As Integer = 0
     Private monthId As Integer = 0
-    Private mStream As New MemoryStream
     Private orgApp1Status As Integer = 0
     Private orgApp2Status As Integer = 0
     Private orgApp3Status As Integer = 0
@@ -81,7 +78,7 @@ Public Class FacTrxDetailMch
                 accessLevelId = 1
             Case 36 'am
                 accessLevelId = 2
-            Case 31, 32, 8, 7 'sv, asv, engr, sr engr
+            Case 31, 32, 7, 8 'sv, asv, sr engr, engr
                 accessLevelId = 3
             Case 9 'sr technician
                 accessLevelId = 4
@@ -93,8 +90,6 @@ Public Class FacTrxDetailMch
     End Sub
 
     Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
-
-    'sr mngr action
     Public Property fromPmCalendar As Boolean = False
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
@@ -193,7 +188,7 @@ Public Class FacTrxDetailMch
                     txtApp1Remarks.Enabled = False
                 Else
                     Select Case accessLevelId
-                        Case 2 'mngr, asm
+                        Case 2 'mngr, am
                             cmbApp3Status.Enabled = False
                             cmbApp3Name.Enabled = True
                             txtApp3Remarks.Enabled = False
@@ -206,7 +201,7 @@ Public Class FacTrxDetailMch
                             cmbApp1Name.Enabled = False
                             txtApp1Remarks.Enabled = False
 
-                        Case 3 'sv, asv
+                        Case 3 'sv, asv, sr engr, engr
                             cmbApp3Status.Enabled = False
                             cmbApp3Name.Enabled = True
                             txtApp3Remarks.Enabled = False
@@ -278,7 +273,7 @@ Public Class FacTrxDetailMch
 
                 Else 'other access level
                     Select Case accessLevelId
-                        Case 2 'mngr, asm
+                        Case 2 'mngr, am
                             Select Case orgRoutingStatusId
                                 Case 1, 2 'from `for approval of approver 3` and `completed`, disable the form
                                     cmbTransactionStatus.Enabled = False
@@ -428,7 +423,7 @@ Public Class FacTrxDetailMch
                                     End Select
                             End Select
 
-                        Case 3 'sv, asv
+                        Case 3 'sv, asv, sr engr, engr
                             Select Case orgRoutingStatusId
                                 Case 1, 2 'from `for approval of approver 2` to `completed`, disable the form
                                     cmbTransactionStatus.Enabled = False
@@ -713,7 +708,7 @@ Public Class FacTrxDetailMch
         LoadTransactionStatus()
         LoadMachine()
         GetSetting(My.Settings.SettingsId)
-        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -800,13 +795,13 @@ Public Class FacTrxDetailMch
 
     Private Sub bgWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgWorker.DoWork
         Try
-            If lstImgForCopy.Count > 0 Then
+            If lstImgCopy.Count > 0 Then
                 Dim streamRead As System.IO.FileStream
                 Dim streamWrite As System.IO.FileStream
 
-                For i As Integer = 0 To lstImgForCopy.Count - 1
-                    streamRead = New System.IO.FileStream(lstImgForCopy(i).FileName, System.IO.FileMode.Open)
-                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstImgForCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+                For i As Integer = 0 To lstImgCopy.Count - 1
+                    streamRead = New System.IO.FileStream(lstImgCopy(i).FileName, System.IO.FileMode.Open)
+                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstImgCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
 
                     Dim lngLen As Long = streamRead.Length - 1
                     Dim byteBuffer(4096) As Byte
@@ -841,16 +836,22 @@ Public Class FacTrxDetailMch
     End Sub
 
     Private Sub bgWorker_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgWorker.RunWorkerCompleted
-        If e.Cancelled = True Then
+        If e.Cancelled = True Then 'unused, supportscancellation is disabled
             pbAttachment.Visible = False
-            lblProgress.Visible = False
+            lblImageAttachment.Visible = False
 
-            btnPrevious.Enabled = True
-            btnNext.Enabled = True
+            btnAddRow.Enabled = True
+            btnRemoveRow.Enabled = True
+
             btnViewImage.Enabled = True
             btnBrowseImage.Enabled = True
             btnRemoveImage.Enabled = True
+
+            btnNext.Enabled = False
+            btnPrevious.Enabled = False
+
             btnSave.Enabled = True
+            btnCancel.Enabled = True
             btnDelete.Enabled = True
             btnClose.Enabled = True
         Else
@@ -918,7 +919,7 @@ Public Class FacTrxDetailMch
     Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
         Try
             If lstImg.Count = 3 Then
-                MessageBox.Show("Maximum number of attachment is 3 only.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Maximum of 3 image attachments only.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
 
@@ -949,7 +950,9 @@ Public Class FacTrxDetailMch
             If trxId > 0 Then
                 Dim question As String = String.Format("Are you sure you want to delete this record?")
                 If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeJigSubStatusId") = 2 Then 'clear the pm schedule slot
+
+                    'revert the pm schedule to pending
+                    If scheduleId > 0 AndAlso dtTrxHeader.Rows(0).Item("DowntimeMachineSubStatusId") = 2 Then
                         Dim prmMchSchdOrg(8) As SqlParameter
                         prmMchSchdOrg(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmMchSchdOrg(0).Value = Nothing
@@ -978,7 +981,7 @@ Public Class FacTrxDetailMch
                     prmIsLast(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmIsLast(0).Value = trxId
 
-                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY TrxId DESC", CommandType.Text, prmIsLast) Then
+                    If trxId = dbMethod.ExecuteScalar("SELECT TOP 1 TrxId FROM dbo.FacTransactionHeader WHERE MachineId = @MachineId AND TrxStatusId = 2 ORDER BY DatetimeStarted DESC", CommandType.Text, prmIsLast) Then
 
                         Dim prmMachineStatus(2) As SqlParameter
                         prmMachineStatus(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -1030,11 +1033,11 @@ Public Class FacTrxDetailMch
                     lstImg.RemoveAt(currentIndex)
                 Else
                     If Not lstImg(currentIndex).AttachmentId = 0 Then
-                        Dim forDeleteItem As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).FileName,
+                        Dim deleteImg As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).FileName,
                                                                lstImg(currentIndex).SafeName,
                                                                Path.GetExtension(lstImg(currentIndex).SafeName),
                                                                lstImg(currentIndex).AttachmentId)
-                        lstImgForDelete.Add(forDeleteItem)
+                        lstImgDelete.Add(deleteImg)
                         lstImg.RemoveAt(currentIndex)
                     End If
                 End If
@@ -1205,7 +1208,7 @@ Public Class FacTrxDetailMch
                     End If
 
                     If lstImg.Count = 0 Then
-                        MessageBox.Show("Please attach image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show("Please attach pictures for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         btnBrowseImage.Focus()
                         Return
                     End If
@@ -1462,44 +1465,8 @@ Public Class FacTrxDetailMch
 
                 dbMethod.ExecuteNonQuery("InsFacTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
-                If lstImg.Count > 0 Then
-                    For i As Integer = 0 To lstImg.Count - 1
-                        Dim prmAttachment(2) As SqlParameter
-                        prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
-                        prmAttachment(0).Direction = ParameterDirection.Output
-                        prmAttachment(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmAttachment(1).Value = prmHeader(0).Value
-                        prmAttachment(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
-                        prmAttachment(2).Value = ""
-
-                        dbMethod.ExecuteNonQuery("InsFacTransactionAttachment", CommandType.StoredProcedure, prmAttachment)
-
-                        Dim ext As String = String.Empty
-                        Dim newName As String = String.Empty
-                        ext = Path.GetExtension(lstImg(i).FileName).ToLower
-
-                        newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
-
-                        Dim prmUpd(2) As SqlParameter
-                        prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
-                        prmUpd(0).Value = prmAttachment(0).Value
-                        prmUpd(1) = New SqlParameter("@TrxId", SqlDbType.Int)
-                        prmUpd(1).Value = prmHeader(0).Value
-                        prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
-                        prmUpd(2).Value = newName
-
-                        dbMethod.ExecuteNonQuery("UpdFacTransactionAttachment", CommandType.StoredProcedure, prmUpd)
-
-                        pbAttachment.Visible = True
-                        lblProgress.Visible = True
-
-                        Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
-                        lstImgForCopy.Add(copyAttachment)
-                    Next
-                End If
-
-                'get the pm schedule slot
-                'should be place here, before the update of dtTrxDetail so dgvDetail still have the data
+                'machine schedule
+                'note: should be place here, before the update of dtTrxDetail so dgvDetail still have the data
                 If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then 'preventive maintenance
                     Dim prmMchSchd(5) As SqlParameter
                     prmMchSchd(0) = New SqlParameter("@TrxId", SqlDbType.Int)
@@ -1591,6 +1558,43 @@ Public Class FacTrxDetailMch
                         dbMethod.ExecuteNonQuery("InsFacTransactionUser", CommandType.StoredProcedure, prmUser)
                     End If
                 Next
+
+                'transaction image attachment
+                If lstImg.Count > 0 Then
+                    For i As Integer = 0 To lstImg.Count - 1
+                        Dim prmAttachment(2) As SqlParameter
+                        prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                        prmAttachment(0).Direction = ParameterDirection.Output
+                        prmAttachment(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmAttachment(1).Value = prmHeader(0).Value
+                        prmAttachment(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                        prmAttachment(2).Value = ""
+
+                        dbMethod.ExecuteNonQuery("InsFacTransactionImgAttachment", CommandType.StoredProcedure, prmAttachment)
+
+                        Dim ext As String = String.Empty
+                        Dim newName As String = String.Empty
+                        ext = Path.GetExtension(lstImg(i).FileName).ToLower
+
+                        newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
+
+                        Dim prmUpd(2) As SqlParameter
+                        prmUpd(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
+                        prmUpd(0).Value = prmAttachment(0).Value
+                        prmUpd(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmUpd(1).Value = prmHeader(0).Value
+                        prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
+                        prmUpd(2).Value = newName
+
+                        dbMethod.ExecuteNonQuery("UpdFacTransactionImgAttachment", CommandType.StoredProcedure, prmUpd)
+
+                        pbAttachment.Visible = True
+                        lblProgress.Visible = True
+
+                        Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
+                        lstImgCopy.Add(copyAttachment)
+                    Next
+                End If
 
                 btnPrevious.Enabled = False
                 btnNext.Enabled = False
@@ -1845,7 +1849,7 @@ Public Class FacTrxDetailMch
                                 prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
                                 prmHeader(19).Value = If(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
 
-                            Case 3 'sv, asv
+                            Case 3 'sv, asv, sr engr, engr
                                 prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
                                 prmHeader(8).Value = IIf(cmbApp1Status.SelectedValue = 1, 1, 0)
                                 prmHeader(9) = New SqlParameter("@ApproverId1", SqlDbType.Int)
@@ -2048,7 +2052,7 @@ Public Class FacTrxDetailMch
                     prmHeader(23) = New SqlParameter("@FileName", SqlDbType.NVarChar)
                     prmHeader(23).Value = Nothing
 
-                    'trx status
+                    'transaction status
                     If isAdmin Or accessLevelId = 1 Then 'will be based on routing status
                         prmHeader(24) = New SqlParameter("@TrxStatusId", SqlDbType.Int)
                         prmHeader(24).Value = cmbTransactionStatus.SelectedValue
@@ -2097,7 +2101,7 @@ Public Class FacTrxDetailMch
                     prmHeader(29) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                     prmHeader(29).Value = txtDowntimeAccumulated.Text.Trim
 
-                    'routingstatus
+                    'routing status
                     If isAdmin Or accessLevelId = 1 Then
                         If orgRoutingStatusId = 2 Then 'for approval of approver 3
                             If cmbRoutingStatus.SelectedValue = 2 Then 'for approval of approver 3
@@ -2220,7 +2224,7 @@ Public Class FacTrxDetailMch
                             prmHeader(33).Value = txtActionTaken.Text.Trim
                         End If
 
-                    ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled
+                    ElseIf cmbDowntimeStatus.SelectedValue = 3 Then 'unscheduled - require action taken
                         If String.IsNullOrEmpty(txtActionTaken.Text.Trim) Then
                             MessageBox.Show("Please indicate the action taken.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             txtActionTaken.Focus()
@@ -2232,7 +2236,7 @@ Public Class FacTrxDetailMch
                     End If
 
                     If picImage.Image Is Nothing Then
-                        MessageBox.Show("Please attach image for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show("Please attach pictures for this activity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         btnBrowseImage.Focus()
                         Return
                     End If
@@ -2256,7 +2260,7 @@ Public Class FacTrxDetailMch
 
                     dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatus)
 
-                    'if selected machine is different from the original selection, set the original machine to operational
+                    'selected machine was changed, set the original selection to operational
                     If orgMachineId <> cmbMachineName.SelectedValue Then
                         Dim prmMachineStatusOrg(2) As SqlParameter
                         prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -2408,7 +2412,7 @@ Public Class FacTrxDetailMch
 
                     dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMchStatus)
 
-                    'selected machine was changed, set original machine to operational
+                    'selected machine was changed, set the original selection to operational
                     If orgMachineId <> cmbMachineName.SelectedValue Then
                         Dim prmMachineStatusOrg(2) As SqlParameter
                         prmMachineStatusOrg(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -2424,7 +2428,9 @@ Public Class FacTrxDetailMch
 
                 dbMethod.ExecuteNonQuery("UpdFacTransactionHeader", CommandType.StoredProcedure, prmHeader)
 
-                If orgScheduleId > 0 Then 'clear up the orig pm schedule slot
+                'machine schedule
+                'selected machine was changed, revert the pm schedule to pending
+                If orgScheduleId > 0 Then
                     Dim prmOrgSchedule(8) As SqlParameter
                     prmOrgSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmOrgSchedule(0).Value = Nothing
@@ -2448,7 +2454,8 @@ Public Class FacTrxDetailMch
                     dbMethod.ExecuteNonQuery("UpdFacMachineScheduleByScheduleId", CommandType.StoredProcedure, prmOrgSchedule)
                 End If
 
-                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 3 Then
+                'consume available pm schedule
+                If scheduleId > 0 AndAlso cmbDowntimeSubStatus.SelectedValue = 2 Then
                     Dim prmNewSchedule(5) As SqlParameter
                     prmNewSchedule(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                     prmNewSchedule(0).Value = trxId
@@ -2598,21 +2605,21 @@ Public Class FacTrxDetailMch
                     End If
                 Next
 
-                'transaction attachment
-                If lstImgForDelete.Count > 0 Then
-                    For i As Integer = 0 To lstImgForDelete.Count - 1
+                'transaction attachment (image)
+                If lstImgDelete.Count > 0 Then
+                    For i As Integer = 0 To lstImgDelete.Count - 1
                         Dim ext As String = String.Empty
                         Dim newName As String = String.Empty
-                        ext = Path.GetExtension(lstImgForDelete(i).FileName).ToLower
+                        ext = Path.GetExtension(lstImgDelete(i).FileName).ToLower
 
-                        newName = trxId & "-" & lstImgForDelete(i).AttachmentId & ext
+                        newName = trxId & "-" & lstImgDelete(i).AttachmentId & ext
 
                         File.Delete(imgDirectory & "\" & newName)
                         Dim prmDel(0) As SqlParameter
                         prmDel(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
-                        prmDel(0).Value = lstImgForDelete(i).AttachmentId
+                        prmDel(0).Value = lstImgDelete(i).AttachmentId
 
-                        dbMethod.ExecuteNonQuery("DelFacTransactionAttachmentByAttachmentId", CommandType.StoredProcedure, prmDel)
+                        dbMethod.ExecuteNonQuery("DelFacTransactionImgAttachmentByAttachmentId", CommandType.StoredProcedure, prmDel)
                     Next
                 End If
 
@@ -2627,7 +2634,7 @@ Public Class FacTrxDetailMch
                             prmAttachment(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
                             prmAttachment(2).Value = ""
 
-                            dbMethod.ExecuteNonQuery("InsFacTransactionAttachment", CommandType.StoredProcedure, prmAttachment)
+                            dbMethod.ExecuteNonQuery("InsFacTransactionImgAttachment", CommandType.StoredProcedure, prmAttachment)
 
                             Dim ext As String = String.Empty
                             Dim newName As String = String.Empty
@@ -2643,13 +2650,13 @@ Public Class FacTrxDetailMch
                             prmUpd(2) = New SqlParameter("@Filename", SqlDbType.NVarChar)
                             prmUpd(2).Value = newName
 
-                            dbMethod.ExecuteNonQuery("UpdFacTransactionAttachment", CommandType.StoredProcedure, prmUpd)
+                            dbMethod.ExecuteNonQuery("UpdFacTransactionImgAttachment", CommandType.StoredProcedure, prmUpd)
 
                             pbAttachment.Visible = True
                             lblProgress.Visible = True
 
                             Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
-                            lstImgForCopy.Add(copyAttachment)
+                            lstImgCopy.Add(copyAttachment)
                         End If
                     Next
                 End If
@@ -2921,25 +2928,6 @@ Public Class FacTrxDetailMch
                     txtScheduleMonth.Enabled = False
                     txtScheduleWeek.Enabled = False
                 End If
-
-                If trxId = 0 Then
-
-                Else
-                    If isAdmin Or accessLevelId = 1 Then
-
-                    Else
-                        Select Case accessLevelId
-                            Case 2, 3
-                                If orgRoutingStatusId = 3 Or orgRoutingStatusId = 4 Then
-
-                                End If
-                            Case Else
-                                If orgRoutingStatusId = 5 Or orgRoutingStatusId = 6 Then
-
-                                End If
-                        End Select
-                    End If
-                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -3028,7 +3016,7 @@ Public Class FacTrxDetailMch
                     End If
                 End If
 
-                'selected another machine then select again the orig machine
+                'user selected other machine then select again the original selection
                 If orgMachineId = cmbMachineName.SelectedValue AndAlso trxId <> 0 Then
                     If Not dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime") Is DBNull.Value Then
                         txtRuntimeAccumulated.Text = dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime")
@@ -3314,7 +3302,7 @@ Public Class FacTrxDetailMch
             Else
                 Me.Text = "Activity No. " & trxId
 
-                'FacTransactionHeader
+                'transaction header
                 For Each row As DataRow In dtTrxHeader.Rows
                     orgMachineId = row("MachineId")
                     orgMachineSubStatusId = row("DowntimeMachineSubStatusId")
@@ -3354,7 +3342,7 @@ Public Class FacTrxDetailMch
                     End If
 
                     If Not row("JoNumber") Is DBNull.Value Then
-                        txtJoNumber.Text = row("JoNumber").ToString.Trim
+                        txtJoNumber.Text = row("JoNumber")
                     End If
 
                     If Not row("JoRequestor") Is DBNull.Value Then
@@ -3364,7 +3352,6 @@ Public Class FacTrxDetailMch
                     If Not row("LinkChecksheet") Is DBNull.Value Then
                         txtChecksheet.Text = row("LinkChecksheet")
                     End If
-
 
                     If Not row("ModifiedBy") Is DBNull.Value Then
                         orgModifiedBy = row("ModifiedBy")
@@ -3463,33 +3450,7 @@ Public Class FacTrxDetailMch
                     End If
                 Next
 
-                'FacTransactionAttachment
-                Dim aCount As Integer = 0
-                Dim prmCount(0) As SqlParameter
-                prmCount(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                prmCount(0).Value = trxId
-
-                aCount = dbMethod.ExecuteScalar("CntTransactionAttachmentByTrxId", CommandType.StoredProcedure, prmCount)
-
-                If aCount > 0 Then
-                    Dim prmRead(0) As SqlParameter
-                    prmRead(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prmRead(0).Value = trxId
-
-                    dtTrxAttachment = dbMethod.FillDataTable("RdFacTransactionAttachmentByTrxId", CommandType.StoredProcedure, prmRead)
-
-                    For i As Integer = 0 To dtTrxAttachment.Rows.Count - 1
-                        Dim oldAttachment As New ImgAttachment(Path.Combine(imgDirectory, dtTrxAttachment.Rows(i).Item("Filename").ToString),
-                                                           dtTrxAttachment.Rows(i).Item("Filename").ToString,
-                                                           Path.GetExtension(Path.Combine(imgDirectory, dtTrxAttachment.Rows(i).Item("Filename").ToString)),
-                                                           dtTrxAttachment.Rows(i).Item("AttachmentId"))
-                        lstImg.Add(oldAttachment)
-                        currentIndex = 0
-                    Next
-                    ShowAttachment()
-                End If
-
-                'FacTransactionMachinePart
+                'transaction machine part
                 For Each row As DataRow In dtTrxMachinePart.Rows
                     If Not row("MachinePartId") Is DBNull.Value Then
                         cmbMachinePart.SelectedValue = row("MachinePartId")
@@ -3499,7 +3460,7 @@ Public Class FacTrxDetailMch
                     End If
                 Next
 
-                'FacTransactionSparePart
+                'transaction spare aprt
                 For Each row As DataRow In dtTrxSparePart.Rows
                     If Not row("SparePartName") Is DBNull.Value AndAlso Not row("SparePartNo") Is DBNull.Value Then
                         txtPartsReplaced.Text = row("SparePartName")
@@ -3509,7 +3470,7 @@ Public Class FacTrxDetailMch
 
                 imgTmp = Path.Combine(IO.Path.GetTempPath, "tmpImg." & Path.GetExtension(txtImageName.Text))
 
-                'decide what control should receive focus
+                'decide what control shall receive focus
                 If isAdmin Or accessLevelId = 1 Then
                     If cmbApp3Name.SelectedValue = userId AndAlso orgRoutingStatusId = 2 Then
                         Me.ActiveControl = txtApp3Remarks
@@ -3553,6 +3514,32 @@ Public Class FacTrxDetailMch
                 End If
             End If
 
+            'transaction attachment (image)
+            Dim aCount As Integer = 0
+            Dim prmCount(0) As SqlParameter
+            prmCount(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+            prmCount(0).Value = trxId
+
+            aCount = dbMethod.ExecuteScalar("CntTransactionImgAttachmentByTrxId", CommandType.StoredProcedure, prmCount)
+
+            If aCount > 0 Then
+                Dim prmRead(0) As SqlParameter
+                prmRead(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmRead(0).Value = trxId
+
+                dtTrxImgAttachment = dbMethod.FillDataTable("RdFacTransactionImgAttachmentByTrxId", CommandType.StoredProcedure, prmRead)
+
+                For i As Integer = 0 To dtTrxImgAttachment.Rows.Count - 1
+                    Dim oldAttachment As New ImgAttachment(Path.Combine(imgDirectory, dtTrxImgAttachment.Rows(i).Item("Filename").ToString),
+                                                           dtTrxImgAttachment.Rows(i).Item("Filename").ToString,
+                                                           Path.GetExtension(Path.Combine(imgDirectory, dtTrxImgAttachment.Rows(i).Item("Filename").ToString)),
+                                                           dtTrxImgAttachment.Rows(i).Item("AttachmentId"))
+                    lstImg.Add(oldAttachment)
+                    currentIndex = 0
+                Next
+                ShowAttachment()
+            End If
+
             If fromPmCalendar = True Then
                 cmbTransactionStatus.Enabled = False
                 cmbMachineName.Enabled = False
@@ -3576,6 +3563,8 @@ Public Class FacTrxDetailMch
                 btnRemoveImage.Enabled = False
                 btnRemoveChecksheet.Enabled = False
 
+                btnPrevious.Enabled = True
+                btnNext.Enabled = True
                 btnViewChecksheet.Enabled = True
                 btnViewImage.Enabled = True
 
@@ -3610,7 +3599,7 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
     Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        impersonation.UndoImpersonateUser()
+        'impersonation.UndoImpersonateUser()
     End Sub
     Private Sub GetMachineArea(machineId As Integer)
         Try
@@ -3670,7 +3659,7 @@ Public Class FacTrxDetailMch
 
     Private Sub GetMachineSchedule(machineId As Integer)
         Try
-            If trxId = 0 Then
+            If trxId = 0 Then 'new record
                 Dim prmSchedule(0) As SqlParameter
                 prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmSchedule(0).Value = machineId
@@ -3727,7 +3716,7 @@ Public Class FacTrxDetailMch
                         End If
                         rdrSchedule.Close()
 
-                    Else 'non-pm to pm and/or vice versa
+                    Else 'non-pm to pm
                         Dim prmSchedule(0) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                         prmSchedule(0).Value = machineId
@@ -3785,7 +3774,7 @@ Public Class FacTrxDetailMch
                         prmOrgSched(0) = New SqlParameter("@TrxId", SqlDbType.Int)
                         prmOrgSched(0).Value = trxId
 
-                        Dim query2 As String = "SELECT ScheduleId FROM dbo.MntMachineSchedule WHERE TrxId = @TrxId"
+                        Dim query2 As String = "SELECT ScheduleId FROM dbo.FacMachineSchedule WHERE TrxId = @TrxId"
 
                         Dim rdrOrgSched As IDataReader = dbMethod.ExecuteReader(query2, CommandType.Text, prmOrgSched)
 
@@ -4104,6 +4093,16 @@ Public Class FacTrxDetailMch
     End Sub
     Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
+            If ofdImage.FileNames.Length > 3 Then
+                MessageBox.Show("Maximum of 3 image attachments only.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
+            If ofdImage.FileNames.Length + lstImg.Count > 3 Then
+                MessageBox.Show("Maximum of 3 image attachments only.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End If
+
             For i As Integer = 0 To ofdImage.FileNames.Length - 1
                 Dim newAttachment As New ImgAttachment(ofdImage.FileNames(i), ofdImage.SafeFileNames(i), Path.GetExtension(ofdImage.SafeFileNames(i)).ToLower)
                 lstImg.Add(newAttachment)
@@ -4135,8 +4134,8 @@ Public Class FacTrxDetailMch
 
     Private Sub ShowAttachment()
         Try
-            If lstImgFileTypes.Contains(lstImg(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
-                Using img As Image = Image.FromFile(lstImg(currentIndex).FileName)
+            If lstImgTypes.Contains(lstImg(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
+                Using img As Image = Image.FromFile(Path.Combine(imgDirectory, lstImg(currentIndex).FileName))
                     picImage.Image = New Bitmap(img)
                 End Using
             End If

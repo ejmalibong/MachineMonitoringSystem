@@ -32,20 +32,18 @@ Partial Class Main
         Me.FacTransactionConsoleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FacActivtyApprovalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FacMachineScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tssFile1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tssFileFa = New System.Windows.Forms.ToolStripSeparator()
         Me.MntTransactionConsoleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntActivtyApprovalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMachineScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntJigScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tssFile2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tssFileMt = New System.Windows.Forms.ToolStripSeparator()
         Me.LogOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FacActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FacPmReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssReport = New System.Windows.Forms.ToolStripSeparator()
         Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MntPmReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MaintenanceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMchPartsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -111,7 +109,7 @@ Partial Class Main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFile1, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.tssFile2, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFileFa, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.tssFileMt, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -119,73 +117,83 @@ Partial Class Main
         'FacTransactionConsoleToolStripMenuItem
         '
         Me.FacTransactionConsoleToolStripMenuItem.Name = "FacTransactionConsoleToolStripMenuItem"
-        Me.FacTransactionConsoleToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.FacTransactionConsoleToolStripMenuItem.Text = "FC Activity Console"
+        Me.FacTransactionConsoleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.FacTransactionConsoleToolStripMenuItem.Tag = "FA"
+        Me.FacTransactionConsoleToolStripMenuItem.Text = "Activity Console"
         '
         'FacActivtyApprovalToolStripMenuItem
         '
         Me.FacActivtyApprovalToolStripMenuItem.Name = "FacActivtyApprovalToolStripMenuItem"
-        Me.FacActivtyApprovalToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.FacActivtyApprovalToolStripMenuItem.Text = "FC Activity Approval"
+        Me.FacActivtyApprovalToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.FacActivtyApprovalToolStripMenuItem.Tag = "FA"
+        Me.FacActivtyApprovalToolStripMenuItem.Text = "Activity Approval"
         Me.FacActivtyApprovalToolStripMenuItem.Visible = False
         '
         'FacMachineScheduleToolStripMenuItem
         '
         Me.FacMachineScheduleToolStripMenuItem.Name = "FacMachineScheduleToolStripMenuItem"
-        Me.FacMachineScheduleToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.FacMachineScheduleToolStripMenuItem.Text = "FC Machine PM Schedule"
+        Me.FacMachineScheduleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.FacMachineScheduleToolStripMenuItem.Tag = "FA"
+        Me.FacMachineScheduleToolStripMenuItem.Text = "Machine PM Schedule"
         '
-        'tssFile1
+        'tssFileFa
         '
-        Me.tssFile1.Name = "tssFile1"
-        Me.tssFile1.Size = New System.Drawing.Size(209, 6)
+        Me.tssFileFa.Name = "tssFileFa"
+        Me.tssFileFa.Size = New System.Drawing.Size(189, 6)
+        Me.tssFileFa.Tag = "FA"
         '
         'MntTransactionConsoleToolStripMenuItem
         '
         Me.MntTransactionConsoleToolStripMenuItem.Name = "MntTransactionConsoleToolStripMenuItem"
-        Me.MntTransactionConsoleToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.MntTransactionConsoleToolStripMenuItem.Tag = ""
-        Me.MntTransactionConsoleToolStripMenuItem.Text = "MT Activity Console"
+        Me.MntTransactionConsoleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntTransactionConsoleToolStripMenuItem.Tag = "MT"
+        Me.MntTransactionConsoleToolStripMenuItem.Text = "Activity Console"
         '
         'MntActivtyApprovalToolStripMenuItem
         '
         Me.MntActivtyApprovalToolStripMenuItem.Name = "MntActivtyApprovalToolStripMenuItem"
-        Me.MntActivtyApprovalToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.MntActivtyApprovalToolStripMenuItem.Text = "MT Activity Approval"
+        Me.MntActivtyApprovalToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntActivtyApprovalToolStripMenuItem.Tag = "MT"
+        Me.MntActivtyApprovalToolStripMenuItem.Text = "Activity Approval"
         Me.MntActivtyApprovalToolStripMenuItem.Visible = False
         '
         'MntMachineScheduleToolStripMenuItem
         '
         Me.MntMachineScheduleToolStripMenuItem.Name = "MntMachineScheduleToolStripMenuItem"
-        Me.MntMachineScheduleToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.MntMachineScheduleToolStripMenuItem.Text = "MT Machine PM Schedule"
+        Me.MntMachineScheduleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntMachineScheduleToolStripMenuItem.Tag = "MT"
+        Me.MntMachineScheduleToolStripMenuItem.Text = "Machine PM Schedule"
         '
         'MntJigScheduleToolStripMenuItem
         '
         Me.MntJigScheduleToolStripMenuItem.Name = "MntJigScheduleToolStripMenuItem"
-        Me.MntJigScheduleToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
-        Me.MntJigScheduleToolStripMenuItem.Text = "MT Jig PM Schedule"
+        Me.MntJigScheduleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntJigScheduleToolStripMenuItem.Tag = "MT"
+        Me.MntJigScheduleToolStripMenuItem.Text = "Jig PM Schedule"
         '
-        'tssFile2
+        'tssFileMt
         '
-        Me.tssFile2.Name = "tssFile2"
-        Me.tssFile2.Size = New System.Drawing.Size(209, 6)
+        Me.tssFileMt.Name = "tssFileMt"
+        Me.tssFileMt.Size = New System.Drawing.Size(189, 6)
+        Me.tssFileMt.Tag = "MT"
         '
         'LogOutToolStripMenuItem
         '
         Me.LogOutToolStripMenuItem.Name = "LogOutToolStripMenuItem"
-        Me.LogOutToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.LogOutToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.LogOutToolStripMenuItem.Tag = "GE"
         Me.LogOutToolStripMenuItem.Text = "Log Out"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.ExitToolStripMenuItem.Tag = "GE"
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'ReportsToolStripMenuItem
         '
-        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacActivityReportToolStripMenuItem, Me.FacPmReportToolStripMenuItem, Me.tssReport, Me.MntActivityReportToolStripMenuItem, Me.MntPmReportToolStripMenuItem})
+        Me.ReportsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacActivityReportToolStripMenuItem, Me.tssReport, Me.MntActivityReportToolStripMenuItem})
         Me.ReportsToolStripMenuItem.Name = "ReportsToolStripMenuItem"
         Me.ReportsToolStripMenuItem.Size = New System.Drawing.Size(54, 20)
         Me.ReportsToolStripMenuItem.Text = "Report"
@@ -193,32 +201,22 @@ Partial Class Main
         'FacActivityReportToolStripMenuItem
         '
         Me.FacActivityReportToolStripMenuItem.Name = "FacActivityReportToolStripMenuItem"
-        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
-        Me.FacActivityReportToolStripMenuItem.Text = "FC Activity Report"
-        '
-        'FacPmReportToolStripMenuItem
-        '
-        Me.FacPmReportToolStripMenuItem.Name = "FacPmReportToolStripMenuItem"
-        Me.FacPmReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
-        Me.FacPmReportToolStripMenuItem.Text = "FC PM Report"
+        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FacActivityReportToolStripMenuItem.Tag = "FA"
+        Me.FacActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'tssReport
         '
         Me.tssReport.Name = "tssReport"
-        Me.tssReport.Size = New System.Drawing.Size(169, 6)
+        Me.tssReport.Size = New System.Drawing.Size(177, 6)
+        Me.tssReport.Tag = "MT"
         '
         'MntActivityReportToolStripMenuItem
         '
         Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
-        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
-        Me.MntActivityReportToolStripMenuItem.Text = "MT Activity Report"
-        '
-        'MntPmReportToolStripMenuItem
-        '
-        Me.MntPmReportToolStripMenuItem.Name = "MntPmReportToolStripMenuItem"
-        Me.MntPmReportToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
-        Me.MntPmReportToolStripMenuItem.Text = "MT PM Report"
-        Me.MntPmReportToolStripMenuItem.Visible = False
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntActivityReportToolStripMenuItem.Tag = "MT"
+        Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'MaintenanceToolStripMenuItem
         '
@@ -232,12 +230,14 @@ Partial Class Main
         Me.MntMchToolStripMenuItem.AccessibleName = ""
         Me.MntMchToolStripMenuItem.Name = "MntMchToolStripMenuItem"
         Me.MntMchToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntMchToolStripMenuItem.Tag = "MT"
         Me.MntMchToolStripMenuItem.Text = "Machine"
         '
         'MntMchPartsToolStripMenuItem
         '
         Me.MntMchPartsToolStripMenuItem.Name = "MntMchPartsToolStripMenuItem"
         Me.MntMchPartsToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntMchPartsToolStripMenuItem.Tag = "MT"
         Me.MntMchPartsToolStripMenuItem.Text = "Machine Parts"
         Me.MntMchPartsToolStripMenuItem.Visible = False
         '
@@ -245,12 +245,14 @@ Partial Class Main
         '
         Me.MntMchChecksheetToolStripMenuItem.Name = "MntMchChecksheetToolStripMenuItem"
         Me.MntMchChecksheetToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntMchChecksheetToolStripMenuItem.Tag = "MT"
         Me.MntMchChecksheetToolStripMenuItem.Text = "Machine Checksheet"
         '
         'MntAreaToolStripMenuItem
         '
         Me.MntAreaToolStripMenuItem.Name = "MntAreaToolStripMenuItem"
         Me.MntAreaToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntAreaToolStripMenuItem.Tag = "MT"
         Me.MntAreaToolStripMenuItem.Text = "Area"
         Me.MntAreaToolStripMenuItem.Visible = False
         '
@@ -258,40 +260,47 @@ Partial Class Main
         '
         Me.tssMaintenance1.Name = "tssMaintenance1"
         Me.tssMaintenance1.Size = New System.Drawing.Size(181, 6)
+        Me.tssMaintenance1.Tag = "MT"
         '
         'MntJigToolStripMenuItem
         '
         Me.MntJigToolStripMenuItem.Name = "MntJigToolStripMenuItem"
         Me.MntJigToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntJigToolStripMenuItem.Tag = "MT"
         Me.MntJigToolStripMenuItem.Text = "Jig"
         '
         'MntJigChecksheetToolStripMenuItem
         '
         Me.MntJigChecksheetToolStripMenuItem.Name = "MntJigChecksheetToolStripMenuItem"
         Me.MntJigChecksheetToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntJigChecksheetToolStripMenuItem.Tag = "MT"
         Me.MntJigChecksheetToolStripMenuItem.Text = "Jig Checksheet"
         '
         'MntJigModelToolStripMenuItem
         '
         Me.MntJigModelToolStripMenuItem.Name = "MntJigModelToolStripMenuItem"
         Me.MntJigModelToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntJigModelToolStripMenuItem.Tag = "MT"
         Me.MntJigModelToolStripMenuItem.Text = "Model"
         '
         'MntModelExtensionToolStripMenuItem
         '
         Me.MntModelExtensionToolStripMenuItem.Name = "MntModelExtensionToolStripMenuItem"
         Me.MntModelExtensionToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntModelExtensionToolStripMenuItem.Tag = "MT"
         Me.MntModelExtensionToolStripMenuItem.Text = "Extension"
         '
         'tssMaintenance2
         '
         Me.tssMaintenance2.Name = "tssMaintenance2"
         Me.tssMaintenance2.Size = New System.Drawing.Size(181, 6)
+        Me.tssMaintenance2.Tag = "MT"
         '
         'SecUserToolStripMenuItem
         '
         Me.SecUserToolStripMenuItem.Name = "SecUserToolStripMenuItem"
         Me.SecUserToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.SecUserToolStripMenuItem.Tag = "AD"
         Me.SecUserToolStripMenuItem.Text = "User"
         '
         'WindowToolStripMenuItem
@@ -383,7 +392,7 @@ Partial Class Main
     Friend WithEvents WindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntTransactionConsoleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntActivtyApprovalToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents tssFile2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tssFileMt As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents LogOutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntActivityReportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -399,14 +408,12 @@ Partial Class Main
     Friend WithEvents VersionToolStripStatusLabel As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents MntMachineScheduleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MntJigScheduleToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents MntPmReportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MntMchChecksheetToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MntJigChecksheetToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FacTransactionConsoleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FacActivtyApprovalToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FacMachineScheduleToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents tssFile1 As ToolStripSeparator
+    Friend WithEvents tssFileFa As ToolStripSeparator
     Friend WithEvents FacActivityReportToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents FacPmReportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents tssReport As ToolStripSeparator
 End Class
