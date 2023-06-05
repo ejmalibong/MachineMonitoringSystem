@@ -24,6 +24,7 @@ Partial Class FacMchSched
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacMchSched))
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -32,7 +33,6 @@ Partial Class FacMchSched
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMchSched))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -46,18 +46,6 @@ Partial Class FacMchSched
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.ColScheduleId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColWeek = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColPmFrequency = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColCreatedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColActivityBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColActivityDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModifiedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModifiedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsChecklistCompleted = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.ColIsDone = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -77,6 +65,18 @@ Partial Class FacMchSched
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.lblYear = New System.Windows.Forms.Label()
         Me.txtYearId = New System.Windows.Forms.MaskedTextBox()
+        Me.ColScheduleId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColWeek = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPmFrequency = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColCreatedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivityBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivityDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModifiedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModifiedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsChecklistCompleted = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.ColIsDone = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -243,119 +243,6 @@ Partial Class FacMchSched
         Me.dgvList.Size = New System.Drawing.Size(1014, 490)
         Me.dgvList.TabIndex = 553
         '
-        'ColScheduleId
-        '
-        Me.ColScheduleId.DataPropertyName = "ScheduleId"
-        Me.ColScheduleId.HeaderText = "Schedule ID"
-        Me.ColScheduleId.Name = "ColScheduleId"
-        Me.ColScheduleId.ReadOnly = True
-        Me.ColScheduleId.Visible = False
-        '
-        'ColMonth
-        '
-        Me.ColMonth.DataPropertyName = "MonthShortName"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColMonth.HeaderText = "Month"
-        Me.ColMonth.Name = "ColMonth"
-        Me.ColMonth.ReadOnly = True
-        Me.ColMonth.Width = 60
-        '
-        'ColWeek
-        '
-        Me.ColWeek.DataPropertyName = "WeekId"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColWeek.HeaderText = "Week"
-        Me.ColWeek.Name = "ColWeek"
-        Me.ColWeek.ReadOnly = True
-        Me.ColWeek.Width = 50
-        '
-        'ColMachineName
-        '
-        Me.ColMachineName.DataPropertyName = "MachineName"
-        Me.ColMachineName.HeaderText = "Machine"
-        Me.ColMachineName.Name = "ColMachineName"
-        Me.ColMachineName.ReadOnly = True
-        Me.ColMachineName.Width = 150
-        '
-        'ColPmFrequency
-        '
-        Me.ColPmFrequency.DataPropertyName = "PmFrequencyId"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColPmFrequency.HeaderText = "Freq"
-        Me.ColPmFrequency.Name = "ColPmFrequency"
-        Me.ColPmFrequency.ReadOnly = True
-        Me.ColPmFrequency.Width = 50
-        '
-        'ColCreatedBy
-        '
-        Me.ColCreatedBy.DataPropertyName = "CreatedByNickname"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColCreatedBy.HeaderText = "Created By"
-        Me.ColCreatedBy.Name = "ColCreatedBy"
-        Me.ColCreatedBy.ReadOnly = True
-        '
-        'ColActivityBy
-        '
-        Me.ColActivityBy.DataPropertyName = "ActivityByNickname"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle6
-        Me.ColActivityBy.HeaderText = "Activity By"
-        Me.ColActivityBy.Name = "ColActivityBy"
-        Me.ColActivityBy.ReadOnly = True
-        Me.ColActivityBy.Width = 120
-        '
-        'ColActivityDate
-        '
-        Me.ColActivityDate.DataPropertyName = "ActivityDate"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle7.Format = "MM/dd/yyyy hh:mm tt"
-        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle7
-        Me.ColActivityDate.HeaderText = "Activity Date"
-        Me.ColActivityDate.Name = "ColActivityDate"
-        Me.ColActivityDate.ReadOnly = True
-        Me.ColActivityDate.Width = 120
-        '
-        'ColModifiedBy
-        '
-        Me.ColModifiedBy.DataPropertyName = "ModifiedByNickname"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle8
-        Me.ColModifiedBy.HeaderText = "Modified By"
-        Me.ColModifiedBy.Name = "ColModifiedBy"
-        Me.ColModifiedBy.ReadOnly = True
-        '
-        'ColModifiedDate
-        '
-        Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
-        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle9
-        Me.ColModifiedDate.HeaderText = "Modified Date"
-        Me.ColModifiedDate.Name = "ColModifiedDate"
-        Me.ColModifiedDate.ReadOnly = True
-        Me.ColModifiedDate.Width = 120
-        '
-        'ColIsChecklistCompleted
-        '
-        Me.ColIsChecklistCompleted.DataPropertyName = "IsChecklistCompleted"
-        Me.ColIsChecklistCompleted.HeaderText = "CS"
-        Me.ColIsChecklistCompleted.Name = "ColIsChecklistCompleted"
-        Me.ColIsChecklistCompleted.ReadOnly = True
-        Me.ColIsChecklistCompleted.Visible = False
-        Me.ColIsChecklistCompleted.Width = 50
-        '
-        'ColIsDone
-        '
-        Me.ColIsDone.DataPropertyName = "IsDone"
-        Me.ColIsDone.HeaderText = "Done"
-        Me.ColIsDone.Name = "ColIsDone"
-        Me.ColIsDone.ReadOnly = True
-        Me.ColIsDone.Width = 50
-        '
         'bindingNavigator
         '
         Me.bindingNavigator.AddNewItem = Nothing
@@ -413,6 +300,7 @@ Partial Class FacMchSched
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -568,7 +456,120 @@ Partial Class FacMchSched
         Me.txtYearId.TabIndex = 579
         Me.txtYearId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'MntMchSched
+        'ColScheduleId
+        '
+        Me.ColScheduleId.DataPropertyName = "ScheduleId"
+        Me.ColScheduleId.HeaderText = "Schedule ID"
+        Me.ColScheduleId.Name = "ColScheduleId"
+        Me.ColScheduleId.ReadOnly = True
+        Me.ColScheduleId.Visible = False
+        '
+        'ColMonth
+        '
+        Me.ColMonth.DataPropertyName = "MonthShortName"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMonth.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColMonth.HeaderText = "Month"
+        Me.ColMonth.Name = "ColMonth"
+        Me.ColMonth.ReadOnly = True
+        Me.ColMonth.Width = 60
+        '
+        'ColWeek
+        '
+        Me.ColWeek.DataPropertyName = "WeekId"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColWeek.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColWeek.HeaderText = "Week"
+        Me.ColWeek.Name = "ColWeek"
+        Me.ColWeek.ReadOnly = True
+        Me.ColWeek.Width = 50
+        '
+        'ColMachineName
+        '
+        Me.ColMachineName.DataPropertyName = "MachineCode"
+        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.Name = "ColMachineName"
+        Me.ColMachineName.ReadOnly = True
+        Me.ColMachineName.Width = 150
+        '
+        'ColPmFrequency
+        '
+        Me.ColPmFrequency.DataPropertyName = "PmFrequencyId"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColPmFrequency.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColPmFrequency.HeaderText = "Freq"
+        Me.ColPmFrequency.Name = "ColPmFrequency"
+        Me.ColPmFrequency.ReadOnly = True
+        Me.ColPmFrequency.Width = 50
+        '
+        'ColCreatedBy
+        '
+        Me.ColCreatedBy.DataPropertyName = "CreatedByNickname"
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColCreatedBy.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColCreatedBy.HeaderText = "Created By"
+        Me.ColCreatedBy.Name = "ColCreatedBy"
+        Me.ColCreatedBy.ReadOnly = True
+        '
+        'ColActivityBy
+        '
+        Me.ColActivityBy.DataPropertyName = "ActivityByNickname"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColActivityBy.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColActivityBy.HeaderText = "Activity By"
+        Me.ColActivityBy.Name = "ColActivityBy"
+        Me.ColActivityBy.ReadOnly = True
+        Me.ColActivityBy.Width = 120
+        '
+        'ColActivityDate
+        '
+        Me.ColActivityDate.DataPropertyName = "ActivityDate"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColActivityDate.DefaultCellStyle = DataGridViewCellStyle7
+        Me.ColActivityDate.HeaderText = "Activity Date"
+        Me.ColActivityDate.Name = "ColActivityDate"
+        Me.ColActivityDate.ReadOnly = True
+        Me.ColActivityDate.Width = 120
+        '
+        'ColModifiedBy
+        '
+        Me.ColModifiedBy.DataPropertyName = "ModifiedByNickname"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColModifiedBy.DefaultCellStyle = DataGridViewCellStyle8
+        Me.ColModifiedBy.HeaderText = "Modified By"
+        Me.ColModifiedBy.Name = "ColModifiedBy"
+        Me.ColModifiedBy.ReadOnly = True
+        '
+        'ColModifiedDate
+        '
+        Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColModifiedDate.DefaultCellStyle = DataGridViewCellStyle9
+        Me.ColModifiedDate.HeaderText = "Modified Date"
+        Me.ColModifiedDate.Name = "ColModifiedDate"
+        Me.ColModifiedDate.ReadOnly = True
+        Me.ColModifiedDate.Width = 120
+        '
+        'ColIsChecklistCompleted
+        '
+        Me.ColIsChecklistCompleted.DataPropertyName = "IsChecklistCompleted"
+        Me.ColIsChecklistCompleted.HeaderText = "CS"
+        Me.ColIsChecklistCompleted.Name = "ColIsChecklistCompleted"
+        Me.ColIsChecklistCompleted.ReadOnly = True
+        Me.ColIsChecklistCompleted.Visible = False
+        Me.ColIsChecklistCompleted.Width = 50
+        '
+        'ColIsDone
+        '
+        Me.ColIsDone.DataPropertyName = "IsDone"
+        Me.ColIsDone.HeaderText = "Done"
+        Me.ColIsDone.Name = "ColIsDone"
+        Me.ColIsDone.ReadOnly = True
+        Me.ColIsDone.Width = 50
+        '
+        'FacMchSched
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -595,7 +596,7 @@ Partial Class FacMchSched
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntMchSched"
+        Me.Name = "FacMchSched"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

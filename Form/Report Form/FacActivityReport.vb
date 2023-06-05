@@ -415,6 +415,27 @@ Public Class FacActivityReport
         Dim width = 0
         Dim height = 0
 
+        'For Each image In enumerable
+        '    width += image.Width
+        '    height = If(image.Height > height, image.Height, height)
+        'Next
+
+        'Dim bitmap = New Bitmap(width, height)
+
+        'Using g = Graphics.FromImage(bitmap)
+        '    Dim localWidth = 0
+
+        '    For Each image In enumerable
+        '        Dim resImg As Image = dbMain.ResizeImage(image, New Size(width / enumerable.Count, image.Height))
+        '        'g.DrawImage(image, localWidth, 0)
+        '        g.DrawImage(resImg, localWidth, 0)
+        '        'g.DrawImage(resImg, localWidth, 0, localWidth, height)
+        '        'localWidth += image.Width
+        '        localWidth += resImg.Width
+        '        'localWidth += width / enumerable.Count
+        '    Next
+        'End Using
+
         For Each image In enumerable
             width += image.Width
             height = If(image.Height > height, image.Height, height)
