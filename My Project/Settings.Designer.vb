@@ -82,28 +82,6 @@ Namespace My
                 Return CType(Me("MachineMonitoringConnectionString"),String)
             End Get
         End Property
-        
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.20.230;Initial Catalog=MachineMonitoring;Integrated Security="& _ 
-            "True")>  _
-        Public ReadOnly Property MachineMonitoringConnectionString1() As String
-            Get
-                Return CType(Me("MachineMonitoringConnectionString1"),String)
-            End Get
-        End Property
-        
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.20.230;Initial Catalog=MachineMonitoring;Integrated Security="& _ 
-            "True")>  _
-        Public ReadOnly Property MachineMonitoringConnectionString2() As String
-            Get
-                Return CType(Me("MachineMonitoringConnectionString2"),String)
-            End Get
-        End Property
     End Class
 End Namespace
 

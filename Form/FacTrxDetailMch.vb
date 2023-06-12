@@ -34,7 +34,7 @@ Public Class FacTrxDetailMch
     Private dtTrxUser As New DataTable
     Private imgDirectory As String = directory.ImgIniDirectoryFc
     Private imgTmp As String = String.Empty
-    'Private impersonation As New UserImpersonation.UserImpersonation
+    Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
 
     Private lstImg As New List(Of ImgAttachment)
@@ -708,7 +708,7 @@ Public Class FacTrxDetailMch
         LoadTransactionStatus()
         LoadMachine()
         GetSetting(My.Settings.SettingsId)
-        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -3599,7 +3599,7 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
     Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        'impersonation.UndoImpersonateUser()
+        impersonation.UndoImpersonateUser()
     End Sub
     Private Sub GetMachineArea(machineId As Integer)
         Try

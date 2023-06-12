@@ -50,17 +50,13 @@ Public Class Login
             'txtEmployeeId.Text = "2009-002"
             'txtPassword.Text = "malibong"
 
-            'chad
-            'txtEmployeeId.Text = "2005-001"
-            'txtPassword.Text = "belen"
-
             'karlin
             'txtEmployeeId.Text = "2106-020"
             'txtPassword.Text = "tano"
 
             'noriel
-            txtEmployeeId.Text = "1901-033"
-            txtPassword.Text = "aquino"
+            'txtEmployeeId.Text = "1901-033"
+            'txtPassword.Text = "aquino"
 
             'txtEmployeeId.Text = "2009-015"
             'txtPassword.Text = "pastrana"
