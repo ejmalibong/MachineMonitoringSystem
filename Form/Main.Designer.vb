@@ -48,6 +48,7 @@ Partial Class Main
         Me.MntMchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMchPartsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMchChecksheetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MntSparePartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntAreaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssMaintenance1 = New System.Windows.Forms.ToolStripSeparator()
         Me.MntJigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -201,26 +202,26 @@ Partial Class Main
         'FacActivityReportToolStripMenuItem
         '
         Me.FacActivityReportToolStripMenuItem.Name = "FacActivityReportToolStripMenuItem"
-        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FacActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.FacActivityReportToolStripMenuItem.Tag = "FA"
         Me.FacActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'tssReport
         '
         Me.tssReport.Name = "tssReport"
-        Me.tssReport.Size = New System.Drawing.Size(177, 6)
+        Me.tssReport.Size = New System.Drawing.Size(149, 6)
         Me.tssReport.Tag = "MT"
         '
         'MntActivityReportToolStripMenuItem
         '
         Me.MntActivityReportToolStripMenuItem.Name = "MntActivityReportToolStripMenuItem"
-        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MntActivityReportToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.MntActivityReportToolStripMenuItem.Tag = "MT"
         Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
         'MaintenanceToolStripMenuItem
         '
-        Me.MaintenanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntMchToolStripMenuItem, Me.MntMchPartsToolStripMenuItem, Me.MntMchChecksheetToolStripMenuItem, Me.MntAreaToolStripMenuItem, Me.tssMaintenance1, Me.MntJigToolStripMenuItem, Me.MntJigChecksheetToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.tssMaintenance2, Me.SecUserToolStripMenuItem})
+        Me.MaintenanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntMchToolStripMenuItem, Me.MntMchPartsToolStripMenuItem, Me.MntMchChecksheetToolStripMenuItem, Me.MntSparePartToolStripMenuItem, Me.MntAreaToolStripMenuItem, Me.tssMaintenance1, Me.MntJigToolStripMenuItem, Me.MntJigChecksheetToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.tssMaintenance2, Me.SecUserToolStripMenuItem})
         Me.MaintenanceToolStripMenuItem.Name = "MaintenanceToolStripMenuItem"
         Me.MaintenanceToolStripMenuItem.Size = New System.Drawing.Size(88, 20)
         Me.MaintenanceToolStripMenuItem.Text = "Maintenance"
@@ -247,6 +248,13 @@ Partial Class Main
         Me.MntMchChecksheetToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
         Me.MntMchChecksheetToolStripMenuItem.Tag = "MT"
         Me.MntMchChecksheetToolStripMenuItem.Text = "Machine Checksheet"
+        '
+        'MntSparePartToolStripMenuItem
+        '
+        Me.MntSparePartToolStripMenuItem.Name = "MntSparePartToolStripMenuItem"
+        Me.MntSparePartToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.MntSparePartToolStripMenuItem.Tag = "MT"
+        Me.MntSparePartToolStripMenuItem.Text = "Spare Parts"
         '
         'MntAreaToolStripMenuItem
         '
@@ -416,4 +424,5 @@ Partial Class Main
     Friend WithEvents tssFileFa As ToolStripSeparator
     Friend WithEvents FacActivityReportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents tssReport As ToolStripSeparator
+    Friend WithEvents MntSparePartToolStripMenuItem As ToolStripMenuItem
 End Class

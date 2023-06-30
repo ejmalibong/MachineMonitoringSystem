@@ -127,7 +127,7 @@ Public Class Main
 
     'report
     Private Sub MntActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntActivityReportToolStripMenuItem.Click
-        dbMain.FormLoader(Me, New MntActivityReport)
+        dbMain.FormLoader(Me, New MntActivityReport, True)
     End Sub
 
     'maintenance
@@ -259,7 +259,6 @@ Public Class Main
 
                     Case 2, 3
                         dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                        'dbMain.FormLoader(Me, MntTrxPartsIssuance)
 
                     Case Else
                         SecUserToolStripMenuItem.Visible = False
@@ -392,6 +391,10 @@ Public Class Main
         If FacActivityReportToolStripMenuItem.Visible = False Or MntActivityReportToolStripMenuItem.Visible = False Then
             tssReport.Visible = False
         End If
+    End Sub
+
+    Private Sub MntSparePartToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntSparePart(userId, workgroupId, isAdmin), True)
     End Sub
 
 End Class

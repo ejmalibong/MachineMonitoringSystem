@@ -134,22 +134,18 @@
           <DataField>Image</DataField>
           <rd:TypeName>System.Byte[]</rd:TypeName>
         </Field>
-        <Field Name="SparePartName">
-          <DataField>SparePartName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SparePartNo">
-          <DataField>SparePartNo</DataField>
+        <Field Name="PartsIssued">
+          <DataField>PartsIssued</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsReport</rd:DataSetName>
-        <rd:SchemaPath>B:\Users BACKUP\NBCP-LT-043\Documents\Visual Studio 2012\Projects\MachineMonitoringSystem\MachineMonitoringSystem\Dataset\dsReport.xsd</rd:SchemaPath>
+        <rd:SchemaPath>B:\Users BACKUP\NBCP-DT-032\Documents\Visual Studio 2012\Projects\MachineMonitoringSystem\MachineMonitoringSystem\Dataset\dsReport.xsd</rd:SchemaPath>
         <rd:TableName>RptMntActivityReport</rd:TableName>
-        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
-        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>RptMntActivityReportTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterFillMethod />
+        <rd:TableAdapterGetDataMethod />
+        <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -161,16 +157,16 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.7in</Width>
+                  <Width>0.65in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.5in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.5in</Width>
+                  <Width>1.3in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.7in</Width>
+                  <Width>1.5in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -182,22 +178,25 @@
                   <Width>0.71458in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1in</Width>
+                  <Width>0.8in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2in</Width>
+                  <Width>1.8in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2in</Width>
+                  <Width>1.8in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2in</Width>
+                  <Width>1.8in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1in</Width>
+                  <Width>0.8in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.85in</Width>
+                  <Width>0.75in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.55in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -659,6 +658,41 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Parts Issued</Value>
+                                  <Style>
+                                    <FontSize>8.5pt</FontSize>
+                                    <FontWeight>SemiBold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -969,7 +1003,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=MID(Fields!PicName.Value, 1, Len(Fields!PicName.Value)-1)</Value>
+                                  <Value>=MID(Fields!PicName.Value, 1, Len(Fields!PicName.Value)-2)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -1050,19 +1084,6 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!ActionTaken.Value</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=IIF(IsNothing(Fields!SparePartName.Value), "", "Spare Parts: " &amp; Fields!SparePartName.Value &amp; " (" &amp; Fields!SparePartNo.Value &amp; ") ")</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -1165,12 +1186,48 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="PartsIssued">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PartsIssued.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>PartsIssued</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />

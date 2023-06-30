@@ -276,7 +276,7 @@ Partial Class MntTrxApproval
         Me.btnRefresh.TabIndex = 160
         Me.btnRefresh.Text = "Refresh"
         '
-        'frmMntTrxApproval
+        'MntTrxApproval
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.White
@@ -295,7 +295,7 @@ Partial Class MntTrxApproval
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "frmMntTrxApproval"
+        Me.Name = "MntTrxApproval"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

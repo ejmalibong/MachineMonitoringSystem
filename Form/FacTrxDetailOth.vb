@@ -735,8 +735,8 @@ Public Class FacTrxDetailOth
                 Dim streamWrite As System.IO.FileStream
 
                 For i As Integer = 0 To lstImgCopy.Count - 1
-                    streamRead = New System.IO.FileStream(lstImgCopy(i).FileName, System.IO.FileMode.Open)
-                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstImgCopy(i).SafeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
+                    streamRead = New System.IO.FileStream(lstImgCopy(i).fileName, System.IO.FileMode.Open)
+                    streamWrite = New System.IO.FileStream(imgDirectory & "\" & lstImgCopy(i).safeName, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None)
 
                     Dim lngLen As Long = streamRead.Length - 1
                     Dim byteBuffer(4096) As Byte
@@ -792,57 +792,6 @@ Public Class FacTrxDetailOth
         Else
             Me.DialogResult = DialogResult.OK
         End If
-    End Sub
-
-    Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
-        Try
-            If trxId = 0 Then
-                Using frmDetailLog As New FacTrxActvityLog(userId)
-                    frmDetailLog.ShowDialog(Me)
-
-                    If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
-                        Me.bsTrxDetail.AddNew()
-                        Me.bsTrxDetail.MoveLast()
-                        Me.bsTrxDetail.Current("TrxId") = DBNull.Value
-                        Me.bsTrxDetail.Current("TrxDate") = dbMethod.GetServerDate
-                        Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
-                        Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
-                        Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
-                        Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                        Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
-                        Me.bsTrxDetail.Sort = "TrxFrom"
-                        Me.bsTrxDetail.EndEdit()
-                    Else
-                        Me.bsTrxDetail.CancelEdit()
-                    End If
-                End Using
-            Else
-                Using frmDetailLog As New FacTrxActvityLog(userId, trxId)
-                    frmDetailLog.ShowDialog(Me)
-
-                    If frmDetailLog.DialogResult = Windows.Forms.DialogResult.OK Then
-                        Me.bsTrxDetail.AddNew()
-                        Me.bsTrxDetail.MoveLast()
-                        Me.bsTrxDetail.Current("TrxId") = trxId
-                        Me.bsTrxDetail.Current("TrxDate") = DateTime.Now
-                        Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
-                        Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
-                        Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
-                        Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                        Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
-                        Me.bsTrxDetail.Sort = "TrxFrom"
-                        Me.bsTrxDetail.EndEdit()
-                    Else
-                        Me.bsTrxDetail.CancelEdit()
-                    End If
-                End Using
-            End If
-
-            FilterPicTable()
-            GetTotalDowntime()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
     End Sub
 
     Private Sub btnAddRow_Enter(sender As Object, e As EventArgs) Handles btnAddRow.Enter
@@ -920,11 +869,11 @@ Public Class FacTrxDetailOth
                 If trxId = 0 Then
                     lstImg.RemoveAt(currentIndex)
                 Else
-                    If Not lstImg(currentIndex).AttachmentId = 0 Then
-                        Dim forDeleteItem As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).FileName,
-                                                               lstImg(currentIndex).SafeName,
-                                                               Path.GetExtension(lstImg(currentIndex).SafeName),
-                                                               lstImg(currentIndex).AttachmentId)
+                    If Not lstImg(currentIndex).attachmentId = 0 Then
+                        Dim forDeleteItem As New ImgAttachment(imgDirectory & "\" & lstImg(currentIndex).fileName,
+                                                               lstImg(currentIndex).safeName,
+                                                               Path.GetExtension(lstImg(currentIndex).safeName),
+                                                               lstImg(currentIndex).attachmentId)
                         lstImgDelete.Add(forDeleteItem)
                         lstImg.RemoveAt(currentIndex)
                     End If
@@ -1344,7 +1293,7 @@ Public Class FacTrxDetailOth
 
                         Dim ext As String = String.Empty
                         Dim newName As String = String.Empty
-                        ext = Path.GetExtension(lstImg(i).FileName).ToLower
+                        ext = Path.GetExtension(lstImg(i).fileName).ToLower
 
                         newName = prmHeader(0).Value & "-" & prmAttachment(0).Value & ext
 
@@ -1361,7 +1310,7 @@ Public Class FacTrxDetailOth
                         pbImgAttachment.Visible = True
                         lblImgAttachmentProgress.Visible = True
 
-                        Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
+                        Dim copyAttachment As New ImgAttachment(lstImg(i).fileName, newName, lstImg(i).fileName)
                         lstImgCopy.Add(copyAttachment)
                     Next
                 End If
@@ -2230,14 +2179,14 @@ Public Class FacTrxDetailOth
                     For i As Integer = 0 To lstImgDelete.Count - 1
                         Dim ext As String = String.Empty
                         Dim newName As String = String.Empty
-                        ext = Path.GetExtension(lstImgDelete(i).FileName).ToLower
+                        ext = Path.GetExtension(lstImgDelete(i).fileName).ToLower
 
-                        newName = trxId & "-" & lstImgDelete(i).AttachmentId & ext
+                        newName = trxId & "-" & lstImgDelete(i).attachmentId & ext
 
                         File.Delete(imgDirectory & "\" & newName)
                         Dim prmDel(0) As SqlParameter
                         prmDel(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
-                        prmDel(0).Value = lstImgDelete(i).AttachmentId
+                        prmDel(0).Value = lstImgDelete(i).attachmentId
 
                         dbMethod.ExecuteNonQuery("DelFacTransactionImgAttachmentByAttachmentId", CommandType.StoredProcedure, prmDel)
                     Next
@@ -2245,7 +2194,7 @@ Public Class FacTrxDetailOth
 
                 If lstImg.Count > 0 Then
                     For i As Integer = 0 To lstImg.Count - 1
-                        If lstImg(i).AttachmentId = 0 Then
+                        If lstImg(i).attachmentId = 0 Then
                             Dim prmAttachment(2) As SqlParameter
                             prmAttachment(0) = New SqlParameter("@AttachmentId", SqlDbType.Int)
                             prmAttachment(0).Direction = ParameterDirection.Output
@@ -2258,7 +2207,7 @@ Public Class FacTrxDetailOth
 
                             Dim ext As String = String.Empty
                             Dim newName As String = String.Empty
-                            ext = Path.GetExtension(lstImg(i).FileName).ToLower
+                            ext = Path.GetExtension(lstImg(i).fileName).ToLower
 
                             newName = trxId & "-" & prmAttachment(0).Value & ext
 
@@ -2275,7 +2224,7 @@ Public Class FacTrxDetailOth
                             pbImgAttachment.Visible = True
                             lblImgAttachmentProgress.Visible = True
 
-                            Dim copyAttachment As New ImgAttachment(lstImg(i).FileName, newName, lstImg(i).FileName)
+                            Dim copyAttachment As New ImgAttachment(lstImg(i).fileName, newName, lstImg(i).fileName)
                             lstImgCopy.Add(copyAttachment)
                         End If
                     Next
@@ -2304,7 +2253,7 @@ Public Class FacTrxDetailOth
     Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
         Try
             If lstImg.Count > 0 Then
-                Process.Start(lstImg(0).FileName)
+                Process.Start(lstImg(0).fileName)
             Else
                 'https://stackoverflow.com/questions/14866603/a-generic-error-occurred-in-gdi-when-attempting-to-use-image-save
                 If Not picImage.Image Is Nothing Then
@@ -3233,7 +3182,7 @@ Public Class FacTrxDetailOth
             Next
             ShowAttachment()
 
-            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImg(currentIndex).FileName)
+            ofdImage.InitialDirectory = Path.GetDirectoryName(lstImg(currentIndex).fileName)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -3251,13 +3200,13 @@ Public Class FacTrxDetailOth
 
     Private Sub ShowAttachment()
         Try
-            If lstImgTypes.Contains(lstImg(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
-                Using img As Image = Image.FromFile(Path.Combine(imgDirectory, lstImg(currentIndex).FileName))
+            If lstImgTypes.Contains(lstImg(currentIndex).extensionType.ToString.Trim.ToLower) Then
+                Using img As Image = Image.FromFile(Path.Combine(imgDirectory, lstImg(currentIndex).fileName))
                     picImage.Image = New Bitmap(img)
                 End Using
             End If
 
-            txtImageName.Text = lstImg(currentIndex).SafeName
+            txtImageName.Text = lstImg(currentIndex).safeName
 
             If lstImg.Count > 0 Then
                 lblImgAttachmentCount.Visible = True
@@ -3272,13 +3221,13 @@ Public Class FacTrxDetailOth
     End Sub
     Private Sub ShowImgAttachment()
         Try
-            If lstImgTypes.Contains(lstImg(currentIndex).ExtensionName.ToString.Trim.ToLower) Then
-                Using img As Image = Image.FromFile(lstImg(currentIndex).FileName)
+            If lstImgTypes.Contains(lstImg(currentIndex).extensionType.ToString.Trim.ToLower) Then
+                Using img As Image = Image.FromFile(lstImg(currentIndex).fileName)
                     picImage.Image = New Bitmap(img)
                 End Using
             End If
 
-            txtImageName.Text = lstImg(currentIndex).SafeName
+            txtImageName.Text = lstImg(currentIndex).safeName
 
             If lstImg.Count > 0 Then
                 lblImgAttachmentCount.Visible = True

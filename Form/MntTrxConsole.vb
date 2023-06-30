@@ -113,6 +113,8 @@ Public Class MntTrxConsole
         Me.dgvJig.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 
         cmbStatus.SelectedValue = 7
+
+        'Call MachineRelatedToolStripMenuItem_Click(sender, e)
     End Sub
 
     Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown

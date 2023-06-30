@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class MntTrxPartsIssuance
+Partial Class MntTrxPartsIssue
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,16 +23,16 @@ Partial Class MntTrxPartsIssuance
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle46 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle47 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle48 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle49 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle50 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle51 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle52 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle53 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle54 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxPartsIssuance))
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxPartsIssue))
         Me.dgvSpareParts = New System.Windows.Forms.DataGridView()
         Me.ColIsSelected = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -68,6 +68,8 @@ Partial Class MntTrxPartsIssuance
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.btnClearSearch = New PinkieControls.ButtonXP()
+        Me.lblTechnician = New System.Windows.Forms.Label()
+        Me.cmbTechnician = New SergeUtils.EasyCompletionComboBox()
         CType(Me.dgvSpareParts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvIssue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,24 +84,24 @@ Partial Class MntTrxPartsIssuance
         Me.dgvSpareParts.AllowUserToResizeRows = False
         Me.dgvSpareParts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle46.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle46.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle46.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle46.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle46.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle46.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvSpareParts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle46
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvSpareParts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvSpareParts.ColumnHeadersHeight = 22
         Me.dgvSpareParts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvSpareParts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColIsSelected, Me.ColPartId, Me.ColPartNo, Me.ColPartName, Me.ColStock})
-        Me.dgvSpareParts.Location = New System.Drawing.Point(3, 61)
+        Me.dgvSpareParts.Location = New System.Drawing.Point(3, 91)
         Me.dgvSpareParts.MultiSelect = False
         Me.dgvSpareParts.Name = "dgvSpareParts"
         Me.dgvSpareParts.RowHeadersVisible = False
         Me.dgvSpareParts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvSpareParts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvSpareParts.Size = New System.Drawing.Size(777, 280)
+        Me.dgvSpareParts.Size = New System.Drawing.Size(777, 250)
         Me.dgvSpareParts.TabIndex = 12
         Me.dgvSpareParts.TabStop = False
         '
@@ -121,8 +123,8 @@ Partial Class MntTrxPartsIssuance
         '
         Me.ColPartNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColPartNo.DataPropertyName = "PartNo"
-        DataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle47
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColPartNo.HeaderText = "Part No"
         Me.ColPartNo.Name = "ColPartNo"
         Me.ColPartNo.ReadOnly = True
@@ -131,8 +133,8 @@ Partial Class MntTrxPartsIssuance
         '
         Me.ColPartName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColPartName.DataPropertyName = "PartName"
-        DataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle48
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColPartName.HeaderText = "Part Name"
         Me.ColPartName.Name = "ColPartName"
         Me.ColPartName.ReadOnly = True
@@ -140,8 +142,8 @@ Partial Class MntTrxPartsIssuance
         'ColStock
         '
         Me.ColStock.DataPropertyName = "ActualStock"
-        DataGridViewCellStyle49.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColStock.DefaultCellStyle = DataGridViewCellStyle49
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColStock.DefaultCellStyle = DataGridViewCellStyle4
         Me.ColStock.HeaderText = "Stock"
         Me.ColStock.Name = "ColStock"
         Me.ColStock.ReadOnly = True
@@ -153,7 +155,7 @@ Partial Class MntTrxPartsIssuance
         Me.txtSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSearch.Location = New System.Drawing.Point(132, 32)
+        Me.txtSearch.Location = New System.Drawing.Point(132, 62)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
         Me.txtSearch.Size = New System.Drawing.Size(620, 26)
@@ -169,12 +171,12 @@ Partial Class MntTrxPartsIssuance
         Me.lblMasterlist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblMasterlist.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblMasterlist.ForeColor = System.Drawing.Color.Black
-        Me.lblMasterlist.Location = New System.Drawing.Point(3, 3)
+        Me.lblMasterlist.Location = New System.Drawing.Point(3, 32)
         Me.lblMasterlist.Name = "lblMasterlist"
         Me.lblMasterlist.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblMasterlist.Size = New System.Drawing.Size(777, 26)
         Me.lblMasterlist.TabIndex = 564
-        Me.lblMasterlist.Text = "Item Masterlist"
+        Me.lblMasterlist.Text = "Current Stock"
         Me.lblMasterlist.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btnAdd
@@ -233,14 +235,14 @@ Partial Class MntTrxPartsIssuance
         Me.dgvIssue.AllowUserToResizeRows = False
         Me.dgvIssue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle50.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle50.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle50.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle50.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle50.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle50.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle50.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvIssue.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle50
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvIssue.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgvIssue.ColumnHeadersHeight = 22
         Me.dgvIssue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvIssue.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColIssIsSelected, Me.ColIssPartId, Me.ColIssPartNo, Me.ColIssPartName, Me.ColIssStock, Me.ColIssQty})
@@ -272,8 +274,8 @@ Partial Class MntTrxPartsIssuance
         '
         Me.ColIssPartNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColIssPartNo.DataPropertyName = "PartNo"
-        DataGridViewCellStyle51.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColIssPartNo.DefaultCellStyle = DataGridViewCellStyle51
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColIssPartNo.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColIssPartNo.HeaderText = "Part No"
         Me.ColIssPartNo.Name = "ColIssPartNo"
         Me.ColIssPartNo.ReadOnly = True
@@ -283,8 +285,8 @@ Partial Class MntTrxPartsIssuance
         '
         Me.ColIssPartName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColIssPartName.DataPropertyName = "PartName"
-        DataGridViewCellStyle52.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColIssPartName.DefaultCellStyle = DataGridViewCellStyle52
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColIssPartName.DefaultCellStyle = DataGridViewCellStyle7
         Me.ColIssPartName.HeaderText = "Part Name"
         Me.ColIssPartName.Name = "ColIssPartName"
         Me.ColIssPartName.ReadOnly = True
@@ -293,8 +295,8 @@ Partial Class MntTrxPartsIssuance
         'ColIssStock
         '
         Me.ColIssStock.DataPropertyName = "ActualStock"
-        DataGridViewCellStyle53.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColIssStock.DefaultCellStyle = DataGridViewCellStyle53
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColIssStock.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColIssStock.HeaderText = "Stock"
         Me.ColIssStock.Name = "ColIssStock"
         Me.ColIssStock.ReadOnly = True
@@ -303,8 +305,8 @@ Partial Class MntTrxPartsIssuance
         'ColIssQty
         '
         Me.ColIssQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle54.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColIssQty.DefaultCellStyle = DataGridViewCellStyle54
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColIssQty.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColIssQty.HeaderText = "Qty"
         Me.ColIssQty.Name = "ColIssQty"
         Me.ColIssQty.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
@@ -435,6 +437,7 @@ Partial Class MntTrxPartsIssuance
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(34, 23)
         Me.txtPageNumber.Text = "0"
@@ -486,7 +489,7 @@ Partial Class MntTrxPartsIssuance
         Me.lblSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblSearch.ForeColor = System.Drawing.Color.Black
-        Me.lblSearch.Location = New System.Drawing.Point(3, 32)
+        Me.lblSearch.Location = New System.Drawing.Point(3, 62)
         Me.lblSearch.Name = "lblSearch"
         Me.lblSearch.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblSearch.Size = New System.Drawing.Size(130, 26)
@@ -503,19 +506,43 @@ Partial Class MntTrxPartsIssuance
         Me.btnClearSearch.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnClearSearch.Hint = "View image"
         Me.btnClearSearch.Image = CType(resources.GetObject("btnClearSearch.Image"), System.Drawing.Image)
-        Me.btnClearSearch.Location = New System.Drawing.Point(753, 31)
+        Me.btnClearSearch.Location = New System.Drawing.Point(753, 61)
         Me.btnClearSearch.Name = "btnClearSearch"
         Me.btnClearSearch.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClearSearch.Size = New System.Drawing.Size(28, 28)
         Me.btnClearSearch.TabIndex = 576
         Me.btnClearSearch.TabStop = False
         '
-        'MntTrxPartsIssuance
+        'lblTechnician
+        '
+        Me.lblTechnician.BackColor = System.Drawing.SystemColors.Control
+        Me.lblTechnician.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTechnician.ForeColor = System.Drawing.Color.Black
+        Me.lblTechnician.Location = New System.Drawing.Point(2, 3)
+        Me.lblTechnician.Name = "lblTechnician"
+        Me.lblTechnician.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblTechnician.Size = New System.Drawing.Size(130, 27)
+        Me.lblTechnician.TabIndex = 578
+        Me.lblTechnician.Text = "Technician"
+        Me.lblTechnician.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbTechnician
+        '
+        Me.cmbTechnician.Font = New System.Drawing.Font("Segoe UI", 10.5!)
+        Me.cmbTechnician.FormattingEnabled = True
+        Me.cmbTechnician.Location = New System.Drawing.Point(131, 3)
+        Me.cmbTechnician.Name = "cmbTechnician"
+        Me.cmbTechnician.Size = New System.Drawing.Size(649, 27)
+        Me.cmbTechnician.TabIndex = 577
+        '
+        'MntTrxPartsIssue
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(784, 611)
+        Me.Controls.Add(Me.lblTechnician)
+        Me.Controls.Add(Me.cmbTechnician)
         Me.Controls.Add(Me.btnClearSearch)
         Me.Controls.Add(Me.lblSearch)
         Me.Controls.Add(Me.bindingNavigator)
@@ -536,7 +563,7 @@ Partial Class MntTrxPartsIssuance
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntTrxPartsIssuance"
+        Me.Name = "MntTrxPartsIssue"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Parts Issuance"
         CType(Me.dgvSpareParts, System.ComponentModel.ISupportInitialize).EndInit()
@@ -584,4 +611,6 @@ Partial Class MntTrxPartsIssuance
     Friend WithEvents ColIssStock As DataGridViewTextBoxColumn
     Friend WithEvents ColIssQty As DataGridViewTextBoxColumn
     Friend WithEvents btnClearSearch As PinkieControls.ButtonXP
+    Friend WithEvents lblTechnician As Label
+    Friend WithEvents cmbTechnician As SergeUtils.EasyCompletionComboBox
 End Class

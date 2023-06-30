@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>81</ApplicationRevision>
+    <ApplicationRevision>86</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -176,6 +176,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\ActivityLogSparePart.vb" />
     <Compile Include="Class\Connection.vb" />
     <Compile Include="Class\ImgAttachment.vb" />
     <Compile Include="Class\FileAttachment.vb" />
@@ -187,6 +188,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReport.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Dataset\dsReport.vb">
+      <DependentUpon>dsReport.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Form\Main.Designer.vb">
       <DependentUpon>Main.vb</DependentUpon>
@@ -222,6 +228,18 @@
       <DependentUpon>FacMchSchedDetail.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\FacMchSchedDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntSparePartDetail.Designer.vb">
+      <DependentUpon>MntSparePartDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntSparePartDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MntSparePart.Designer.vb">
+      <DependentUpon>MntSparePart.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntSparePart.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntModelExtensionDetail.Designer.vb">
@@ -290,6 +308,12 @@
     <Compile Include="Form\FacTrxActvityLog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\MntTrxPartReceive.Designer.vb">
+      <DependentUpon>MntTrxPartReceive.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MntTrxPartReceive.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntTrxActvityLog.Designer.vb">
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </Compile>
@@ -342,12 +366,6 @@
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
     </Compile>
     <Compile Include="Form\MntTrxDetailOth.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form\MntTrxPartsIssuance.Designer.vb">
-      <DependentUpon>MntTrxPartsIssuance.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Form\MntTrxPartsIssuance.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\Report Form\FacActivityReport.Designer.vb">
@@ -413,14 +431,17 @@
     <None Include=".gitignore" />
     <None Include="Dataset\dsReport.xsc">
       <DependentUpon>dsReport.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Dataset\dsReport.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReport.Designer.vb</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Dataset\dsReport.xss">
       <DependentUpon>dsReport.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Password-Show.png" />
     <None Include="Resources\Password-Hide.png" />
@@ -816,6 +837,12 @@
     <EmbeddedResource Include="Form\FacMchSchedDetail.resx">
       <DependentUpon>FacMchSchedDetail.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntSparePartDetail.resx">
+      <DependentUpon>MntSparePartDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntSparePart.resx">
+      <DependentUpon>MntSparePart.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntModelExtensionDetail.resx">
       <DependentUpon>MntModelExtensionDetail.vb</DependentUpon>
     </EmbeddedResource>
@@ -849,6 +876,9 @@
     <EmbeddedResource Include="Form\FacTrxActvityLog.resx">
       <DependentUpon>FacTrxActvityLog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntTrxPartReceive.resx">
+      <DependentUpon>MntTrxPartReceive.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxActvityLog.resx">
       <DependentUpon>MntTrxActvityLog.vb</DependentUpon>
     </EmbeddedResource>
@@ -875,9 +905,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxDetailOth.resx">
       <DependentUpon>MntTrxDetailOth.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form\MntTrxPartsIssuance.resx">
-      <DependentUpon>MntTrxPartsIssuance.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\Report Form\FacActivityReport.resx">
       <DependentUpon>FacActivityReport.vb</DependentUpon>

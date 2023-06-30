@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 
-Public Class MntTrxPartsIssuance
+Public Class MntTrxPartsIssue
     Private dbConnection As New Connection
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -19,17 +19,19 @@ Public Class MntTrxPartsIssuance
 
     Private lstPartId As New List(Of Integer)
 
-    Public Sub New()
+    Private trxId As Integer = 0
+
+    'Public Sub New(Optional _trxId As Integer = 0)
 
 
-        ' This call is required by the designer.
-        InitializeComponent()
+    '    ' This call is required by the designer.
+    '    InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
-        dbMain.EnableDoubleBuffered(dgvSpareParts)
+    '    ' Add any initialization after the InitializeComponent() call.
+    '    dbMain.EnableDoubleBuffered(dgvSpareParts)
 
-
-    End Sub
+    '    trxId = _trxId
+    'End Sub
 
     Private Sub MntTrxPartsIssuance_Load(sender As Object, e As EventArgs) Handles Me.Load
         lstPartId.Clear()
@@ -65,7 +67,7 @@ Public Class MntTrxPartsIssuance
                 prmParts(2).Direction = ParameterDirection.Output
                 prmParts(2).Value = totalCount
 
-                dtMntSpareParts = dbMethod.FillDataTable("RdMntSpareParts", CommandType.StoredProcedure, prmParts)
+                dtMntSpareParts = dbMethod.FillDataTable("RdMntSparePart", CommandType.StoredProcedure, prmParts)
                 totalCount = prmParts(2).Value
             Else
                 Dim prmParts(3) As SqlParameter
@@ -79,7 +81,7 @@ Public Class MntTrxPartsIssuance
                 prmParts(3) = New SqlParameter("@Name", SqlDbType.NVarChar)
                 prmParts(3).Value = txtSearch.Text.Trim
 
-                dtMntSpareParts = dbMethod.FillDataTable("RdMntSparePartsByName", CommandType.StoredProcedure, prmParts)
+                dtMntSpareParts = dbMethod.FillDataTable("RdMntSparePartByName", CommandType.StoredProcedure, prmParts)
                 totalCount = prmParts(2).Value
                 pageIndex = 0
             End If
