@@ -74,6 +74,10 @@ Public Class MntTrxActvityLog
             prmUser(1) = New SqlParameter("@IsActive", SqlDbType.BigInt)
             prmUser(1).Value = 1
             dbMethod.FillCmb("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, prmUser)
+
+            If userId <> 0 Then
+                cmbTechnician.SelectedValue = userId
+            End If
         Else
             If userId = 0 Then
                 Dim prmUser(1) As SqlParameter

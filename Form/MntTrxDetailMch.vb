@@ -866,7 +866,7 @@ Public Class MntTrxDetailMch
     Private Sub btnAddLog_Click(sender As Object, e As EventArgs) Handles btnAddLog.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog()
+                Using frmDetailLog As New MntTrxActvityLog(userId)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
