@@ -1,9 +1,8 @@
-﻿Imports BlackCoffeeLibrary
-Imports System.Data.SqlClient
-Imports System.Drawing.Imaging
+﻿Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports BlackCoffeeLibrary
 
 Public Class FacTrxDetailMch
     Private WithEvents bsSecUserLog As New BindingSource
@@ -62,6 +61,7 @@ Public Class FacTrxDetailMch
     Private userId As Integer
     Private weekId As Integer = 0
     Private workgroupId As Integer = 0
+
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _trxId As Integer = 0)
 
         ' This call is required by the designer.
@@ -90,7 +90,9 @@ Public Class FacTrxDetailMch
     End Sub
 
     Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
+
     Public Property fromPmCalendar As Boolean = False
+
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
             cmbTransactionStatus.Enabled = False
@@ -139,7 +141,6 @@ Public Class FacTrxDetailMch
                 cmbApp1Name.Enabled = False
                 txtApp1Remarks.Enabled = False
             End If
-
         Else 'contains machine, enable form
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
@@ -228,7 +229,6 @@ Public Class FacTrxDetailMch
                             txtApp1Remarks.Enabled = False
                     End Select
                 End If
-
             Else 'existing transaction
                 If isAdmin Or accessLevelId = 1 Then
                     cmbTransactionStatus.Enabled = False
@@ -270,7 +270,6 @@ Public Class FacTrxDetailMch
                     cmbApp1Status.Enabled = False
                     cmbApp1Name.Enabled = False
                     txtApp1Remarks.Enabled = False
-
                 Else 'other access level
                     Select Case accessLevelId
                         Case 2 'mngr, am
@@ -1027,7 +1026,6 @@ Public Class FacTrxDetailMch
     Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
         Try
             If lstImg.Count = 0 Then
-
             Else
                 If trxId = 0 Then
                     lstImg.RemoveAt(currentIndex)
@@ -1336,7 +1334,6 @@ Public Class FacTrxDetailMch
                         prmHeader(36) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
                         prmHeader(36).Value = txtChecksheet.Text.Trim
                     End If
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -1394,7 +1391,6 @@ Public Class FacTrxDetailMch
                         prmHeader(30).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                         prmHeader(31) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                         prmHeader(31).Value = txtDowntimeAccumulated.Text.Trim
-
                     Else 'no activity log yet - use current datetime as datetimestarted, logged in user as trx owner
                         prmHeader(27) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                         prmHeader(27).Value = dbMethod.GetServerDate
@@ -1756,7 +1752,6 @@ Public Class FacTrxDetailMch
 
                         prmHeader(19) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
                         prmHeader(19).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
-
                     Else 'other access level
                         Select Case accessLevelId
                             Case 2 'mngr, asm
@@ -2272,7 +2267,6 @@ Public Class FacTrxDetailMch
 
                         dbMethod.ExecuteNonQuery("UpdFacMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(8) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -2967,7 +2961,6 @@ Public Class FacTrxDetailMch
                 LoadDowntimeSubStatus(cmbDowntimeStatus.SelectedValue)
 
                 If trxId = 0 Then
-
                 Else
                     If isAdmin Or accessLevelId = 1 Then
                         If cmbMachinePart.Items.Count > 0 Then
@@ -3139,6 +3132,7 @@ Public Class FacTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub cmbTransactionStatus_Enter(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Enter
         lblTransactionStatus.ForeColor = Color.White
         lblTransactionStatus.BackColor = Color.DarkSlateGray
@@ -3598,9 +3592,11 @@ Public Class FacTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         impersonation.UndoImpersonateUser()
     End Sub
+
     Private Sub GetMachineArea(machineId As Integer)
         Try
             Dim prmMachineId(0) As SqlParameter
@@ -3691,7 +3687,6 @@ Public Class FacTrxDetailMch
                     Return
                 End If
                 rdrSchedule.Close()
-
             Else 'existing record
                 If orgMachineId = machineId Then 'same machine
                     If orgMachineSubStatusId = cmbDowntimeSubStatus.SelectedValue Then 'same sub status (pm)
@@ -3715,7 +3710,6 @@ Public Class FacTrxDetailMch
                             txtScheduleWeek.Text = weekId
                         End If
                         rdrSchedule.Close()
-
                     Else 'non-pm to pm
                         Dim prmSchedule(0) As SqlParameter
                         prmSchedule(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -3734,7 +3728,6 @@ Public Class FacTrxDetailMch
 
                             txtScheduleMonth.Text = MonthName(monthId)
                             txtScheduleWeek.Text = weekId
-
                         Else
                             MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             cmbDowntimeStatus.SelectedValue = 0
@@ -3750,7 +3743,6 @@ Public Class FacTrxDetailMch
                         End If
                         rdrSchedule.Close()
                     End If
-
                 Else 'selected machine was changed
                     Dim prmNewSched(0) As SqlParameter
                     prmNewSched(0) = New SqlParameter("@MachineId", SqlDbType.Int)
@@ -3782,7 +3774,6 @@ Public Class FacTrxDetailMch
                             orgScheduleId = rdrOrgSched.Item("ScheduleId")
                         End While
                         rdrOrgSched.Close()
-
                     Else
                         MessageBox.Show("No PM schedule found for this machine.", "", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         cmbDowntimeSubStatus.SelectedValue = 0
@@ -4091,6 +4082,7 @@ Public Class FacTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
             If ofdImage.FileNames.Length > 3 Then
@@ -4153,6 +4145,7 @@ Public Class FacTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub ShowProgress(ByVal text As String, ByVal lbl As Label)
         If lbl.InvokeRequired Then
             lbl.Invoke(New SetProgressInvoker(AddressOf ShowProgress), text, lbl)
@@ -4303,6 +4296,7 @@ Public Class FacTrxDetailMch
             End If
         End If
     End Sub
+
     Private Sub txtProblem_Enter(sender As Object, e As EventArgs) Handles txtProblem.Enter
         lblProblem.ForeColor = Color.White
         lblProblem.BackColor = Color.DarkSlateGray

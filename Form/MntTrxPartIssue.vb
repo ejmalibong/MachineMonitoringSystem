@@ -3,7 +3,7 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports BlackCoffeeLibrary
 
-Public Class MntTrxPartReceive
+Public Class MntTrxPartIssue
     Public bsTrxPartDetail As New BindingSource
     Public dtTrxPartDetail As New DataTable
     Private adpTrxPartDetail As New SqlDataAdapter
@@ -217,7 +217,7 @@ Public Class MntTrxPartReceive
             prmPrHeader(3) = New SqlParameter("@TrxId", SqlDbType.Int)
             prmPrHeader(3).Value = Nothing
             prmPrHeader(4) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
-            prmPrHeader(4).Value = 1
+            prmPrHeader(4).Value = 2
             prmPrHeader(5) = New SqlParameter("@ReferenceNo", SqlDbType.Char)
             prmPrHeader(5).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
             prmPrHeader(6) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
@@ -238,7 +238,7 @@ Public Class MntTrxPartReceive
                 prmIss(1) = New SqlParameter("@Qty", SqlDbType.Int)
                 prmIss(1).Value = row.Cells("ColQty").Value
 
-                dbMethod.ExecuteNonQuery("UpdMntSparePartRec", CommandType.StoredProcedure, prmIss)
+                dbMethod.ExecuteNonQuery("UpdMntSparePartIss", CommandType.StoredProcedure, prmIss)
             Next
 
             Me.DialogResult = Windows.Forms.DialogResult.OK

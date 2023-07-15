@@ -1,6 +1,7 @@
 ﻿Imports System.Text.RegularExpressions
 
 Module KeyValidation
+
     Public Enum ValidationType
         Only_Numbers = 1
         Only_Characters = 2
@@ -24,6 +25,7 @@ Module KeyValidation
                 AddHandler txt.KeyPress, AddressOf PhoneNumber_Leave
         End Select
     End Sub
+
     Public Sub Number_Leave(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         Dim numbers As Windows.Forms.TextBox = sender
         If InStr("1234567890.", e.KeyChar) = 0 And Asc(e.KeyChar) <> 8 Or (e.KeyChar = "." And InStr(numbers.Text, ".") > 0) Then
@@ -31,6 +33,7 @@ Module KeyValidation
             e.Handled = True
         End If
     End Sub
+
     Public Sub PhoneNumber_Leave(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         Dim numbers As Windows.Forms.TextBox = sender
         If InStr("1234567890.()-+ ", e.KeyChar) = 0 And Asc(e.KeyChar) <> 8 Or (e.KeyChar = "." And InStr(numbers.Text, ".") > 0) Then
@@ -38,12 +41,14 @@ Module KeyValidation
             e.Handled = True
         End If
     End Sub
+
     Public Sub Character_Leave(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         If InStr("1234567890!@#$%^&*()_+=-", e.KeyChar) > 0 Then
             e.KeyChar = Chr(0)
             e.Handled = True
         End If
     End Sub
+
     Public Sub NotNull_Leave(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim No As Windows.Forms.TextBox = sender
         If No.Text.Trim = "" Then
@@ -51,6 +56,7 @@ Module KeyValidation
             No.Focus()
         End If
     End Sub
+
     Public Sub Email_Leave(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim Email As Windows.Forms.TextBox = sender
         If Email.Text <> "" Then

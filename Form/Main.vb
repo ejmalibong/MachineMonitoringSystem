@@ -262,9 +262,10 @@ Public Class Main
 
                     Case Else
                         SecUserToolStripMenuItem.Visible = False
-                        tssMaintenance2.Visible = False
+                        tssMaintenance3.Visible = False
 
-                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                        dbMain.FormLoader(Me, New MntSparePart(userId, workgroupId, isAdmin), True)
                 End Select
 
             Case 3 'facility
@@ -367,10 +368,6 @@ Public Class Main
 
     Private Sub FacTransactionConsoleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacTransactionConsoleToolStripMenuItem.Click
         dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-    End Sub
-
-    Private Sub MntPmReportToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
     End Sub
 
     Private Sub FacActivityReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacActivityReportToolStripMenuItem.Click

@@ -1,6 +1,6 @@
-﻿Imports BlackCoffeeLibrary
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports System.Deployment.Application
+Imports BlackCoffeeLibrary
 
 Public Class Login
     Private dbConnection As New Connection
@@ -46,18 +46,19 @@ Public Class Login
             'txtEmployeeId.Text = "XXXX-XXX"
             'txtPassword.Text = "Adm1nAcc3ss"
 
-            ''ej
+            'ej
             'txtEmployeeId.Text = "2009-002"
             'txtPassword.Text = "malibong"
 
             'karlin
-            txtEmployeeId.Text = "2106-020"
-            txtPassword.Text = "tano"
+            'txtEmployeeId.Text = "2106-020"
+            'txtPassword.Text = "tano"
 
             'noriel
             'txtEmployeeId.Text = "1901-033"
             'txtPassword.Text = "aquino"
 
+            'liza
             'txtEmployeeId.Text = "2009-015"
             'txtPassword.Text = "pastrana"
         End If

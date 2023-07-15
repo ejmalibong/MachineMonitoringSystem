@@ -1,30 +1,27 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Drawing.Imaging
-Imports System.Globalization
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
 Imports BlackCoffeeLibrary
+
 Public Class MntSparePartDetail
+    Private accessLevelId As Integer = 0
+    Private bite As Byte()
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
 
-    Private imgTmp As String = String.Empty
-    Private lstImgAttachment As New List(Of ImgAttachment)
-
     Private dtPart As New DataTable
-
+    Private imgTmp As String = String.Empty
+    Private isAdmin As Integer = 0
+    Private lstImgAttachment As New List(Of ImgAttachment)
+    Private mStream As New MemoryStream
+    Private orgPartNo As String = String.Empty
     Private partId As Integer = 0
-    Private accessLevelId As Integer = 0
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
-    Private isAdmin As Integer = 0
-
-    Private orgPartNo As String = String.Empty
-
-    Private mStream As New MemoryStream
-    Private bite As Byte() 'the word `byte` is not a valid identifier
+    'the word `byte` is not a valid identifier
 
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _partId As Integer = 0)
 
@@ -40,9 +37,56 @@ Public Class MntSparePartDetail
         LoadItemType()
         LoadUnit()
         LoadVendor()
+
     End Sub
 
     Public Property pKey As Integer = 0
+
+    Public Async Sub OpenImage(ByVal imagePath As String, ByVal time As Integer)
+        Try
+            Dim exePathReturnValue = New StringBuilder()
+            FindExecutable(Path.GetFileName(imagePath), Path.GetDirectoryName(imagePath), exePathReturnValue)
+            Dim exePath = exePathReturnValue.ToString()
+            Dim arguments = """" & imagePath & """"
+
+            If Path.GetFileName(exePath).Equals("photoviewer.dll", StringComparison.InvariantCultureIgnoreCase) Then
+                arguments = """" & exePath & """, ImageView_Fullscreen " & imagePath
+                exePath = "rundll32"
+            End If
+
+            Dim process = New Process()
+            process.StartInfo.FileName = exePath
+            process.StartInfo.Arguments = arguments
+            process.EnableRaisingEvents = True
+            AddHandler process.Exited, New EventHandler(AddressOf DeleteTempImg)
+            process.Start()
+
+            Await Task.Delay(time)
+
+            If Not process.HasExited Then
+                process.Kill()
+            End If
+
+            process.Close()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    <DllImport("shell32.dll")>
+    Private Shared Function FindExecutable(ByVal lpFile As String, ByVal lpDirectory As String, <Out> ByVal lpResult As StringBuilder) As Integer
+    End Function
+
+    Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
+        Try
+            ofdImage.Filter = "JPEGs (*.jpg, *.jpeg) | *.jpg; *.jpeg |GIFs (*.gif) | *.gif |Bitmaps (*.bmp) | *.bmp | All Images (*.*) | *.jpg; *.jpeg; *.gif; *.bmp; *.png; *.tif; *.tiff"
+            ofdImage.FilterIndex = 7
+            ofdImage.ShowDialog()
+            ofdImage.RestoreDirectory = True
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
@@ -78,6 +122,19 @@ Public Class MntSparePartDetail
 
                     Me.DialogResult = DialogResult.OK
                 End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
+        Try
+            If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
+
+            If Not picImage.Image Is Nothing Then
+                picImage.Image.Dispose()
+                picImage.Image = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -147,7 +204,7 @@ Public Class MntSparePartDetail
                     Return
                 End If
 
-                Dim prmPart(18) As SqlParameter
+                Dim prmPart(19) As SqlParameter
                 prmPart(0) = New SqlParameter("@CreatedBy", SqlDbType.Int)
                 prmPart(0).Value = userId
                 prmPart(1) = New SqlParameter("@CreatedDate", SqlDbType.DateTime)
@@ -194,12 +251,13 @@ Public Class MntSparePartDetail
                 prmPart(16).Value = IIf(String.IsNullOrEmpty(txtQrCode.Text.Trim), Nothing, txtQrCode.Text.Trim)
                 prmPart(17) = New SqlParameter("@Rfid", SqlDbType.Char)
                 prmPart(17).Value = IIf(String.IsNullOrEmpty(txtRfid.Text.Trim), Nothing, txtRfid.Text.Trim)
-                prmPart(18) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmPart(18).Value = IIf(rdActive.Checked = True, True, False)
+                prmPart(18) = New SqlParameter("@UnitPrice", SqlDbType.Decimal)
+                prmPart(18).Value = IIf(String.IsNullOrEmpty(txtUnitPrice.Text.Trim), Nothing, CDec(txtUnitPrice.Text))
+                prmPart(19) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmPart(19).Value = IIf(rdActive.Checked = True, True, False)
 
                 dbMethod.ExecuteNonQuery("InsMntSparePart", CommandType.StoredProcedure, prmPart)
                 pKey = prmPart(0).Value
-
             Else 'old record
                 If Not txtPartNo.Text.Trim.Equals(orgPartNo) Then
                     If IsPartExist(txtPartNo.Text.Trim) = True Then
@@ -256,8 +314,10 @@ Public Class MntSparePartDetail
                 prmPart(16).Value = userId
                 prmPart(17) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime)
                 prmPart(17).Value = dbMethod.GetServerDate
-                prmPart(18) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmPart(18).Value = IIf(rdActive.Checked = True, True, False)
+                prmPart(18) = New SqlParameter("@UnitPrice", SqlDbType.Decimal)
+                prmPart(18).Value = IIf(String.IsNullOrEmpty(txtUnitPrice.Text.Trim), Nothing, CDec(txtUnitPrice.Text))
+                prmPart(19) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmPart(19).Value = IIf(rdActive.Checked = True, True, False)
 
                 dbMethod.ExecuteNonQuery("UpdMntSparePart", CommandType.StoredProcedure, prmPart)
                 pKey = partId
@@ -269,18 +329,38 @@ Public Class MntSparePartDetail
         End Try
     End Sub
 
-    Private Sub cmbVendor_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+    Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
         Try
-            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbVendor.Text)
-            If e.Cancel Then Beep()
+            If lstImgAttachment.Count > 0 Then
+                Process.Start(lstImgAttachment(0).fileName)
+            Else
+                'https://stackoverflow.com/questions/14866603/a-generic-error-occurred-in-gdi-when-attempting-to-use-image-save
+                If Not picImage.Image Is Nothing Then
+                    Dim bmp As Bitmap = New Bitmap(picImage.Image)
+                    bmp.Save(imgTmp)
+                    Process.Start(imgTmp)
+
+                    'OpenImage(imgTmp, 30000) '30 seconds
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub cmbUnit_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+    Private Sub cmbArea_Enter(sender As Object, e As EventArgs) Handles cmbLocation.Enter
+        lblLocation.ForeColor = Color.White
+        lblLocation.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub cmbArea_Leave(sender As Object, e As EventArgs) Handles cmbLocation.Leave
+        lblLocation.ForeColor = Color.Black
+        lblLocation.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub cmbItemType_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
         Try
-            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbUnit.Text)
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbItemType.Text)
             If e.Cancel Then Beep()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -296,15 +376,6 @@ Public Class MntSparePartDetail
         End Try
     End Sub
 
-    Private Sub cmbItemType_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
-        Try
-            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbItemType.Text)
-            If e.Cancel Then Beep()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub cmbMachineType_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
         Try
             e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbMachineType.Text)
@@ -313,6 +384,31 @@ Public Class MntSparePartDetail
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    Private Sub cmbUnit_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbUnit.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbVendor_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbVendor.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub DeleteTempImg(ByVal sender As Object, ByVal e As System.EventArgs)
+        If File.Exists(imgTmp) Then
+            File.Delete(imgTmp)
+        End If
+    End Sub
+
     Private Function GetMachineStatus(machineStatusId As Integer) As String
         Dim status As String = String.Empty
 
@@ -375,6 +471,36 @@ Public Class MntSparePartDetail
         End If
     End Function
 
+    Private Sub LoadItemType()
+        Try
+            dbMethod.FillCmbWithCaption("RdMntSparePartItemType", CommandType.StoredProcedure, "ItemTypeId", "ItemTypeName", cmbItemType, "< Select Item Type >")
+
+            AddHandler cmbItemType.Validating, AddressOf cmbItemType_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadLocation()
+        Try
+            dbMethod.FillCmbWithCaption("RdMntSparePartLocation", CommandType.StoredProcedure, "LocationId", "LocationName", cmbLocation, "< Select Location >")
+
+            AddHandler cmbLocation.Validating, AddressOf cmbLocation_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadMachineType()
+        Try
+            dbMethod.FillCmbWithCaption("RdMntSparePartMachineType", CommandType.StoredProcedure, "MachineTypeId", "MachineTypeName", cmbMachineType, "< Select Machine Type >")
+
+            AddHandler cmbMachineType.Validating, AddressOf cmbMachineType_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Sub LoadUnit()
         Try
             dbMethod.FillCmbWithCaption("RdMntSparePartUnit", CommandType.StoredProcedure, "UnitId", "UnitName", cmbUnit, "< Select Unit >")
@@ -395,35 +521,6 @@ Public Class MntSparePartDetail
         End Try
     End Sub
 
-    Private Sub LoadLocation()
-        Try
-            dbMethod.FillCmbWithCaption("RdMntSparePartLocation", CommandType.StoredProcedure, "LocationId", "LocationName", cmbLocation, "< Select Location >")
-
-            AddHandler cmbLocation.Validating, AddressOf cmbLocation_Validating
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub LoadItemType()
-        Try
-            dbMethod.FillCmbWithCaption("RdMntSparePartItemType", CommandType.StoredProcedure, "ItemTypeId", "ItemTypeName", cmbItemType, "< Select Item Type >")
-
-            AddHandler cmbItemType.Validating, AddressOf cmbItemType_Validating
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub LoadMachineType()
-        Try
-            dbMethod.FillCmbWithCaption("RdMntSparePartMachineType", CommandType.StoredProcedure, "MachineTypeId", "MachineTypeName", cmbMachineType, "< Select Machine Type >")
-
-            AddHandler cmbMachineType.Validating, AddressOf cmbMachineType_Validating
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
     Private Sub MntMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F8) Then
             e.Handled = True
@@ -440,7 +537,6 @@ Public Class MntSparePartDetail
                 Me.Text = "New Part Entry"
 
                 rdActive.Checked = True
-
             Else
                 Me.Text = "Part No. " & partId
 
@@ -517,118 +613,6 @@ Public Class MntSparePartDetail
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub ResetForm()
-        Try
-            txtPartNo.Clear()
-            txtPartName.Clear()
-            txtBarcode.Clear()
-            txtQrCode.Clear()
-            txtRfid.Clear()
-
-            txtOrderingPoint.Text = 0
-            txtMaxStock.Text = 0
-            txtMinStock.Text = 0
-
-            cmbUnit.SelectedValue = 0
-            cmbVendor.SelectedValue = 0
-            cmbLocation.SelectedValue = 0
-            cmbItemType.SelectedValue = 0
-            cmbMachineType.SelectedValue = 0
-
-            rdActive.Checked = True
-
-            picImage.Image = Nothing
-
-            Me.ActiveControl = txtPartNo
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub txtMachineName_Enter(sender As Object, e As EventArgs) Handles txtPartNo.Enter
-        lblPartNo.ForeColor = Color.White
-        lblPartNo.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub txtMachineName_Leave(sender As Object, e As EventArgs) Handles txtPartNo.Leave
-        lblPartNo.ForeColor = Color.Black
-        lblPartNo.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub cmbArea_Enter(sender As Object, e As EventArgs) Handles cmbLocation.Enter
-        lblLocation.ForeColor = Color.White
-        lblLocation.BackColor = Color.DarkSlateGray
-    End Sub
-
-    Private Sub cmbArea_Leave(sender As Object, e As EventArgs) Handles cmbLocation.Leave
-        lblLocation.ForeColor = Color.Black
-        lblLocation.BackColor = SystemColors.Control
-    End Sub
-
-    'Private Sub cmbPartGroup_Enter(sender As Object, e As EventArgs)
-    '    lblPartGroup.ForeColor = Color.White
-    '    lblPartGroup.BackColor = Color.DarkSlateGray
-    'End Sub
-
-    'Private Sub cmbPartGroup_Leave(sender As Object, e As EventArgs)
-    '    lblPartGroup.ForeColor = Color.Black
-    '    lblPartGroup.BackColor = SystemColors.Control
-    'End Sub
-
-    'Private Sub cmbFrequency_Enter(sender As Object, e As EventArgs)
-    '    lblFrequency.ForeColor = Color.White
-    '    lblFrequency.BackColor = Color.DarkSlateGray
-    'End Sub
-
-    'Private Sub cmbFrequency_Leave(sender As Object, e As EventArgs)
-    '    lblFrequency.ForeColor = Color.Black
-    '    lblFrequency.BackColor = SystemColors.Control
-    'End Sub
-
-    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
-        lblIsActive.ForeColor = Color.White
-        lblIsActive.BackColor = Color.DarkSlateGray
-    End Sub
-
-
-    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
-        lblIsActive.ForeColor = Color.Black
-        lblIsActive.BackColor = SystemColors.Control
-    End Sub
-
-    Private Sub txtKeyPress(sender As Object, e As KeyPressEventArgs) Handles txtOrderingPoint.KeyPress, txtMaxStock.KeyPress, txtMinStock.KeyPress
-        Try
-            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
-                e.Handled = True
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnRemoveImage_Click(sender As Object, e As EventArgs) Handles btnRemoveImage.Click
-        Try
-            If lstImgAttachment.Count > 0 Then lstImgAttachment.RemoveAt(0)
-
-            If Not picImage.Image Is Nothing Then
-                picImage.Image.Dispose()
-                picImage.Image = Nothing
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnBrowseImage_Click(sender As Object, e As EventArgs) Handles btnBrowseImage.Click
-        Try
-            ofdImage.Filter = "JPEGs (*.jpg, *.jpeg) | *.jpg; *.jpeg |GIFs (*.gif) | *.gif |Bitmaps (*.bmp) | *.bmp | All Images (*.*) | *.jpg; *.jpeg; *.gif; *.bmp; *.png; *.tif; *.tiff"
-            ofdImage.FilterIndex = 7
-            ofdImage.ShowDialog()
-            ofdImage.RestoreDirectory = True
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
 
     Private Sub ofdImage_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ofdImage.FileOk
         Try
@@ -665,64 +649,93 @@ Public Class MntSparePartDetail
         End Try
     End Sub
 
-    Private Sub btnViewImage_Click(sender As Object, e As EventArgs) Handles btnViewImage.Click
+    Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlStatus.Enter
+        lblIsActive.ForeColor = Color.White
+        lblIsActive.BackColor = Color.DarkSlateGray
+    End Sub
+
+    'Private Sub cmbFrequency_Leave(sender As Object, e As EventArgs)
+    '    lblFrequency.ForeColor = Color.Black
+    '    lblFrequency.BackColor = SystemColors.Control
+    'End Sub
+    Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
+        lblIsActive.ForeColor = Color.Black
+        lblIsActive.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub ResetForm()
         Try
-            If lstImgAttachment.Count > 0 Then
-                Process.Start(lstImgAttachment(0).fileName)
+            txtPartNo.Clear()
+            txtPartName.Clear()
+            txtBarcode.Clear()
+            txtQrCode.Clear()
+            txtRfid.Clear()
+
+            txtOrderingPoint.Text = 0
+            txtMaxStock.Text = 0
+            txtMinStock.Text = 0
+
+            cmbUnit.SelectedValue = 0
+            cmbVendor.SelectedValue = 0
+            cmbLocation.SelectedValue = 0
+            cmbItemType.SelectedValue = 0
+            cmbMachineType.SelectedValue = 0
+
+            rdActive.Checked = True
+
+            picImage.Image = Nothing
+
+            Me.ActiveControl = txtPartNo
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    'Private Sub cmbFrequency_Enter(sender As Object, e As EventArgs)
+    '    lblFrequency.ForeColor = Color.White
+    '    lblFrequency.BackColor = Color.DarkSlateGray
+    'End Sub
+    Private Sub txtKeyPress(sender As Object, e As KeyPressEventArgs) Handles txtOrderingPoint.KeyPress, txtMaxStock.KeyPress, txtMinStock.KeyPress
+        Try
+            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
+                e.Handled = True
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub txtMachineName_Enter(sender As Object, e As EventArgs) Handles txtPartNo.Enter
+        lblPartNo.ForeColor = Color.White
+        lblPartNo.BackColor = Color.DarkSlateGray
+    End Sub
+
+    Private Sub txtMachineName_Leave(sender As Object, e As EventArgs) Handles txtPartNo.Leave
+        lblPartNo.ForeColor = Color.Black
+        lblPartNo.BackColor = SystemColors.Control
+    End Sub
+
+    Private Sub txtUnitPrice_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtUnitPrice.KeyPress
+        Try
+            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) AndAlso Not e.KeyChar = "." Then
+                e.Handled = True
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub txtUnitPrice_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtUnitPrice.Validating
+        Try
+            Dim res As Decimal = 0.00
+            If Decimal.TryParse(txtUnitPrice.Text, res) Then
+                e.Cancel = False
             Else
-                'https://stackoverflow.com/questions/14866603/a-generic-error-occurred-in-gdi-when-attempting-to-use-image-save
-                If Not picImage.Image Is Nothing Then
-                    Dim bmp As Bitmap = New Bitmap(picImage.Image)
-                    bmp.Save(imgTmp)
-                    Process.Start(imgTmp)
-
-                    'OpenImage(imgTmp, 30000) '30 seconds
-                End If
+                e.Cancel = True
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-
-    Public Async Sub OpenImage(ByVal imagePath As String, ByVal time As Integer)
-        Try
-            Dim exePathReturnValue = New StringBuilder()
-            FindExecutable(Path.GetFileName(imagePath), Path.GetDirectoryName(imagePath), exePathReturnValue)
-            Dim exePath = exePathReturnValue.ToString()
-            Dim arguments = """" & imagePath & """"
-
-            If Path.GetFileName(exePath).Equals("photoviewer.dll", StringComparison.InvariantCultureIgnoreCase) Then
-                arguments = """" & exePath & """, ImageView_Fullscreen " & imagePath
-                exePath = "rundll32"
-            End If
-
-            Dim process = New Process()
-            process.StartInfo.FileName = exePath
-            process.StartInfo.Arguments = arguments
-            process.EnableRaisingEvents = True
-            AddHandler process.Exited, New EventHandler(AddressOf DeleteTempImg)
-            process.Start()
-
-            Await Task.Delay(time)
-
-            If Not process.HasExited Then
-                process.Kill()
-            End If
-
-            process.Close()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    <DllImport("shell32.dll")>
-    Private Shared Function FindExecutable(ByVal lpFile As String, ByVal lpDirectory As String, <Out> ByVal lpResult As StringBuilder) As Integer
-    End Function
-
-    Private Sub DeleteTempImg(ByVal sender As Object, ByVal e As System.EventArgs)
-        If File.Exists(imgTmp) Then
-            File.Delete(imgTmp)
-        End If
     End Sub
 
 End Class

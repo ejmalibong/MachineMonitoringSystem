@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Globalization
 Imports BlackCoffeeLibrary
+
 Public Class MntMchDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -25,6 +25,7 @@ Public Class MntMchDetail
     End Sub
 
     Public Property pKey As Integer = 0
+
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
@@ -112,7 +113,6 @@ Public Class MntMchDetail
 
                 dbMethod.ExecuteNonQuery("InsMntMachine", CommandType.StoredProcedure, prmMch)
                 pKey = prmMch(0).Value
-
             Else 'old record
                 If Not txtMachineName.Text.Trim.Equals(orgMachineName) Then
                     If IsMachineExist(txtMachineName.Text.Trim) = True Then
@@ -172,6 +172,7 @@ Public Class MntMchDetail
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Function GetMachineStatus(machineStatusId As Integer) As String
         Dim status As String = String.Empty
 
@@ -269,6 +270,7 @@ Public Class MntMchDetail
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub MntMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F8) Then
             e.Handled = True
@@ -325,6 +327,7 @@ Public Class MntMchDetail
         Me.ActiveControl = txtMachineName
         txtMachineName.Select(txtMachineName.Text.Trim.Length, 0)
     End Sub
+
     Private Sub ResetForm()
         Try
             txtMachineName.Clear()
@@ -384,9 +387,9 @@ Public Class MntMchDetail
         lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
-
     Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
         lblRemarks.ForeColor = Color.Black
         lblRemarks.BackColor = SystemColors.Control
     End Sub
+
 End Class

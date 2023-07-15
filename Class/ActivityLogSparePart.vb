@@ -70,5 +70,4 @@ Public Class ActivityLogSparePart
         datatable.Columns.Add(colModifiedDate)
     End Sub
 
-
 End Class

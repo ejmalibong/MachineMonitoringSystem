@@ -27,7 +27,6 @@ Partial Class MntSparePart
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePart))
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -36,6 +35,12 @@ Partial Class MntSparePart
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePart))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -49,6 +54,24 @@ Partial Class MntSparePart
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPartNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPartName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColImage = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.ColItemType = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColUnitPrice = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActualStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActualStockAmount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColOrderingPoint = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMinStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMaxStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColForPr = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExpectedStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColLocatioName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineType = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColItemCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColRemarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -70,25 +93,16 @@ Partial Class MntSparePart
         Me.cmbCommon2 = New SergeUtils.EasyCompletionComboBox()
         Me.btnViewLogs = New PinkieControls.ButtonXP()
         Me.btnReceiveStock = New PinkieControls.ButtonXP()
-        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColPartNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColPartName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColImage = New System.Windows.Forms.DataGridViewImageColumn()
-        Me.ColActualStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColOrderingPoint = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMaxStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMinStock = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColUnitCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColLocatioName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColItemType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColItemCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColVendor = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.ColCreatedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModifiedBy = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModifiedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.btnExport = New PinkieControls.ButtonXP()
+        Me.cmsExport = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.AllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BelowOrderingPointToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblSortBy = New System.Windows.Forms.Label()
+        Me.cmbSortCriteria = New System.Windows.Forms.ComboBox()
+        Me.btnIssueStock = New PinkieControls.ButtonXP()
+        Me.grpSortMode = New System.Windows.Forms.GroupBox()
+        Me.rdDesc = New System.Windows.Forms.RadioButton()
+        Me.rdAsc = New System.Windows.Forms.RadioButton()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -96,6 +110,8 @@ Partial Class MntSparePart
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         Me.pnlSearchByCmb2.SuspendLayout()
+        Me.cmsExport.SuspendLayout()
+        Me.grpSortMode.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmbSearchCriteria
@@ -245,7 +261,7 @@ Partial Class MntSparePart
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColPartNo, Me.ColPartName, Me.ColImage, Me.ColActualStock, Me.ColOrderingPoint, Me.ColMaxStock, Me.ColMinStock, Me.ColUnitCode, Me.ColLocatioName, Me.ColItemType, Me.ColMachineType, Me.ColItemCode, Me.ColVendor, Me.ColIsActive, Me.ColCreatedBy, Me.ColCreatedDate, Me.ColModifiedBy, Me.ColModifiedDate})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColPartNo, Me.ColPartName, Me.ColImage, Me.ColItemType, Me.ColUnitPrice, Me.ColActualStock, Me.ColActualStockAmount, Me.ColOrderingPoint, Me.ColMinStock, Me.ColMaxStock, Me.ColForPr, Me.ColExpectedStock, Me.ColLocatioName, Me.ColMachineType, Me.ColItemCode, Me.ColRemarks, Me.ColIsActive})
         Me.dgvList.GridColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
@@ -255,8 +271,184 @@ Partial Class MntSparePart
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.RowTemplate.Height = 100
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1014, 490)
+        Me.dgvList.Size = New System.Drawing.Size(1120, 490)
         Me.dgvList.TabIndex = 553
+        '
+        'ColPartId
+        '
+        Me.ColPartId.DataPropertyName = "PartId"
+        Me.ColPartId.Frozen = True
+        Me.ColPartId.HeaderText = "Part Id"
+        Me.ColPartId.Name = "ColPartId"
+        Me.ColPartId.ReadOnly = True
+        Me.ColPartId.Visible = False
+        '
+        'ColPartNo
+        '
+        Me.ColPartNo.DataPropertyName = "PartNo"
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColPartNo.Frozen = True
+        Me.ColPartNo.HeaderText = "Part No"
+        Me.ColPartNo.Name = "ColPartNo"
+        Me.ColPartNo.ReadOnly = True
+        Me.ColPartNo.Width = 300
+        '
+        'ColPartName
+        '
+        Me.ColPartName.DataPropertyName = "PartName"
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColPartName.Frozen = True
+        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.Name = "ColPartName"
+        Me.ColPartName.ReadOnly = True
+        Me.ColPartName.Width = 300
+        '
+        'ColImage
+        '
+        Me.ColImage.DataPropertyName = "Image"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColImage.HeaderText = "Image"
+        Me.ColImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
+        Me.ColImage.Name = "ColImage"
+        Me.ColImage.ReadOnly = True
+        Me.ColImage.Width = 200
+        '
+        'ColItemType
+        '
+        Me.ColItemType.DataPropertyName = "ItemTypeName"
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemType.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColItemType.HeaderText = "Item Type"
+        Me.ColItemType.Name = "ColItemType"
+        Me.ColItemType.ReadOnly = True
+        '
+        'ColUnitPrice
+        '
+        Me.ColUnitPrice.DataPropertyName = "UnitPrice"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.NullValue = Nothing
+        Me.ColUnitPrice.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColUnitPrice.HeaderText = "Unit Price"
+        Me.ColUnitPrice.Name = "ColUnitPrice"
+        Me.ColUnitPrice.ReadOnly = True
+        '
+        'ColActualStock
+        '
+        Me.ColActualStock.DataPropertyName = "ActualStock"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle7
+        Me.ColActualStock.HeaderText = "Act Stock"
+        Me.ColActualStock.Name = "ColActualStock"
+        Me.ColActualStock.ReadOnly = True
+        Me.ColActualStock.Width = 65
+        '
+        'ColActualStockAmount
+        '
+        Me.ColActualStockAmount.DataPropertyName = "ActualStockAmount"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColActualStockAmount.DefaultCellStyle = DataGridViewCellStyle8
+        Me.ColActualStockAmount.HeaderText = "Stock Amount"
+        Me.ColActualStockAmount.Name = "ColActualStockAmount"
+        Me.ColActualStockAmount.ReadOnly = True
+        '
+        'ColOrderingPoint
+        '
+        Me.ColOrderingPoint.DataPropertyName = "OrderingPoint"
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle9
+        Me.ColOrderingPoint.HeaderText = "Ord Point"
+        Me.ColOrderingPoint.Name = "ColOrderingPoint"
+        Me.ColOrderingPoint.ReadOnly = True
+        Me.ColOrderingPoint.Width = 65
+        '
+        'ColMinStock
+        '
+        Me.ColMinStock.DataPropertyName = "MinStock"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle10
+        Me.ColMinStock.HeaderText = "Min Stock"
+        Me.ColMinStock.Name = "ColMinStock"
+        Me.ColMinStock.ReadOnly = True
+        Me.ColMinStock.Width = 70
+        '
+        'ColMaxStock
+        '
+        Me.ColMaxStock.DataPropertyName = "MaxStock"
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle11
+        Me.ColMaxStock.HeaderText = "Max Stock"
+        Me.ColMaxStock.Name = "ColMaxStock"
+        Me.ColMaxStock.ReadOnly = True
+        Me.ColMaxStock.Width = 70
+        '
+        'ColForPr
+        '
+        Me.ColForPr.DataPropertyName = "ForPr"
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColForPr.DefaultCellStyle = DataGridViewCellStyle12
+        Me.ColForPr.HeaderText = "For PR"
+        Me.ColForPr.Name = "ColForPr"
+        Me.ColForPr.ReadOnly = True
+        Me.ColForPr.Width = 65
+        '
+        'ColExpectedStock
+        '
+        Me.ColExpectedStock.DataPropertyName = "ExpectedStock"
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColExpectedStock.DefaultCellStyle = DataGridViewCellStyle13
+        Me.ColExpectedStock.HeaderText = "Exp Stock"
+        Me.ColExpectedStock.Name = "ColExpectedStock"
+        Me.ColExpectedStock.ReadOnly = True
+        Me.ColExpectedStock.Width = 65
+        '
+        'ColLocatioName
+        '
+        Me.ColLocatioName.DataPropertyName = "LocationName"
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle14
+        Me.ColLocatioName.HeaderText = "Location"
+        Me.ColLocatioName.Name = "ColLocatioName"
+        Me.ColLocatioName.ReadOnly = True
+        '
+        'ColMachineType
+        '
+        Me.ColMachineType.DataPropertyName = "MachineTypeName"
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle15
+        Me.ColMachineType.HeaderText = "Machine Type"
+        Me.ColMachineType.Name = "ColMachineType"
+        Me.ColMachineType.ReadOnly = True
+        '
+        'ColItemCode
+        '
+        Me.ColItemCode.DataPropertyName = "ItemCode"
+        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle16
+        Me.ColItemCode.HeaderText = "Item Code"
+        Me.ColItemCode.Name = "ColItemCode"
+        Me.ColItemCode.ReadOnly = True
+        '
+        'ColRemarks
+        '
+        Me.ColRemarks.DataPropertyName = "Remarks"
+        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColRemarks.DefaultCellStyle = DataGridViewCellStyle17
+        Me.ColRemarks.HeaderText = "Remarks"
+        Me.ColRemarks.Name = "ColRemarks"
+        Me.ColRemarks.ReadOnly = True
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.ColIsActive.Width = 50
         '
         'bindingNavigator
         '
@@ -270,7 +462,7 @@ Partial Class MntSparePart
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(4, 527)
+        Me.bindingNavigator.Location = New System.Drawing.Point(4, 529)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
@@ -385,7 +577,7 @@ Partial Class MntSparePart
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(638, 526)
+        Me.btnAdd.Location = New System.Drawing.Point(744, 526)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -402,7 +594,7 @@ Partial Class MntSparePart
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(732, 526)
+        Me.btnEdit.Location = New System.Drawing.Point(838, 526)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -419,7 +611,7 @@ Partial Class MntSparePart
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(826, 526)
+        Me.btnDelete.Location = New System.Drawing.Point(932, 526)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -435,7 +627,7 @@ Partial Class MntSparePart
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(920, 526)
+        Me.btnClose.Location = New System.Drawing.Point(1026, 526)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -468,12 +660,11 @@ Partial Class MntSparePart
         Me.btnViewLogs.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnViewLogs.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnViewLogs.Hint = "View transaction history"
-        Me.btnViewLogs.Image = Global.MachineMonitoringSystem.My.Resources.Resources.List_16_x_16
-        Me.btnViewLogs.Location = New System.Drawing.Point(399, 526)
+        Me.btnViewLogs.Location = New System.Drawing.Point(452, 526)
         Me.btnViewLogs.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewLogs.Name = "btnViewLogs"
         Me.btnViewLogs.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnViewLogs.Size = New System.Drawing.Size(100, 32)
+        Me.btnViewLogs.Size = New System.Drawing.Size(90, 32)
         Me.btnViewLogs.TabIndex = 560
         Me.btnViewLogs.Text = "View Logs"
         '
@@ -485,192 +676,122 @@ Partial Class MntSparePart
         Me.btnReceiveStock.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReceiveStock.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnReceiveStock.Hint = "Modify record"
-        Me.btnReceiveStock.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Delivery_16_x_16
-        Me.btnReceiveStock.Location = New System.Drawing.Point(503, 526)
+        Me.btnReceiveStock.Location = New System.Drawing.Point(645, 526)
         Me.btnReceiveStock.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReceiveStock.Name = "btnReceiveStock"
         Me.btnReceiveStock.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnReceiveStock.Size = New System.Drawing.Size(130, 32)
+        Me.btnReceiveStock.Size = New System.Drawing.Size(95, 32)
         Me.btnReceiveStock.TabIndex = 559
         Me.btnReceiveStock.Text = "Receive Stock"
         '
-        'ColPartId
+        'btnExport
         '
-        Me.ColPartId.DataPropertyName = "PartId"
-        Me.ColPartId.Frozen = True
-        Me.ColPartId.HeaderText = "PartId"
-        Me.ColPartId.Name = "ColPartId"
-        Me.ColPartId.ReadOnly = True
-        Me.ColPartId.Visible = False
+        Me.btnExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnExport.DefaultScheme = True
+        Me.btnExport.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnExport.Hint = "Export to excel"
+        Me.btnExport.Location = New System.Drawing.Point(358, 526)
+        Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnExport.Name = "btnExport"
+        Me.btnExport.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnExport.Size = New System.Drawing.Size(90, 32)
+        Me.btnExport.TabIndex = 561
+        Me.btnExport.Text = "Export"
         '
-        'ColPartNo
+        'cmsExport
         '
-        Me.ColPartNo.DataPropertyName = "PartNo"
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColPartNo.Frozen = True
-        Me.ColPartNo.HeaderText = "Part No"
-        Me.ColPartNo.Name = "ColPartNo"
-        Me.ColPartNo.ReadOnly = True
-        Me.ColPartNo.Width = 350
+        Me.cmsExport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AllToolStripMenuItem, Me.BelowOrderingPointToolStripMenuItem})
+        Me.cmsExport.Name = "cmsConsole"
+        Me.cmsExport.Size = New System.Drawing.Size(188, 48)
         '
-        'ColPartName
+        'AllToolStripMenuItem
         '
-        Me.ColPartName.DataPropertyName = "PartName"
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColPartName.Frozen = True
-        Me.ColPartName.HeaderText = "Part Name"
-        Me.ColPartName.Name = "ColPartName"
-        Me.ColPartName.ReadOnly = True
-        Me.ColPartName.Width = 350
+        Me.AllToolStripMenuItem.Name = "AllToolStripMenuItem"
+        Me.AllToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.AllToolStripMenuItem.Text = "All"
         '
-        'ColImage
+        'BelowOrderingPointToolStripMenuItem
         '
-        Me.ColImage.DataPropertyName = "Image"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColImage.HeaderText = "Image"
-        Me.ColImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
-        Me.ColImage.Name = "ColImage"
-        Me.ColImage.ReadOnly = True
-        Me.ColImage.Width = 200
+        Me.BelowOrderingPointToolStripMenuItem.Name = "BelowOrderingPointToolStripMenuItem"
+        Me.BelowOrderingPointToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.BelowOrderingPointToolStripMenuItem.Text = "Below Ordering Point"
         '
-        'ColActualStock
+        'lblSortBy
         '
-        Me.ColActualStock.DataPropertyName = "ActualStock"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColActualStock.HeaderText = "Act Stock"
-        Me.ColActualStock.Name = "ColActualStock"
-        Me.ColActualStock.ReadOnly = True
-        Me.ColActualStock.Width = 65
+        Me.lblSortBy.BackColor = System.Drawing.SystemColors.Control
+        Me.lblSortBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSortBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSortBy.ForeColor = System.Drawing.Color.Black
+        Me.lblSortBy.Location = New System.Drawing.Point(666, 4)
+        Me.lblSortBy.Name = "lblSortBy"
+        Me.lblSortBy.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblSortBy.Size = New System.Drawing.Size(55, 25)
+        Me.lblSortBy.TabIndex = 563
+        Me.lblSortBy.Text = "Sort by"
+        Me.lblSortBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'ColOrderingPoint
+        'cmbSortCriteria
         '
-        Me.ColOrderingPoint.DataPropertyName = "OrderingPoint"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle6
-        Me.ColOrderingPoint.HeaderText = "Ord Point"
-        Me.ColOrderingPoint.Name = "ColOrderingPoint"
-        Me.ColOrderingPoint.ReadOnly = True
-        Me.ColOrderingPoint.Width = 65
+        Me.cmbSortCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbSortCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbSortCriteria.FormattingEnabled = True
+        Me.cmbSortCriteria.Location = New System.Drawing.Point(720, 4)
+        Me.cmbSortCriteria.Name = "cmbSortCriteria"
+        Me.cmbSortCriteria.Size = New System.Drawing.Size(160, 25)
+        Me.cmbSortCriteria.TabIndex = 564
         '
-        'ColMaxStock
+        'btnIssueStock
         '
-        Me.ColMaxStock.DataPropertyName = "MaxStock"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle7
-        Me.ColMaxStock.HeaderText = "Max Stock"
-        Me.ColMaxStock.Name = "ColMaxStock"
-        Me.ColMaxStock.ReadOnly = True
-        Me.ColMaxStock.Width = 70
+        Me.btnIssueStock.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnIssueStock.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnIssueStock.DefaultScheme = True
+        Me.btnIssueStock.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnIssueStock.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnIssueStock.Hint = "Modify record"
+        Me.btnIssueStock.Location = New System.Drawing.Point(546, 526)
+        Me.btnIssueStock.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnIssueStock.Name = "btnIssueStock"
+        Me.btnIssueStock.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnIssueStock.Size = New System.Drawing.Size(95, 32)
+        Me.btnIssueStock.TabIndex = 565
+        Me.btnIssueStock.Text = "Issue Stock"
         '
-        'ColMinStock
+        'grpSortMode
         '
-        Me.ColMinStock.DataPropertyName = "MinStock"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle8
-        Me.ColMinStock.HeaderText = "Min Stock"
-        Me.ColMinStock.Name = "ColMinStock"
-        Me.ColMinStock.ReadOnly = True
-        Me.ColMinStock.Width = 70
+        Me.grpSortMode.Controls.Add(Me.rdDesc)
+        Me.grpSortMode.Controls.Add(Me.rdAsc)
+        Me.grpSortMode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.grpSortMode.Location = New System.Drawing.Point(883, -4)
+        Me.grpSortMode.Name = "grpSortMode"
+        Me.grpSortMode.Size = New System.Drawing.Size(123, 34)
+        Me.grpSortMode.TabIndex = 566
+        Me.grpSortMode.TabStop = False
         '
-        'ColUnitCode
+        'rdDesc
         '
-        Me.ColUnitCode.DataPropertyName = "UnitCode"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColUnitCode.DefaultCellStyle = DataGridViewCellStyle9
-        Me.ColUnitCode.HeaderText = "UOM"
-        Me.ColUnitCode.Name = "ColUnitCode"
-        Me.ColUnitCode.ReadOnly = True
-        Me.ColUnitCode.Width = 60
+        Me.rdDesc.AutoSize = True
+        Me.rdDesc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.rdDesc.Location = New System.Drawing.Point(65, 10)
+        Me.rdDesc.Name = "rdDesc"
+        Me.rdDesc.Size = New System.Drawing.Size(54, 21)
+        Me.rdDesc.TabIndex = 3
+        Me.rdDesc.TabStop = True
+        Me.rdDesc.Text = "Desc"
+        Me.rdDesc.UseVisualStyleBackColor = True
         '
-        'ColLocatioName
+        'rdAsc
         '
-        Me.ColLocatioName.DataPropertyName = "LocationName"
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle10
-        Me.ColLocatioName.HeaderText = "Location"
-        Me.ColLocatioName.Name = "ColLocatioName"
-        Me.ColLocatioName.ReadOnly = True
-        '
-        'ColItemType
-        '
-        Me.ColItemType.DataPropertyName = "ItemTypeName"
-        Me.ColItemType.HeaderText = "Item Type"
-        Me.ColItemType.Name = "ColItemType"
-        Me.ColItemType.ReadOnly = True
-        '
-        'ColMachineType
-        '
-        Me.ColMachineType.DataPropertyName = "MachineTypeName"
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle11
-        Me.ColMachineType.HeaderText = "Machine Type"
-        Me.ColMachineType.Name = "ColMachineType"
-        Me.ColMachineType.ReadOnly = True
-        '
-        'ColItemCode
-        '
-        Me.ColItemCode.DataPropertyName = "ItemCode"
-        Me.ColItemCode.HeaderText = "Item Code"
-        Me.ColItemCode.Name = "ColItemCode"
-        Me.ColItemCode.ReadOnly = True
-        '
-        'ColVendor
-        '
-        Me.ColVendor.DataPropertyName = "VendorName"
-        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColVendor.DefaultCellStyle = DataGridViewCellStyle12
-        Me.ColVendor.HeaderText = "Vendor"
-        Me.ColVendor.Name = "ColVendor"
-        Me.ColVendor.ReadOnly = True
-        Me.ColVendor.Width = 150
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.ColIsActive.Width = 50
-        '
-        'ColCreatedBy
-        '
-        Me.ColCreatedBy.DataPropertyName = "CreatedBy"
-        Me.ColCreatedBy.HeaderText = "Created By"
-        Me.ColCreatedBy.Name = "ColCreatedBy"
-        Me.ColCreatedBy.ReadOnly = True
-        Me.ColCreatedBy.Width = 250
-        '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        Me.ColCreatedDate.HeaderText = "Created Date"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
-        'ColModifiedBy
-        '
-        Me.ColModifiedBy.DataPropertyName = "ModifiedBy"
-        Me.ColModifiedBy.HeaderText = "Modified By"
-        Me.ColModifiedBy.Name = "ColModifiedBy"
-        Me.ColModifiedBy.ReadOnly = True
-        Me.ColModifiedBy.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColModifiedBy.Width = 250
-        '
-        'ColModifiedDate
-        '
-        Me.ColModifiedDate.DataPropertyName = "ModifiedDate"
-        Me.ColModifiedDate.HeaderText = "Modified Date"
-        Me.ColModifiedDate.Name = "ColModifiedDate"
-        Me.ColModifiedDate.ReadOnly = True
-        Me.ColModifiedDate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColModifiedDate.Width = 120
+        Me.rdAsc.AutoSize = True
+        Me.rdAsc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.rdAsc.Location = New System.Drawing.Point(10, 10)
+        Me.rdAsc.Name = "rdAsc"
+        Me.rdAsc.Size = New System.Drawing.Size(46, 21)
+        Me.rdAsc.TabIndex = 2
+        Me.rdAsc.TabStop = True
+        Me.rdAsc.Text = "Asc"
+        Me.rdAsc.UseVisualStyleBackColor = True
         '
         'MntSparePart
         '
@@ -679,7 +800,15 @@ Partial Class MntSparePart
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(1014, 561)
+        Me.ClientSize = New System.Drawing.Size(1120, 561)
+        Me.Controls.Add(Me.grpSortMode)
+        Me.Controls.Add(Me.btnReset)
+        Me.Controls.Add(Me.btnSearch)
+        Me.Controls.Add(Me.cmbSearchCriteria)
+        Me.Controls.Add(Me.btnIssueStock)
+        Me.Controls.Add(Me.lblSortBy)
+        Me.Controls.Add(Me.cmbSortCriteria)
+        Me.Controls.Add(Me.btnExport)
         Me.Controls.Add(Me.btnViewLogs)
         Me.Controls.Add(Me.btnReceiveStock)
         Me.Controls.Add(Me.pnlSearchByCmb2)
@@ -692,9 +821,6 @@ Partial Class MntSparePart
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.bindingNavigator)
         Me.Controls.Add(Me.dgvList)
-        Me.Controls.Add(Me.btnReset)
-        Me.Controls.Add(Me.btnSearch)
-        Me.Controls.Add(Me.cmbSearchCriteria)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
@@ -716,6 +842,9 @@ Partial Class MntSparePart
         Me.bindingNavigator.ResumeLayout(False)
         Me.bindingNavigator.PerformLayout()
         Me.pnlSearchByCmb2.ResumeLayout(False)
+        Me.cmsExport.ResumeLayout(False)
+        Me.grpSortMode.ResumeLayout(False)
+        Me.grpSortMode.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -755,23 +884,32 @@ Partial Class MntSparePart
     Friend WithEvents cmbCommon2 As SergeUtils.EasyCompletionComboBox
     Friend WithEvents btnViewLogs As PinkieControls.ButtonXP
     Friend WithEvents btnReceiveStock As PinkieControls.ButtonXP
+    Friend WithEvents btnExport As PinkieControls.ButtonXP
+    Friend WithEvents cmsExport As ContextMenuStrip
+    Friend WithEvents AllToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents lblSortBy As Label
+    Friend WithEvents cmbSortCriteria As ComboBox
+    Friend WithEvents BelowOrderingPointToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents btnIssueStock As PinkieControls.ButtonXP
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColPartNo As DataGridViewTextBoxColumn
     Friend WithEvents ColPartName As DataGridViewTextBoxColumn
     Friend WithEvents ColImage As DataGridViewImageColumn
-    Friend WithEvents ColActualStock As DataGridViewTextBoxColumn
-    Friend WithEvents ColOrderingPoint As DataGridViewTextBoxColumn
-    Friend WithEvents ColMaxStock As DataGridViewTextBoxColumn
-    Friend WithEvents ColMinStock As DataGridViewTextBoxColumn
-    Friend WithEvents ColUnitCode As DataGridViewTextBoxColumn
-    Friend WithEvents ColLocatioName As DataGridViewTextBoxColumn
     Friend WithEvents ColItemType As DataGridViewTextBoxColumn
+    Friend WithEvents ColUnitPrice As DataGridViewTextBoxColumn
+    Friend WithEvents ColActualStock As DataGridViewTextBoxColumn
+    Friend WithEvents ColActualStockAmount As DataGridViewTextBoxColumn
+    Friend WithEvents ColOrderingPoint As DataGridViewTextBoxColumn
+    Friend WithEvents ColMinStock As DataGridViewTextBoxColumn
+    Friend WithEvents ColMaxStock As DataGridViewTextBoxColumn
+    Friend WithEvents ColForPr As DataGridViewTextBoxColumn
+    Friend WithEvents ColExpectedStock As DataGridViewTextBoxColumn
+    Friend WithEvents ColLocatioName As DataGridViewTextBoxColumn
     Friend WithEvents ColMachineType As DataGridViewTextBoxColumn
     Friend WithEvents ColItemCode As DataGridViewTextBoxColumn
-    Friend WithEvents ColVendor As DataGridViewTextBoxColumn
+    Friend WithEvents ColRemarks As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
-    Friend WithEvents ColCreatedBy As DataGridViewTextBoxColumn
-    Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
-    Friend WithEvents ColModifiedBy As DataGridViewTextBoxColumn
-    Friend WithEvents ColModifiedDate As DataGridViewTextBoxColumn
+    Public WithEvents grpSortMode As GroupBox
+    Public WithEvents rdDesc As RadioButton
+    Public WithEvents rdAsc As RadioButton
 End Class

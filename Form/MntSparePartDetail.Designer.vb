@@ -72,6 +72,8 @@ Partial Class MntSparePartDetail
         Me.ofdImage = New System.Windows.Forms.OpenFileDialog()
         Me.txtItemCode = New System.Windows.Forms.TextBox()
         Me.lblItemCode = New System.Windows.Forms.Label()
+        Me.txtUnitPrice = New System.Windows.Forms.TextBox()
+        Me.lblUnitPrice = New System.Windows.Forms.Label()
         Me.pnlStatus.SuspendLayout()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -85,7 +87,7 @@ Partial Class MntSparePartDetail
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(475, 431)
+        Me.btnClose.Location = New System.Drawing.Point(490, 455)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
@@ -102,7 +104,7 @@ Partial Class MntSparePartDetail
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.Hint = "Delete record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(381, 431)
+        Me.btnDelete.Location = New System.Drawing.Point(396, 455)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(90, 32)
@@ -119,7 +121,7 @@ Partial Class MntSparePartDetail
         Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnSave.Hint = "Save record"
         Me.btnSave.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Save_16_x_16
-        Me.btnSave.Location = New System.Drawing.Point(287, 431)
+        Me.btnSave.Location = New System.Drawing.Point(302, 455)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(90, 32)
@@ -133,7 +135,7 @@ Partial Class MntSparePartDetail
         Me.lblLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblLocation.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblLocation.ForeColor = System.Drawing.Color.Black
-        Me.lblLocation.Location = New System.Drawing.Point(4, 202)
+        Me.lblLocation.Location = New System.Drawing.Point(4, 227)
         Me.lblLocation.Name = "lblLocation"
         Me.lblLocation.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblLocation.Size = New System.Drawing.Size(100, 23)
@@ -147,7 +149,7 @@ Partial Class MntSparePartDetail
         Me.lblIsActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblIsActive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblIsActive.ForeColor = System.Drawing.Color.Black
-        Me.lblIsActive.Location = New System.Drawing.Point(4, 402)
+        Me.lblIsActive.Location = New System.Drawing.Point(4, 427)
         Me.lblIsActive.Name = "lblIsActive"
         Me.lblIsActive.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblIsActive.Size = New System.Drawing.Size(100, 23)
@@ -160,10 +162,10 @@ Partial Class MntSparePartDetail
         Me.pnlStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pnlStatus.Controls.Add(Me.rdInactive)
         Me.pnlStatus.Controls.Add(Me.rdActive)
-        Me.pnlStatus.Location = New System.Drawing.Point(103, 402)
+        Me.pnlStatus.Location = New System.Drawing.Point(103, 427)
         Me.pnlStatus.Name = "pnlStatus"
         Me.pnlStatus.Size = New System.Drawing.Size(180, 23)
-        Me.pnlStatus.TabIndex = 14
+        Me.pnlStatus.TabIndex = 15
         '
         'rdInactive
         '
@@ -191,10 +193,10 @@ Partial Class MntSparePartDetail
         '
         Me.cmbLocation.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbLocation.FormattingEnabled = True
-        Me.cmbLocation.Location = New System.Drawing.Point(103, 202)
+        Me.cmbLocation.Location = New System.Drawing.Point(103, 227)
         Me.cmbLocation.Name = "cmbLocation"
         Me.cmbLocation.Size = New System.Drawing.Size(180, 23)
-        Me.cmbLocation.TabIndex = 6
+        Me.cmbLocation.TabIndex = 7
         '
         'lblPartNo
         '
@@ -216,7 +218,7 @@ Partial Class MntSparePartDetail
         Me.txtPartNo.Location = New System.Drawing.Point(103, 52)
         Me.txtPartNo.MaxLength = 50
         Me.txtPartNo.Name = "txtPartNo"
-        Me.txtPartNo.Size = New System.Drawing.Size(462, 23)
+        Me.txtPartNo.Size = New System.Drawing.Size(477, 23)
         Me.txtPartNo.TabIndex = 0
         '
         'txtCreatedDate
@@ -228,7 +230,7 @@ Partial Class MntSparePartDetail
         Me.txtCreatedDate.Location = New System.Drawing.Point(103, 27)
         Me.txtCreatedDate.Name = "txtCreatedDate"
         Me.txtCreatedDate.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
-        Me.txtCreatedDate.Size = New System.Drawing.Size(180, 23)
+        Me.txtCreatedDate.Size = New System.Drawing.Size(192, 23)
         Me.txtCreatedDate.TabIndex = 591
         Me.txtCreatedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtCreatedDate.UseCompatibleTextRendering = True
@@ -256,7 +258,7 @@ Partial Class MntSparePartDetail
         Me.txtCreatedBy.Location = New System.Drawing.Point(103, 2)
         Me.txtCreatedBy.Name = "txtCreatedBy"
         Me.txtCreatedBy.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
-        Me.txtCreatedBy.Size = New System.Drawing.Size(180, 23)
+        Me.txtCreatedBy.Size = New System.Drawing.Size(192, 23)
         Me.txtCreatedBy.TabIndex = 590
         Me.txtCreatedBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtCreatedBy.UseCompatibleTextRendering = True
@@ -281,10 +283,10 @@ Partial Class MntSparePartDetail
         Me.txtModifiedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtModifiedDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtModifiedDate.ForeColor = System.Drawing.Color.Black
-        Me.txtModifiedDate.Location = New System.Drawing.Point(385, 27)
+        Me.txtModifiedDate.Location = New System.Drawing.Point(397, 27)
         Me.txtModifiedDate.Name = "txtModifiedDate"
         Me.txtModifiedDate.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
-        Me.txtModifiedDate.Size = New System.Drawing.Size(180, 23)
+        Me.txtModifiedDate.Size = New System.Drawing.Size(183, 23)
         Me.txtModifiedDate.TabIndex = 595
         Me.txtModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtModifiedDate.UseCompatibleTextRendering = True
@@ -295,7 +297,7 @@ Partial Class MntSparePartDetail
         Me.lblModifiedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblModifiedDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblModifiedDate.ForeColor = System.Drawing.Color.Black
-        Me.lblModifiedDate.Location = New System.Drawing.Point(286, 27)
+        Me.lblModifiedDate.Location = New System.Drawing.Point(298, 27)
         Me.lblModifiedDate.Name = "lblModifiedDate"
         Me.lblModifiedDate.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblModifiedDate.Size = New System.Drawing.Size(100, 23)
@@ -309,10 +311,10 @@ Partial Class MntSparePartDetail
         Me.txtModifiedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtModifiedBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtModifiedBy.ForeColor = System.Drawing.Color.Black
-        Me.txtModifiedBy.Location = New System.Drawing.Point(385, 2)
+        Me.txtModifiedBy.Location = New System.Drawing.Point(397, 2)
         Me.txtModifiedBy.Name = "txtModifiedBy"
         Me.txtModifiedBy.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
-        Me.txtModifiedBy.Size = New System.Drawing.Size(180, 23)
+        Me.txtModifiedBy.Size = New System.Drawing.Size(183, 23)
         Me.txtModifiedBy.TabIndex = 594
         Me.txtModifiedBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtModifiedBy.UseCompatibleTextRendering = True
@@ -323,7 +325,7 @@ Partial Class MntSparePartDetail
         Me.lblModifiedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblModifiedBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblModifiedBy.ForeColor = System.Drawing.Color.Black
-        Me.lblModifiedBy.Location = New System.Drawing.Point(286, 2)
+        Me.lblModifiedBy.Location = New System.Drawing.Point(298, 2)
         Me.lblModifiedBy.Name = "lblModifiedBy"
         Me.lblModifiedBy.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblModifiedBy.Size = New System.Drawing.Size(100, 23)
@@ -337,7 +339,7 @@ Partial Class MntSparePartDetail
         Me.txtPartName.Location = New System.Drawing.Point(103, 77)
         Me.txtPartName.MaxLength = 50
         Me.txtPartName.Name = "txtPartName"
-        Me.txtPartName.Size = New System.Drawing.Size(462, 23)
+        Me.txtPartName.Size = New System.Drawing.Size(477, 23)
         Me.txtPartName.TabIndex = 1
         '
         'lblPartName
@@ -408,7 +410,7 @@ Partial Class MntSparePartDetail
         Me.lblUnit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblUnit.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblUnit.ForeColor = System.Drawing.Color.Black
-        Me.lblUnit.Location = New System.Drawing.Point(4, 177)
+        Me.lblUnit.Location = New System.Drawing.Point(4, 202)
         Me.lblUnit.Name = "lblUnit"
         Me.lblUnit.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblUnit.Size = New System.Drawing.Size(100, 23)
@@ -422,7 +424,7 @@ Partial Class MntSparePartDetail
         Me.lblItemType.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblItemType.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblItemType.ForeColor = System.Drawing.Color.Black
-        Me.lblItemType.Location = New System.Drawing.Point(4, 227)
+        Me.lblItemType.Location = New System.Drawing.Point(4, 252)
         Me.lblItemType.Name = "lblItemType"
         Me.lblItemType.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblItemType.Size = New System.Drawing.Size(100, 23)
@@ -434,10 +436,10 @@ Partial Class MntSparePartDetail
         '
         Me.cmbItemType.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbItemType.FormattingEnabled = True
-        Me.cmbItemType.Location = New System.Drawing.Point(103, 227)
+        Me.cmbItemType.Location = New System.Drawing.Point(103, 252)
         Me.cmbItemType.Name = "cmbItemType"
         Me.cmbItemType.Size = New System.Drawing.Size(180, 23)
-        Me.cmbItemType.TabIndex = 7
+        Me.cmbItemType.TabIndex = 8
         '
         'lblVendor
         '
@@ -445,7 +447,7 @@ Partial Class MntSparePartDetail
         Me.lblVendor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblVendor.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblVendor.ForeColor = System.Drawing.Color.Black
-        Me.lblVendor.Location = New System.Drawing.Point(4, 277)
+        Me.lblVendor.Location = New System.Drawing.Point(4, 302)
         Me.lblVendor.Name = "lblVendor"
         Me.lblVendor.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblVendor.Size = New System.Drawing.Size(100, 23)
@@ -457,10 +459,10 @@ Partial Class MntSparePartDetail
         '
         Me.cmbVendor.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbVendor.FormattingEnabled = True
-        Me.cmbVendor.Location = New System.Drawing.Point(103, 277)
+        Me.cmbVendor.Location = New System.Drawing.Point(103, 302)
         Me.cmbVendor.Name = "cmbVendor"
         Me.cmbVendor.Size = New System.Drawing.Size(180, 23)
-        Me.cmbVendor.TabIndex = 9
+        Me.cmbVendor.TabIndex = 10
         '
         'lblMachineType
         '
@@ -468,7 +470,7 @@ Partial Class MntSparePartDetail
         Me.lblMachineType.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblMachineType.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblMachineType.ForeColor = System.Drawing.Color.Black
-        Me.lblMachineType.Location = New System.Drawing.Point(4, 252)
+        Me.lblMachineType.Location = New System.Drawing.Point(4, 277)
         Me.lblMachineType.Name = "lblMachineType"
         Me.lblMachineType.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblMachineType.Size = New System.Drawing.Size(100, 23)
@@ -480,10 +482,10 @@ Partial Class MntSparePartDetail
         '
         Me.cmbMachineType.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbMachineType.FormattingEnabled = True
-        Me.cmbMachineType.Location = New System.Drawing.Point(103, 252)
+        Me.cmbMachineType.Location = New System.Drawing.Point(103, 277)
         Me.cmbMachineType.Name = "cmbMachineType"
         Me.cmbMachineType.Size = New System.Drawing.Size(180, 23)
-        Me.cmbMachineType.TabIndex = 8
+        Me.cmbMachineType.TabIndex = 9
         '
         'txtMaxStock
         '
@@ -513,19 +515,19 @@ Partial Class MntSparePartDetail
         '
         Me.cmbUnit.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbUnit.FormattingEnabled = True
-        Me.cmbUnit.Location = New System.Drawing.Point(103, 177)
+        Me.cmbUnit.Location = New System.Drawing.Point(103, 202)
         Me.cmbUnit.Name = "cmbUnit"
         Me.cmbUnit.Size = New System.Drawing.Size(180, 23)
-        Me.cmbUnit.TabIndex = 5
+        Me.cmbUnit.TabIndex = 6
         '
         'txtQrCode
         '
         Me.txtQrCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtQrCode.Location = New System.Drawing.Point(103, 352)
+        Me.txtQrCode.Location = New System.Drawing.Point(103, 377)
         Me.txtQrCode.MaxLength = 50
         Me.txtQrCode.Name = "txtQrCode"
         Me.txtQrCode.Size = New System.Drawing.Size(180, 23)
-        Me.txtQrCode.TabIndex = 12
+        Me.txtQrCode.TabIndex = 13
         '
         'lblQrCode
         '
@@ -533,7 +535,7 @@ Partial Class MntSparePartDetail
         Me.lblQrCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblQrCode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblQrCode.ForeColor = System.Drawing.Color.Black
-        Me.lblQrCode.Location = New System.Drawing.Point(4, 352)
+        Me.lblQrCode.Location = New System.Drawing.Point(4, 377)
         Me.lblQrCode.Name = "lblQrCode"
         Me.lblQrCode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblQrCode.Size = New System.Drawing.Size(100, 23)
@@ -544,11 +546,11 @@ Partial Class MntSparePartDetail
         'txtRfid
         '
         Me.txtRfid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtRfid.Location = New System.Drawing.Point(103, 377)
+        Me.txtRfid.Location = New System.Drawing.Point(103, 402)
         Me.txtRfid.MaxLength = 50
         Me.txtRfid.Name = "txtRfid"
         Me.txtRfid.Size = New System.Drawing.Size(180, 23)
-        Me.txtRfid.TabIndex = 13
+        Me.txtRfid.TabIndex = 14
         '
         'lblRfid
         '
@@ -556,7 +558,7 @@ Partial Class MntSparePartDetail
         Me.lblRfid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblRfid.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblRfid.ForeColor = System.Drawing.Color.Black
-        Me.lblRfid.Location = New System.Drawing.Point(4, 377)
+        Me.lblRfid.Location = New System.Drawing.Point(4, 402)
         Me.lblRfid.Name = "lblRfid"
         Me.lblRfid.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblRfid.Size = New System.Drawing.Size(100, 23)
@@ -567,11 +569,11 @@ Partial Class MntSparePartDetail
         'txtBarcode
         '
         Me.txtBarcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtBarcode.Location = New System.Drawing.Point(103, 327)
+        Me.txtBarcode.Location = New System.Drawing.Point(103, 352)
         Me.txtBarcode.MaxLength = 50
         Me.txtBarcode.Name = "txtBarcode"
         Me.txtBarcode.Size = New System.Drawing.Size(180, 23)
-        Me.txtBarcode.TabIndex = 11
+        Me.txtBarcode.TabIndex = 12
         '
         'lblBarcode
         '
@@ -579,7 +581,7 @@ Partial Class MntSparePartDetail
         Me.lblBarcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblBarcode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblBarcode.ForeColor = System.Drawing.Color.Black
-        Me.lblBarcode.Location = New System.Drawing.Point(4, 327)
+        Me.lblBarcode.Location = New System.Drawing.Point(4, 352)
         Me.lblBarcode.Name = "lblBarcode"
         Me.lblBarcode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblBarcode.Size = New System.Drawing.Size(100, 23)
@@ -597,7 +599,7 @@ Partial Class MntSparePartDetail
         Me.pnlImage.Controls.Add(Me.picImage)
         Me.pnlImage.Location = New System.Drawing.Point(285, 125)
         Me.pnlImage.Name = "pnlImage"
-        Me.pnlImage.Size = New System.Drawing.Size(280, 300)
+        Me.pnlImage.Size = New System.Drawing.Size(295, 325)
         Me.pnlImage.TabIndex = 622
         '
         'btnViewImage
@@ -609,7 +611,7 @@ Partial Class MntSparePartDetail
         Me.btnViewImage.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnViewImage.Hint = "View image"
         Me.btnViewImage.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Expand_16_x_16
-        Me.btnViewImage.Location = New System.Drawing.Point(2, 269)
+        Me.btnViewImage.Location = New System.Drawing.Point(2, 294)
         Me.btnViewImage.Name = "btnViewImage"
         Me.btnViewImage.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnViewImage.Size = New System.Drawing.Size(28, 28)
@@ -624,7 +626,7 @@ Partial Class MntSparePartDetail
         Me.btnRemoveImage.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnRemoveImage.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnRemoveImage.Hint = "Remove image"
-        Me.btnRemoveImage.Location = New System.Drawing.Point(196, 269)
+        Me.btnRemoveImage.Location = New System.Drawing.Point(211, 294)
         Me.btnRemoveImage.Name = "btnRemoveImage"
         Me.btnRemoveImage.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnRemoveImage.Size = New System.Drawing.Size(80, 28)
@@ -640,7 +642,7 @@ Partial Class MntSparePartDetail
         Me.btnBrowseImage.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnBrowseImage.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnBrowseImage.Hint = "Browse image"
-        Me.btnBrowseImage.Location = New System.Drawing.Point(115, 269)
+        Me.btnBrowseImage.Location = New System.Drawing.Point(130, 294)
         Me.btnBrowseImage.Name = "btnBrowseImage"
         Me.btnBrowseImage.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnBrowseImage.Size = New System.Drawing.Size(80, 28)
@@ -659,21 +661,20 @@ Partial Class MntSparePartDetail
         Me.picImage.InitialImage = Nothing
         Me.picImage.Location = New System.Drawing.Point(3, 3)
         Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(272, 265)
+        Me.picImage.Size = New System.Drawing.Size(287, 290)
         Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.picImage.TabIndex = 0
         Me.picImage.TabStop = False
         '
         'lblImage
         '
-        Me.lblImage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblImage.BackColor = System.Drawing.SystemColors.Control
         Me.lblImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblImage.ForeColor = System.Drawing.Color.Black
         Me.lblImage.Location = New System.Drawing.Point(285, 102)
         Me.lblImage.Name = "lblImage"
         Me.lblImage.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblImage.Size = New System.Drawing.Size(280, 24)
+        Me.lblImage.Size = New System.Drawing.Size(295, 24)
         Me.lblImage.TabIndex = 621
         Me.lblImage.Text = "Image"
         Me.lblImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -684,11 +685,11 @@ Partial Class MntSparePartDetail
         'txtItemCode
         '
         Me.txtItemCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtItemCode.Location = New System.Drawing.Point(103, 302)
+        Me.txtItemCode.Location = New System.Drawing.Point(103, 327)
         Me.txtItemCode.MaxLength = 50
         Me.txtItemCode.Name = "txtItemCode"
         Me.txtItemCode.Size = New System.Drawing.Size(180, 23)
-        Me.txtItemCode.TabIndex = 10
+        Me.txtItemCode.TabIndex = 11
         '
         'lblItemCode
         '
@@ -696,7 +697,7 @@ Partial Class MntSparePartDetail
         Me.lblItemCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblItemCode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblItemCode.ForeColor = System.Drawing.Color.Black
-        Me.lblItemCode.Location = New System.Drawing.Point(4, 302)
+        Me.lblItemCode.Location = New System.Drawing.Point(4, 327)
         Me.lblItemCode.Name = "lblItemCode"
         Me.lblItemCode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblItemCode.Size = New System.Drawing.Size(100, 23)
@@ -704,13 +705,39 @@ Partial Class MntSparePartDetail
         Me.lblItemCode.Text = "Item Code"
         Me.lblItemCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'txtUnitPrice
+        '
+        Me.txtUnitPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtUnitPrice.Location = New System.Drawing.Point(103, 177)
+        Me.txtUnitPrice.MaxLength = 50
+        Me.txtUnitPrice.Name = "txtUnitPrice"
+        Me.txtUnitPrice.Size = New System.Drawing.Size(180, 23)
+        Me.txtUnitPrice.TabIndex = 5
+        Me.txtUnitPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lblUnitPrice
+        '
+        Me.lblUnitPrice.BackColor = System.Drawing.SystemColors.Control
+        Me.lblUnitPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblUnitPrice.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblUnitPrice.ForeColor = System.Drawing.Color.Black
+        Me.lblUnitPrice.Location = New System.Drawing.Point(4, 177)
+        Me.lblUnitPrice.Name = "lblUnitPrice"
+        Me.lblUnitPrice.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblUnitPrice.Size = New System.Drawing.Size(100, 23)
+        Me.lblUnitPrice.TabIndex = 626
+        Me.lblUnitPrice.Text = "Unit Price"
+        Me.lblUnitPrice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'MntSparePartDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(569, 467)
+        Me.ClientSize = New System.Drawing.Size(584, 491)
+        Me.Controls.Add(Me.txtUnitPrice)
+        Me.Controls.Add(Me.lblUnitPrice)
         Me.Controls.Add(Me.txtItemCode)
         Me.Controls.Add(Me.lblItemCode)
         Me.Controls.Add(Me.pnlImage)
@@ -825,4 +852,6 @@ Partial Class MntSparePartDetail
     Friend WithEvents ofdImage As OpenFileDialog
     Friend WithEvents txtItemCode As TextBox
     Friend WithEvents lblItemCode As Label
+    Friend WithEvents txtUnitPrice As TextBox
+    Friend WithEvents lblUnitPrice As Label
 End Class

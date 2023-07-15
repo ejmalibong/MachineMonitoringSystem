@@ -352,7 +352,6 @@ Public Class MntJigModel
 
                 dtUser = dbMethod.FillDataTable("RdMntJigModelMasterlistByExtensionId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
-
             Else
                 Dim prmMasterlist(2) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
@@ -442,4 +441,5 @@ Public Class MntJigModel
             e.Handled = True
         End If
     End Sub
+
 End Class

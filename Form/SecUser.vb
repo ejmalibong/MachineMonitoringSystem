@@ -21,6 +21,7 @@ Public Class SecUser
     Private sectionId As Integer = 0
     Private totalCount As Integer
     Private workgroupId As Integer = 0
+
     Public Sub New(_departmentId As Integer, _sectionId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -416,7 +417,6 @@ Public Class SecUser
 
                 dtUser = dbMethod.FillDataTable("RdSecUserMasterlistBySectionId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
-
             Else
                 Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)

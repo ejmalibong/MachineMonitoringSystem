@@ -316,7 +316,6 @@ Public Class MntModelExtension
 
                 dtUser = dbMethod.FillDataTable("RdMntModelExtensionMasterlistByExtensionName", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
-
             Else
                 Dim prmMasterlist(2) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
@@ -405,4 +404,5 @@ Public Class MntModelExtension
             e.Handled = True
         End If
     End Sub
+
 End Class

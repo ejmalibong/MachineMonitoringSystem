@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntTrxPartReceive
+Partial Class MntTrxPartIssue
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -22,9 +22,9 @@ Partial Class MntTrxPartReceive
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblPartsReceiving = New System.Windows.Forms.Label()
         Me.btnClear = New PinkieControls.ButtonXP()
         Me.lblPartNo = New System.Windows.Forms.Label()
@@ -77,7 +77,7 @@ Partial Class MntTrxPartReceive
         Me.lblPartsReceiving.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblPartsReceiving.Size = New System.Drawing.Size(1034, 24)
         Me.lblPartsReceiving.TabIndex = 565
-        Me.lblPartsReceiving.Text = "Parts Receive"
+        Me.lblPartsReceiving.Text = "Parts Issue"
         Me.lblPartsReceiving.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btnClear
@@ -315,14 +315,14 @@ Partial Class MntTrxPartReceive
         Me.dgvPartDetail.AllowUserToResizeRows = False
         Me.dgvPartDetail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColCreatedDate, Me.ColQty})
         Me.dgvPartDetail.Location = New System.Drawing.Point(3, 308)
@@ -347,8 +347,8 @@ Partial Class MntTrxPartReceive
         'ColCreatedDate
         '
         Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColCreatedDate.HeaderText = "Date Received"
         Me.ColCreatedDate.Name = "ColCreatedDate"
         Me.ColCreatedDate.ReadOnly = True
@@ -357,8 +357,8 @@ Partial Class MntTrxPartReceive
         'ColQty
         '
         Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColQty.HeaderText = "Qty"
         Me.ColQty.Name = "ColQty"
         Me.ColQty.ReadOnly = True
@@ -434,7 +434,7 @@ Partial Class MntTrxPartReceive
         Me.lblStockIn.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblStockIn.Size = New System.Drawing.Size(1034, 24)
         Me.lblStockIn.TabIndex = 616
-        Me.lblStockIn.Text = "Stock In"
+        Me.lblStockIn.Text = "Stock Out"
         Me.lblStockIn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblItemQty1
@@ -498,7 +498,7 @@ Partial Class MntTrxPartReceive
         Me.lblTechnician.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblTechnician.Size = New System.Drawing.Size(120, 25)
         Me.lblTechnician.TabIndex = 627
-        Me.lblTechnician.Text = "Received By"
+        Me.lblTechnician.Text = "Issued To"
         Me.lblTechnician.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'cmbTechnician
@@ -563,7 +563,7 @@ Partial Class MntTrxPartReceive
         Me.txtRemarks.Size = New System.Drawing.Size(751, 62)
         Me.txtRemarks.TabIndex = 4
         '
-        'MntTrxPartReceive
+        'MntTrxPartIssue
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -606,7 +606,7 @@ Partial Class MntTrxPartReceive
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntTrxPartReceive"
+        Me.Name = "MntTrxPartIssue"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

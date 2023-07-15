@@ -10,6 +10,7 @@ Public Class SecUserDetail
     Private sectionId As Integer = 0
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
+
     Public Sub New(_userId As Integer, _departmentId As Integer, _sectionId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -155,7 +156,6 @@ Public Class SecUserDetail
 
                 dbMethod.ExecuteNonQuery("InsSecUser", CommandType.StoredProcedure, prmUser)
                 pKey = prmUser(0).Value
-
             Else
                 Dim prmCntEmp(1) As SqlParameter
                 prmCntEmp(0) = New SqlParameter("@EmployeeId", SqlDbType.Char, 8)

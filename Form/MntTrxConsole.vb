@@ -113,8 +113,6 @@ Public Class MntTrxConsole
         Me.dgvJig.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 
         cmbStatus.SelectedValue = 7
-
-        'Call MachineRelatedToolStripMenuItem_Click(sender, e)
     End Sub
 
     Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
@@ -193,7 +191,7 @@ Public Class MntTrxConsole
                 ElseIf jigStatusId = 2 Then
                     dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.Orange 'scheduled
                 ElseIf jigStatusId = 3 Then
-                    dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral 'unscheduled 
+                    dgvJig.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral 'unscheduled
                 End If
             Next
         Catch ex As Exception
@@ -285,7 +283,6 @@ Public Class MntTrxConsole
                             LoadMachine()
                         End If
                     End Using
-
                 Else
                     Using frmDetail As New MntTrxDetailOth(userId, workgroupId, isAdmin, trxId)
                         frmDetail.ShowDialog(Me)
@@ -3193,6 +3190,7 @@ Public Class MntTrxConsole
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub GetScrollingIndex()
         indexScroll = dgvList.FirstDisplayedCell.RowIndex
         indexPosition = dgvList.CurrentRow.Index

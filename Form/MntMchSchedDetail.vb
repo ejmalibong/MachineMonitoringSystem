@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Globalization
-Imports System.Text.RegularExpressions
 Imports BlackCoffeeLibrary
+
 Public Class MntMchSchedDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -28,6 +28,7 @@ Public Class MntMchSchedDetail
     End Sub
 
     Public Property pKey As Integer = 0
+
     Public Shared Function GetWeekOfMonth(dt As DateTime) As Integer
         Dim cultureInfo As CultureInfo = New CultureInfo("en-US")
         Dim calendar As Calendar = cultureInfo.Calendar
@@ -145,7 +146,6 @@ Public Class MntMchSchedDetail
                 Next
 
                 ResetForm()
-
             Else 'old record
                 If IsSchedExists(cmbMachineName.SelectedValue, frequencyId, cmbMonth.SelectedValue, CInt(txtYearId.Text), scheduleId) = True Then
                     MessageBox.Show("Schedule already exists.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -400,6 +400,7 @@ Public Class MntMchSchedDetail
         pnlChecklist.Enabled = False
         pnlRemarks.Enabled = False
     End Sub
+
     Private Sub ResetForm()
         Try
             txtYearId.Text = Year(dbMethod.GetServerDate)
@@ -642,4 +643,5 @@ Public Class MntMchSchedDetail
         lblRemarks.ForeColor = Color.Black
         lblRemarks.BackColor = SystemColors.Control
     End Sub
+
 End Class

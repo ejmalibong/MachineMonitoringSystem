@@ -1,9 +1,9 @@
-﻿Imports BlackCoffeeLibrary
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports BlackCoffeeLibrary
 
 Public Class MntTrxDetailOth
     Private WithEvents bsSparePart As New BindingSource
@@ -36,6 +36,7 @@ Public Class MntTrxDetailOth
     Private dtTrxHeader As New DataTable
     Private dtTrxMachinePart As New DataTable
     Private dtTrxPartDetail As New DataTable
+
     'Private dtTrxSparePart As New DataTable
     Private dtTrxPartHeader As New DataTable
 
@@ -136,7 +137,6 @@ Public Class MntTrxDetailOth
                 cmbApp1Name.Enabled = False
                 txtApp1Remarks.Enabled = False
             End If
-
         Else 'contains area, enable form
             If trxId = 0 Then 'new transaction, enable all controls, enable approvers controls based on accesslevel
                 cmbTransactionStatus.Enabled = True
@@ -217,7 +217,6 @@ Public Class MntTrxDetailOth
                             txtApp1Remarks.Enabled = False
                     End Select
                 End If
-
             Else 'existing transaction
                 btnViewImage.Enabled = True
                 btnViewChecksheet.Enabled = True
@@ -256,7 +255,6 @@ Public Class MntTrxDetailOth
                     cmbApp1Status.Enabled = False
                     cmbApp1Name.Enabled = False
                     txtApp1Remarks.Enabled = False
-
                 Else 'other access level
                     Select Case accessLevelId
                         Case 2 'mngr, asm
@@ -862,7 +860,7 @@ Public Class MntTrxDetailOth
     Private Sub btnAddLog_Click(sender As Object, e As EventArgs) Handles btnAddLog.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog(userId)
+                Using frmDetailLog As New MntTrxActvityLog()
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -890,12 +888,10 @@ Public Class MntTrxDetailOth
                             Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
                             Me.bsTrxPartDetail.EndEdit()
                         Next
-
                     Else
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
-
             Else
                 Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -1031,7 +1027,6 @@ Public Class MntTrxDetailOth
 
                 ElseIf dgvPartDetail.Rows.Count > 0 AndAlso trxId <> 0 Then
                     question = String.Format("Are you sure you want to delete this activity log?" & Environment.NewLine & "NOTE: Record of parts issued will not be deleted.")
-
                 Else
                     question = "Are you sure you want to delete this activity log?"
                 End If
@@ -1147,12 +1142,10 @@ Public Class MntTrxDetailOth
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
                     End Using
-
                 Else
                     Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
@@ -1220,7 +1213,6 @@ Public Class MntTrxDetailOth
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
@@ -1480,7 +1472,6 @@ Public Class MntTrxDetailOth
                     prmHeader(41).Value = Nothing
                     prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                     prmHeader(42).Value = Nothing
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -1538,7 +1529,6 @@ Public Class MntTrxDetailOth
                         prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                         prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                         prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
-
                     Else 'no activity log yet - use current datetime as datetimestarted, logged in user as trx owner
                         prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                         prmHeader(30).Value = dbMethod.GetServerDate
@@ -1864,7 +1854,6 @@ Public Class MntTrxDetailOth
 
                         prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
                         prmHeader(22).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
-
                     Else 'other access level
                         Select Case accessLevelId
                             Case 2 'mngr, asm
@@ -2352,7 +2341,6 @@ Public Class MntTrxDetailOth
                     prmHeader(39).Value = Nothing
                     prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                     prmHeader(40).Value = Nothing
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -2523,11 +2511,9 @@ Public Class MntTrxDetailOth
                                 Dim copyChecksheet As New FileAttachment(lstAttachment(i).fileName, filename1, Path.GetExtension(lstAttachment(i).fileName).ToLower)
                                 lstAttachmentCopy.Add(copyChecksheet)
                             Next
-
                         Else 'db version is equals to current attachment name - means old attachment, do nothing
 
                         End If
-
                     Else 'originally do not have attachment
                         For i As Integer = 0 To lstAttachment.Count - 1
                             Dim extension2 As String = String.Empty
@@ -2550,7 +2536,6 @@ Public Class MntTrxDetailOth
                             lstAttachmentCopy.Add(copyChecksheet)
                         Next
                     End If
-
                 Else 'attachment list is empty
                     If Not dtTrxHeader.Rows(0).Item("FileName") Is DBNull.Value Then 'originally contains attachment
                         Dim extension As String = String.Empty
@@ -2568,7 +2553,6 @@ Public Class MntTrxDetailOth
                         prmUpd(1).Value = Nothing
 
                         dbMethod.ExecuteNonQuery("UpdMntTransactionHeaderByFileName", CommandType.StoredProcedure, prmUpd)
-
                     Else 'originally do not have attachment
 
                     End If
@@ -3498,9 +3482,11 @@ Public Class MntTrxDetailOth
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub frmMntTrxDetailOth_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         impersonation.UndoImpersonateUser()
     End Sub
+
     Private Sub GetSetting(settingsId As Integer)
         Try
             Dim prm(0) As SqlParameter

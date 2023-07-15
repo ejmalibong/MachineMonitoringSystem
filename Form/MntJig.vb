@@ -549,7 +549,6 @@ Public Class MntJig
 
                 dtJig = dbMethod.FillDataTable("RdMntJigMasterlistByIsActive", CommandType.StoredProcedure, prmJigMasterlist)
                 totalCount = prmJigMasterlist(2).Value
-
             Else
                 Dim prmJigMasterlist(2) As SqlParameter
                 prmJigMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
@@ -636,6 +635,7 @@ Public Class MntJig
 
         dbMethod.FillCmbWithCaption("RdMntJigSubStatus", CommandType.StoredProcedure, "JigSubStatusId", "JigSubStatusName", cmbCommon, "< All >")
     End Sub
+
     Private Sub LoadFrequency()
         cmbCommon.DisplayMember = "FrequencyName"
         cmbCommon.ValueMember = "FrequencyId"
@@ -717,6 +717,7 @@ Public Class MntJig
 
         Me.dgvList.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
     End Sub
+
     Private Sub SetScrollingIndex()
         dgvList.FirstDisplayedScrollingRowIndex = indexScroll
         If dgvList.Rows.Count > indexPosition Then
@@ -737,6 +738,5 @@ Public Class MntJig
             e.Handled = True
         End If
     End Sub
-
 
 End Class

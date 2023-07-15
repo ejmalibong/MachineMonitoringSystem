@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Globalization
 Imports BlackCoffeeLibrary
+
 Public Class MntModelExtensionDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -21,6 +21,7 @@ Public Class MntModelExtensionDetail
     End Sub
 
     Public Property pKey As Integer = 0
+
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
@@ -96,7 +97,6 @@ Public Class MntModelExtensionDetail
 
                 dbMethod.ExecuteNonQuery("InsMntModelExtension", CommandType.StoredProcedure, prmModel)
                 pKey = prmModel(0).Value
-
             Else 'old record
                 If Not txtExtensionName.Text.Trim.Equals(orgExtensioName) Then
                     If IsExtensionExist(txtExtensionName.Text.Trim) = True Then
@@ -188,4 +188,5 @@ Public Class MntModelExtensionDetail
         lblExtensionName.ForeColor = Color.Black
         lblExtensionName.BackColor = SystemColors.Control
     End Sub
+
 End Class

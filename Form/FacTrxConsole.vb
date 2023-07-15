@@ -174,7 +174,6 @@ Public Class FacTrxConsole
         End Try
     End Sub
 
-
     Private Sub dgvJig_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs)
         Try
             tmrElapsedTime.Start()
@@ -232,7 +231,6 @@ Public Class FacTrxConsole
                             LoadMachine()
                         End If
                     End Using
-
                 Else
                     Using frmDetail As New FacTrxDetailOth(userId, workgroupId, isAdmin, trxId)
                         frmDetail.ShowDialog(Me)
@@ -2814,6 +2812,7 @@ Public Class FacTrxConsole
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub GetScrollingIndex()
         indexScroll = dgvList.FirstDisplayedCell.RowIndex
         indexPosition = dgvList.CurrentRow.Index

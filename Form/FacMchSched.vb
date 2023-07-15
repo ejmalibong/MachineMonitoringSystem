@@ -622,6 +622,7 @@ Public Class FacMchSched
 
         Me.dgvList.Columns(3).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
     End Sub
+
     Private Sub SetScrollingIndex()
         dgvList.FirstDisplayedScrollingRowIndex = indexScroll
         If dgvList.Rows.Count > indexPosition Then

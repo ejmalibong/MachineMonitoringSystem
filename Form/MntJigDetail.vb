@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Globalization
 Imports BlackCoffeeLibrary
+
 Public Class MntJigDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -27,6 +27,7 @@ Public Class MntJigDetail
     End Sub
 
     Public Property pKey As Integer = 0
+
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
@@ -118,8 +119,7 @@ Public Class MntJigDetail
 
                 dbMethod.ExecuteNonQuery("InsMntJig", CommandType.StoredProcedure, prmJig)
                 pKey = prmJig(0).Value
-                'edit the insert sp - include extension 
-
+                'edit the insert sp - include extension
             Else 'old record
                 If Not txtJigName.Text.Trim.Equals(orgMachineName) Then
                     If IsJigExist(txtJigName.Text.Trim) = True Then
@@ -400,6 +400,7 @@ Public Class MntJigDetail
         Me.ActiveControl = txtJigName
         txtJigName.Select(txtJigName.Text.Trim.Length, 0)
     End Sub
+
     Private Sub ResetForm()
         Try
             txtJigName.Clear()
@@ -444,6 +445,7 @@ Public Class MntJigDetail
         lblModel.ForeColor = Color.Black
         lblModel.BackColor = SystemColors.Control
     End Sub
+
     Private Sub cmbJigType_Enter(sender As Object, e As EventArgs) Handles cmbJigType.Enter
         lblJigType.ForeColor = Color.White
         lblJigType.BackColor = Color.DarkSlateGray
@@ -469,9 +471,9 @@ Public Class MntJigDetail
         lblRemarks.BackColor = Color.DarkSlateGray
     End Sub
 
-
     Private Sub pnlStatus_Leave(sender As Object, e As EventArgs) Handles pnlStatus.Leave
         lblRemarks.ForeColor = Color.Black
         lblRemarks.BackColor = SystemColors.Control
     End Sub
+
 End Class

@@ -1,5 +1,4 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Drawing.Imaging
 Imports System.IO
 Imports BlackCoffeeLibrary
 Imports Microsoft.Reporting.WinForms

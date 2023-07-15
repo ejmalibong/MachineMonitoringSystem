@@ -33,6 +33,7 @@ Public Class MntTrxDetailJig
     Private dtTrxDetail As New DataTable
     Private dtTrxHeader As New DataTable
     Private dtTrxPartDetail As New DataTable
+
     'Private dtTrxSparePart As New DataTable
     Private dtTrxPartHeader As New DataTable
 
@@ -94,6 +95,7 @@ Public Class MntTrxDetailJig
     End Sub
 
     Public Property fromPmCalendar As Boolean = False
+
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
             cmbTransactionStatus.Enabled = False
@@ -148,7 +150,6 @@ Public Class MntTrxDetailJig
                 cmbApp1Name.Enabled = False
                 txtApp1Remarks.Enabled = False
             End If
-
         Else 'contains machine, enable form
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
@@ -236,7 +237,6 @@ Public Class MntTrxDetailJig
                             txtApp1Remarks.Enabled = False
                     End Select
                 End If
-
             Else 'existing transaction
                 If isAdmin Or accessLevelId = 1 Then
                     cmbTransactionStatus.Enabled = False
@@ -276,7 +276,6 @@ Public Class MntTrxDetailJig
                     cmbApp1Status.Enabled = False
                     cmbApp1Name.Enabled = False
                     txtApp1Remarks.Enabled = False
-
                 Else 'other access level
                     Select Case accessLevelId
                         Case 2 'mngr, asm
@@ -851,7 +850,7 @@ Public Class MntTrxDetailJig
     Private Sub btnAddLog_Click(sender As Object, e As EventArgs) Handles btnAddLog.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog(userId)
+                Using frmDetailLog As New MntTrxActvityLog()
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -879,12 +878,10 @@ Public Class MntTrxDetailJig
                             Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
                             Me.bsTrxPartDetail.EndEdit()
                         Next
-
                     Else
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
-
             Else
                 Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -1030,7 +1027,6 @@ Public Class MntTrxDetailJig
 
                 ElseIf dgvPartDetail.Rows.Count > 0 AndAlso trxId <> 0 Then
                     question = String.Format("Are you sure you want to delete this activity log?" & Environment.NewLine & "NOTE: Record of parts issued will not be deleted.")
-
                 Else
                     question = "Are you sure you want to delete this activity log?"
                 End If
@@ -1146,12 +1142,10 @@ Public Class MntTrxDetailJig
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
                     End Using
-
                 Else
                     Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
@@ -1219,7 +1213,6 @@ Public Class MntTrxDetailJig
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
@@ -1513,7 +1506,6 @@ Public Class MntTrxDetailJig
                                 prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                                 prmHeader(42).Value = txt4M.Text.Trim
                             End If
-
                         Else 'scheduled but not pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
                                 prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
@@ -1590,7 +1582,6 @@ Public Class MntTrxDetailJig
                             prmHeader(42).Value = txt4M.Text.Trim
                         End If
                     End If
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -1648,7 +1639,6 @@ Public Class MntTrxDetailJig
                         prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                         prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                         prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
-
                     Else 'no activity log yet - use current datetime as datetimestarted, logged in user as trx owner
                         prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                         prmHeader(30).Value = dbMethod.GetServerDate
@@ -1850,7 +1840,6 @@ Public Class MntTrxDetailJig
                     End If
                 Next
 
-
                 'existing transaction
             Else
                 'transaction header
@@ -2004,7 +1993,6 @@ Public Class MntTrxDetailJig
 
                         prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
                         prmHeader(22).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
-
                     Else 'other access level
                         Select Case accessLevelId
                             Case 2 'mngr, asm
@@ -2505,7 +2493,6 @@ Public Class MntTrxDetailJig
                                 prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                                 prmHeader(40).Value = txt4M.Text.Trim
                             End If
-
                         Else 'scheduled but not pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
                                 prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
@@ -2605,7 +2592,6 @@ Public Class MntTrxDetailJig
 
                         dbMethod.ExecuteNonQuery("UpdMntJigByJigStatusId", CommandType.StoredProcedure, prmJigStatusOrg)
                     End If
-
                 Else 'transaction status - on-going
                     prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
                     prmHeader(11).Value = If(cmbApp1Status.SelectedValue = 1, 1, 0)
@@ -3883,9 +3869,11 @@ Public Class MntTrxDetailJig
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub frmMntTrxDetailJig_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         impersonation.UndoImpersonateUser()
     End Sub
+
     Private Sub GetJigArea(jigId As Integer)
         Try
             Dim prmJigId(0) As SqlParameter
@@ -4517,6 +4505,5 @@ Public Class MntTrxDetailJig
         lblScheduleWeek.ForeColor = Color.Black
         lblScheduleWeek.BackColor = SystemColors.Control
     End Sub
-
 
 End Class

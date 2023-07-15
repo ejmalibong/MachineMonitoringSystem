@@ -500,7 +500,6 @@ Public Class MntMch
 
                 dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByIsActive", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
-
             Else
                 Dim prmMasterlist(2) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
@@ -618,6 +617,7 @@ Public Class MntMch
 
         Me.dgvList.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
     End Sub
+
     Private Sub SetScrollingIndex()
         dgvList.FirstDisplayedScrollingRowIndex = indexScroll
         If dgvList.Rows.Count > indexPosition Then
@@ -638,6 +638,5 @@ Public Class MntMch
             e.Handled = True
         End If
     End Sub
-
 
 End Class

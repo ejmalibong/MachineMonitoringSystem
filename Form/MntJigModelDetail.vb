@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Globalization
 Imports BlackCoffeeLibrary
+
 Public Class MntJigModelDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -23,6 +23,7 @@ Public Class MntJigModelDetail
     End Sub
 
     Public Property pKey As Integer = 0
+
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
@@ -100,7 +101,6 @@ Public Class MntJigModelDetail
 
                 dbMethod.ExecuteNonQuery("InsMntJigModel", CommandType.StoredProcedure, prmModel)
                 pKey = prmModel(0).Value
-
             Else 'old record
                 If Not txtModelName.Text.Trim.Equals(orgModelName) Then
                     If IsModelExist(txtModelName.Text.Trim) = True Then
@@ -168,7 +168,6 @@ Public Class MntJigModelDetail
         End Try
     End Sub
 
-
     Private Sub frm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F8) Then
             e.Handled = True
@@ -227,6 +226,7 @@ Public Class MntJigModelDetail
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub pnlStatus_Enter(sender As Object, e As EventArgs) Handles pnlRemarks.Enter
         lblRemarks.ForeColor = Color.White
         lblRemarks.BackColor = Color.DarkSlateGray
@@ -246,4 +246,5 @@ Public Class MntJigModelDetail
         lblModelName.ForeColor = Color.Black
         lblModelName.BackColor = SystemColors.Control
     End Sub
+
 End Class

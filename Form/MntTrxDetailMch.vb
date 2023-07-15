@@ -1,9 +1,9 @@
-﻿Imports BlackCoffeeLibrary
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports BlackCoffeeLibrary
 
 Public Class MntTrxDetailMch
     Private WithEvents bsSparePart As New BindingSource
@@ -34,6 +34,7 @@ Public Class MntTrxDetailMch
     Private dtTrxHeader As New DataTable
     Private dtTrxMachinePart As New DataTable
     Private dtTrxPartDetail As New DataTable
+
     'Private dtTrxSparePart As New DataTable
     Private dtTrxPartHeader As New DataTable
 
@@ -67,6 +68,7 @@ Public Class MntTrxDetailMch
     Private userId As Integer
     Private weekId As Integer = 0
     Private workgroupId As Integer = 0
+
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean, Optional _trxId As Integer = 0)
 
         ' This call is required by the designer.
@@ -96,6 +98,7 @@ Public Class MntTrxDetailMch
 
     'sr mngr action
     Public Property fromPmCalendar As Boolean = False
+
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
             cmbTransactionStatus.Enabled = False
@@ -151,7 +154,6 @@ Public Class MntTrxDetailMch
                 cmbApp1Name.Enabled = False
                 txtApp1Remarks.Enabled = False
             End If
-
         Else 'contains machine, enable form
             btnViewImage.Enabled = True
             btnViewChecksheet.Enabled = True
@@ -245,7 +247,6 @@ Public Class MntTrxDetailMch
                             txtApp1Remarks.Enabled = False
                     End Select
                 End If
-
             Else 'existing transaction
                 If isAdmin Or accessLevelId = 1 Then
                     cmbTransactionStatus.Enabled = False
@@ -285,7 +286,6 @@ Public Class MntTrxDetailMch
                     cmbApp1Status.Enabled = False
                     cmbApp1Name.Enabled = False
                     txtApp1Remarks.Enabled = False
-
                 Else 'other access level
                     Select Case accessLevelId
                         Case 2 'mngr, asm
@@ -866,7 +866,7 @@ Public Class MntTrxDetailMch
     Private Sub btnAddLog_Click(sender As Object, e As EventArgs) Handles btnAddLog.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog(userId)
+                Using frmDetailLog As New MntTrxActvityLog()
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -894,12 +894,10 @@ Public Class MntTrxDetailMch
                             Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
                             Me.bsTrxPartDetail.EndEdit()
                         Next
-
                     Else
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
-
             Else
                 Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -1049,7 +1047,6 @@ Public Class MntTrxDetailMch
 
                 ElseIf dgvPartDetail.Rows.Count > 0 AndAlso trxId <> 0 Then
                     question = String.Format("Are you sure you want to delete this activity log?" & Environment.NewLine & "NOTE: Record of parts issued will not be deleted.")
-
                 Else
                     question = "Are you sure you want to delete this activity log?"
                 End If
@@ -1165,12 +1162,10 @@ Public Class MntTrxDetailMch
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
                     End Using
-
                 Else
                     Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
@@ -1238,7 +1233,6 @@ Public Class MntTrxDetailMch
                                     Me.bsTrxPartDetail.EndEdit()
                                 Next
                             End If
-
                         Else
                             Me.bsTrxDetail.CancelEdit()
                         End If
@@ -1285,6 +1279,7 @@ Public Class MntTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub btnRemoveRow_Enter(sender As Object, e As EventArgs) Handles btnDeleteLog.Enter
         lblActivityLog.ForeColor = Color.White
         lblActivityLog.BackColor = Color.DarkSlateGray
@@ -1537,7 +1532,6 @@ Public Class MntTrxDetailMch
                                 prmHeader(42) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                                 prmHeader(42).Value = txt4M.Text.Trim
                             End If
-
                         Else 'scheduled but not pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
                                 prmHeader(41) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
@@ -1614,7 +1608,6 @@ Public Class MntTrxDetailMch
                             prmHeader(42).Value = txt4M.Text.Trim
                         End If
                     End If
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(14) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -1672,7 +1665,6 @@ Public Class MntTrxDetailMch
                         prmHeader(33).Value = dgvDetail.Rows(rowCount - 1).Cells("ColShiftId").Value
                         prmHeader(34) = New SqlParameter("@TotalAccumulatedDowntime", SqlDbType.Int)
                         prmHeader(34).Value = txtDowntimeAccumulated.Text.Trim
-
                     Else 'no activity log yet - use current datetime as datetimestarted, logged in user as trx owner
                         prmHeader(30) = New SqlParameter("@DatetimeStarted", SqlDbType.DateTime2)
                         prmHeader(30).Value = dbMethod.GetServerDate
@@ -2042,7 +2034,6 @@ Public Class MntTrxDetailMch
 
                         prmHeader(22) = New SqlParameter("@ApproverRemarks3", SqlDbType.NVarChar)
                         prmHeader(22).Value = IIf(String.IsNullOrEmpty(txtApp3Remarks.Text.Trim), Nothing, txtApp3Remarks.Text.Trim)
-
                     Else 'other access level
                         Select Case accessLevelId
                             Case 2 'mngr, asm
@@ -2543,7 +2534,6 @@ Public Class MntTrxDetailMch
                                 prmHeader(40) = New SqlParameter("@Link4M", SqlDbType.NVarChar)
                                 prmHeader(40).Value = txt4M.Text.Trim
                             End If
-
                         Else 'scheduled but no pm
                             If String.IsNullOrEmpty(txtChecksheet.Text.Trim) Then
                                 prmHeader(39) = New SqlParameter("@LinkChecksheet", SqlDbType.NVarChar)
@@ -2645,7 +2635,6 @@ Public Class MntTrxDetailMch
 
                         dbMethod.ExecuteNonQuery("UpdMntMachineByMachineStatusId", CommandType.StoredProcedure, prmMachineStatusOrg)
                     End If
-
                 Else 'transaction status - on-going
                     'approvers
                     prmHeader(11) = New SqlParameter("@ApproverIsApproved1", SqlDbType.Bit)
@@ -3502,6 +3491,7 @@ Public Class MntTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub cmbTransactionStatus_Enter(sender As Object, e As EventArgs) Handles cmbTransactionStatus.Enter
         lblTransactionStatus.ForeColor = Color.White
         lblTransactionStatus.BackColor = Color.DarkSlateGray
@@ -3696,6 +3686,7 @@ Public Class MntTrxDetailMch
     Private Sub dgvPic_SelectionChanged(sender As Object, e As EventArgs) Handles dgvPic.SelectionChanged
         dgvPic.ClearSelection()
     End Sub
+
     Private Sub FilterPicTable()
         Try
             If dgvDetail.Rows.Count > 0 Then
@@ -3748,7 +3739,6 @@ Public Class MntTrxDetailMch
 
                 DisableForm(True)
                 Me.ActiveControl = cmbMachineName
-
             Else
                 Me.Text = "Activity No. " & trxId
 
@@ -4027,9 +4017,11 @@ Public Class MntTrxDetailMch
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
     Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         impersonation.UndoImpersonateUser()
     End Sub
+
     Private Sub GetMachineArea(machineId As Integer)
         Try
             Dim prmMachineId(0) As SqlParameter
