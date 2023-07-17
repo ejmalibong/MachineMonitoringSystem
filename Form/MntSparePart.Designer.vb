@@ -23,23 +23,23 @@ Partial Class MntSparePart
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePart))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
@@ -135,6 +135,7 @@ Partial Class MntSparePart
         'txtCommon
         '
         Me.txtCommon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtCommon.CausesValidation = False
         Me.txtCommon.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCommon.Location = New System.Drawing.Point(3, 3)
         Me.txtCommon.Name = "txtCommon"
@@ -214,6 +215,7 @@ Partial Class MntSparePart
         'btnReset
         '
         Me.btnReset.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnReset.CausesValidation = False
         Me.btnReset.DefaultScheme = True
         Me.btnReset.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
@@ -230,6 +232,7 @@ Partial Class MntSparePart
         'btnSearch
         '
         Me.btnSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnSearch.CausesValidation = False
         Me.btnSearch.DefaultScheme = True
         Me.btnSearch.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
@@ -252,13 +255,13 @@ Partial Class MntSparePart
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle18.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle18
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColPartNo, Me.ColPartName, Me.ColImage, Me.ColItemType, Me.ColUnitPrice, Me.ColActualStock, Me.ColActualStockAmount, Me.ColOrderingPoint, Me.ColMinStock, Me.ColMaxStock, Me.ColForPr, Me.ColExpectedStock, Me.ColLocatioName, Me.ColMachineType, Me.ColItemCode, Me.ColRemarks, Me.ColIsActive})
@@ -286,8 +289,8 @@ Partial Class MntSparePart
         'ColPartNo
         '
         Me.ColPartNo.DataPropertyName = "PartNo"
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle19
         Me.ColPartNo.Frozen = True
         Me.ColPartNo.HeaderText = "Part No"
         Me.ColPartNo.Name = "ColPartNo"
@@ -297,8 +300,8 @@ Partial Class MntSparePart
         'ColPartName
         '
         Me.ColPartName.DataPropertyName = "PartName"
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle20
         Me.ColPartName.Frozen = True
         Me.ColPartName.HeaderText = "Part Name"
         Me.ColPartName.Name = "ColPartName"
@@ -308,9 +311,9 @@ Partial Class MntSparePart
         'ColImage
         '
         Me.ColImage.DataPropertyName = "Image"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle21.NullValue = Nothing
+        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle21
         Me.ColImage.HeaderText = "Image"
         Me.ColImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom
         Me.ColImage.Name = "ColImage"
@@ -320,8 +323,8 @@ Partial Class MntSparePart
         'ColItemType
         '
         Me.ColItemType.DataPropertyName = "ItemTypeName"
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColItemType.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemType.DefaultCellStyle = DataGridViewCellStyle22
         Me.ColItemType.HeaderText = "Item Type"
         Me.ColItemType.Name = "ColItemType"
         Me.ColItemType.ReadOnly = True
@@ -329,9 +332,9 @@ Partial Class MntSparePart
         'ColUnitPrice
         '
         Me.ColUnitPrice.DataPropertyName = "UnitPrice"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.NullValue = Nothing
-        Me.ColUnitPrice.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle23.NullValue = Nothing
+        Me.ColUnitPrice.DefaultCellStyle = DataGridViewCellStyle23
         Me.ColUnitPrice.HeaderText = "Unit Price"
         Me.ColUnitPrice.Name = "ColUnitPrice"
         Me.ColUnitPrice.ReadOnly = True
@@ -339,8 +342,8 @@ Partial Class MntSparePart
         'ColActualStock
         '
         Me.ColActualStock.DataPropertyName = "ActualStock"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle24
         Me.ColActualStock.HeaderText = "Act Stock"
         Me.ColActualStock.Name = "ColActualStock"
         Me.ColActualStock.ReadOnly = True
@@ -349,8 +352,8 @@ Partial Class MntSparePart
         'ColActualStockAmount
         '
         Me.ColActualStockAmount.DataPropertyName = "ActualStockAmount"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColActualStockAmount.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColActualStockAmount.DefaultCellStyle = DataGridViewCellStyle25
         Me.ColActualStockAmount.HeaderText = "Stock Amount"
         Me.ColActualStockAmount.Name = "ColActualStockAmount"
         Me.ColActualStockAmount.ReadOnly = True
@@ -358,8 +361,8 @@ Partial Class MntSparePart
         'ColOrderingPoint
         '
         Me.ColOrderingPoint.DataPropertyName = "OrderingPoint"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle26
         Me.ColOrderingPoint.HeaderText = "Ord Point"
         Me.ColOrderingPoint.Name = "ColOrderingPoint"
         Me.ColOrderingPoint.ReadOnly = True
@@ -368,8 +371,8 @@ Partial Class MntSparePart
         'ColMinStock
         '
         Me.ColMinStock.DataPropertyName = "MinStock"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle27
         Me.ColMinStock.HeaderText = "Min Stock"
         Me.ColMinStock.Name = "ColMinStock"
         Me.ColMinStock.ReadOnly = True
@@ -378,8 +381,8 @@ Partial Class MntSparePart
         'ColMaxStock
         '
         Me.ColMaxStock.DataPropertyName = "MaxStock"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle28
         Me.ColMaxStock.HeaderText = "Max Stock"
         Me.ColMaxStock.Name = "ColMaxStock"
         Me.ColMaxStock.ReadOnly = True
@@ -388,8 +391,8 @@ Partial Class MntSparePart
         'ColForPr
         '
         Me.ColForPr.DataPropertyName = "ForPr"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColForPr.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColForPr.DefaultCellStyle = DataGridViewCellStyle29
         Me.ColForPr.HeaderText = "For PR"
         Me.ColForPr.Name = "ColForPr"
         Me.ColForPr.ReadOnly = True
@@ -398,8 +401,8 @@ Partial Class MntSparePart
         'ColExpectedStock
         '
         Me.ColExpectedStock.DataPropertyName = "ExpectedStock"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColExpectedStock.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColExpectedStock.DefaultCellStyle = DataGridViewCellStyle30
         Me.ColExpectedStock.HeaderText = "Exp Stock"
         Me.ColExpectedStock.Name = "ColExpectedStock"
         Me.ColExpectedStock.ReadOnly = True
@@ -408,8 +411,8 @@ Partial Class MntSparePart
         'ColLocatioName
         '
         Me.ColLocatioName.DataPropertyName = "LocationName"
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle31
         Me.ColLocatioName.HeaderText = "Location"
         Me.ColLocatioName.Name = "ColLocatioName"
         Me.ColLocatioName.ReadOnly = True
@@ -417,8 +420,8 @@ Partial Class MntSparePart
         'ColMachineType
         '
         Me.ColMachineType.DataPropertyName = "MachineTypeName"
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle32
         Me.ColMachineType.HeaderText = "Machine Type"
         Me.ColMachineType.Name = "ColMachineType"
         Me.ColMachineType.ReadOnly = True
@@ -426,8 +429,8 @@ Partial Class MntSparePart
         'ColItemCode
         '
         Me.ColItemCode.DataPropertyName = "ItemCode"
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle33
         Me.ColItemCode.HeaderText = "Item Code"
         Me.ColItemCode.Name = "ColItemCode"
         Me.ColItemCode.ReadOnly = True
@@ -435,8 +438,8 @@ Partial Class MntSparePart
         'ColRemarks
         '
         Me.ColRemarks.DataPropertyName = "Remarks"
-        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColRemarks.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColRemarks.DefaultCellStyle = DataGridViewCellStyle34
         Me.ColRemarks.HeaderText = "Remarks"
         Me.ColRemarks.Name = "ColRemarks"
         Me.ColRemarks.ReadOnly = True
@@ -572,6 +575,7 @@ Partial Class MntSparePart
         '
         Me.btnAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnAdd.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnAdd.CausesValidation = False
         Me.btnAdd.DefaultScheme = True
         Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -589,6 +593,7 @@ Partial Class MntSparePart
         '
         Me.btnEdit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnEdit.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnEdit.CausesValidation = False
         Me.btnEdit.DefaultScheme = True
         Me.btnEdit.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -606,6 +611,7 @@ Partial Class MntSparePart
         '
         Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnDelete.CausesValidation = False
         Me.btnDelete.DefaultScheme = True
         Me.btnDelete.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -623,6 +629,7 @@ Partial Class MntSparePart
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnClose.CausesValidation = False
         Me.btnClose.DefaultScheme = True
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -645,6 +652,7 @@ Partial Class MntSparePart
         '
         'cmbCommon2
         '
+        Me.cmbCommon2.CausesValidation = False
         Me.cmbCommon2.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbCommon2.FormattingEnabled = True
         Me.cmbCommon2.Location = New System.Drawing.Point(3, 3)
@@ -656,6 +664,7 @@ Partial Class MntSparePart
         '
         Me.btnViewLogs.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnViewLogs.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnViewLogs.CausesValidation = False
         Me.btnViewLogs.DefaultScheme = True
         Me.btnViewLogs.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnViewLogs.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -672,6 +681,7 @@ Partial Class MntSparePart
         '
         Me.btnReceiveStock.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnReceiveStock.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnReceiveStock.CausesValidation = False
         Me.btnReceiveStock.DefaultScheme = True
         Me.btnReceiveStock.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReceiveStock.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -688,6 +698,7 @@ Partial Class MntSparePart
         '
         Me.btnExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnExport.CausesValidation = False
         Me.btnExport.DefaultScheme = True
         Me.btnExport.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -702,9 +713,10 @@ Partial Class MntSparePart
         '
         'cmsExport
         '
+        Me.cmsExport.DropShadowEnabled = False
         Me.cmsExport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AllToolStripMenuItem, Me.BelowOrderingPointToolStripMenuItem})
         Me.cmsExport.Name = "cmsConsole"
-        Me.cmsExport.Size = New System.Drawing.Size(188, 48)
+        Me.cmsExport.Size = New System.Drawing.Size(188, 70)
         '
         'AllToolStripMenuItem
         '
@@ -734,6 +746,7 @@ Partial Class MntSparePart
         '
         'cmbSortCriteria
         '
+        Me.cmbSortCriteria.CausesValidation = False
         Me.cmbSortCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbSortCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.cmbSortCriteria.FormattingEnabled = True
@@ -746,6 +759,7 @@ Partial Class MntSparePart
         '
         Me.btnIssueStock.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnIssueStock.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnIssueStock.CausesValidation = False
         Me.btnIssueStock.DefaultScheme = True
         Me.btnIssueStock.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnIssueStock.Font = New System.Drawing.Font("Verdana", 8.5!)
@@ -760,6 +774,7 @@ Partial Class MntSparePart
         '
         'grpSortMode
         '
+        Me.grpSortMode.CausesValidation = False
         Me.grpSortMode.Controls.Add(Me.rdDesc)
         Me.grpSortMode.Controls.Add(Me.rdAsc)
         Me.grpSortMode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -772,6 +787,7 @@ Partial Class MntSparePart
         'rdDesc
         '
         Me.rdDesc.AutoSize = True
+        Me.rdDesc.CausesValidation = False
         Me.rdDesc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.rdDesc.Location = New System.Drawing.Point(65, 10)
         Me.rdDesc.Name = "rdDesc"
@@ -784,6 +800,7 @@ Partial Class MntSparePart
         'rdAsc
         '
         Me.rdAsc.AutoSize = True
+        Me.rdAsc.CausesValidation = False
         Me.rdAsc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.rdAsc.Location = New System.Drawing.Point(10, 10)
         Me.rdAsc.Name = "rdAsc"
@@ -799,7 +816,6 @@ Partial Class MntSparePart
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1120, 561)
         Me.Controls.Add(Me.grpSortMode)
         Me.Controls.Add(Me.btnReset)

@@ -4,6 +4,8 @@ Imports ClosedXML.Excel
 
 Public Class MntSparePart
     Public bsSparePart As New BindingSource
+    Private accessLevelId As Integer = 0
+    Private actStock As Integer = 0
     Private connection As New Connection
 
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -15,32 +17,30 @@ Public Class MntSparePart
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
 
-    Private isFilterByPartNo As Boolean = False '1
-    Private isFilterByPartName As Boolean = False '2
-    Private isFilterByLocationId As Boolean = False '3
-    Private isFilterByItemTypeId As Boolean = False '4
-    Private isFilterByMachineTypeId As Boolean = False '5
+    Private isAdmin As Integer = 0
     Private isFilterByBelowOrderingPoint As Boolean = False
+    Private isFilterByItemTypeId As Boolean = False
+    Private isFilterByLocationId As Boolean = False
+    Private isFilterByMachineTypeId As Boolean = False
     Private isFilterByMinStock As Boolean = False
+    Private isFilterByPartName As Boolean = False
+    Private isFilterByPartNo As Boolean = False
+    Private minStock As Integer = 0
+
+    Private ordPoint As Integer = 0
 
     Private pageCount As Integer
     Private pageIndex As Integer
     Private pageSize As Integer
     Private totalCount As Integer
-
-    Private accessLevelId As Integer = 0
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
-    Private isAdmin As Integer = 0
-
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        dbMain.EnableDoubleBuffered(dgvList)
-
         userId = _userId
         workgroupId = _workgroupId
         isAdmin = _isAdmin
@@ -68,27 +68,42 @@ Public Class MntSparePart
         Me.dgvList.Columns("ColActualStockAmount").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-US")
     End Sub
 
-    Private Sub MntSpare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadSearchCriteria()
-        LoadSortCriteria()
-
-        cmbSortCriteria.SelectedValue = "PartNo"
-        rdAsc.Checked = True
-
-        pageIndex = 0
-        pageSize = 100
-        LoadPart()
-
-        AddHandler rdAsc.CheckedChanged, AddressOf CheckedChanged
-        AddHandler rdDesc.CheckedChanged, AddressOf CheckedChanged
-
-        Me.ActiveControl = dgvList
-    End Sub
-
     Public Sub Reload()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
         LoadPart()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
+    End Sub
+
+    Private Sub AllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AllToolStripMenuItem.Click
+        Try
+            Dim dt As New DataTable
+
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart", CommandType.Text)
+
+            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
+
+            If Not System.IO.Directory.Exists(folderPath) Then
+                System.IO.Directory.CreateDirectory(folderPath)
+            End If
+
+            Using wb As New XLWorkbook()
+                wb.Worksheets.Add(dt, "Sheet1")
+                wb.SaveAs(fileName)
+            End Using
+
+            Process.Start(fileName)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub BelowOrderingPointToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BelowOrderingPointToolStripMenuItem.Click
+        Try
+
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub BindingNavigatorMoveFirstItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveFirstItem.Click
@@ -193,8 +208,41 @@ Public Class MntSparePart
         End Try
     End Sub
 
+    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+        Try
+            cmsExport.Show(btnExport, New Point(0, 0))
+            AllToolStripMenuItem.Select()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Sub btnGo_Click(sender As Object, e As EventArgs) Handles btnGo.Click
         Go()
+    End Sub
+
+    Private Sub btnIssueStock_Click(sender As Object, e As EventArgs) Handles btnIssueStock.Click
+        Try
+            Using frm As New MntTrxPartIssue(userId)
+                If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                    Reload()
+                End If
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnReceiveStock_Click(sender As Object, e As EventArgs) Handles btnReceiveStock.Click
+        Try
+            Using frm As New MntTrxPartReceive(userId)
+                If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                    Reload()
+                End If
+            End Using
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
@@ -270,6 +318,24 @@ Public Class MntSparePart
         End Try
     End Sub
 
+    Private Sub btnViewLogs_Click(sender As Object, e As EventArgs) Handles btnViewLogs.Click
+        Try
+
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub CheckedChanged(sender As Object, e As EventArgs)
+        Reload()
+    End Sub
+
+    Private Sub cmbCommon_Validated(sender As Object, e As EventArgs) Handles cmbCommon.Validated
+        If cmbCommon.SelectedValue = 0 Then
+            cmbCommon.SelectedValue = 0
+        End If
+    End Sub
+
     Private Sub cmbSearchCriteria_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbSearchCriteria.SelectedValueChanged
         Try
             cmbCommon.SelectedValue = 0
@@ -333,6 +399,26 @@ Public Class MntSparePart
         End Try
     End Sub
 
+    Private Sub cmbSortCriteria_SelectedValueChanged(sender As Object, e As EventArgs)
+        Reload()
+    End Sub
+
+    Private Sub dgvList_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs)
+        For i As Integer = 0 To dgvList.Rows.Count - 1
+            actStock = dgvList.Rows(i).Cells("ColActualStock").Value
+            minStock = dgvList.Rows(i).Cells("ColMinStock").Value
+            ordPoint = dgvList.Rows(i).Cells("ColOrderingPoint").Value
+
+            If actStock < ordPoint Then
+                dgvList.Rows(i).DefaultCellStyle.BackColor = Color.Yellow
+            End If
+
+            If actStock < minStock Then
+                dgvList.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral
+            End If
+        Next
+    End Sub
+
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvList.CellDoubleClick
         btnEdit.PerformClick()
     End Sub
@@ -345,6 +431,24 @@ Public Class MntSparePart
         indexScroll = dgvList.FirstDisplayedCell.RowIndex
         indexPosition = dgvList.CurrentRow.Index
     End Sub
+
+    Private Function GetSortMode() As String
+        Dim sortMode As String = String.Empty
+
+        Try
+            If rdAsc.Checked = True Then
+                sortMode = "ASC"
+            ElseIf rdDesc.Checked = True Then
+                sortMode = "DESC"
+            Else
+                sortMode = Nothing
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        Return sortMode
+    End Function
 
     Private Sub Go()
         Try
@@ -373,12 +477,12 @@ Public Class MntSparePart
         End Try
     End Sub
 
-    Private Sub LoadLocation()
-        dbMethod.FillCmbWithCaption("RdMntSparePartLocation", CommandType.StoredProcedure, "LocationId", "LocationName", cmbCommon2, "< All >")
-    End Sub
-
     Private Sub LoadItemType()
         dbMethod.FillCmbWithCaption("RdMntSparePartItemType", CommandType.StoredProcedure, "ItemTypeId", "ItemTypeName", cmbCommon2, "< All >")
+    End Sub
+
+    Private Sub LoadLocation()
+        dbMethod.FillCmbWithCaption("RdMntSparePartLocation", CommandType.StoredProcedure, "LocationId", "LocationName", cmbCommon2, "< All >")
     End Sub
 
     Private Sub LoadMachineType()
@@ -586,8 +690,24 @@ Public Class MntSparePart
         End If
     End Sub
 
+    Private Sub MntSpare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadSearchCriteria()
+        LoadSortCriteria()
 
+        cmbSortCriteria.SelectedValue = "PartNo"
+        rdAsc.Checked = True
 
+        pageIndex = 0
+        pageSize = 100
+        LoadPart()
+
+        AddHandler rdAsc.CheckedChanged, AddressOf CheckedChanged
+        AddHandler rdDesc.CheckedChanged, AddressOf CheckedChanged
+        'AddHandler dgvList.CellFormatting, AddressOf dgvList_CellFormatting
+
+        dbMain.EnableDoubleBuffered(dgvList)
+        Me.ActiveControl = dgvList
+    End Sub
     Private Sub SetScrollingIndex()
         dgvList.FirstDisplayedScrollingRowIndex = indexScroll
         If dgvList.Rows.Count > indexPosition Then
@@ -607,121 +727,6 @@ Public Class MntSparePart
         Else
             e.Handled = True
         End If
-    End Sub
-
-    Private Sub cmbCommon_Validated(sender As Object, e As EventArgs) Handles cmbCommon.Validated
-        If cmbCommon.SelectedValue = 0 Then
-            cmbCommon.SelectedValue = 0
-        End If
-    End Sub
-
-    Private Sub btnReceiveStock_Click(sender As Object, e As EventArgs) Handles btnReceiveStock.Click
-        Try
-            Using frm As New MntTrxPartReceive(userId)
-                If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                    Reload()
-                End If
-            End Using
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
-        Try
-            cmsExport.Show(btnExport, New Point(0, 0))
-            AllToolStripMenuItem.Select()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub AllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AllToolStripMenuItem.Click
-        Try
-            Dim dt As New DataTable
-
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart", CommandType.Text)
-
-            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
-            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
-
-            If Not System.IO.Directory.Exists(folderPath) Then
-                System.IO.Directory.CreateDirectory(folderPath)
-            End If
-
-            Using wb As New XLWorkbook()
-                wb.Worksheets.Add(dt, "Sheet1")
-                wb.SaveAs(fileName)
-            End Using
-
-            Process.Start(fileName)
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub BelowOrderingPointToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BelowOrderingPointToolStripMenuItem.Click
-        Try
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Function GetSortMode() As String
-        Dim sortMode As String = String.Empty
-
-        Try
-            If rdAsc.Checked = True Then
-                sortMode = "ASC"
-            ElseIf rdDesc.Checked = True Then
-                sortMode = "DESC"
-            Else
-                sortMode = Nothing
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-        Return sortMode
-    End Function
-
-    Private Sub cmbSortCriteria_SelectedValueChanged(sender As Object, e As EventArgs)
-        Reload()
-    End Sub
-
-    Private Sub CheckedChanged(sender As Object, e As EventArgs)
-        Reload()
-    End Sub
-
-    Private Sub btnIssueStock_Click(sender As Object, e As EventArgs) Handles btnIssueStock.Click
-        Try
-            Using frm As New MntTrxPartIssue(userId)
-                If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                    Reload()
-                End If
-            End Using
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    'https://stackoverflow.com/questions/39732068/making-datagridview-rows-a-certain-color-based-on-a-column-value
-    Private Sub dgvList_RowPrePaint(sender As Object, e As DataGridViewRowPrePaintEventArgs) Handles dgvList.RowPrePaint
-        Try
-            If Convert.ToInt32(dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value) < Convert.ToInt32(dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value) Then
-                dgvList.Rows(e.RowIndex).DefaultCellStyle.BackColor = Color.Yellow
-            End If
-
-            If Convert.ToInt32(dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value) < Convert.ToInt32(dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value) Then
-                dgvList.Rows(e.RowIndex).DefaultCellStyle.BackColor = Color.LightCoral
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnViewLogs_Click(sender As Object, e As EventArgs) Handles btnViewLogs.Click
-
     End Sub
 
 End Class

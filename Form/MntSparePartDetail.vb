@@ -267,7 +267,7 @@ Public Class MntSparePartDetail
                     End If
                 End If
 
-                Dim prmPart(18) As SqlParameter
+                Dim prmPart(19) As SqlParameter
                 prmPart(0) = New SqlParameter("@PartId", SqlDbType.Int)
                 prmPart(0).Value = partId
                 prmPart(1) = New SqlParameter("@PartNo", SqlDbType.NVarChar)
@@ -314,16 +314,23 @@ Public Class MntSparePartDetail
                 prmPart(16).Value = userId
                 prmPart(17) = New SqlParameter("@ModifiedDate", SqlDbType.DateTime)
                 prmPart(17).Value = dbMethod.GetServerDate
-                prmPart(18) = New SqlParameter("@UnitPrice", SqlDbType.Decimal)
-                prmPart(18).Value = IIf(String.IsNullOrEmpty(txtUnitPrice.Text.Trim), Nothing, CDec(txtUnitPrice.Text))
+
+                If String.IsNullOrWhiteSpace(txtUnitPrice.Text.Trim) Then
+                    prmPart(18) = New SqlParameter("@UnitPrice", SqlDbType.Decimal)
+                    prmPart(18).Value = 0
+                Else
+                    prmPart(18) = New SqlParameter("@UnitPrice", SqlDbType.Decimal)
+                    prmPart(18).Value = CDec(txtUnitPrice.Text)
+                End If
+
                 prmPart(19) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmPart(19).Value = IIf(rdActive.Checked = True, True, False)
+                    prmPart(19).Value = IIf(rdActive.Checked = True, True, False)
 
-                dbMethod.ExecuteNonQuery("UpdMntSparePart", CommandType.StoredProcedure, prmPart)
-                pKey = partId
-            End If
+                    dbMethod.ExecuteNonQuery("UpdMntSparePart", CommandType.StoredProcedure, prmPart)
+                    pKey = partId
+                End If
 
-            Me.DialogResult = DialogResult.OK
+                Me.DialogResult = DialogResult.OK
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
