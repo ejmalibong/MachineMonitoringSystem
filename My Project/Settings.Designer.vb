@@ -54,13 +54,16 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public ReadOnly Property IsDebug() As Boolean
+        Public Property IsDebug() As Boolean
             Get
                 Return CType(Me("IsDebug"),Boolean)
             End Get
+            Set
+                Me("IsDebug") = value
+            End Set
         End Property
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
@@ -74,12 +77,10 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.20.230;Initial Catalog=MachineMonitoring;Persist Security Inf"& _ 
-            "o=True;User ID=sa;Password=Nbc12#")>  _
-        Public ReadOnly Property MachineMonitoringConnectionString() As String
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString)>  _
+        Public ReadOnly Property ConnectionString() As String
             Get
-                Return CType(Me("MachineMonitoringConnectionString"),String)
+                Return CType(Me("ConnectionString"),String)
             End Get
         End Property
     End Class

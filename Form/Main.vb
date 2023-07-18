@@ -391,13 +391,7 @@ Public Class Main
     End Sub
 
     Private Sub MntSparePartToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartToolStripMenuItem.Click
-        MessageBox.Show("terst")
         dbMain.FormLoader(Me, New MntSparePart(userId, workgroupId, isAdmin), True)
-
-        'Dim frm As Form = New MntSparePart(userId, workgroupId, isAdmin)
-        'frm.Show(Me)
-
-
     End Sub
 
 End Class

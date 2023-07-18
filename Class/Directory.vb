@@ -1,7 +1,9 @@
 ﻿Public Class Directory
 
+    Private isDebug As Boolean = My.Settings.IsDebug
+
     Public Function ImgIniDirectoryMt() As String
-        If MachineMonitoringSystem.My.MySettings.Default.IsDebug = True Then
+        If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
                 Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentMt"
             Else
@@ -13,7 +15,7 @@
     End Function
 
     Public Function AtchIniDirectoryMt() As String
-        If MachineMonitoringSystem.My.MySettings.Default.IsDebug = True Then
+        If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
                 Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentMt"
             Else
@@ -25,7 +27,7 @@
     End Function
 
     Public Function ImgIniDirectoryFc() As String
-        If MachineMonitoringSystem.My.MySettings.Default.IsDebug = True Then
+        If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
                 Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentFc"
             Else
@@ -37,7 +39,7 @@
     End Function
 
     Public Function AtchIniDirectoryFc() As String
-        If MachineMonitoringSystem.My.MySettings.Default.IsDebug = True Then
+        If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
                 Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentFc"
             Else

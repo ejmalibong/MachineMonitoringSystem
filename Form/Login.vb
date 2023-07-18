@@ -18,11 +18,13 @@ Public Class Login
     Private isAdmin As Boolean = False
     Private isActive As Boolean = False
 
-    Dim imgHide As Image = My.Resources.Password_Hide
-    Dim imgShow As Image = My.Resources.Password_Show
+    Private imgHide As Image = My.Resources.Password_Hide
+    Private imgShow As Image = My.Resources.Password_Show
+
+    Private isDebug As Boolean = My.Settings.IsDebug
 
     Private Sub Login_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MachineMonitoringSystem.My.Settings.IsDebug = True Then
+        If isDebug = True Then
             'sir alvin
             'txtEmployeeId.Text = "1705-025"
             'txtPassword.Text = "aranes"
@@ -51,8 +53,8 @@ Public Class Login
             'txtPassword.Text = "malibong"
 
             'karlin
-            'txtEmployeeId.Text = "2106-020"
-            'txtPassword.Text = "tano"
+            txtEmployeeId.Text = "2106-020"
+            txtPassword.Text = "tano"
 
             'noriel
             'txtEmployeeId.Text = "1901-033"
@@ -90,7 +92,7 @@ Public Class Login
             End If
 
             If String.IsNullOrEmpty(txtEmployeeId.Text.Trim) Then
-                MessageBox.Show("Please enter your employee ID.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show("Please enter your employee ID.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 txtEmployeeId.Focus()
                 Return
             End If

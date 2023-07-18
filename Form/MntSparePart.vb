@@ -41,6 +41,8 @@ Public Class MntSparePart
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        dbMain.EnableDoubleBuffered(dgvList)
+
         userId = _userId
         workgroupId = _workgroupId
         isAdmin = _isAdmin
@@ -156,7 +158,6 @@ Public Class MntSparePart
 
             'allow delete function from senior technician and above only
             If accessLevelId >= CInt(4) Then 'technician and below)
-                Me.BringToFront()
                 MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
@@ -403,21 +404,7 @@ Public Class MntSparePart
         Reload()
     End Sub
 
-    Private Sub dgvList_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs)
-        For i As Integer = 0 To dgvList.Rows.Count - 1
-            actStock = dgvList.Rows(i).Cells("ColActualStock").Value
-            minStock = dgvList.Rows(i).Cells("ColMinStock").Value
-            ordPoint = dgvList.Rows(i).Cells("ColOrderingPoint").Value
 
-            If actStock < ordPoint Then
-                dgvList.Rows(i).DefaultCellStyle.BackColor = Color.Yellow
-            End If
-
-            If actStock < minStock Then
-                dgvList.Rows(i).DefaultCellStyle.BackColor = Color.LightCoral
-            End If
-        Next
-    End Sub
 
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvList.CellDoubleClick
         btnEdit.PerformClick()
@@ -703,9 +690,7 @@ Public Class MntSparePart
 
         AddHandler rdAsc.CheckedChanged, AddressOf CheckedChanged
         AddHandler rdDesc.CheckedChanged, AddressOf CheckedChanged
-        'AddHandler dgvList.CellFormatting, AddressOf dgvList_CellFormatting
 
-        dbMain.EnableDoubleBuffered(dgvList)
         Me.ActiveControl = dgvList
     End Sub
     Private Sub SetScrollingIndex()
@@ -726,6 +711,25 @@ Public Class MntSparePart
             End If
         Else
             e.Handled = True
+        End If
+    End Sub
+
+    'https://www.vbforums.com/showthread.php?600244-RESOLVED-DataGridView-Paint-and-Repaint-)
+    Private Sub dgvList_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvList.CellPainting
+        If (e.RowIndex < 0) Then
+            Exit Sub
+        End If
+
+        Dim act As Integer = dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value
+        Dim ord As Integer = dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value
+        Dim min As Integer = dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value
+
+        If act < ord Then
+            e.CellStyle.BackColor = Color.Yellow
+        End If
+
+        If act < min Then
+            e.CellStyle.BackColor = Color.LightCoral
         End If
     End Sub
 

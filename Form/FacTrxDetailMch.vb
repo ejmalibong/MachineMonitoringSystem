@@ -706,7 +706,7 @@ Public Class FacTrxDetailMch
 
         LoadTransactionStatus()
         LoadMachine()
-        GetSetting(My.Settings.SettingsId)
+        'GetSetting(My.Settings.SettingsId)
         impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()

@@ -66,8 +66,6 @@ Public Class MntTrxConsole
 
     Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 35, 2}
 
-    Private isDebug As Boolean = My.Settings.IsDebug
-
     Public Sub New(_userId As Integer, _workgroupId As Integer, _sectionId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.

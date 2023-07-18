@@ -746,7 +746,7 @@ Public Class MntTrxDetailJig
 
         LoadTransactionStatus()
         LoadJig()
-        GetSetting(My.Settings.SettingsId)
+        'GetSetting(My.Settings.SettingsId)
         impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()

@@ -1,7 +1,7 @@
 ﻿Public Class Connection
 
     Public Function GetConnectionString() As String
-        If MachineMonitoringSystem.My.MySettings.Default.IsDebug = True Then
+        If MachineMonitoringSystem.My.Settings.IsDebug = True Then
             If Environment.MachineName.ToString.Trim = "NBCP-DT-032" Then
                 Return "Data Source=NBCP-DT-032\SQLEXPRESS;Initial Catalog=MachineMonitoring;Persist Security Info=False;User ID=sa;Password=Nbc12#"
             Else

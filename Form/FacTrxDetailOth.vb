@@ -645,7 +645,7 @@ Public Class FacTrxDetailOth
 
         LoadTransactionStatus()
         LoadArea()
-        GetSetting(My.Settings.SettingsId)
+        'GetSetting(My.Settings.SettingsId)
         impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
