@@ -29,13 +29,13 @@ Partial Class MntTrxConsole
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxConsole))
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxConsole))
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
@@ -48,15 +48,6 @@ Partial Class MntTrxConsole
         Me.ColMachineLastTransaction = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineElapsedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColTechnician = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColShiftId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColActivity = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColDatetimeEnded = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColTotalAccumulatedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColRoutingStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnRefresh = New PinkieControls.ButtonXP()
         Me.lblSearchCriteria = New System.Windows.Forms.Label()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
@@ -101,6 +92,15 @@ Partial Class MntTrxConsole
         Me.MachineRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.JigRelatedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OthersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTechnician = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColShiftId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineName2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColActivity = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColDatetimeEnded = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTotalAccumulatedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColRoutingStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvMachine, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -293,86 +293,6 @@ Partial Class MntTrxConsole
         Me.dgvList.Size = New System.Drawing.Size(1048, 529)
         Me.dgvList.TabIndex = 158
         '
-        'ColTrxId
-        '
-        Me.ColTrxId.DataPropertyName = "TrxId"
-        Me.ColTrxId.HeaderText = "#"
-        Me.ColTrxId.Name = "ColTrxId"
-        Me.ColTrxId.ReadOnly = True
-        Me.ColTrxId.Width = 50
-        '
-        'ColTechnician
-        '
-        Me.ColTechnician.DataPropertyName = "Nickname"
-        Me.ColTechnician.HeaderText = "Technician"
-        Me.ColTechnician.Name = "ColTechnician"
-        Me.ColTechnician.ReadOnly = True
-        '
-        'ColShiftId
-        '
-        Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle7
-        Me.ColShiftId.HeaderText = "Shift"
-        Me.ColShiftId.Name = "ColShiftId"
-        Me.ColShiftId.ReadOnly = True
-        Me.ColShiftId.Width = 50
-        '
-        'ColMachineName2
-        '
-        Me.ColMachineName2.DataPropertyName = "SubjectName"
-        Me.ColMachineName2.HeaderText = "Machine / Jig"
-        Me.ColMachineName2.Name = "ColMachineName2"
-        Me.ColMachineName2.ReadOnly = True
-        Me.ColMachineName2.Width = 200
-        '
-        'ColDatetimeStarted
-        '
-        Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
-        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle8
-        Me.ColDatetimeStarted.HeaderText = "Start"
-        Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
-        Me.ColDatetimeStarted.ReadOnly = True
-        Me.ColDatetimeStarted.Width = 120
-        '
-        'ColActivity
-        '
-        Me.ColActivity.DataPropertyName = "ActionTaken"
-        Me.ColActivity.HeaderText = "Activity"
-        Me.ColActivity.Name = "ColActivity"
-        Me.ColActivity.ReadOnly = True
-        '
-        'ColDatetimeEnded
-        '
-        Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
-        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle9.NullValue = Nothing
-        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle9
-        Me.ColDatetimeEnded.HeaderText = "End"
-        Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
-        Me.ColDatetimeEnded.ReadOnly = True
-        Me.ColDatetimeEnded.Width = 120
-        '
-        'ColTotalAccumulatedTime
-        '
-        Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle10
-        Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
-        Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
-        Me.ColTotalAccumulatedTime.ReadOnly = True
-        Me.ColTotalAccumulatedTime.Width = 65
-        '
-        'ColRoutingStatusName
-        '
-        Me.ColRoutingStatusName.DataPropertyName = "RoutingStatusName"
-        Me.ColRoutingStatusName.HeaderText = "Status"
-        Me.ColRoutingStatusName.Name = "ColRoutingStatusName"
-        Me.ColRoutingStatusName.ReadOnly = True
-        Me.ColRoutingStatusName.Width = 200
-        '
         'btnRefresh
         '
         Me.btnRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -459,6 +379,7 @@ Partial Class MntTrxConsole
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -820,6 +741,86 @@ Partial Class MntTrxConsole
         Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
         Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
         Me.OthersToolStripMenuItem.Text = "Others"
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "#"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Width = 50
+        '
+        'ColTechnician
+        '
+        Me.ColTechnician.DataPropertyName = "Nickname"
+        Me.ColTechnician.HeaderText = "Technician"
+        Me.ColTechnician.Name = "ColTechnician"
+        Me.ColTechnician.ReadOnly = True
+        '
+        'ColShiftId
+        '
+        Me.ColShiftId.DataPropertyName = "ShiftId"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle7
+        Me.ColShiftId.HeaderText = "Shift"
+        Me.ColShiftId.Name = "ColShiftId"
+        Me.ColShiftId.ReadOnly = True
+        Me.ColShiftId.Width = 50
+        '
+        'ColMachineName2
+        '
+        Me.ColMachineName2.DataPropertyName = "SubjectName"
+        Me.ColMachineName2.HeaderText = "Machine / Jig"
+        Me.ColMachineName2.Name = "ColMachineName2"
+        Me.ColMachineName2.ReadOnly = True
+        Me.ColMachineName2.Width = 200
+        '
+        'ColDatetimeStarted
+        '
+        Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
+        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle8
+        Me.ColDatetimeStarted.HeaderText = "Start"
+        Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
+        Me.ColDatetimeStarted.ReadOnly = True
+        Me.ColDatetimeStarted.Width = 120
+        '
+        'ColActivity
+        '
+        Me.ColActivity.DataPropertyName = "ActionTaken"
+        Me.ColActivity.HeaderText = "Activity"
+        Me.ColActivity.Name = "ColActivity"
+        Me.ColActivity.ReadOnly = True
+        '
+        'ColDatetimeEnded
+        '
+        Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
+        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle9.NullValue = Nothing
+        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle9
+        Me.ColDatetimeEnded.HeaderText = "End"
+        Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
+        Me.ColDatetimeEnded.ReadOnly = True
+        Me.ColDatetimeEnded.Width = 120
+        '
+        'ColTotalAccumulatedTime
+        '
+        Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle10
+        Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
+        Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
+        Me.ColTotalAccumulatedTime.ReadOnly = True
+        Me.ColTotalAccumulatedTime.Width = 65
+        '
+        'ColRoutingStatusName
+        '
+        Me.ColRoutingStatusName.DataPropertyName = "RoutingStatusName"
+        Me.ColRoutingStatusName.HeaderText = "Status"
+        Me.ColRoutingStatusName.Name = "ColRoutingStatusName"
+        Me.ColRoutingStatusName.ReadOnly = True
+        Me.ColRoutingStatusName.Width = 200
         '
         'MntTrxConsole
         '

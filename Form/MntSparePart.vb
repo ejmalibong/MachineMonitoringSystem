@@ -5,7 +5,7 @@ Imports ClosedXML.Excel
 Public Class MntSparePart
     Public bsSparePart As New BindingSource
     Private accessLevelId As Integer = 0
-    Private actStock As Integer = 0
+
     Private connection As New Connection
 
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -18,16 +18,11 @@ Public Class MntSparePart
     Private indexScroll As Integer = 0
 
     Private isAdmin As Integer = 0
-    Private isFilterByBelowOrderingPoint As Boolean = False
     Private isFilterByItemTypeId As Boolean = False
     Private isFilterByLocationId As Boolean = False
     Private isFilterByMachineTypeId As Boolean = False
-    Private isFilterByMinStock As Boolean = False
     Private isFilterByPartName As Boolean = False
     Private isFilterByPartNo As Boolean = False
-    Private minStock As Integer = 0
-
-    Private ordPoint As Integer = 0
 
     Private pageCount As Integer
     Private pageIndex As Integer
@@ -72,6 +67,7 @@ Public Class MntSparePart
 
     Public Sub Reload()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
+        pageIndex = 0
         LoadPart()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
     End Sub
@@ -100,14 +96,53 @@ Public Class MntSparePart
         End Try
     End Sub
 
-    Private Sub BelowOrderingPointToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BelowOrderingPointToolStripMenuItem.Click
+    Private Sub BelowMinStockToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BelowMinStockToolStripMenuItem.Click
         Try
+            Dim dt As New DataTable
 
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= MinStock", CommandType.Text)
+
+            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
+
+            If Not System.IO.Directory.Exists(folderPath) Then
+                System.IO.Directory.CreateDirectory(folderPath)
+            End If
+
+            Using wb As New XLWorkbook()
+                wb.Worksheets.Add(dt, "Sheet1")
+                wb.SaveAs(fileName)
+            End Using
+
+            Process.Start(fileName)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
+    Private Sub BelowOrderingPointToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BelowOrderingPointToolStripMenuItem.Click
+        Try
+            Dim dt As New DataTable
+
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= OrderingPoint", CommandType.Text)
+
+            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
+
+            If Not System.IO.Directory.Exists(folderPath) Then
+                System.IO.Directory.CreateDirectory(folderPath)
+            End If
+
+            Using wb As New XLWorkbook()
+                wb.Worksheets.Add(dt, "Sheet1")
+                wb.SaveAs(fileName)
+            End Using
+
+            Process.Start(fileName)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
     Private Sub BindingNavigatorMoveFirstItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveFirstItem.Click
         pageIndex = 0
         LoadPart()
@@ -321,7 +356,8 @@ Public Class MntSparePart
 
     Private Sub btnViewLogs_Click(sender As Object, e As EventArgs) Handles btnViewLogs.Click
         Try
-
+            'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
+            DirectCast(Me.MdiParent, Main).ClickSparePartsLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -404,7 +440,24 @@ Public Class MntSparePart
         Reload()
     End Sub
 
+    'https://www.vbforums.com/showthread.php?600244-RESOLVED-DataGridView-Paint-and-Repaint-)
+    Private Sub dgvList_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvList.CellPainting
+        If (e.RowIndex < 0) Then
+            Exit Sub
+        End If
 
+        Dim act As Integer = dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value
+        Dim ord As Integer = dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value
+        Dim min As Integer = dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value
+
+        If act < ord Then
+            e.CellStyle.BackColor = Color.Yellow
+        End If
+
+        If act < min Then
+            e.CellStyle.BackColor = Color.LightCoral
+        End If
+    End Sub
 
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvList.CellDoubleClick
         btnEdit.PerformClick()
@@ -714,23 +767,6 @@ Public Class MntSparePart
         End If
     End Sub
 
-    'https://www.vbforums.com/showthread.php?600244-RESOLVED-DataGridView-Paint-and-Repaint-)
-    Private Sub dgvList_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvList.CellPainting
-        If (e.RowIndex < 0) Then
-            Exit Sub
-        End If
 
-        Dim act As Integer = dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value
-        Dim ord As Integer = dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value
-        Dim min As Integer = dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value
-
-        If act < ord Then
-            e.CellStyle.BackColor = Color.Yellow
-        End If
-
-        If act < min Then
-            e.CellStyle.BackColor = Color.LightCoral
-        End If
-    End Sub
 
 End Class

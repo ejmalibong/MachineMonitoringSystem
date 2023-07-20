@@ -42,7 +42,7 @@ Public Class MntTrxDetailJig
     Private dtUserPic As New DataTable
     Private imgDirectory As String = directory.ImgIniDirectoryMt
     Private imgTmp As String = String.Empty
-    Private impersonation As New UserImpersonation.UserImpersonation
+    'Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
     Private jigId As Integer = 0
     Private lstImgAttachment As New List(Of ImgAttachment)
@@ -747,7 +747,7 @@ Public Class MntTrxDetailJig
         LoadTransactionStatus()
         LoadJig()
         'GetSetting(My.Settings.SettingsId)
-        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -3871,7 +3871,7 @@ Public Class MntTrxDetailJig
     End Sub
 
     Private Sub frmMntTrxDetailJig_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        impersonation.UndoImpersonateUser()
+        'impersonation.UndoImpersonateUser()
     End Sub
 
     Private Sub GetJigArea(jigId As Integer)

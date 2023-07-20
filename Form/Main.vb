@@ -20,6 +20,15 @@ Public Class Main
 
     Private arrSplitted() As String
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
     Public Sub New(_userId As Integer, _userName As String, _departmentId As Integer, _departmentName As String, _sectionId As Integer,
                    _sectionName As String, _workgroupId As Integer, _workgroupName As String, _isAdmin As Boolean)
 
@@ -113,6 +122,10 @@ Public Class Main
         dbMain.FormLoader(Me, New MntJigSched(userId))
     End Sub
 
+    Public Sub MntSparePartLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartLogToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntSparePartLog)
+    End Sub
+
     Private Sub LogOutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogOutToolStripMenuItem.Click
         Me.Hide()
         Login.Show()
@@ -160,187 +173,190 @@ Public Class Main
     End Sub
 
     Private Sub GetWorkgroupAccess(wgroupId As Integer, sectId As Integer)
-        Select Case sectId
-            Case 1, 4 'manager, sys admin
-                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Text = "FA " & itm.Text
+        Try
+            Select Case sectId
+                Case 1, 4 'manager, sys admin
+                    For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Text = "FA " & itm.Text
+                            End If
+
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Text = "MT " & itm.Text
+                            End If
+                        End If
+                    Next
+
+                    For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Text = "FA " & itm.Text
+                            End If
+
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Text = "MT " & itm.Text
+                            End If
+                        End If
+                    Next
+
+                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Text = "FA " & itm.Text
+                            End If
+
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Text = "MT " & itm.Text
+                            End If
+                        End If
+                    Next
+
+                Case 2 'maintenance
+                    Select Case wgroupId
+                        Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
+                            accessLevelId = 1
+                        Case 35, 40 'mt mgr, am
+                            accessLevelId = 2
+                        Case 29, 30 'mt sv, asv
+                            accessLevelId = 3
+                        Case 5 'mt sr tech
+                            accessLevelId = 4
+                        Case Else
+                            accessLevelId = 99
+                    End Select
+
+                    For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
 
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Text = "MT " & itm.Text
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Text = "FA " & itm.Text
-                        End If
-
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Text = "MT " & itm.Text
-                        End If
-                    End If
-                Next
-
-                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Text = "FA " & itm.Text
+                    For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
 
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Text = "MT " & itm.Text
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-            Case 2 'maintenance
-                Select Case wgroupId
-                    Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
-                        accessLevelId = 1
-                    Case 35, 40 'mt mgr, am
-                        accessLevelId = 2
-                    Case 29, 30 'mt sv, asv
-                        accessLevelId = 3
-                    Case 5 'mt sr tech
-                        accessLevelId = 4
-                    Case Else
-                        accessLevelId = 99
-                End Select
-
-                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                    Select Case accessLevelId
+                        Case 1
+
+                        Case 2, 3
+                            dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+
+                        Case Else
+                            SecUserToolStripMenuItem.Visible = False
+                            tssMaintenance3.Visible = False
+
+                            dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                    End Select
+
+                Case 3 'facility
+                    Select Case wgroupId
+                        Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                            accessLevelId = 1
+                        Case 36 'fc am
+                            accessLevelId = 2
+                        Case 31, 32, 7, 8 'fc sv, asv, sr engr, engr
+                            accessLevelId = 3
+                        Case 9 'fc sr tech
+                            accessLevelId = 4
+                        Case Else
+                            accessLevelId = 99
+                    End Select
+
+                    For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                    For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
-                            itm.Visible = False
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-                Select Case accessLevelId
-                    Case 1
-
-                    Case 2, 3
-                        dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-
-                    Case Else
-                        SecUserToolStripMenuItem.Visible = False
-                        tssMaintenance3.Visible = False
-
-                        'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                        dbMain.FormLoader(Me, New MntSparePart(userId, workgroupId, isAdmin), True)
-                End Select
-
-            Case 3 'facility
-                Select Case wgroupId
-                    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
-                        accessLevelId = 1
-                    Case 36 'fc am
-                        accessLevelId = 2
-                    Case 31, 32, 7, 8 'fc sv, asv, sr engr, engr
-                        accessLevelId = 3
-                    Case 9 'fc sr tech
-                        accessLevelId = 4
-                    Case Else
-                        accessLevelId = 99
-                End Select
-
-                For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
+                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                        If TypeOf (itm) Is ToolStripMenuItem Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
+                        If TypeOf (itm) Is ToolStripSeparator Then
+                            If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
+                                itm.Visible = False
+                            End If
                         End If
-                    End If
-                Next
+                    Next
 
-                For Each itm As ToolStripItem In ReportsToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
-                        End If
-                    End If
+                    Select Case accessLevelId
+                        Case 1
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
-                        End If
-                    End If
-                Next
+                        Case 2, 3
+                            dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
 
-                For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
-                    If TypeOf (itm) Is ToolStripMenuItem Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
-                        End If
-                    End If
+                        Case Else
+                            dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                            SecUserToolStripMenuItem.Visible = False
+                            tssMaintenance2.Visible = False
 
-                    If TypeOf (itm) Is ToolStripSeparator Then
-                        If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
-                            itm.Visible = False
-                        End If
-                    End If
-                Next
+                            dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                    End Select
 
-                Select Case accessLevelId
-                    Case 1
-
-                    Case 2, 3
-                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-
-                    Case Else
-                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                        SecUserToolStripMenuItem.Visible = False
-                        tssMaintenance2.Visible = False
-
-                        dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                End Select
-
-            Case Else
-                Application.Exit()
-        End Select
+                Case Else
+                    Application.Exit()
+            End Select
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     'prevent form resizing when double clicked the titlebar or dragged
@@ -392,6 +408,86 @@ Public Class Main
 
     Private Sub MntSparePartToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartToolStripMenuItem.Click
         dbMain.FormLoader(Me, New MntSparePart(userId, workgroupId, isAdmin), True)
+    End Sub
+
+    'https://www.vbforums.com/showthread.php?551628-Manual-MDI-Window-List-Menu
+    Public Sub RefreshWindowList()
+        ' Count windows and Menuitems
+        Dim mdiWindowCount As Integer = Me.MdiChildren.Count
+        Dim menuItemWindowCount As Integer = Me.WindowToolStripMenuItem.DropDownItems.Count
+
+        ' Remove all WINDOW MenuItems from the Window menu, but don't remove the
+        ' extra items such as Close and the separator (first two) and the last item
+        Dim item As ToolStripItem
+        For i As Integer = menuItemWindowCount - 1 To 0 Step -1
+            item = Me.WindowToolStripMenuItem.DropDownItems(i)
+
+            If Not (item Is CloseAllToolStripMenuItem _
+                    Or item Is CloseToolStripSeparator) Then
+                Me.WindowToolStripMenuItem.DropDownItems.RemoveAt(i)
+            End If
+        Next
+
+        If mdiWindowCount > 0 Then
+            Dim menuItem As ToolStripMenuItem
+            Dim counter As Integer = 1
+            ' Add the new window items
+            For Each window As Form In Me.MdiChildren
+                'Create new menuitem
+                menuItem = New ToolStripMenuItem
+
+                'Set the text to for example "2. Windowtext"
+                menuItem.Text = counter.ToString & ". " & window.Text
+
+                'Set the tag to the current window so we can retrieve it later
+                menuItem.Tag = window
+
+                'Check the menuitem if this is the currently active window
+                If window Is Me.ActiveMdiChild Then
+                    menuItem.Checked = True
+                End If
+
+                'Add a Click EventHandler to be able to click it
+                AddHandler menuItem.Click, AddressOf WindowMenuItemClicked
+
+                'Finally add it to the actual menuitem list
+                Me.WindowToolStripMenuItem.DropDownItems.Insert(0 + Me.WindowToolStripMenuItem.DropDownItems.Count - 2, menuItem)
+
+                'Raise the counter by 1
+                counter += 1
+            Next
+        End If
+    End Sub
+
+    Private Sub WindowMenuItemClicked(ByVal sender As Object, ByVal e As EventArgs)
+        'Retrieve the clicked MenuItem from the sender object
+        Dim menuItem As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
+
+        'Retrieve the corresponding form from the Tag property
+        Dim frm As Form = TryCast(menuItem.Tag, Form)
+
+        'Activate it
+        If frm IsNot Nothing Then
+            frm.Activate()
+        End If
+    End Sub
+
+    Private Sub WindowToolStripMenuItem_DropDownOpening(sender As Object, e As EventArgs) Handles WindowToolStripMenuItem.DropDownOpening
+        RefreshWindowList()
+    End Sub
+
+    Public Sub ClickSparePartsLogs()
+        dbMain.FormLoader(Me, New MntSparePartLog)
+    End Sub
+
+    Private Sub CloseAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseAllToolStripMenuItem.Click
+        Try
+            For Each frm As Form In Me.MdiChildren
+                frm.Close()
+            Next
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 End Class

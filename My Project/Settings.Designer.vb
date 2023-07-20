@@ -54,16 +54,13 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property IsDebug() As Boolean
+        Public ReadOnly Property IsDebug() As Boolean
             Get
                 Return CType(Me("IsDebug"),Boolean)
             End Get
-            Set
-                Me("IsDebug") = value
-            End Set
         End Property
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _

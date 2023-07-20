@@ -45,7 +45,7 @@ Public Class MntTrxDetailOth
     Private dtUserPic As New DataTable
     Private imgDirectory As String = directory.ImgIniDirectoryMt
     Private imgTmp As String = String.Empty
-    Private impersonation As New UserImpersonation.UserImpersonation
+    'Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
     Private lstAttachment As New List(Of FileAttachment)
     Private lstAttachmentCopy As New List(Of FileAttachment)
@@ -95,6 +95,7 @@ Public Class MntTrxDetailOth
     End Sub
 
     Private Delegate Sub SetProgressInvoker(textProgress As String, labelProgress As Label)
+    Public Property fromPmCalendar As Boolean = False
 
     Public Sub DisableForm(isDisable As Boolean)
         If isDisable Then
@@ -696,7 +697,7 @@ Public Class MntTrxDetailOth
         LoadTransactionStatus()
         LoadArea()
         'GetSetting(My.Settings.SettingsId)
-        impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
+        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         LoadApproverAction()
         LoadApprovers()
@@ -3234,15 +3235,17 @@ Public Class MntTrxDetailOth
     End Sub
 
     Private Sub frmMntTrxDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If e.KeyCode.Equals(Keys.F8) Then 'delete
-            e.Handled = True
-            If btnDelete.Enabled = True Then
-                btnDelete.PerformClick()
-            End If
-        ElseIf e.KeyCode.Equals(Keys.F10) Then 'save
-            e.Handled = True
-            If btnSave.Enabled = True Then
-                btnSave.PerformClick()
+        If fromPmCalendar = False Then
+            If e.KeyCode.Equals(Keys.F8) Then 'delete
+                e.Handled = True
+                If btnDelete.Enabled = True Then
+                    btnDelete.PerformClick()
+                End If
+            ElseIf e.KeyCode.Equals(Keys.F10) Then 'save
+                e.Handled = True
+                If btnSave.Enabled = True Then
+                    btnSave.PerformClick()
+                End If
             End If
         End If
     End Sub
@@ -3473,6 +3476,48 @@ Public Class MntTrxDetailOth
                 End If
             End If
 
+            If fromPmCalendar = True Then
+                cmbTransactionStatus.Enabled = False
+                cmbArea.Enabled = False
+
+                txtProblem.Enabled = False
+                txtRootCause.Enabled = False
+                txtActionTaken.Enabled = False
+
+                txtJoNumber.Enabled = False
+                txtJoRequestor.Enabled = False
+
+                btnAddLog.Enabled = False
+                btnEditLog.Enabled = False
+                btnDeleteLog.Enabled = False
+                btnBrowseImage.Enabled = False
+                btnRemoveImage.Enabled = False
+                btnRemoveChecksheet.Enabled = False
+
+                btnViewChecksheet.Enabled = True
+                btnViewImage.Enabled = True
+
+                dgvPic.ReadOnly = True
+                dgvDetail.ReadOnly = True
+
+                btnSave.Enabled = False
+                btnCancel.Enabled = False
+                btnDelete.Enabled = False
+
+                cmbApp3Status.Enabled = False
+                cmbApp3Name.Enabled = False
+
+                txtApp3Remarks.Enabled = False
+
+                cmbApp2Status.Enabled = False
+                cmbApp2Name.Enabled = False
+                txtApp2Remarks.Enabled = False
+
+                cmbApp1Status.Enabled = False
+                cmbApp1Name.Enabled = False
+                txtApp1Remarks.Enabled = False
+            End If
+
             If btnCancel.Enabled = True Then
                 Me.CancelButton = btnCancel
             Else
@@ -3484,7 +3529,7 @@ Public Class MntTrxDetailOth
     End Sub
 
     Private Sub frmMntTrxDetailOth_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        impersonation.UndoImpersonateUser()
+        'impersonation.UndoImpersonateUser()
     End Sub
 
     Private Sub GetSetting(settingsId As Integer)
