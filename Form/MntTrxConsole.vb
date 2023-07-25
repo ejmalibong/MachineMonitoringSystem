@@ -5,6 +5,7 @@ Public Class MntTrxConsole
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+    Private accessLevel As New AccessLevel
 
     Private dtJig As New DataTable
     Private dtMachine As New DataTable
@@ -64,8 +65,6 @@ Public Class MntTrxConsole
     Private sectionId As Integer = 0
     Private isAdmin As Boolean = False
 
-    Private superiorWorkgroupId As New List(Of Integer) From {29, 30, 35, 2}
-
     Public Sub New(_userId As Integer, _workgroupId As Integer, _sectionId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -76,6 +75,8 @@ Public Class MntTrxConsole
         workgroupId = _workgroupId
         sectionId = _sectionId
         isAdmin = _isAdmin
+
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr

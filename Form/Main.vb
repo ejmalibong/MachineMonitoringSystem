@@ -5,6 +5,7 @@ Public Class Main
     Private dbConnection As New Connection
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
     Private dbMain As New BlackCoffeeLibrary.Main
+    Private accessLevel As New AccessLevel
 
     Private userId As Integer = 0
     Private userName As String = String.Empty
@@ -175,7 +176,7 @@ Public Class Main
     Private Sub GetWorkgroupAccess(wgroupId As Integer, sectId As Integer)
         Try
             Select Case sectId
-                Case 1, 4 'manager, sys admin
+                Case 1, 4 'manager, it/sys admin
                     For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
                         If TypeOf (itm) Is ToolStripMenuItem Then
                             If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
@@ -200,7 +201,7 @@ Public Class Main
                         End If
                     Next
 
-                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    For Each itm As ToolStripItem In MasterlistToolStripMenuItem.DropDownItems
                         If TypeOf (itm) Is ToolStripMenuItem Then
                             If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
                                 itm.Text = "FA " & itm.Text
@@ -213,14 +214,16 @@ Public Class Main
                     Next
 
                 Case 2 'maintenance
-                    Select Case wgroupId
-                        Case 1, 2, 3 Or isAdmin 'engg sys admin, sr mngr, mngr
+                    'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
+
+                    Select Case workgroupId
+                        Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
                             accessLevelId = 1
-                        Case 35, 40 'mt mgr, am
+                        Case 35, 40 'mngr, asst mngr
                             accessLevelId = 2
-                        Case 29, 30 'mt sv, asv
+                        Case 29, 30 'sv, asv
                             accessLevelId = 3
-                        Case 5 'mt sr tech
+                        Case 5 'sr tech
                             accessLevelId = 4
                         Case Else
                             accessLevelId = 99
@@ -254,7 +257,7 @@ Public Class Main
                         End If
                     Next
 
-                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    For Each itm As ToolStripItem In MasterlistToolStripMenuItem.DropDownItems
                         If TypeOf (itm) Is ToolStripMenuItem Then
                             If itm.Tag.ToString.Substring(0, 2).Equals("FA") Then
                                 itm.Visible = False
@@ -269,9 +272,7 @@ Public Class Main
                     Next
 
                     Select Case accessLevelId
-                        Case 1
-
-                        Case 2, 3
+                        Case 1, 2, 3
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
 
                         Case Else
@@ -323,7 +324,7 @@ Public Class Main
                         End If
                     Next
 
-                    For Each itm As ToolStripItem In MaintenanceToolStripMenuItem.DropDownItems
+                    For Each itm As ToolStripItem In MasterlistToolStripMenuItem.DropDownItems
                         If TypeOf (itm) Is ToolStripMenuItem Then
                             If itm.Tag.ToString.Substring(0, 2).Equals("MT") Then
                                 itm.Visible = False

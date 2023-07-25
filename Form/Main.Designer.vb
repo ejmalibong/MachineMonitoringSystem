@@ -45,7 +45,7 @@ Partial Class Main
         Me.FacActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssReport = New System.Windows.Forms.ToolStripSeparator()
         Me.MntActivityReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MaintenanceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MasterlistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntSparePartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntAreaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssMaintenance1 = New System.Windows.Forms.ToolStripSeparator()
@@ -75,7 +75,7 @@ Partial Class Main
         '
         Me.mnuMain.BackColor = System.Drawing.Color.White
         Me.mnuMain.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MaintenanceToolStripMenuItem, Me.WindowToolStripMenuItem})
+        Me.mnuMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatetimeToolStripMenuItem, Me.UserItemToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.FileToolStripMenuItem, Me.ReportsToolStripMenuItem, Me.MasterlistToolStripMenuItem, Me.WindowToolStripMenuItem})
         Me.mnuMain.Location = New System.Drawing.Point(0, 0)
         Me.mnuMain.Name = "mnuMain"
         Me.mnuMain.ShowItemToolTips = True
@@ -229,12 +229,12 @@ Partial Class Main
         Me.MntActivityReportToolStripMenuItem.Tag = "MT"
         Me.MntActivityReportToolStripMenuItem.Text = "Activity Report"
         '
-        'MaintenanceToolStripMenuItem
+        'MasterlistToolStripMenuItem
         '
-        Me.MaintenanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntSparePartToolStripMenuItem, Me.MntAreaToolStripMenuItem, Me.tssMaintenance1, Me.MntMchToolStripMenuItem, Me.MntMchPartsToolStripMenuItem, Me.MntMchChecksheetToolStripMenuItem, Me.tssMaintenance2, Me.MntJigToolStripMenuItem, Me.MntJigChecksheetToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.tssMaintenance3, Me.SecUserToolStripMenuItem})
-        Me.MaintenanceToolStripMenuItem.Name = "MaintenanceToolStripMenuItem"
-        Me.MaintenanceToolStripMenuItem.Size = New System.Drawing.Size(88, 20)
-        Me.MaintenanceToolStripMenuItem.Text = "Maintenance"
+        Me.MasterlistToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntSparePartToolStripMenuItem, Me.MntAreaToolStripMenuItem, Me.tssMaintenance1, Me.MntMchToolStripMenuItem, Me.MntMchPartsToolStripMenuItem, Me.MntMchChecksheetToolStripMenuItem, Me.tssMaintenance2, Me.MntJigToolStripMenuItem, Me.MntJigChecksheetToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.tssMaintenance3, Me.SecUserToolStripMenuItem})
+        Me.MasterlistToolStripMenuItem.Name = "MasterlistToolStripMenuItem"
+        Me.MasterlistToolStripMenuItem.Size = New System.Drawing.Size(88, 20)
+        Me.MasterlistToolStripMenuItem.Text = "Maintenance"
         '
         'MntSparePartToolStripMenuItem
         '
@@ -337,12 +337,12 @@ Partial Class Main
         'CloseToolStripSeparator
         '
         Me.CloseToolStripSeparator.Name = "CloseToolStripSeparator"
-        Me.CloseToolStripSeparator.Size = New System.Drawing.Size(177, 6)
+        Me.CloseToolStripSeparator.Size = New System.Drawing.Size(117, 6)
         '
         'CloseAllToolStripMenuItem
         '
         Me.CloseAllToolStripMenuItem.Name = "CloseAllToolStripMenuItem"
-        Me.CloseAllToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.CloseAllToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
         Me.CloseAllToolStripMenuItem.Text = "Close All"
         '
         'stsMain
@@ -424,7 +424,7 @@ Partial Class Main
     Friend WithEvents SectionToolStripStatusLabel As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents MaintenanceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MasterlistToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents WindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntTransactionConsoleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MntActivtyApprovalToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

@@ -22,6 +22,7 @@ Public Class MntTrxDetailOth
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+    Private accessLevel As New AccessLevel
 
     Private dicApp1Action As New Dictionary(Of String, Integer)
     Private dicApp2Action As New Dictionary(Of String, Integer)
@@ -77,6 +78,8 @@ Public Class MntTrxDetailOth
         workgroupId = _workgroupId
         isAdmin = _isAdmin
         trxId = _trxId
+
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr

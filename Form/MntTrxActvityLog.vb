@@ -16,6 +16,8 @@ Public Class MntTrxActvityLog
     Private trxId As Integer = 0
     Private userId As Integer = 0
 
+    Private dicPartSelection As New Dictionary(Of String, Integer)
+
     Public Sub New(Optional _trxId As Integer = 0, Optional _userId As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
@@ -83,22 +85,13 @@ Public Class MntTrxActvityLog
             prmUser(0).Value = 2
             dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
         End If
-
-        cmbPartNo.DisplayMember = "PartNo"
-        cmbPartNo.ValueMember = "PartId"
-
-        dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
-                                    CommandType.Text, "PartId", "PartNo", cmbPartNo, "")
-
-        AddHandler cmbPartNo.SelectedValueChanged, AddressOf cmbPartNo_SelectedValueChanged
-        AddHandler cmbPartNo.Validated, AddressOf cmbPartNo_Validated
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Try
-            If cmbPartNo.SelectedValue = 0 Then
+            If cmbPart.SelectedValue = 0 Then
                 MessageBox.Show("Please select an item.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                cmbPartNo.Focus()
+                cmbPart.Focus()
                 Exit Sub
             End If
 
@@ -116,14 +109,14 @@ Public Class MntTrxActvityLog
 
             Dim cnt As Integer = 0
             For Each row As DataGridViewRow In dgvPartDetail.Rows
-                If row.Cells("ColPartId").Value = cmbPartNo.SelectedValue Then
+                If row.Cells("ColPartId").Value = cmbPart.SelectedValue Then
                     cnt += 1
                 End If
             Next
 
             If cnt > 0 Then
                 MessageBox.Show("The selected item is already on the list.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                cmbPartNo.Focus()
+                cmbPart.Focus()
                 Exit Sub
             End If
 
@@ -132,19 +125,19 @@ Public Class MntTrxActvityLog
             Me.bsTrxPartDetail.Current("CreatedBy") = cmbTechnician.SelectedValue
             Me.bsTrxPartDetail.Current("CreatedDate") = dbMethod.GetServerDate
             Me.bsTrxPartDetail.Current("UserId") = cmbTechnician.SelectedValue
-            Me.bsTrxPartDetail.Current("PartId") = cmbPartNo.SelectedValue
+            Me.bsTrxPartDetail.Current("PartId") = cmbPart.SelectedValue
             Me.bsTrxPartDetail.Current("Qty") = txtQty.Text.Trim
             Me.bsTrxPartDetail.EndEdit()
 
-            cmbPartNo.SelectedValue = 0
+            cmbPart.SelectedValue = 0
 
-            txtPartName.Text = ""
+            txtPartDescription.Text = ""
             txtActualStock.Text = ""
             txtOrderingPoint.Text = ""
             txtUnit.Text = ""
             txtQty.Clear()
 
-            cmbPartNo.Focus()
+            cmbPart.Focus()
 
             lblQty2.Text = dgvPartDetail.Rows.Count
         Catch ex As Exception
@@ -153,9 +146,9 @@ Public Class MntTrxActvityLog
     End Sub
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        cmbPartNo.Text = ""
-        cmbPartNo.SelectedValue = 0
-        cmbPartNo.Focus()
+        cmbPart.Text = ""
+        cmbPart.SelectedValue = 0
+        cmbPart.Focus()
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -231,22 +224,38 @@ Public Class MntTrxActvityLog
         End Try
     End Sub
 
-    Private Sub cmbPartNo_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub cmbPart_SelectedValueChanged(sender As Object, e As EventArgs)
         Try
-            If cmbPartNo.SelectedValue <> 0 Then
-                Dim prmPartNo(0) As SqlParameter
-                prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                prmPartNo(0).Value = cmbPartNo.SelectedValue
+            If cmbPart.SelectedValue <> 0 Then
+                If cmbPartSelection.SelectedValue = 1 Then
+                    Dim prmPartNo(0) As SqlParameter
+                    prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmPartNo(0).Value = cmbPart.SelectedValue
 
-                Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
-                    While rdr.Read
-                        txtPartName.Text = rdr.Item("PartName").ToString.Trim
-                        txtActualStock.Text = rdr.Item("ActualStock")
-                        txtOrderingPoint.Text = rdr.Item("OrderingPoint")
-                        txtUnit.Text = rdr.Item("UnitCode")
-                    End While
-                    rdr.Close()
-                End Using
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
+                        While rdr.Read
+                            txtPartDescription.Text = rdr.Item("PartNo").ToString.Trim
+                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtOrderingPoint.Text = rdr.Item("OrderingPoint")
+                            txtUnit.Text = rdr.Item("UnitCode")
+                        End While
+                        rdr.Close()
+                    End Using
+                Else
+                    Dim prmPartNo(0) As SqlParameter
+                    prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmPartNo(0).Value = cmbPart.SelectedValue
+
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
+                        While rdr.Read
+                            txtPartDescription.Text = rdr.Item("PartName").ToString.Trim
+                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtOrderingPoint.Text = rdr.Item("OrderingPoint")
+                            txtUnit.Text = rdr.Item("UnitCode")
+                        End While
+                        rdr.Close()
+                    End Using
+                End If
 
                 If CInt(txtActualStock.Text) <= CInt(txtOrderingPoint.Text) Then
                     txtActualStock.ForeColor = Color.Red
@@ -254,7 +263,7 @@ Public Class MntTrxActvityLog
                     txtActualStock.ForeColor = Color.Black
                 End If
             Else
-                txtPartName.Text = ""
+                txtPartDescription.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
@@ -265,10 +274,10 @@ Public Class MntTrxActvityLog
         End Try
     End Sub
 
-    Private Sub cmbPartNo_Validated(sender As Object, e As EventArgs)
+    Private Sub cmbPart_Validated(sender As Object, e As EventArgs)
         Try
-            If cmbPartNo.SelectedValue = 0 Then
-                txtPartName.Text = ""
+            If cmbPart.SelectedValue = 0 Then
+                txtPartDescription.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
@@ -453,14 +462,14 @@ Public Class MntTrxActvityLog
             End If
         Else
             If userId = 0 Then
-                cmbPartNo.Enabled = True
+                cmbPart.Enabled = True
                 btnClear.Enabled = True
                 txtQty.Enabled = True
                 btnAdd.Enabled = True
                 btnRemove.Enabled = True
                 dgvPartDetail.Enabled = True
             Else
-                cmbPartNo.Enabled = False
+                cmbPart.Enabled = False
                 btnClear.Enabled = False
                 txtQty.Enabled = False
                 btnAdd.Enabled = False
@@ -468,6 +477,11 @@ Public Class MntTrxActvityLog
                 dgvPartDetail.Enabled = False
             End If
         End If
+
+        LoadPartSelection()
+        cmbPartSelection.SelectedValue = 1
+
+
 
         Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
         dgvPartDetail.AutoGenerateColumns = False
@@ -483,6 +497,48 @@ Public Class MntTrxActvityLog
             If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
                 e.Handled = True
             End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadPartSelection()
+        Try
+            dicPartSelection.Add(" Part Name", 1)
+            dicPartSelection.Add(" Part No", 2)
+
+            cmbPartSelection.DisplayMember = "Key"
+            cmbPartSelection.ValueMember = "Value"
+            cmbPartSelection.DataSource = New BindingSource(dicPartSelection, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbPartSelection_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbPartSelection.SelectedValueChanged
+        Try
+            cmbPart.DataSource = Nothing
+
+            If cmbPartSelection.SelectedValue = 1 Then
+                cmbPart.DisplayMember = "PartName"
+                cmbPart.ValueMember = "PartId"
+
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartName", cmbPart, "")
+
+                lblPartDescription.Text = "Part No"
+            Else
+                cmbPart.DisplayMember = "PartNo"
+                cmbPart.ValueMember = "PartId"
+
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartNo", cmbPart, "")
+
+                lblPartDescription.Text = "Part Name"
+            End If
+
+            AddHandler cmbPart.SelectedValueChanged, AddressOf cmbPart_SelectedValueChanged
+            AddHandler cmbPart.Validated, AddressOf cmbPart_Validated
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

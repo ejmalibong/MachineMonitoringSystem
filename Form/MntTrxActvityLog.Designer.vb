@@ -37,12 +37,11 @@ Partial Class MntTrxActvityLog
         Me.cmbTechnician = New SergeUtils.EasyCompletionComboBox()
         Me.lblPartIssuance = New System.Windows.Forms.Label()
         Me.btnClear = New PinkieControls.ButtonXP()
-        Me.lblPartNo = New System.Windows.Forms.Label()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnCancel = New PinkieControls.ButtonXP()
         Me.btnSave = New PinkieControls.ButtonXP()
-        Me.cmbPartNo = New SergeUtils.EasyCompletionComboBox()
+        Me.cmbPart = New SergeUtils.EasyCompletionComboBox()
         Me.lblActivityLog = New System.Windows.Forms.Label()
         Me.lblActualStock = New System.Windows.Forms.Label()
         Me.txtActualStock = New System.Windows.Forms.Label()
@@ -56,8 +55,8 @@ Partial Class MntTrxActvityLog
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lblPartName = New System.Windows.Forms.Label()
-        Me.txtPartName = New System.Windows.Forms.Label()
+        Me.lblPartDescription = New System.Windows.Forms.Label()
+        Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtElapsedTime = New System.Windows.Forms.Label()
         Me.lblElapsedTime = New System.Windows.Forms.Label()
         Me.txtOrderingPoint = New System.Windows.Forms.Label()
@@ -65,6 +64,7 @@ Partial Class MntTrxActvityLog
         Me.lblStockOut = New System.Windows.Forms.Label()
         Me.lblItemQty1 = New System.Windows.Forms.Label()
         Me.lblQty2 = New System.Windows.Forms.Label()
+        Me.cmbPartSelection = New System.Windows.Forms.ComboBox()
         Me.grpShift.SuspendLayout()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -219,20 +219,6 @@ Partial Class MntTrxActvityLog
         Me.btnClear.TabStop = False
         Me.btnClear.Text = "X"
         '
-        'lblPartNo
-        '
-        Me.lblPartNo.BackColor = System.Drawing.SystemColors.Control
-        Me.lblPartNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPartNo.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPartNo.ForeColor = System.Drawing.Color.Black
-        Me.lblPartNo.Location = New System.Drawing.Point(360, 28)
-        Me.lblPartNo.Name = "lblPartNo"
-        Me.lblPartNo.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblPartNo.Size = New System.Drawing.Size(120, 25)
-        Me.lblPartNo.TabIndex = 578
-        Me.lblPartNo.Text = "Part No"
-        Me.lblPartNo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -302,14 +288,14 @@ Partial Class MntTrxActvityLog
         Me.btnSave.TabStop = False
         Me.btnSave.Text = " Save"
         '
-        'cmbPartNo
+        'cmbPart
         '
-        Me.cmbPartNo.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbPartNo.FormattingEnabled = True
-        Me.cmbPartNo.Location = New System.Drawing.Point(479, 28)
-        Me.cmbPartNo.Name = "cmbPartNo"
-        Me.cmbPartNo.Size = New System.Drawing.Size(601, 25)
-        Me.cmbPartNo.TabIndex = 590
+        Me.cmbPart.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbPart.FormattingEnabled = True
+        Me.cmbPart.Location = New System.Drawing.Point(479, 28)
+        Me.cmbPart.Name = "cmbPart"
+        Me.cmbPart.Size = New System.Drawing.Size(601, 25)
+        Me.cmbPart.TabIndex = 590
         '
         'lblActivityLog
         '
@@ -491,32 +477,32 @@ Partial Class MntTrxActvityLog
         Me.ColQty.ReadOnly = True
         Me.ColQty.Width = 60
         '
-        'lblPartName
+        'lblPartDescription
         '
-        Me.lblPartName.BackColor = System.Drawing.SystemColors.Control
-        Me.lblPartName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPartName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPartName.ForeColor = System.Drawing.Color.Black
-        Me.lblPartName.Location = New System.Drawing.Point(360, 55)
-        Me.lblPartName.Name = "lblPartName"
-        Me.lblPartName.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblPartName.Size = New System.Drawing.Size(120, 25)
-        Me.lblPartName.TabIndex = 604
-        Me.lblPartName.Text = "Part Name"
-        Me.lblPartName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblPartDescription.BackColor = System.Drawing.SystemColors.Control
+        Me.lblPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPartDescription.ForeColor = System.Drawing.Color.Black
+        Me.lblPartDescription.Location = New System.Drawing.Point(360, 55)
+        Me.lblPartDescription.Name = "lblPartDescription"
+        Me.lblPartDescription.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblPartDescription.Size = New System.Drawing.Size(120, 25)
+        Me.lblPartDescription.TabIndex = 604
+        Me.lblPartDescription.Text = "Part Name"
+        Me.lblPartDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'txtPartName
+        'txtPartDescription
         '
-        Me.txtPartName.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtPartName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtPartName.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.txtPartName.ForeColor = System.Drawing.Color.Black
-        Me.txtPartName.Location = New System.Drawing.Point(479, 55)
-        Me.txtPartName.Name = "txtPartName"
-        Me.txtPartName.Size = New System.Drawing.Size(632, 25)
-        Me.txtPartName.TabIndex = 605
-        Me.txtPartName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.txtPartName.UseCompatibleTextRendering = True
+        Me.txtPartDescription.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtPartDescription.ForeColor = System.Drawing.Color.Black
+        Me.txtPartDescription.Location = New System.Drawing.Point(479, 55)
+        Me.txtPartDescription.Name = "txtPartDescription"
+        Me.txtPartDescription.Size = New System.Drawing.Size(632, 25)
+        Me.txtPartDescription.TabIndex = 605
+        Me.txtPartDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtPartDescription.UseCompatibleTextRendering = True
         '
         'txtElapsedTime
         '
@@ -606,19 +592,31 @@ Partial Class MntTrxActvityLog
         Me.lblQty2.TabIndex = 618
         Me.lblQty2.Text = "0"
         '
+        'cmbPartSelection
+        '
+        Me.cmbPartSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbPartSelection.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbPartSelection.FormattingEnabled = True
+        Me.cmbPartSelection.Location = New System.Drawing.Point(360, 28)
+        Me.cmbPartSelection.Name = "cmbPartSelection"
+        Me.cmbPartSelection.Size = New System.Drawing.Size(120, 25)
+        Me.cmbPartSelection.TabIndex = 619
+        '
         'MntTrxActvityLog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1114, 379)
+        Me.Controls.Add(Me.cmbPart)
+        Me.Controls.Add(Me.cmbPartSelection)
         Me.Controls.Add(Me.lblQty2)
         Me.Controls.Add(Me.lblItemQty1)
         Me.Controls.Add(Me.lblStockOut)
         Me.Controls.Add(Me.lblElapsedTime)
         Me.Controls.Add(Me.txtElapsedTime)
-        Me.Controls.Add(Me.txtPartName)
-        Me.Controls.Add(Me.lblPartName)
+        Me.Controls.Add(Me.txtPartDescription)
+        Me.Controls.Add(Me.lblPartDescription)
         Me.Controls.Add(Me.dgvPartDetail)
         Me.Controls.Add(Me.btnRemove)
         Me.Controls.Add(Me.btnAdd)
@@ -636,7 +634,6 @@ Partial Class MntTrxActvityLog
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.btnClear)
-        Me.Controls.Add(Me.lblPartNo)
         Me.Controls.Add(Me.lblPartIssuance)
         Me.Controls.Add(Me.lblTechnician)
         Me.Controls.Add(Me.cmbTechnician)
@@ -646,7 +643,6 @@ Partial Class MntTrxActvityLog
         Me.Controls.Add(Me.dtpTo)
         Me.Controls.Add(Me.dtpFrom)
         Me.Controls.Add(Me.grpShift)
-        Me.Controls.Add(Me.cmbPartNo)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -675,12 +671,11 @@ Partial Class MntTrxActvityLog
     Friend WithEvents cmbTechnician As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblPartIssuance As Label
     Friend WithEvents btnClear As PinkieControls.ButtonXP
-    Friend WithEvents lblPartNo As Label
     Friend WithEvents btnClose As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnCancel As PinkieControls.ButtonXP
     Friend WithEvents btnSave As PinkieControls.ButtonXP
-    Friend WithEvents cmbPartNo As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents cmbPart As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblActivityLog As Label
     Friend WithEvents lblActualStock As Label
     Public WithEvents txtActualStock As Label
@@ -690,8 +685,8 @@ Partial Class MntTrxActvityLog
     Public WithEvents txtUnit As Label
     Friend WithEvents btnAdd As PinkieControls.ButtonXP
     Friend WithEvents btnRemove As PinkieControls.ButtonXP
-    Friend WithEvents lblPartName As Label
-    Public WithEvents txtPartName As Label
+    Friend WithEvents lblPartDescription As Label
+    Public WithEvents txtPartDescription As Label
     Friend WithEvents txtElapsedTime As Label
     Friend WithEvents lblElapsedTime As Label
     Public WithEvents txtOrderingPoint As Label
@@ -705,4 +700,5 @@ Partial Class MntTrxActvityLog
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
+    Friend WithEvents cmbPartSelection As ComboBox
 End Class

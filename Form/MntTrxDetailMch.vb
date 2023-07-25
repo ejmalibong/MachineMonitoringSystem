@@ -22,6 +22,7 @@ Public Class MntTrxDetailMch
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+    Private accessLevel As New AccessLevel
 
     Private dicApp1Action As New Dictionary(Of String, Integer)
     Private dicApp2Action As New Dictionary(Of String, Integer)
@@ -79,6 +80,8 @@ Public Class MntTrxDetailMch
         workgroupId = _workgroupId
         isAdmin = _isAdmin
         trxId = _trxId
+
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
@@ -220,7 +223,7 @@ Public Class MntTrxDetailMch
                             cmbApp1Name.Enabled = False
                             txtApp1Remarks.Enabled = False
 
-                        Case 3 'sv, asv
+                        Case 3
                             cmbApp3Status.Enabled = False
                             cmbApp3Name.Enabled = True
                             txtApp3Remarks.Enabled = False
@@ -4315,7 +4318,7 @@ Public Class MntTrxDetailMch
             prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
             prmApp2(1).Value = 2
 
-            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
+            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
 
             Dim prmApp1(1) As SqlParameter
             prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
@@ -4323,7 +4326,7 @@ Public Class MntTrxDetailMch
             prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
             prmApp1(1).Value = 2
 
-            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< None >", prmApp1)
+            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
 
             If cmbApp3Name.Items.Count = 1 Then
                 cmbApp3Name.SelectedIndex = 0

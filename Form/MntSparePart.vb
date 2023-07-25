@@ -10,6 +10,7 @@ Public Class MntSparePart
 
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
+    Private accessLevel As New AccessLevel
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
     Private dicSortCriteria As New Dictionary(Of String, String)
     Private dtSparePart As New DataTable
@@ -41,6 +42,8 @@ Public Class MntSparePart
         userId = _userId
         workgroupId = _workgroupId
         isAdmin = _isAdmin
+
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr

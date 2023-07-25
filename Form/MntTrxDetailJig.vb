@@ -22,6 +22,7 @@ Public Class MntTrxDetailJig
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+    Private accessLevel As New AccessLevel
 
     Private dicApp1Action As New Dictionary(Of String, Integer)
     Private dicApp2Action As New Dictionary(Of String, Integer)
@@ -77,6 +78,8 @@ Public Class MntTrxDetailJig
         workgroupId = _workgroupId
         isAdmin = _isAdmin
         trxId = _trxId
+
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
@@ -4122,7 +4125,9 @@ Public Class MntTrxDetailJig
             prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
             prmApp3(0).Value = 1
 
-            dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+            dbMethod.FillCmb("
+
+", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
 
             Dim prmApp2(1) As SqlParameter
             prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
@@ -4130,7 +4135,8 @@ Public Class MntTrxDetailJig
             prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
             prmApp2(1).Value = 2
 
-            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
+            dbMethod.FillCmbWithCaption("
+", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
 
             Dim prmApp1(1) As SqlParameter
             prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)

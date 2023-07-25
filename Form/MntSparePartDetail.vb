@@ -11,6 +11,7 @@ Public Class MntSparePartDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
+    Private accessLevel As New AccessLevel
 
     Private dtPart As New DataTable
     Private imgTmp As String = String.Empty
@@ -37,6 +38,8 @@ Public Class MntSparePartDetail
         LoadItemType()
         LoadUnit()
         LoadVendor()
+
+        accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
     End Sub
 
