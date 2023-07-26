@@ -276,9 +276,6 @@ Public Class Main
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
 
                         Case Else
-                            SecUserToolStripMenuItem.Visible = False
-                            tssMaintenance3.Visible = False
-
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                     End Select
 

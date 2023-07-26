@@ -481,8 +481,6 @@ Public Class MntTrxActvityLog
         LoadPartSelection()
         cmbPartSelection.SelectedValue = 1
 
-
-
         Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
         dgvPartDetail.AutoGenerateColumns = False
         dgvPartDetail.DataSource = Me.bsTrxPartDetail

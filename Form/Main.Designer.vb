@@ -233,8 +233,8 @@ Partial Class Main
         '
         Me.MasterlistToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MntSparePartToolStripMenuItem, Me.MntAreaToolStripMenuItem, Me.tssMaintenance1, Me.MntMchToolStripMenuItem, Me.MntMchPartsToolStripMenuItem, Me.MntMchChecksheetToolStripMenuItem, Me.tssMaintenance2, Me.MntJigToolStripMenuItem, Me.MntJigChecksheetToolStripMenuItem, Me.MntJigModelToolStripMenuItem, Me.MntModelExtensionToolStripMenuItem, Me.tssMaintenance3, Me.SecUserToolStripMenuItem})
         Me.MasterlistToolStripMenuItem.Name = "MasterlistToolStripMenuItem"
-        Me.MasterlistToolStripMenuItem.Size = New System.Drawing.Size(88, 20)
-        Me.MasterlistToolStripMenuItem.Text = "Maintenance"
+        Me.MasterlistToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
+        Me.MasterlistToolStripMenuItem.Text = "Masterlist"
         '
         'MntSparePartToolStripMenuItem
         '

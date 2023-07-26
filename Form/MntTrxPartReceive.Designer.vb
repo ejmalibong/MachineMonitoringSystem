@@ -27,12 +27,11 @@ Partial Class MntTrxPartReceive
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblPartsReceiving = New System.Windows.Forms.Label()
         Me.btnClear = New PinkieControls.ButtonXP()
-        Me.lblPartNo = New System.Windows.Forms.Label()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnCancel = New PinkieControls.ButtonXP()
         Me.btnSave = New PinkieControls.ButtonXP()
-        Me.cmbPartNo = New SergeUtils.EasyCompletionComboBox()
+        Me.cmbPart = New SergeUtils.EasyCompletionComboBox()
         Me.lblActualStock = New System.Windows.Forms.Label()
         Me.txtActualStock = New System.Windows.Forms.Label()
         Me.lblQty = New System.Windows.Forms.Label()
@@ -45,8 +44,8 @@ Partial Class MntTrxPartReceive
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lblPartName = New System.Windows.Forms.Label()
-        Me.txtPartName = New System.Windows.Forms.Label()
+        Me.lblPartDescription = New System.Windows.Forms.Label()
+        Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtOrderingPoint = New System.Windows.Forms.Label()
         Me.lblOrderingPoint = New System.Windows.Forms.Label()
         Me.lblStockIn = New System.Windows.Forms.Label()
@@ -60,6 +59,7 @@ Partial Class MntTrxPartReceive
         Me.lblReferenceNo = New System.Windows.Forms.Label()
         Me.lblRemarks = New System.Windows.Forms.Label()
         Me.txtRemarks = New System.Windows.Forms.TextBox()
+        Me.cmbPartSelection = New System.Windows.Forms.ComboBox()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -96,21 +96,6 @@ Partial Class MntTrxPartReceive
         Me.btnClear.TabIndex = 579
         Me.btnClear.TabStop = False
         Me.btnClear.Text = "X"
-        '
-        'lblPartNo
-        '
-        Me.lblPartNo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblPartNo.BackColor = System.Drawing.SystemColors.Control
-        Me.lblPartNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPartNo.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPartNo.ForeColor = System.Drawing.Color.Black
-        Me.lblPartNo.Location = New System.Drawing.Point(286, 55)
-        Me.lblPartNo.Name = "lblPartNo"
-        Me.lblPartNo.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblPartNo.Size = New System.Drawing.Size(120, 25)
-        Me.lblPartNo.TabIndex = 578
-        Me.lblPartNo.Text = "Part No"
-        Me.lblPartNo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'btnClose
         '
@@ -181,15 +166,15 @@ Partial Class MntTrxPartReceive
         Me.btnSave.TabStop = False
         Me.btnSave.Text = " Save"
         '
-        'cmbPartNo
+        'cmbPart
         '
-        Me.cmbPartNo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmbPartNo.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbPartNo.FormattingEnabled = True
-        Me.cmbPartNo.Location = New System.Drawing.Point(405, 55)
-        Me.cmbPartNo.Name = "cmbPartNo"
-        Me.cmbPartNo.Size = New System.Drawing.Size(601, 25)
-        Me.cmbPartNo.TabIndex = 1
+        Me.cmbPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbPart.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbPart.FormattingEnabled = True
+        Me.cmbPart.Location = New System.Drawing.Point(405, 55)
+        Me.cmbPart.Name = "cmbPart"
+        Me.cmbPart.Size = New System.Drawing.Size(601, 25)
+        Me.cmbPart.TabIndex = 1
         '
         'lblActualStock
         '
@@ -364,34 +349,34 @@ Partial Class MntTrxPartReceive
         Me.ColQty.ReadOnly = True
         Me.ColQty.Width = 60
         '
-        'lblPartName
+        'lblPartDescription
         '
-        Me.lblPartName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblPartName.BackColor = System.Drawing.SystemColors.Control
-        Me.lblPartName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblPartName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPartName.ForeColor = System.Drawing.Color.Black
-        Me.lblPartName.Location = New System.Drawing.Point(286, 82)
-        Me.lblPartName.Name = "lblPartName"
-        Me.lblPartName.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblPartName.Size = New System.Drawing.Size(120, 25)
-        Me.lblPartName.TabIndex = 604
-        Me.lblPartName.Text = "Part Name"
-        Me.lblPartName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblPartDescription.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblPartDescription.BackColor = System.Drawing.SystemColors.Control
+        Me.lblPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPartDescription.ForeColor = System.Drawing.Color.Black
+        Me.lblPartDescription.Location = New System.Drawing.Point(286, 82)
+        Me.lblPartDescription.Name = "lblPartDescription"
+        Me.lblPartDescription.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblPartDescription.Size = New System.Drawing.Size(120, 25)
+        Me.lblPartDescription.TabIndex = 604
+        Me.lblPartDescription.Text = "Part Name"
+        Me.lblPartDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'txtPartName
+        'txtPartDescription
         '
-        Me.txtPartName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtPartName.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtPartName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtPartName.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.txtPartName.ForeColor = System.Drawing.Color.Black
-        Me.txtPartName.Location = New System.Drawing.Point(405, 82)
-        Me.txtPartName.Name = "txtPartName"
-        Me.txtPartName.Size = New System.Drawing.Size(632, 25)
-        Me.txtPartName.TabIndex = 605
-        Me.txtPartName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.txtPartName.UseCompatibleTextRendering = True
+        Me.txtPartDescription.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtPartDescription.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtPartDescription.ForeColor = System.Drawing.Color.Black
+        Me.txtPartDescription.Location = New System.Drawing.Point(405, 82)
+        Me.txtPartDescription.Name = "txtPartDescription"
+        Me.txtPartDescription.Size = New System.Drawing.Size(632, 25)
+        Me.txtPartDescription.TabIndex = 605
+        Me.txtPartDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txtPartDescription.UseCompatibleTextRendering = True
         '
         'txtOrderingPoint
         '
@@ -563,12 +548,24 @@ Partial Class MntTrxPartReceive
         Me.txtRemarks.Size = New System.Drawing.Size(751, 62)
         Me.txtRemarks.TabIndex = 4
         '
+        'cmbPartSelection
+        '
+        Me.cmbPartSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbPartSelection.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbPartSelection.FormattingEnabled = True
+        Me.cmbPartSelection.Location = New System.Drawing.Point(286, 55)
+        Me.cmbPartSelection.Name = "cmbPartSelection"
+        Me.cmbPartSelection.Size = New System.Drawing.Size(120, 25)
+        Me.cmbPartSelection.TabIndex = 633
+        '
         'MntTrxPartReceive
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1040, 501)
+        Me.Controls.Add(Me.cmbPart)
+        Me.Controls.Add(Me.cmbPartSelection)
         Me.Controls.Add(Me.txtRemarks)
         Me.Controls.Add(Me.lblRemarks)
         Me.Controls.Add(Me.txtReferenceNo)
@@ -579,8 +576,8 @@ Partial Class MntTrxPartReceive
         Me.Controls.Add(Me.lblQty2)
         Me.Controls.Add(Me.lblItemQty1)
         Me.Controls.Add(Me.lblStockIn)
-        Me.Controls.Add(Me.txtPartName)
-        Me.Controls.Add(Me.lblPartName)
+        Me.Controls.Add(Me.txtPartDescription)
+        Me.Controls.Add(Me.lblPartDescription)
         Me.Controls.Add(Me.dgvPartDetail)
         Me.Controls.Add(Me.btnRemove)
         Me.Controls.Add(Me.btnAdd)
@@ -597,9 +594,7 @@ Partial Class MntTrxPartReceive
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.btnClear)
-        Me.Controls.Add(Me.lblPartNo)
         Me.Controls.Add(Me.lblPartsReceiving)
-        Me.Controls.Add(Me.cmbPartNo)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -620,12 +615,11 @@ Partial Class MntTrxPartReceive
     End Sub
     Friend WithEvents lblPartsReceiving As Label
     Friend WithEvents btnClear As PinkieControls.ButtonXP
-    Friend WithEvents lblPartNo As Label
     Friend WithEvents btnClose As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnCancel As PinkieControls.ButtonXP
     Friend WithEvents btnSave As PinkieControls.ButtonXP
-    Friend WithEvents cmbPartNo As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents cmbPart As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblActualStock As Label
     Public WithEvents txtActualStock As Label
     Friend WithEvents lblQty As Label
@@ -634,8 +628,8 @@ Partial Class MntTrxPartReceive
     Public WithEvents txtUnit As Label
     Friend WithEvents btnAdd As PinkieControls.ButtonXP
     Friend WithEvents btnRemove As PinkieControls.ButtonXP
-    Friend WithEvents lblPartName As Label
-    Public WithEvents txtPartName As Label
+    Friend WithEvents lblPartDescription As Label
+    Public WithEvents txtPartDescription As Label
     Public WithEvents txtOrderingPoint As Label
     Friend WithEvents lblOrderingPoint As Label
     Public WithEvents dgvPartDetail As DataGridView
@@ -653,4 +647,5 @@ Partial Class MntTrxPartReceive
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
+    Friend WithEvents cmbPartSelection As ComboBox
 End Class
