@@ -4125,9 +4125,7 @@ Public Class MntTrxDetailJig
             prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
             prmApp3(0).Value = 1
 
-            dbMethod.FillCmb("
-
-", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+            dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
 
             Dim prmApp2(1) As SqlParameter
             prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
@@ -4135,8 +4133,7 @@ Public Class MntTrxDetailJig
             prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
             prmApp2(1).Value = 2
 
-            dbMethod.FillCmbWithCaption("
-", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
+            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< None >", prmApp2)
 
             Dim prmApp1(1) As SqlParameter
             prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)

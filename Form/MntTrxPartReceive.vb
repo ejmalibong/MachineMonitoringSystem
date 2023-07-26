@@ -463,7 +463,7 @@ Public Class MntTrxPartReceive
                 cmbPart.DisplayMember = "PartName"
                 cmbPart.ValueMember = "PartId"
 
-                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE IsActive = 1",
                                             CommandType.Text, "PartId", "PartName", cmbPart, "")
 
                 lblPartDescription.Text = "Part No"
@@ -471,7 +471,7 @@ Public Class MntTrxPartReceive
                 cmbPart.DisplayMember = "PartNo"
                 cmbPart.ValueMember = "PartId"
 
-                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE IsActive = 1",
                                             CommandType.Text, "PartId", "PartNo", cmbPart, "")
 
                 lblPartDescription.Text = "Part Name"
