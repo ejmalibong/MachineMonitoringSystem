@@ -39,7 +39,20 @@ Public Class MntSparePartDetail
         LoadUnit()
         LoadVendor()
 
-        accessLevelId = accessLevel.GetAccessLevel(workgroupId)
+        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
+
+        Select Case workgroupId
+            Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                accessLevelId = 1
+            Case 35, 40 'mngr, asst mngr
+                accessLevelId = 2
+            Case 29, 30 'sv, asv
+                accessLevelId = 3
+            Case 5 'sr tech
+                accessLevelId = 4
+            Case Else
+                accessLevelId = 99
+        End Select
 
     End Sub
 
