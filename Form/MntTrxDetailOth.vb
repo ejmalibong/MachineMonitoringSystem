@@ -1634,7 +1634,7 @@ Public Class MntTrxDetailOth
 
                 'transaction spare part
                 If dgvPartDetail.Rows.Count > 0 Then
-                    Dim prmPrHeader(6) As SqlParameter
+                    Dim prmPrHeader(7) As SqlParameter
                     prmPrHeader(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
                     prmPrHeader(0).Direction = ParameterDirection.Output
                     prmPrHeader(1) = New SqlParameter("@CreatedBy", SqlDbType.Int)
@@ -1649,11 +1649,17 @@ Public Class MntTrxDetailOth
                     prmPrHeader(5).Value = Nothing
                     prmPrHeader(6) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
                     prmPrHeader(6).Value = Nothing
+                    prmPrHeader(7) = New SqlParameter("@TrxDate", SqlDbType.Date)
+                    prmPrHeader(7).Value = CDate(dbMethod.GetServerDate).Date
                     dbMethod.ExecuteNonQuery("InsMntTransactionPartHeader", CommandType.StoredProcedure, prmPrHeader)
 
+                    Dim partIssRowCount As Integer = 0
                     For Each dataRowView As DataRowView In Me.bsTrxPartDetail
+                        partIssRowCount = partIssRowCount + 1
+
                         Dim row = dataRowView.Row
                         row.Item("PartTrxId") = prmPrHeader(0).Value
+                        row.Item("SeqId") = partIssRowCount
                     Next
                     Me.bsTrxPartDetail.EndEdit()
                     adpTrxPartDetail.Update(dtTrxPartDetail)

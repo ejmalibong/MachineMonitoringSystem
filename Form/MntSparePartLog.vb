@@ -17,7 +17,7 @@ Public Class MntSparePartLog
 
     Private isFilterByPartName As Boolean = False
     Private isFilterByPartNo As Boolean = False
-    Private isFilterByTransactionDate As Boolean = False
+    Private isFilterByTrxDate As Boolean = False
     Private isFilterByUsername As Boolean = False
     Private pageCount As Integer
     Private pageIndex As Integer
@@ -97,6 +97,60 @@ Public Class MntSparePartLog
         Close()
     End Sub
 
+    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+        Try
+            Dim dt As New DataTable
+
+            Dim query As String = String.Empty
+
+            Select Case GetTrxType()
+                Case 1
+                    query = "SELECT CAST(TrxDate AS DATE) AS TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
+
+                Case Else
+                    query = "SELECT CAST(TrxDate AS DATE) AS TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, Problem, RootCause, ActionTaken, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
+            End Select
+
+            Select Case cmbSearchCriteria.SelectedValue
+                Case 1
+                    query += " CAST(TrxDate AS DATE) BETWEEN '" & dtpStartDate.Value.Date & "' AND '" & dtpEndDate.Value.Date & "'"
+
+                Case 2
+                    query += " UserId = '" & cmbCommon2.SelectedValue & "'"
+
+                Case 3
+                    query += " PartId = '" & cmbCommon2.SelectedValue & "'"
+
+                Case 4
+                    query += " PartId = '" & cmbCommon2.SelectedValue & "'"
+            End Select
+
+            If GetTrxType() <> 0 Then
+                query += " AND TransactionTypeId = '" & GetTrxType() & "'"
+            End If
+
+            query += " ORDER BY " & cmbSortCriteria.SelectedValue & " " & GetSortMode() & " "
+
+            dt = dbMethod.FillDataTable(query, CommandType.Text)
+
+            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Logs.xlsx")
+
+            If Not System.IO.Directory.Exists(folderPath) Then
+                System.IO.Directory.CreateDirectory(folderPath)
+            End If
+
+            Using wb As New XLWorkbook()
+                wb.Worksheets.Add(dt, "Logs")
+                wb.SaveAs(fileName)
+            End Using
+
+            Process.Start(fileName)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Sub btnGo_Click(sender As Object, e As EventArgs) Handles btnGo.Click
         Go()
     End Sub
@@ -107,7 +161,7 @@ Public Class MntSparePartLog
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Try
-            isFilterByTransactionDate = False
+            isFilterByTrxDate = False
             isFilterByUsername = False
             isFilterByPartNo = False
             isFilterByPartName = False
@@ -131,25 +185,30 @@ Public Class MntSparePartLog
         Try
             Select Case cmbSearchCriteria.SelectedValue
                 Case 1
-                    isFilterByTransactionDate = True
+                    If dtpStartDate.Value.Date > dtpEndDate.Value.Date Then
+                        MessageBox.Show("Start date is later than end date.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return
+                    End If
+
+                    isFilterByTrxDate = True
                     isFilterByUsername = False
                     isFilterByPartNo = False
                     isFilterByPartName = False
 
                 Case 2
-                    isFilterByTransactionDate = False
+                    isFilterByTrxDate = False
                     isFilterByUsername = True
                     isFilterByPartNo = False
                     isFilterByPartName = False
 
                 Case 3
-                    isFilterByTransactionDate = False
+                    isFilterByTrxDate = False
                     isFilterByUsername = False
                     isFilterByPartNo = True
                     isFilterByPartName = False
 
                 Case 4
-                    isFilterByTransactionDate = False
+                    isFilterByTrxDate = False
                     isFilterByUsername = False
                     isFilterByPartNo = False
                     isFilterByPartName = True
@@ -165,40 +224,60 @@ Public Class MntSparePartLog
     Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
         Try
             If Me.dgvList.Rows.Count > 0 Then
-                Dim trxId As Integer = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId")
+                Dim trxId As Integer = 0
+                Dim partTrxId As Integer = 0
 
-                Dim isMachineActivity As Boolean = False
-                Dim isJigActivity As Boolean = False
-                Dim isOthActivity As Boolean = False
+                If Not CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId") Is DBNull.Value Then
+                    trxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId")
+                Else
+                    partTrxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("PartTrxId")
+                End If
 
-                Dim prm(0) As SqlParameter
-                prm(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                prm(0).Value = trxId
-
-                Dim rdr As IDataReader = dbMethod.ExecuteReader("SELECT Machineid, JigId FROM MntTransactionHeader WHERE TrxId = @TrxId", CommandType.Text, prm)
-
-                While rdr.Read
-                    If rdr.Item("MachineId") Is DBNull.Value AndAlso rdr.Item("JigId") Is DBNull.Value Then
-                        Using frmDetail As New MntTrxDetailOth(0, 0, 0, trxId)
-                            frmDetail.ShowDialog()
+                If trxId = 0 Then
+                    If CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TransactionTypeId") = 1 Then
+                        Using frmReceive As New MntTrxPartReceive(0, partTrxId)
+                            frmReceive.ShowDialog()
+                        End Using
+                    Else
+                        Using frmIssue As New MntTrxPartIssue(0, partTrxId)
+                            frmIssue.ShowDialog()
                         End Using
                     End If
 
-                    If Not rdr.Item("MachineId") Is DBNull.Value Then
-                        Using frmDetail As New MntTrxDetailMch(0, 0, 0, trxId)
-                            frmDetail.fromPmCalendar = True
-                            frmDetail.ShowDialog()
-                        End Using
-                    End If
+                Else
+                    Dim isMachineActivity As Boolean = False
+                    Dim isJigActivity As Boolean = False
+                    Dim isOthActivity As Boolean = False
 
-                    If Not rdr.Item("JigId") Is DBNull.Value Then
-                        Using frmDetail As New MntTrxDetailJig(0, 0, 0, trxId)
-                            frmDetail.fromPmCalendar = True
-                            frmDetail.ShowDialog()
-                        End Using
-                    End If
-                End While
-                rdr.Close()
+                    Dim prm(0) As SqlParameter
+                    prm(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prm(0).Value = trxId
+
+                    Dim rdr As IDataReader = dbMethod.ExecuteReader("SELECT Machineid, JigId FROM MntTransactionHeader WHERE TrxId = @TrxId", CommandType.Text, prm)
+
+                    While rdr.Read
+                        If rdr.Item("MachineId") Is DBNull.Value AndAlso rdr.Item("JigId") Is DBNull.Value Then
+                            Using frmDetail As New MntTrxDetailOth(0, 0, 0, trxId)
+                                frmDetail.ShowDialog()
+                            End Using
+                        End If
+
+                        If Not rdr.Item("MachineId") Is DBNull.Value Then
+                            Using frmDetail As New MntTrxDetailMch(0, 0, 0, trxId)
+                                frmDetail.fromPmCalendar = True
+                                frmDetail.ShowDialog()
+                            End Using
+                        End If
+
+                        If Not rdr.Item("JigId") Is DBNull.Value Then
+                            Using frmDetail As New MntTrxDetailJig(0, 0, 0, trxId)
+                                frmDetail.fromPmCalendar = True
+                                frmDetail.ShowDialog()
+                            End Using
+                        End If
+                    End While
+                    rdr.Close()
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -309,8 +388,6 @@ Public Class MntSparePartLog
                 trxTypeId = 1
             ElseIf rdIssue.Checked = True Then
                 trxTypeId = 2
-            ElseIf rdAll.Checked = True Then
-                trxTypeId = 0
             Else
                 trxTypeId = 0
             End If
@@ -353,7 +430,7 @@ Public Class MntSparePartLog
             totalCount = 0
             totalQty = 0
 
-            If isFilterByTransactionDate = True Then
+            If isFilterByTrxDate = True Then
                 Dim prmPart(8) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
@@ -376,7 +453,7 @@ Public Class MntSparePartLog
                 prmPart(8) = New SqlParameter("@EndDate", SqlDbType.Date)
                 prmPart(8).Value = CDate(dtpEndDate.Value)
 
-                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogsCreatedDate", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogsTrxDate", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
                 totalQty = prmPart(3).Value
 
@@ -495,7 +572,7 @@ Public Class MntSparePartLog
     End Sub
 
     Private Sub LoadPartName()
-        dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart", CommandType.Text, "PartId", "PartName", cmbCommon2, "< All >")
+        dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) + ' ' + TRIM(PartNo) AS PartName FROM dbo.MntSparePart", CommandType.Text, "PartId", "PartName", cmbCommon2, "< All >")
     End Sub
 
     Private Sub LoadPartNo()
@@ -519,7 +596,7 @@ Public Class MntSparePartLog
 
     Private Sub LoadSortCriteria()
         Try
-            dicSortCriteria.Add(" Created Date", "CreatedDate")
+            dicSortCriteria.Add(" Transaction Date", "TrxDate")
             dicSortCriteria.Add(" Transaction", "TransactionCode")
             dicSortCriteria.Add(" Username", "UserName")
             dicSortCriteria.Add(" Part Number", "PartNo")
@@ -563,8 +640,8 @@ Public Class MntSparePartLog
         LoadSearchCriteria()
         LoadSortCriteria()
 
-        cmbSortCriteria.SelectedValue = "CreatedDate"
-        rdAsc.Checked = True
+        cmbSortCriteria.SelectedValue = "TrxDate"
+        rdDesc.Checked = True
         rdAll.Checked = True
 
         pageIndex = 0
@@ -610,6 +687,15 @@ Public Class MntSparePartLog
         Else
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub dgvList_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvList.DataBindingComplete
+        Try
+            'https://www.daniweb.com/programming/software-development/threads/21784/datagrid-no-value-at-index-error-when-scroll-and-sort
+            dgvList.CurrentCell = Nothing
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 End Class

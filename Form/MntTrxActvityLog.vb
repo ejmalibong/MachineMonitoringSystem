@@ -30,12 +30,28 @@ Public Class MntTrxActvityLog
 
         dtTrxPartDetail = CreateMntTransactionPartDetail()
 
-        Dim prmPart(1) As SqlParameter
-        prmPart(0) = New SqlParameter("@IsNoStock", SqlDbType.Bit)
-        prmPart(0).Value = 0
-        prmPart(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-        prmPart(1).Value = 1
-        dtSparePart = dbMethod.FillDataTable("RdMntSparePart", CommandType.StoredProcedure, prmPart)
+        If userId = 0 Then
+            Dim prmUser(1) As SqlParameter
+            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmUser(0).Value = 2
+            prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+            prmUser(1).Value = 1
+            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+
+            Me.ActiveControl = cmbTechnician
+        Else
+            Dim prmUser(0) As SqlParameter
+            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmUser(0).Value = 2
+            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+
+            Me.ActiveControl = btnAdd
+        End If
+
+        Dim prmPart(0) As SqlParameter
+        prmPart(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        prmPart(0).Value = 1
+        dtSparePart = dbMethod.FillDataTable("SELECT PartId, TRIM(PartNo) AS PartNo, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE IsActive = @IsActive AND ActualStock > 0", CommandType.Text, prmPart)
 
         Me.bsSparePart.DataSource = dtSparePart
 
@@ -66,25 +82,25 @@ Public Class MntTrxActvityLog
         colPartName.SortMode = DataGridViewColumnSortMode.Automatic
         dgvPartDetail.Columns.Insert(3, colPartName)
 
-        Dim prmActive(0) As SqlParameter
-        prmActive(0) = New SqlParameter("@UserId", SqlDbType.Int)
-        prmActive(0).Value = userId
+        'Dim prmActive(0) As SqlParameter
+        'prmActive(0) = New SqlParameter("@UserId", SqlDbType.Int)
+        'prmActive(0).Value = userId
 
-        isActive = dbMethod.ExecuteNonQuery("SELECT IsActive FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmActive)
+        'isActive = dbMethod.ExecuteNonQuery("SELECT IsActive FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmActive)
 
-        If isActive = True Then
-            Dim prmUser(1) As SqlParameter
-            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmUser(0).Value = 2
-            prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-            prmUser(1).Value = 1
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
-        Else
-            Dim prmUser(0) As SqlParameter
-            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmUser(0).Value = 2
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
-        End If
+        'If isActive = True Then
+        '    Dim prmUser(1) As SqlParameter
+        '    prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+        '    prmUser(0).Value = 2
+        '    prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        '    prmUser(1).Value = 1
+        '    dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+        'Else
+        '    Dim prmUser(0) As SqlParameter
+        '    prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+        '    prmUser(0).Value = 2
+        '    dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+        'End If
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
@@ -138,14 +154,12 @@ Public Class MntTrxActvityLog
             txtQty.Clear()
 
             cmbPart.Focus()
-
-            lblQty2.Text = dgvPartDetail.Rows.Count
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+    Private Sub btnClear_Click(sender As Object, e As EventArgs)
         cmbPart.Text = ""
         cmbPart.SelectedValue = 0
         cmbPart.Focus()
@@ -188,8 +202,6 @@ Public Class MntTrxActvityLog
                     End Select
                 End If
             End If
-
-            lblQty2.Text = dgvPartDetail.Rows.Count
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -238,9 +250,11 @@ Public Class MntTrxActvityLog
                             txtActualStock.Text = rdr.Item("ActualStock")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
+                            txtLocation.Text = rdr.Item("LocationName")
                         End While
                         rdr.Close()
                     End Using
+
                 Else
                     Dim prmPartNo(0) As SqlParameter
                     prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
@@ -252,6 +266,7 @@ Public Class MntTrxActvityLog
                             txtActualStock.Text = rdr.Item("ActualStock")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
+                            txtLocation.Text = rdr.Item("LocationName")
                         End While
                         rdr.Close()
                     End Using
@@ -264,6 +279,7 @@ Public Class MntTrxActvityLog
                 End If
             Else
                 txtPartDescription.Text = ""
+                txtLocation.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
@@ -278,6 +294,7 @@ Public Class MntTrxActvityLog
         Try
             If cmbPart.SelectedValue = 0 Then
                 txtPartDescription.Text = ""
+                txtLocation.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
@@ -289,8 +306,18 @@ Public Class MntTrxActvityLog
     End Sub
 
     Private Sub cmbTechnician_Validating(sender As Object, e As CancelEventArgs) Handles cmbTechnician.Validating
-        e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbTechnician.Text)
+        e.Cancel = sender.FindStringExact(sender.text) < 0 AndAlso String.IsNullOrEmpty(cmbTechnician.Text)
         If e.Cancel Then Beep()
+    End Sub
+
+    Private Sub cmbTechnician_Validated(sender As Object, e As EventArgs) Handles cmbTechnician.Validated
+        Try
+            If cmbTechnician.SelectedValue = 0 Then
+                cmbTechnician.SelectedValue = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub cmbUser_Enter(sender As Object, e As EventArgs) Handles cmbTechnician.Enter
@@ -463,14 +490,12 @@ Public Class MntTrxActvityLog
         Else
             If userId = 0 Then
                 cmbPart.Enabled = True
-                btnClear.Enabled = True
                 txtQty.Enabled = True
                 btnAdd.Enabled = True
                 btnRemove.Enabled = True
                 dgvPartDetail.Enabled = True
             Else
                 cmbPart.Enabled = False
-                btnClear.Enabled = False
                 txtQty.Enabled = False
                 btnAdd.Enabled = False
                 btnRemove.Enabled = False
@@ -484,8 +509,6 @@ Public Class MntTrxActvityLog
         Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
         dgvPartDetail.AutoGenerateColumns = False
         dgvPartDetail.DataSource = Me.bsTrxPartDetail
-
-        lblQty2.Text = dgvPartDetail.Rows.Count
 
         Me.ActiveControl = cmbTechnician
     End Sub
@@ -521,7 +544,7 @@ Public Class MntTrxActvityLog
                 cmbPart.DisplayMember = "PartName"
                 cmbPart.ValueMember = "PartId"
 
-                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) + ' ' + TRIM(PartNo) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
                                             CommandType.Text, "PartId", "PartName", cmbPart, "")
 
                 lblPartDescription.Text = "Part No"
@@ -537,6 +560,16 @@ Public Class MntTrxActvityLog
 
             AddHandler cmbPart.SelectedValueChanged, AddressOf cmbPart_SelectedValueChanged
             AddHandler cmbPart.Validated, AddressOf cmbPart_Validated
+            AddHandler cmbPart.Validating, AddressOf cmbPart_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbPart_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0
+            If e.Cancel Then Beep()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

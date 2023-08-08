@@ -189,6 +189,12 @@ Public Class MntSparePartDetail
                 Return
             End If
 
+            If String.IsNullOrEmpty(txtUnitPrice.Text.Trim) Then
+                MessageBox.Show("Unit price is required.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txtUnitPrice.Focus()
+                Return
+            End If
+
             If cmbUnit.SelectedValue = 0 Then
                 MessageBox.Show("Unit of measurement is required.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 cmbUnit.Focus()
@@ -587,6 +593,7 @@ Public Class MntSparePartDetail
                     txtOrderingPoint.Text = row("OrderingPoint")
                     txtMaxStock.Text = row("MaxStock")
                     txtMinStock.Text = row("MinStock")
+                    txtUnitPrice.Text = row("UnitPrice")
 
                     cmbUnit.SelectedValue = row("UnitId")
                     cmbLocation.SelectedValue = row("LocationId")

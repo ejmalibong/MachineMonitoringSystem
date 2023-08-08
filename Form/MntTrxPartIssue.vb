@@ -12,16 +12,15 @@ Public Class MntTrxPartIssue
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
+    Private dicPartSelection As New Dictionary(Of String, Integer)
     Private dtSparePart As New DataTable
+    Private dtTrxPartHeader As New DataTable
     Private isActive As Boolean = False
     Private mStream As New MemoryStream
     Private partTrxId As Integer = 0
     Private userId As Integer = 0
-
-    Private dicPartSelection As New Dictionary(Of String, Integer)
-
     'the word `byte` is not a valid identifier
-    Public Sub New(_userId As Integer, Optional _partTrxId As Integer = 0)
+    Public Sub New(Optional _userId As Integer = 0, Optional _partTrxId As Integer = 0)
         ' This call is required by the designer.
         InitializeComponent()
 
@@ -31,14 +30,57 @@ Public Class MntTrxPartIssue
 
         dbMain.EnableDoubleBuffered(dgvPartDetail)
 
-        dtTrxPartDetail = CreateMntTransactionPartDetail()
+        If partTrxId = 0 Then
+            Dim prmUser(1) As SqlParameter
+            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmUser(0).Value = 2
+            prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+            prmUser(1).Value = 1
+            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
 
-        Dim prmPart(1) As SqlParameter
-        prmPart(0) = New SqlParameter("@IsNoStock", SqlDbType.Bit)
-        prmPart(0).Value = 0
-        prmPart(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-        prmPart(1).Value = 1
-        dtSparePart = dbMethod.FillDataTable("RdMntSparePart", CommandType.StoredProcedure, prmPart)
+            dtTrxPartDetail = CreateMntTransactionPartDetail()
+
+            ActiveControl = cmbTechnician
+        Else
+            Dim prmUser(0) As SqlParameter
+            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+            prmUser(0).Value = 2
+            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+
+            Dim prmHeader(0) As SqlParameter
+            prmHeader(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+            prmHeader(0).Value = partTrxId
+
+            dtTrxPartHeader = dbMethod.FillDataTable("RdMntTransactionPartHeaderByPartTrxId", CommandType.StoredProcedure, prmHeader)
+
+            Dim prmDetail(0) As SqlParameter
+            prmDetail(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+            prmDetail(0).Value = partTrxId
+
+            dtTrxPartDetail = dbMethod.FillDataTable("RdMntTransactionPartDetailByPartTrxId", CommandType.StoredProcedure, prmDetail)
+
+            Me.Text = "Transaction No. " & partTrxId
+
+            For Each row As DataRow In dtTrxPartHeader.Rows
+                dtpDateReceived.Value = row("TrxDate")
+                cmbTechnician.SelectedValue = row("CreatedBy")
+
+                If Not row("ReferenceNo") Is DBNull.Value Then
+                    txtReferenceNo.Text = row("ReferenceNo").ToString.Trim
+                End If
+
+                If Not row("Remarks") Is DBNull.Value Then
+                    txtRemarks.Text = row("Remarks").ToString.Trim
+                End If
+            Next
+
+            Me.ActiveControl = btnClose
+        End If
+
+        Dim prmPart(0) As SqlParameter
+        prmPart(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        prmPart(0).Value = 1
+        dtSparePart = dbMethod.FillDataTable("SELECT PartId, TRIM(PartNo) AS PartNo, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE IsActive = @IsActive AND ActualStock > 0", CommandType.Text, prmPart)
 
         Me.bsSparePart.DataSource = dtSparePart
 
@@ -69,25 +111,8 @@ Public Class MntTrxPartIssue
         colPartName.SortMode = DataGridViewColumnSortMode.Automatic
         dgvPartDetail.Columns.Insert(3, colPartName)
 
-        Dim prmActive(0) As SqlParameter
-        prmActive(0) = New SqlParameter("@UserId", SqlDbType.Int)
-        prmActive(0).Value = userId
-
-        isActive = dbMethod.ExecuteNonQuery("SELECT IsActive FROM dbo.SecUser WHERE UserId = @UserId", CommandType.Text, prmActive)
-
-        If isActive = True Then
-            Dim prmUser(1) As SqlParameter
-            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmUser(0).Value = 2
-            prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-            prmUser(1).Value = 1
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
-        Else
-            Dim prmUser(0) As SqlParameter
-            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmUser(0).Value = 2
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
-        End If
+        AddHandler cmbTechnician.Validating, AddressOf cmbTechnician_Validating
+        AddHandler cmbTechnician.Validated, AddressOf cmbTechnician_Validated
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
@@ -129,23 +154,17 @@ Public Class MntTrxPartIssue
             cmbPart.SelectedValue = 0
 
             txtPartDescription.Text = ""
+            txtLocation.Text = ""
             txtActualStock.Text = ""
             txtOrderingPoint.Text = ""
             txtUnit.Text = ""
             txtQty.Clear()
 
-            cmbPart.Focus()
-
-            lblQty2.Text = dgvPartDetail.Rows.Count
+            Me.ActiveControl = cmbTechnician
+            Me.ActiveControl = cmbPart
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-
-    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        cmbPart.Text = ""
-        cmbPart.SelectedValue = 0
-        cmbPart.Focus()
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
@@ -185,8 +204,6 @@ Public Class MntTrxPartIssue
                     End Select
                 End If
             End If
-
-            lblQty2.Text = dgvPartDetail.Rows.Count
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -194,13 +211,23 @@ Public Class MntTrxPartIssue
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Try
+            If btnSave.Enabled = False Then
+                Exit Sub
+            End If
+
+            If cmbTechnician.SelectedValue = 0 Then
+                MessageBox.Show("Please select receiver of items.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                cmbTechnician.Focus()
+                Exit Sub
+            End If
+
             If dgvPartDetail.Rows.Count = 0 Then
                 MessageBox.Show("Please select items to receive.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 cmbPart.Focus()
                 Exit Sub
             End If
 
-            Dim prmPrHeader(6) As SqlParameter
+            Dim prmPrHeader(7) As SqlParameter
             prmPrHeader(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
             prmPrHeader(0).Direction = ParameterDirection.Output
             prmPrHeader(1) = New SqlParameter("@CreatedBy", SqlDbType.Int)
@@ -214,12 +241,18 @@ Public Class MntTrxPartIssue
             prmPrHeader(5) = New SqlParameter("@ReferenceNo", SqlDbType.Char)
             prmPrHeader(5).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
             prmPrHeader(6) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-            prmPrHeader(6).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
+            prmPrHeader(6).Value = IIf(String.IsNullOrEmpty(txtRemarks.Text.Trim), Nothing, txtRemarks.Text.Trim)
+            prmPrHeader(7) = New SqlParameter("@TrxDate", SqlDbType.Date)
+            prmPrHeader(7).Value = CDate(dbMethod.GetServerDate).Date
             dbMethod.ExecuteNonQuery("InsMntTransactionPartHeader", CommandType.StoredProcedure, prmPrHeader)
 
+            Dim rowCount As Integer = 0
             For Each dataRowView As DataRowView In Me.bsTrxPartDetail
+                rowCount = rowCount + 1
+
                 Dim row = dataRowView.Row
                 row.Item("PartTrxId") = prmPrHeader(0).Value
+                row.Item("SeqId") = rowCount
             Next
             Me.bsTrxPartDetail.EndEdit()
             adpTrxPartDetail.Update(dtTrxPartDetail)
@@ -259,6 +292,7 @@ Public Class MntTrxPartIssue
                             txtActualStock.Text = rdr.Item("ActualStock")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
+                            txtLocation.Text = rdr.Item("LocationName")
 
                             If Not rdr.Item("Image") Is DBNull.Value Then
                                 bite = rdr.Item("Image")
@@ -281,6 +315,7 @@ Public Class MntTrxPartIssue
                             txtActualStock.Text = rdr.Item("ActualStock")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
+                            txtLocation.Text = rdr.Item("LocationName")
 
                             If Not rdr.Item("Image") Is DBNull.Value Then
                                 bite = rdr.Item("Image")
@@ -301,6 +336,7 @@ Public Class MntTrxPartIssue
 
             Else
                 txtPartDescription.Text = ""
+                txtLocation.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
@@ -320,17 +356,56 @@ Public Class MntTrxPartIssue
         Try
             If cmbPart.SelectedValue = 0 Then
                 txtPartDescription.Text = ""
+                txtLocation.Text = ""
                 txtActualStock.Text = ""
                 txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
+                txtQty.Clear()
 
                 If Not picImage.Image Is Nothing Then
                     picImage.Dispose()
                     picImage.Image = Nothing
                 End If
-
-                txtQty.Clear()
             End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbPart_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbPartSelection_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbPartSelection.SelectedValueChanged
+        Try
+            cmbPart.DataSource = Nothing
+
+            If cmbPartSelection.SelectedValue = 1 Then
+                cmbPart.DisplayMember = "PartName"
+                cmbPart.ValueMember = "PartId"
+
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) + ' ' + TRIM(PartNo) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartName", cmbPart, "")
+
+                lblPartDescription.Text = "Part No"
+            Else
+                cmbPart.DisplayMember = "PartNo"
+                cmbPart.ValueMember = "PartId"
+
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartNo", cmbPart, "")
+
+                lblPartDescription.Text = "Part Name"
+            End If
+
+            AddHandler cmbPart.Validated, AddressOf cmbPart_Validated
+            AddHandler cmbPart.SelectedValueChanged, AddressOf cmbPart_SelectedValueChanged
+            AddHandler cmbPart.Validating, AddressOf cmbPart_Validating
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -346,17 +421,29 @@ Public Class MntTrxPartIssue
         lblTechnician.BackColor = SystemColors.Control
     End Sub
 
-    Private Sub cmbTechnician_Validating(sender As Object, e As CancelEventArgs)
-        e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbTechnician.Text)
-        If e.Cancel Then Beep()
+    Private Sub cmbTechnician_Validated(sender As Object, e As EventArgs)
+        Try
+            If cmbTechnician.SelectedValue = 0 Then
+                cmbTechnician.SelectedValue = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
-    Private Function CreateMntTransactionPartDetail() As DataTable
+    Private Sub cmbTechnician_Validating(sender As Object, e As CancelEventArgs)
+        e.Cancel = sender.FindStringExact(sender.text) < 0 AndAlso String.IsNullOrEmpty(cmbTechnician.Text)
+        If e.Cancel Then Beep()
+    End Sub
+    Private Function CreateMntTransactionPartDetail(Optional partTrxId As Integer = 0) As DataTable
         Dim dtMntTrxPartDetail As New DataTable
         Dim con As New SqlConnection(dbConnection.GetConnectionString)
 
         Try
-            Dim query As String = "SELECT PartTrxDetailId, PartTrxId, SeqId, CreatedBy, CreatedDate, UserId, PartId, Qty, ModifiedBy, ModifiedDate FROM dbo.MntTransactionPartDetail"
+            Dim query As String = String.Empty
+
+            query = "SELECT PartTrxDetailId, PartTrxId, SeqId, CreatedBy, CreatedDate, UserId, PartId, Qty, ModifiedBy, ModifiedDate FROM dbo.MntTransactionPartDetail"
+
             Dim cmd As New SqlCommand(query, con)
             adpTrxPartDetail = New SqlDataAdapter(cmd)
             Dim cbTrxDetail As New SqlCommandBuilder(adpTrxPartDetail)
@@ -413,65 +500,6 @@ Public Class MntTrxPartIssue
         e.Cancel = False
     End Sub
 
-    Private Sub MntTrxActvityLog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If e.KeyCode.Equals(Keys.F10) Then
-            e.Handled = True
-            btnSave.PerformClick()
-        End If
-    End Sub
-
-    Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
-        dgvPartDetail.AutoGenerateColumns = False
-        dgvPartDetail.DataSource = Me.bsTrxPartDetail
-
-        LoadPartSelection()
-        cmbPartSelection.SelectedValue = 1
-
-        lblQty2.Text = dgvPartDetail.Rows.Count
-
-        Me.ActiveControl = cmbTechnician
-    End Sub
-
-    Private Sub txtQty_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtQty.KeyPress
-        Try
-            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
-                e.Handled = True
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub cmbPartSelection_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbPartSelection.SelectedValueChanged
-        Try
-            cmbPart.DataSource = Nothing
-
-            If cmbPartSelection.SelectedValue = 1 Then
-                cmbPart.DisplayMember = "PartName"
-                cmbPart.ValueMember = "PartId"
-
-                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
-                                            CommandType.Text, "PartId", "PartName", cmbPart, "")
-
-                lblPartDescription.Text = "Part No"
-            Else
-                cmbPart.DisplayMember = "PartNo"
-                cmbPart.ValueMember = "PartId"
-
-                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
-                                            CommandType.Text, "PartId", "PartNo", cmbPart, "")
-
-                lblPartDescription.Text = "Part Name"
-            End If
-
-            AddHandler cmbPart.SelectedValueChanged, AddressOf cmbPart_SelectedValueChanged
-            AddHandler cmbPart.Validated, AddressOf cmbPart_Validated
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub LoadPartSelection()
         Try
             dicPartSelection.Add(" Part Name", 1)
@@ -485,4 +513,60 @@ Public Class MntTrxPartIssue
         End Try
     End Sub
 
+    Private Sub MntTrxActvityLog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode.Equals(Keys.F10) Then
+            e.Handled = True
+            btnSave.PerformClick()
+        End If
+    End Sub
+
+    Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadPartSelection()
+
+        If partTrxId = 0 Then
+            cmbPartSelection.SelectedValue = 1
+        Else
+            dtpDateReceived.Enabled = False
+            txtReferenceNo.Enabled = False
+            cmbTechnician.Enabled = False
+            cmbPartSelection.Enabled = False
+            cmbPart.Enabled = False
+            txtQty.Enabled = False
+            txtRemarks.Enabled = False
+            btnAdd.Enabled = False
+            btnRemove.Enabled = False
+            dgvPartDetail.Enabled = False
+            btnDelete.Enabled = False
+            btnCancel.Enabled = False
+            btnSave.Enabled = False
+        End If
+
+        Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
+        dgvPartDetail.AutoGenerateColumns = False
+        dgvPartDetail.DataSource = Me.bsTrxPartDetail
+
+        If partTrxId <> 0 Then
+            dgvPartDetail.ClearSelection()
+        End If
+    End Sub
+
+    Private Sub txtQty_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtQty.KeyPress
+        Try
+            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
+                e.Handled = True
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub MntTrxPartIssue_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        Try
+            If partTrxId <> 0 Then
+                cmbTechnician.SelectionLength = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class

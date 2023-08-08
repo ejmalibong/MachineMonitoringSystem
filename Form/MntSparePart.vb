@@ -4,13 +4,13 @@ Imports ClosedXML.Excel
 
 Public Class MntSparePart
     Public bsSparePart As New BindingSource
+    Private accessLevel As New AccessLevel
     Private accessLevelId As Integer = 0
 
     Private connection As New Connection
 
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
-    Private accessLevel As New AccessLevel
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
     Private dicSortCriteria As New Dictionary(Of String, String)
     Private dtSparePart As New DataTable
@@ -54,6 +54,13 @@ Public Class MntSparePart
                 accessLevelId = 3
             Case 5 'sr tech
                 accessLevelId = 4
+            Case 41, 42, 43, 44
+                accessLevelId = 10
+                btnIssueStock.Enabled = False
+                btnReceiveStock.Enabled = False
+                btnAdd.Enabled = False
+                btnEdit.Enabled = False
+                btnDelete.Enabled = False
             Case Else
                 accessLevelId = 99
         End Select
@@ -274,6 +281,7 @@ Public Class MntSparePart
 
     Private Sub btnReceiveStock_Click(sender As Object, e As EventArgs) Handles btnReceiveStock.Click
         Try
+
             Using frm As New MntTrxPartReceive(userId)
                 If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                     Reload()
@@ -630,6 +638,7 @@ Public Class MntSparePart
 
                 dtSparePart = dbMethod.FillDataTable("RdMntSparePartMasterlistByMachineTypeId", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
+
             Else
                 Dim prmPart(4) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)

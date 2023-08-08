@@ -74,6 +74,7 @@ Partial Class MntSparePartLog
         Me.ColPartName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblTotal = New System.Windows.Forms.Label()
         Me.txtTotal = New System.Windows.Forms.Label()
         Me.grpTrxType = New System.Windows.Forms.GroupBox()
@@ -351,14 +352,13 @@ Partial Class MntSparePartLog
         Me.btnExport.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnExport.Hint = ""
-        Me.btnExport.Location = New System.Drawing.Point(808, 546)
+        Me.btnExport.Location = New System.Drawing.Point(822, 546)
         Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExport.Name = "btnExport"
         Me.btnExport.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnExport.Size = New System.Drawing.Size(90, 32)
         Me.btnExport.TabIndex = 557
         Me.btnExport.Text = "Export"
-        Me.btnExport.Visible = False
         '
         'btnView
         '
@@ -369,7 +369,7 @@ Partial Class MntSparePartLog
         Me.btnView.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnView.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnView.Hint = ""
-        Me.btnView.Location = New System.Drawing.Point(902, 546)
+        Me.btnView.Location = New System.Drawing.Point(916, 546)
         Me.btnView.Margin = New System.Windows.Forms.Padding(2)
         Me.btnView.Name = "btnView"
         Me.btnView.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -386,7 +386,7 @@ Partial Class MntSparePartLog
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1026, 546)
+        Me.btnClose.Location = New System.Drawing.Point(1040, 546)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -511,7 +511,7 @@ Partial Class MntSparePartLog
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColQty, Me.ColTrxId})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColQty, Me.ColTrxId, Me.ColReferenceNo})
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
@@ -519,15 +519,16 @@ Partial Class MntSparePartLog
         Me.dgvList.RowHeadersVisible = False
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1120, 480)
+        Me.dgvList.Size = New System.Drawing.Size(1134, 480)
         Me.dgvList.TabIndex = 553
         '
         'ColCreatedDate
         '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle2.Format = "MM/dd/yyyy hh:mm tt"
+        Me.ColCreatedDate.DataPropertyName = "TrxDate"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
         Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColCreatedDate.HeaderText = "Created Date"
+        Me.ColCreatedDate.HeaderText = "Transaction Date"
         Me.ColCreatedDate.Name = "ColCreatedDate"
         Me.ColCreatedDate.ReadOnly = True
         Me.ColCreatedDate.Width = 120
@@ -537,7 +538,7 @@ Partial Class MntSparePartLog
         Me.ColTransactionCode.DataPropertyName = "TransactionCode"
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColTransactionCode.HeaderText = " Trx"
+        Me.ColTransactionCode.HeaderText = "Type"
         Me.ColTransactionCode.Name = "ColTransactionCode"
         Me.ColTransactionCode.ReadOnly = True
         Me.ColTransactionCode.Width = 50
@@ -584,6 +585,14 @@ Partial Class MntSparePartLog
         Me.ColTrxId.ReadOnly = True
         Me.ColTrxId.Visible = False
         '
+        'ColReferenceNo
+        '
+        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
+        Me.ColReferenceNo.HeaderText = "Ref No"
+        Me.ColReferenceNo.Name = "ColReferenceNo"
+        Me.ColReferenceNo.ReadOnly = True
+        Me.ColReferenceNo.Width = 90
+        '
         'lblTotal
         '
         Me.lblTotal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -591,7 +600,7 @@ Partial Class MntSparePartLog
         Me.lblTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblTotal.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblTotal.ForeColor = System.Drawing.Color.Black
-        Me.lblTotal.Location = New System.Drawing.Point(938, 512)
+        Me.lblTotal.Location = New System.Drawing.Point(952, 512)
         Me.lblTotal.Name = "lblTotal"
         Me.lblTotal.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblTotal.Size = New System.Drawing.Size(65, 25)
@@ -606,7 +615,7 @@ Partial Class MntSparePartLog
         Me.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtTotal.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.txtTotal.ForeColor = System.Drawing.Color.Black
-        Me.txtTotal.Location = New System.Drawing.Point(1000, 512)
+        Me.txtTotal.Location = New System.Drawing.Point(1014, 512)
         Me.txtTotal.Name = "txtTotal"
         Me.txtTotal.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
         Me.txtTotal.Size = New System.Drawing.Size(120, 25)
@@ -672,7 +681,7 @@ Partial Class MntSparePartLog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(1120, 581)
+        Me.ClientSize = New System.Drawing.Size(1134, 581)
         Me.Controls.Add(Me.grpSortMode)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnSearch)
@@ -760,6 +769,12 @@ Partial Class MntSparePartLog
     Public WithEvents rdDesc As RadioButton
     Public WithEvents rdAsc As RadioButton
     Friend WithEvents dgvList As DataGridView
+    Friend WithEvents lblTotal As Label
+    Friend WithEvents txtTotal As Label
+    Public WithEvents grpTrxType As GroupBox
+    Public WithEvents rdReceive As RadioButton
+    Public WithEvents rdAll As RadioButton
+    Public WithEvents rdIssue As RadioButton
     Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
     Friend WithEvents ColTransactionCode As DataGridViewTextBoxColumn
     Friend WithEvents ColUserName As DataGridViewTextBoxColumn
@@ -767,10 +782,5 @@ Partial Class MntSparePartLog
     Friend WithEvents ColPartName As DataGridViewTextBoxColumn
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
-    Friend WithEvents lblTotal As Label
-    Friend WithEvents txtTotal As Label
-    Public WithEvents grpTrxType As GroupBox
-    Public WithEvents rdReceive As RadioButton
-    Public WithEvents rdAll As RadioButton
-    Public WithEvents rdIssue As RadioButton
+    Friend WithEvents ColReferenceNo As DataGridViewTextBoxColumn
 End Class
