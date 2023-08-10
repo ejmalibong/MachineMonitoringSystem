@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -109,13 +109,15 @@
     <Reference Include="BlackCoffeeLibrary">
       <HintPath>..\..\..\..\DLL\BlackCoffeeLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="ClosedXML, Version=0.69.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\DLL\ClosedXML.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.93.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\DLL\ClosedXML 0.93.0 .NET4.0\ClosedXML.dll</HintPath>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\DLL\DocumentFormat.OpenXml.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\..\..\..\DLL\ClosedXML 0.93.0 .NET4.0\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember.Signed">
+      <HintPath>..\..\..\..\DLL\ClosedXML 0.93.0 .NET4.0\FastMember.Signed.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
       <Private>True</Private>

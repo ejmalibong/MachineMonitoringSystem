@@ -275,8 +275,8 @@ Public Class Main
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
 
                         Case Else
-                            'dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                            dbMain.FormLoader(Me, New MntSparePartLog, False)
+                            dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                            'dbMain.FormLoader(Me, New MntSparePartLog, False)
                     End Select
 
                 Case 3 'facility

@@ -1,6 +1,8 @@
 ﻿Imports System.Data.SqlClient
+Imports System.IO
 Imports BlackCoffeeLibrary
 Imports ClosedXML.Excel
+Imports DocumentFormat.OpenXml.Drawing
 
 Public Class MntSparePartLog
     Public bsTransactionPartDetail As New BindingSource
@@ -25,6 +27,8 @@ Public Class MntSparePartLog
     Private totalCount As Integer
     Private totalQty As Integer
 
+    Private mStream As New MemoryStream
+    Private bite As Byte() 'the word `byte` is not a valid identifier
     Public Sub New()
 
         ' This call is required by the designer.
@@ -99,17 +103,10 @@ Public Class MntSparePartLog
 
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
-            Dim dt As New DataTable
+            Dim dt As DataTable = New DataTable()
+            Dim dtReport As DataTable = New DataTable()
 
-            Dim query As String = String.Empty
-
-            Select Case GetTrxType()
-                Case 1
-                    query = "SELECT CAST(TrxDate AS DATE) AS TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
-
-                Case Else
-                    query = "SELECT CAST(TrxDate AS DATE) AS TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, Problem, RootCause, ActionTaken, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
-            End Select
+            Dim query As String = "SELECT TrxId, TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, ParticularName, AreaName, MachinePartName, MachineStatusName, MachineSubStatusName, Problem, RootCause, ActionTaken, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
 
             Select Case cmbSearchCriteria.SelectedValue
                 Case 1
@@ -125,31 +122,104 @@ Public Class MntSparePartLog
                     query += " PartId = '" & cmbCommon2.SelectedValue & "'"
             End Select
 
-            If GetTrxType() <> 0 Then
-                query += " AND TransactionTypeId = '" & GetTrxType() & "'"
-            End If
+            Select Case GetTrxType()
+                Case 1, 2
+                    query += " AND TransactionTypeId = '" & GetTrxType() & "'"
+            End Select
 
             query += " ORDER BY " & cmbSortCriteria.SelectedValue & " " & GetSortMode() & " "
 
             dt = dbMethod.FillDataTable(query, CommandType.Text)
 
-            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
-            Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Logs.xlsx")
-
-            If Not System.IO.Directory.Exists(folderPath) Then
-                System.IO.Directory.CreateDirectory(folderPath)
+            If dt.Rows.Count = 0 Then
+                MessageBox.Show("No records found.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
             End If
 
+            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            Dim imgDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\Temp"
+            Dim expFilename As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Logs.xlsx")
+
+            If dtReport.Rows.Count > 0 Then
+                dtReport.Clear()
+            End If
+
+            BuildContainerTable(dtReport)
+
+            If Not System.IO.Directory.Exists(imgDir) Then
+                System.IO.Directory.CreateDirectory(imgDir)
+            End If
+
+            For i As Integer = 0 To dt.Rows.Count - 1
+                Dim newRow As DataRow = dtReport.NewRow
+                newRow("TrxDate") = dt.Rows(i).Item("TrxDate")
+                newRow("TransactionCode") = dt.Rows(i).Item("TransactionCode")
+                newRow("UserName") = dt.Rows(i).Item("UserName")
+                newRow("PartNo") = dt.Rows(i).Item("PartNo")
+                newRow("PartName") = dt.Rows(i).Item("PartName")
+                newRow("Qty") = dt.Rows(i).Item("Qty")
+                newRow("ReferenceNo") = dt.Rows(i).Item("ReferenceNo")
+                newRow("ParticularName") = dt.Rows(i).Item("ParticularName")
+                newRow("AreaName") = dt.Rows(i).Item("AreaName")
+                newRow("MachinePartName") = dt.Rows(i).Item("MachinePartName")
+                newRow("MachineStatusName") = dt.Rows(i).Item("MachineStatusName")
+                newRow("MachineSubStatusName") = dt.Rows(i).Item("MachineSubStatusName")
+                newRow("Problem") = dt.Rows(i).Item("Problem")
+                newRow("RootCause") = dt.Rows(i).Item("RootCause")
+                newRow("ActionTaken") = dt.Rows(i).Item("ActionTaken")
+                newRow("Remarks") = dt.Rows(i).Item("Remarks")
+
+                'bite = dt.Rows(i).Item("Image")
+
+                'Using ms As New MemoryStream(bite)
+                '    Dim img As Image = Image.FromStream(ms)
+                '    img.Save(IO.Path.Combine(imgDir, dt.Rows(i).Item("ImageName")))
+                'End Using
+
+                dtReport.Rows.Add(newRow)
+            Next
+
             Using wb As New XLWorkbook()
-                wb.Worksheets.Add(dt, "Logs")
-                wb.SaveAs(fileName)
+                Dim ws = wb.Worksheets.Add(dtReport, "Spare Parts Logs")
+
+                'adding header column
+                For column As Integer = 0 To dtReport.Columns.Count - 1
+                    ws.Cell(1, column + 1).Value = dtReport.Columns(column).ColumnName
+                Next
+
+                'adding rows in cell
+                For row As Integer = 0 To dtReport.Rows.Count - 1
+                    For column As Integer = 0 To dtReport.Columns.Count - 1 - 1
+                        ws.Cell(row + 2, column + 1).Value = dtReport.Rows(row)(column)
+                    Next
+                Next
+
+                ''adding image in cell
+                'For row As Integer = 0 To dtReport.Rows.Count - 1
+                '    For column As Integer = dtReport.Columns.Count - 1 To dtReport.Columns.Count - 1
+                '        Dim image = ws.AddPicture(dtReport.Rows(row)(column).ToString()).MoveTo(ws.Cell(row + 2, column + 1))
+                '        image.Width = 50
+                '        Image.Height = 50
+                '    Next
+                'Next
+
+                Dim directoryInfo As DirectoryInfo = New DirectoryInfo(imgDir)
+                For Each file As FileInfo In directoryInfo.GetFiles()
+                    file.Delete()
+                Next
+
+                directoryInfo.Delete()
+
+                wb.SaveAs(expFilename)
             End Using
 
-            Process.Start(fileName)
+            Process.Start(expFilename)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+
 
     Private Sub btnGo_Click(sender As Object, e As EventArgs) Handles btnGo.Click
         Go()
@@ -693,6 +763,158 @@ Public Class MntSparePartLog
         Try
             'https://www.daniweb.com/programming/software-development/threads/21784/datagrid-no-value-at-index-error-when-scroll-and-sort
             dgvList.CurrentCell = Nothing
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub BuildContainerTable(table As DataTable, Optional _trxTypeId As Integer = 0)
+        Try
+            Dim column As DataColumn
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "TransactionCode"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.DateTime")
+            column.ColumnName = "TrxDate"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "UserName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "PartNo"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "PartName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.Int32")
+            column.ColumnName = "Qty"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "ReferenceNo"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "ParticularName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "AreaName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "MachinePartName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "MachineStatusName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "MachineSubStatusName"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "Problem"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "RootCause"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "ActionTaken"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            column = New DataColumn()
+            column.DataType = System.Type.GetType("System.String")
+            column.ColumnName = "Remarks"
+            column.AutoIncrement = False
+            column.ReadOnly = False
+            column.Unique = False
+            table.Columns.Add(column)
+
+            'column = New DataColumn()
+            'column.DataType = System.Type.GetType("System.Byte[]")
+            'column.ColumnName = "Image"
+            'column.AutoIncrement = False
+            'column.ReadOnly = False
+            'column.Unique = False
+            'table.Columns.Add(column)
+
+            'column = New DataColumn()
+            'column.DataType = System.Type.GetType("System.String")
+            'column.ColumnName = "ImageName"
+            'column.AutoIncrement = False
+            'column.ReadOnly = False
+            'column.Unique = False
+            'table.Columns.Add(column)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
