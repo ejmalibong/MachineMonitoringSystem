@@ -351,8 +351,9 @@ Partial Class MntSparePartLog
         Me.btnExport.DefaultScheme = True
         Me.btnExport.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnExport.Hint = ""
-        Me.btnExport.Location = New System.Drawing.Point(822, 546)
+        Me.btnExport.Hint = "Export selected data"
+        Me.btnExport.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Download_16_x_16
+        Me.btnExport.Location = New System.Drawing.Point(802, 546)
         Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExport.Name = "btnExport"
         Me.btnExport.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -368,12 +369,13 @@ Partial Class MntSparePartLog
         Me.btnView.DefaultScheme = True
         Me.btnView.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnView.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnView.Hint = ""
-        Me.btnView.Location = New System.Drawing.Point(916, 546)
+        Me.btnView.Hint = "View transaction details"
+        Me.btnView.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Text_preview_16_x_16
+        Me.btnView.Location = New System.Drawing.Point(896, 546)
         Me.btnView.Margin = New System.Windows.Forms.Padding(2)
         Me.btnView.Name = "btnView"
         Me.btnView.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnView.Size = New System.Drawing.Size(120, 32)
+        Me.btnView.Size = New System.Drawing.Size(140, 32)
         Me.btnView.TabIndex = 556
         Me.btnView.Text = "View Transaction"
         '

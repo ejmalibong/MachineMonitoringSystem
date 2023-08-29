@@ -276,7 +276,6 @@ Public Class Main
 
                         Case Else
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                            'dbMain.FormLoader(Me, New MntSparePartLog, False)
                     End Select
 
                 Case 3 'facility
@@ -573,6 +572,14 @@ Public Class Main
             For Each frm As Form In Me.MdiChildren
                 frm.Close()
             Next
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub MntSparePartInventoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartInventoryToolStripMenuItem.Click
+        Try
+            dbMain.FormLoader(Me, New MntSparePartInv(userId, workgroupId, False), False)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

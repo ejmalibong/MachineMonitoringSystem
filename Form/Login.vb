@@ -53,8 +53,8 @@ Public Class Login
             'txtPassword.Text = "malibong"
 
             'karlin
-            txtEmployeeId.Text = "2106-020"
-            txtPassword.Text = "tano"
+            'txtEmployeeId.Text = "2106-020"
+            'txtPassword.Text = "tano"
 
             'noriel
             'txtEmployeeId.Text = "1901-033"

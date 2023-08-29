@@ -37,6 +37,7 @@ Partial Class Main
         Me.MntActivtyApprovalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMachineScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntJigScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MntSparePartInventoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntSparePartLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssFileMt = New System.Windows.Forms.ToolStripSeparator()
         Me.LogOutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -67,6 +68,7 @@ Partial Class Main
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.VersionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
+        Me.tssFileMtPart = New System.Windows.Forms.ToolStripSeparator()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -113,7 +115,7 @@ Partial Class Main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFileFa, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.MntSparePartLogToolStripMenuItem, Me.tssFileMt, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFileFa, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.tssFileMtPart, Me.MntSparePartInventoryToolStripMenuItem, Me.MntSparePartLogToolStripMenuItem, Me.tssFileMt, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -174,6 +176,13 @@ Partial Class Main
         Me.MntJigScheduleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
         Me.MntJigScheduleToolStripMenuItem.Tag = "MT"
         Me.MntJigScheduleToolStripMenuItem.Text = "Jig PM Schedule"
+        '
+        'MntSparePartInventoryToolStripMenuItem
+        '
+        Me.MntSparePartInventoryToolStripMenuItem.Name = "MntSparePartInventoryToolStripMenuItem"
+        Me.MntSparePartInventoryToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntSparePartInventoryToolStripMenuItem.Tag = "MT"
+        Me.MntSparePartInventoryToolStripMenuItem.Text = "Spare Parts Inventory"
         '
         'MntSparePartLogToolStripMenuItem
         '
@@ -388,6 +397,12 @@ Partial Class Main
         'tmrMain
         '
         '
+        'tssFileMtPart
+        '
+        Me.tssFileMtPart.Name = "tssFileMtPart"
+        Me.tssFileMtPart.Size = New System.Drawing.Size(189, 6)
+        Me.tssFileMtPart.Tag = "MT"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -457,4 +472,6 @@ Partial Class Main
     Friend WithEvents MntSparePartLogToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CloseToolStripSeparator As ToolStripSeparator
     Friend WithEvents CloseAllToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MntSparePartInventoryToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents tssFileMtPart As ToolStripSeparator
 End Class
