@@ -57,6 +57,7 @@ Public Class MntSparePartDetail
     End Sub
 
     Public Property pKey As Integer = 0
+    Public Property partNo As String = String.Empty
 
     Public Async Sub OpenImage(ByVal imagePath As String, ByVal time As Integer)
         Try
@@ -195,6 +196,13 @@ Public Class MntSparePartDetail
                 Return
             End If
 
+            Dim res As Decimal = 0.00
+            If Decimal.TryParse(txtUnitPrice.Text.Trim, res) = False Then
+                MessageBox.Show("Unit price should be 2 decimal digits.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txtUnitPrice.Focus()
+                Return
+            End If
+
             If cmbUnit.SelectedValue = 0 Then
                 MessageBox.Show("Unit of measurement is required.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 cmbUnit.Focus()
@@ -279,7 +287,8 @@ Public Class MntSparePartDetail
                 prmPart(19).Value = IIf(rdActive.Checked = True, True, False)
 
                 dbMethod.ExecuteNonQuery("InsMntSparePart", CommandType.StoredProcedure, prmPart)
-                pKey = prmPart(0).Value
+                partNo = txtPartNo.Text.Trim
+
             Else 'old record
                 If Not txtPartNo.Text.Trim.Equals(orgPartNo) Then
                     If IsPartExist(txtPartNo.Text.Trim) = True Then
@@ -757,12 +766,12 @@ Public Class MntSparePartDetail
 
     Private Sub txtUnitPrice_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txtUnitPrice.Validating
         Try
-            Dim res As Decimal = 0.00
-            If Decimal.TryParse(txtUnitPrice.Text, res) Then
-                e.Cancel = False
-            Else
-                e.Cancel = True
-            End If
+            'Dim res As Decimal = 0.00
+            'If Decimal.TryParse(txtUnitPrice.Text, res) Then
+            '    e.Cancel = False
+            'Else
+            '    e.Cancel = True
+            'End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

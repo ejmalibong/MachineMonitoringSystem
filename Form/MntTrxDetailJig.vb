@@ -854,6 +854,8 @@ Public Class MntTrxDetailJig
         Try
             If trxId = 0 Then
                 Using frmDetailLog As New MntTrxActvityLog()
+                    frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -885,8 +887,11 @@ Public Class MntTrxDetailJig
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
+
             Else
                 Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
+                    frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -1086,6 +1091,8 @@ Public Class MntTrxDetailJig
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
 
                     Using frmDetailLog As New MntTrxActvityLog(0, userId)
+                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                         frmDetailLog.cmbTechnician.SelectedValue = userId
                         frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
                         frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
@@ -1149,11 +1156,14 @@ Public Class MntTrxDetailJig
                             Me.bsTrxDetail.CancelEdit()
                         End If
                     End Using
+
                 Else
                     Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
 
                     Using frmDetailLog As New MntTrxActvityLog(trxId, userId)
+                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                         frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
                         frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
                         frmDetailLog.cmbTechnician.SelectedValue = userId

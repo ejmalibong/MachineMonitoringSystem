@@ -12,6 +12,7 @@ Public Class MntTrxDetailMch
     Private WithEvents bsTrxPartHeader As New BindingSource
     Private WithEvents bsTrxUser As New BindingSource
     Private WithEvents bsUserLog As New BindingSource
+    Private accessLevel As New AccessLevel
     Private accessLevelId As Integer = 0
     Private adpTrxDetail As New SqlDataAdapter
     Private adpTrxPartDetail As New SqlDataAdapter
@@ -22,8 +23,6 @@ Public Class MntTrxDetailMch
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
-    Private accessLevel As New AccessLevel
-
     Private dicApp1Action As New Dictionary(Of String, Integer)
     Private dicApp2Action As New Dictionary(Of String, Integer)
     Private dicApp3Action As New Dictionary(Of String, Integer)
@@ -870,6 +869,8 @@ Public Class MntTrxDetailMch
         Try
             If trxId = 0 Then
                 Using frmDetailLog As New MntTrxActvityLog()
+                    frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -901,8 +902,11 @@ Public Class MntTrxDetailMch
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
+
             Else
                 Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
+                    frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
                         Me.bsTrxDetail.MoveLast()
@@ -1106,6 +1110,8 @@ Public Class MntTrxDetailMch
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
 
                     Using frmDetailLog As New MntTrxActvityLog(0, userId)
+                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                         frmDetailLog.cmbTechnician.SelectedValue = userId
                         frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
                         frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
@@ -1169,11 +1175,14 @@ Public Class MntTrxDetailMch
                             Me.bsTrxDetail.CancelEdit()
                         End If
                     End Using
+
                 Else
                     Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
                     Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
 
                     Using frmDetailLog As New MntTrxActvityLog(trxId, userId)
+                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+
                         frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
                         frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
                         frmDetailLog.cmbTechnician.SelectedValue = userId

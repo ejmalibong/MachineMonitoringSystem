@@ -79,7 +79,6 @@ Public Class MntSparePart
 
     Public Sub Reload()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
-        pageIndex = 0
         LoadPart()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
     End Sub
@@ -185,15 +184,15 @@ Public Class MntSparePart
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Try
-            If Not (userId = 5 Or userId = 17 Or userId = 2 Or userId = 21) Then
-                MessageBox.Show("You are not allowed to register new spare part.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
-            End If
-
             Using frm As New MntSparePartDetail(userId, workgroupId, isAdmin)
                 If frm.ShowDialog(Me) = DialogResult.OK Then
                     Reload()
-                    bsSparePart.Position = bsSparePart.Find("PartId", frm.pKey)
+
+                    cmbSearchCriteria.SelectedValue = 1
+                    txtCommon.Text = frm.partNo
+                    btnSearch.PerformClick()
+
+                    bsSparePart.Position = bsSparePart.Find("PartNo", frm.partNo)
                 End If
             End Using
         Catch ex As Exception

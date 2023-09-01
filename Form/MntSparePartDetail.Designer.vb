@@ -523,6 +523,7 @@ Partial Class MntSparePartDetail
         'txtQrCode
         '
         Me.txtQrCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtQrCode.Enabled = False
         Me.txtQrCode.Location = New System.Drawing.Point(103, 377)
         Me.txtQrCode.MaxLength = 50
         Me.txtQrCode.Name = "txtQrCode"
@@ -569,6 +570,7 @@ Partial Class MntSparePartDetail
         'txtBarcode
         '
         Me.txtBarcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtBarcode.Enabled = False
         Me.txtBarcode.Location = New System.Drawing.Point(103, 352)
         Me.txtBarcode.MaxLength = 50
         Me.txtBarcode.Name = "txtBarcode"
