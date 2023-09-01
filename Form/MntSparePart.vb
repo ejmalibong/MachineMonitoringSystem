@@ -246,11 +246,6 @@ Public Class MntSparePart
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Try
             If Me.dgvList.Rows.Count > 0 Then
-                If Not (userId = 5 Or userId = 17 Or userId = 2 Or userId = 21) Then
-                    MessageBox.Show("You are not allowed to edit spare part data.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
-                End If
-
                 Dim partId As Integer = CType(Me.bsSparePart.Current, DataRowView).Item("PartId")
 
                 Using frm As New MntSparePartDetail(userId, workgroupId, isAdmin, partId)

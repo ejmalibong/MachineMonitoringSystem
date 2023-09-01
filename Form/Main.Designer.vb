@@ -37,6 +37,7 @@ Partial Class Main
         Me.MntActivtyApprovalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntMachineScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntJigScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tssFileMtPart = New System.Windows.Forms.ToolStripSeparator()
         Me.MntSparePartInventoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MntSparePartLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tssFileMt = New System.Windows.Forms.ToolStripSeparator()
@@ -68,7 +69,6 @@ Partial Class Main
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.VersionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
-        Me.tssFileMtPart = New System.Windows.Forms.ToolStripSeparator()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -176,6 +176,12 @@ Partial Class Main
         Me.MntJigScheduleToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
         Me.MntJigScheduleToolStripMenuItem.Tag = "MT"
         Me.MntJigScheduleToolStripMenuItem.Text = "Jig PM Schedule"
+        '
+        'tssFileMtPart
+        '
+        Me.tssFileMtPart.Name = "tssFileMtPart"
+        Me.tssFileMtPart.Size = New System.Drawing.Size(189, 6)
+        Me.tssFileMtPart.Tag = "MT"
         '
         'MntSparePartInventoryToolStripMenuItem
         '
@@ -397,12 +403,6 @@ Partial Class Main
         'tmrMain
         '
         '
-        'tssFileMtPart
-        '
-        Me.tssFileMtPart.Name = "tssFileMtPart"
-        Me.tssFileMtPart.Size = New System.Drawing.Size(189, 6)
-        Me.tssFileMtPart.Tag = "MT"
-        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -416,6 +416,7 @@ Partial Class Main
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.IsMdiContainer = True
+        Me.KeyPreview = True
         Me.MainMenuStrip = Me.mnuMain
         Me.Name = "Main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
