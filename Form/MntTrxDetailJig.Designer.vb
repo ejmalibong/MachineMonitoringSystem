@@ -22,14 +22,14 @@ Partial Class MntTrxDetailJig
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.lblRuntimeAccumulated = New System.Windows.Forms.Label()
         Me.txtDowntimeAccumulated = New System.Windows.Forms.Label()
@@ -687,8 +687,8 @@ Partial Class MntTrxDetailJig
         '
         Me.ColUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
         Me.ColUserName.DataPropertyName = "UserName"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.ColUserName.DefaultCellStyle = DataGridViewCellStyle1
         Me.ColUserName.HeaderText = "NickName"
         Me.ColUserName.Name = "ColUserName"
         Me.ColUserName.ReadOnly = True
@@ -717,13 +717,13 @@ Partial Class MntTrxDetailJig
         Me.dgvDetail.AllowUserToResizeColumns = False
         Me.dgvDetail.AllowUserToResizeRows = False
         Me.dgvDetail.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvDetail.ColumnHeadersHeight = 22
         Me.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxDetailId, Me.ColTrxId, Me.ColTrxDate, Me.ColUserIdLog, Me.ColShiftId, Me.ColTrxFrom, Me.ColTrxTo, Me.ColElapsedTime})
@@ -773,8 +773,8 @@ Partial Class MntTrxDetailJig
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -785,9 +785,9 @@ Partial Class MntTrxDetailJig
         'ColTrxFrom
         '
         Me.ColTrxFrom.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle12.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle12.NullValue = Nothing
-        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle4.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.ColTrxFrom.DefaultCellStyle = DataGridViewCellStyle4
         Me.ColTrxFrom.HeaderText = "From"
         Me.ColTrxFrom.Name = "ColTrxFrom"
         Me.ColTrxFrom.ReadOnly = True
@@ -798,9 +798,9 @@ Partial Class MntTrxDetailJig
         'ColTrxTo
         '
         Me.ColTrxTo.DataPropertyName = "TrxTo"
-        DataGridViewCellStyle13.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle13.NullValue = Nothing
-        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle5.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle5.NullValue = Nothing
+        Me.ColTrxTo.DefaultCellStyle = DataGridViewCellStyle5
         Me.ColTrxTo.HeaderText = "To"
         Me.ColTrxTo.Name = "ColTrxTo"
         Me.ColTrxTo.ReadOnly = True
@@ -811,8 +811,8 @@ Partial Class MntTrxDetailJig
         'ColElapsedTime
         '
         Me.ColElapsedTime.DataPropertyName = "ElapsedTime"
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColElapsedTime.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColElapsedTime.HeaderText = "Minutes"
         Me.ColElapsedTime.Name = "ColElapsedTime"
         Me.ColElapsedTime.ReadOnly = True
@@ -1560,7 +1560,7 @@ Partial Class MntTrxDetailJig
         Me.cmbRoutingStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbRoutingStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbRoutingStatus.FormattingEnabled = True
-        Me.cmbRoutingStatus.Location = New System.Drawing.Point(409, 0)
+        Me.cmbRoutingStatus.Location = New System.Drawing.Point(420, 0)
         Me.cmbRoutingStatus.Name = "cmbRoutingStatus"
         Me.cmbRoutingStatus.Size = New System.Drawing.Size(250, 23)
         Me.cmbRoutingStatus.TabIndex = 588
@@ -1645,14 +1645,14 @@ Partial Class MntTrxDetailJig
         Me.dgvPartDetail.AllowUserToDeleteRows = False
         Me.dgvPartDetail.AllowUserToResizeColumns = False
         Me.dgvPartDetail.AllowUserToResizeRows = False
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle15.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
         Me.dgvPartDetail.ColumnHeadersHeight = 22
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColQty})
@@ -1678,8 +1678,8 @@ Partial Class MntTrxDetailJig
         'ColQty
         '
         Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColQty.HeaderText = "Qty"
         Me.ColQty.Name = "ColQty"
         Me.ColQty.ReadOnly = True

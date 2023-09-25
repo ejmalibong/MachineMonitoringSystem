@@ -87,9 +87,9 @@ Public Class MntTrxDetailMch
                 accessLevelId = 1
             Case 35, 40 'mngr, asst mngr
                 accessLevelId = 2
-            Case 29, 30 'sv, asv
-                accessLevelId = 3
             Case 5 'sr tech
+                accessLevelId = 3
+            Case 29, 30 'sv, asv
                 accessLevelId = 4
             Case Else
                 accessLevelId = 99
@@ -249,6 +249,7 @@ Public Class MntTrxDetailMch
                             txtApp1Remarks.Enabled = False
                     End Select
                 End If
+
             Else 'existing transaction
                 If isAdmin Or accessLevelId = 1 Then
                     cmbTransactionStatus.Enabled = False
@@ -760,9 +761,6 @@ Public Class MntTrxDetailMch
         LoadMachine()
         'GetSetting(My.Settings.SettingsId)
         'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
-
-        LoadApproverAction()
-        LoadApprovers()
 
         If trxId = 0 Then
             Me.bsTrxDetail.DataSource = dtTrxDetail
@@ -3733,9 +3731,42 @@ Public Class MntTrxDetailMch
                 If btnDelete.Enabled = True Then
                     btnDelete.PerformClick()
                 End If
+
             ElseIf e.KeyCode.Equals(Keys.F10) Then 'save
                 e.Handled = True
                 If btnSave.Enabled = True Then
+                    btnSave.PerformClick()
+                End If
+
+            ElseIf e.KeyCode.Equals(Keys.F11) Then 'save
+                e.Handled = True
+
+                If btnSave.Enabled = True Then
+                    Select Case accessLevelId
+                        Case 1
+                            cmbApp3Status.SelectedValue = 1
+                        Case 2
+                            cmbApp2Status.SelectedValue = 1
+                        Case 3
+                            cmbApp1Status.SelectedValue = 1
+                    End Select
+
+                    btnSave.PerformClick()
+                End If
+
+            ElseIf e.KeyCode.Equals(Keys.F12) Then 'save
+                e.Handled = True
+
+                If btnSave.Enabled = True Then
+                    Select Case accessLevelId
+                        Case 1
+                            cmbApp3Status.SelectedValue = 2
+                        Case 2
+                            cmbApp2Status.SelectedValue = 2
+                        Case 3
+                            cmbApp1Status.SelectedValue = 2
+                    End Select
+
                     btnSave.PerformClick()
                 End If
             End If
@@ -3744,6 +3775,8 @@ Public Class MntTrxDetailMch
 
     Private Sub frmMntTrxDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
+            LoadApproverAction()
+
             If trxId = 0 Then
                 Me.Text = "New Activity Entry"
 
@@ -3757,6 +3790,53 @@ Public Class MntTrxDetailMch
 
                 DisableForm(True)
                 Me.ActiveControl = cmbMachineName
+
+                Dim prmApp3(1) As SqlParameter
+                prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                prmApp3(0).Value = 1
+                prmApp3(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmApp3(1).Value = 1
+
+                dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+                Dim prmApp2(2) As SqlParameter
+                prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                prmApp2(0).Value = 2
+                prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                prmApp2(1).Value = 2
+                prmApp2(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmApp2(2).Value = 1
+
+                dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+
+                Dim prmApp1(2) As SqlParameter
+                prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                prmApp1(0).Value = 3
+                prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                prmApp1(1).Value = 2
+                prmApp1(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmApp1(2).Value = 1
+
+                dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+
+                If cmbApp3Name.Items.Count = 1 Then
+                    cmbApp3Name.SelectedIndex = 0
+                Else
+                    cmbApp3Name.SelectedValue = 0
+                End If
+
+                If cmbApp2Name.Items.Count = 2 Then
+                    cmbApp2Name.SelectedIndex = 1
+                ElseIf cmbApp2Name.Items.Count > 2 Then
+                    cmbApp2Name.SelectedValue = 0
+                End If
+
+                If cmbApp1Name.Items.Count = 2 Then
+                    cmbApp1Name.SelectedIndex = 1
+                ElseIf cmbApp1Name.Items.Count > 2 Then
+                    cmbApp1Name.SelectedValue = 0
+                End If
+
             Else
                 Me.Text = "Activity No. " & trxId
 
@@ -3976,6 +4056,10 @@ Public Class MntTrxDetailMch
                     End Select
                 End If
             End If
+
+            AddHandler cmbApp3Name.Validating, AddressOf cmbApp3Name_Validating
+            AddHandler cmbApp2Name.Validating, AddressOf cmbApp2Name_Validating
+            AddHandler cmbApp1Name.Validating, AddressOf cmbApp1Name_Validating
 
             If fromPmCalendar = True Then
                 cmbTransactionStatus.Enabled = False
@@ -4319,56 +4403,6 @@ Public Class MntTrxDetailMch
         End Try
     End Sub
 
-    Private Sub LoadApprovers()
-        Try
-            Dim prmApp3(0) As SqlParameter
-            prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
-            prmApp3(0).Value = 1
-
-            dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
-
-            Dim prmApp2(1) As SqlParameter
-            prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
-            prmApp2(0).Value = 2
-            prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmApp2(1).Value = 2
-
-            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
-
-            Dim prmApp1(1) As SqlParameter
-            prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
-            prmApp1(0).Value = 3
-            prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmApp1(1).Value = 2
-
-            dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
-
-            If cmbApp3Name.Items.Count = 1 Then
-                cmbApp3Name.SelectedIndex = 0
-            Else
-                cmbApp3Name.SelectedIndex = 1
-            End If
-
-            If cmbApp2Name.Items.Count = 2 Then
-                cmbApp2Name.SelectedIndex = 1
-            ElseIf cmbApp2Name.Items.Count > 2 Then
-                cmbApp2Name.SelectedValue = 0
-            End If
-
-            If cmbApp1Name.Items.Count = 2 Then
-                cmbApp1Name.SelectedIndex = 1
-            ElseIf cmbApp1Name.Items.Count > 2 Then
-                cmbApp1Name.SelectedValue = 0
-            End If
-
-            AddHandler cmbApp3Name.Validating, AddressOf cmbApp3Name_Validating
-            AddHandler cmbApp2Name.Validating, AddressOf cmbApp2Name_Validating
-            AddHandler cmbApp1Name.Validating, AddressOf cmbApp1Name_Validating
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
     Private Sub LoadDowntimeStatus()
         Try
             cmbDowntimeStatus.DisplayMember = "MachineStatusName"
@@ -4444,6 +4478,112 @@ Public Class MntTrxDetailMch
                 cmbRoutingStatus.SelectedValue = routingStatusId
                 txtRoutingStatus.Text = cmbRoutingStatus.Text
             End If
+
+            Select Case routingStatusId
+                Case 1, 2
+                    Dim prmApp3(0) As SqlParameter
+                    prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp3(0).Value = 1
+
+                    dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+                    Dim prmApp2(1) As SqlParameter
+                    prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp2(0).Value = 2
+                    prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp2(1).Value = 2
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+
+                    Dim prmApp1(1) As SqlParameter
+                    prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp1(0).Value = 5
+                    prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp1(1).Value = 2
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+
+                Case 3
+                    Dim prmApp3(1) As SqlParameter
+                    prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp3(0).Value = 1
+                    prmApp3(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp3(1).Value = 1
+
+                    dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+                    Dim prmApp2(1) As SqlParameter
+                    prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp2(0).Value = 2
+                    prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp2(1).Value = 2
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+
+                    Dim prmApp1(1) As SqlParameter
+                    prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp1(0).Value = 5
+                    prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp1(1).Value = 2
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+
+                Case 4
+                    Dim prmApp3(1) As SqlParameter
+                    prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp3(0).Value = 1
+                    prmApp3(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp3(1).Value = 1
+
+                    dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+                    Dim prmApp2(2) As SqlParameter
+                    prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp2(0).Value = 2
+                    prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp2(1).Value = 2
+                    prmApp2(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp2(2).Value = 1
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+
+                    Dim prmApp1(1) As SqlParameter
+                    prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp1(0).Value = 5
+                    prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp1(1).Value = 2
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+
+                Case 5, 6
+                    Dim prmApp3(1) As SqlParameter
+                    prmApp3(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp3(0).Value = 1
+                    prmApp3(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp3(1).Value = 1
+
+                    dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp3Name, prmApp3)
+
+                    Dim prmApp2(2) As SqlParameter
+                    prmApp2(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp2(0).Value = 2
+                    prmApp2(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp2(1).Value = 2
+                    prmApp2(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp2(2).Value = 1
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+
+                    Dim prmApp1(2) As SqlParameter
+                    prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
+                    prmApp1(0).Value = 3
+                    prmApp1(1) = New SqlParameter("@SectionId", SqlDbType.Int)
+                    prmApp1(1).Value = 2
+                    prmApp1(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                    prmApp1(2).Value = 1
+
+                    dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+            End Select
 
             AddHandler cmbRoutingStatus.SelectedValueChanged, AddressOf cmbRoutingStatus_SelectedValueChanged
         Catch ex As Exception

@@ -22,6 +22,7 @@ Partial Class MntJigModelDetail
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntJigModelDetail))
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnSave = New PinkieControls.ButtonXP()
@@ -33,7 +34,24 @@ Partial Class MntJigModelDetail
         Me.cmbExtension = New SergeUtils.EasyCompletionComboBox()
         Me.lblModelName = New System.Windows.Forms.Label()
         Me.txtModelName = New System.Windows.Forms.TextBox()
+        Me.pnlAttachment = New System.Windows.Forms.Panel()
+        Me.lblAttachmentCount = New System.Windows.Forms.Label()
+        Me.lblProgress = New System.Windows.Forms.Label()
+        Me.pbAttachment = New System.Windows.Forms.ProgressBar()
+        Me.btnView = New PinkieControls.ButtonXP()
+        Me.txtAttachmentName = New System.Windows.Forms.Label()
+        Me.btnNext = New PinkieControls.ButtonXP()
+        Me.btnPrevious = New PinkieControls.ButtonXP()
+        Me.btnRemove = New PinkieControls.ButtonXP()
+        Me.btnBrowse = New PinkieControls.ButtonXP()
+        Me.picImage = New System.Windows.Forms.PictureBox()
+        Me.ofdRecDetail = New System.Windows.Forms.OpenFileDialog()
+        Me.bgWorker = New System.ComponentModel.BackgroundWorker()
+        Me.AxAcroPDF = New AxAcroPDFLib.AxAcroPDF()
         Me.pnlRemarks.SuspendLayout()
+        Me.pnlAttachment.SuspendLayout()
+        CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.AxAcroPDF, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnClose
@@ -44,7 +62,7 @@ Partial Class MntJigModelDetail
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(230, 85)
+        Me.btnClose.Location = New System.Drawing.Point(250, 425)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
@@ -61,7 +79,7 @@ Partial Class MntJigModelDetail
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.Hint = "Delete record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(136, 85)
+        Me.btnDelete.Location = New System.Drawing.Point(156, 425)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(90, 32)
@@ -78,7 +96,7 @@ Partial Class MntJigModelDetail
         Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnSave.Hint = "Save record"
         Me.btnSave.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Save_16_x_16
-        Me.btnSave.Location = New System.Drawing.Point(42, 85)
+        Me.btnSave.Location = New System.Drawing.Point(62, 425)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(90, 32)
@@ -123,7 +141,7 @@ Partial Class MntJigModelDetail
         Me.pnlRemarks.Controls.Add(Me.rdActive)
         Me.pnlRemarks.Location = New System.Drawing.Point(103, 54)
         Me.pnlRemarks.Name = "pnlRemarks"
-        Me.pnlRemarks.Size = New System.Drawing.Size(217, 23)
+        Me.pnlRemarks.Size = New System.Drawing.Size(237, 23)
         Me.pnlRemarks.TabIndex = 6
         '
         'rdInactive
@@ -156,7 +174,7 @@ Partial Class MntJigModelDetail
         Me.cmbExtension.FormattingEnabled = True
         Me.cmbExtension.Location = New System.Drawing.Point(103, 29)
         Me.cmbExtension.Name = "cmbExtension"
-        Me.cmbExtension.Size = New System.Drawing.Size(217, 23)
+        Me.cmbExtension.Size = New System.Drawing.Size(237, 23)
         Me.cmbExtension.TabIndex = 1
         '
         'lblModelName
@@ -179,8 +197,184 @@ Partial Class MntJigModelDetail
         Me.txtModelName.Location = New System.Drawing.Point(103, 4)
         Me.txtModelName.MaxLength = 50
         Me.txtModelName.Name = "txtModelName"
-        Me.txtModelName.Size = New System.Drawing.Size(217, 23)
+        Me.txtModelName.Size = New System.Drawing.Size(237, 23)
         Me.txtModelName.TabIndex = 0
+        '
+        'pnlAttachment
+        '
+        Me.pnlAttachment.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.pnlAttachment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlAttachment.Controls.Add(Me.lblAttachmentCount)
+        Me.pnlAttachment.Controls.Add(Me.lblProgress)
+        Me.pnlAttachment.Controls.Add(Me.pbAttachment)
+        Me.pnlAttachment.Controls.Add(Me.btnView)
+        Me.pnlAttachment.Controls.Add(Me.txtAttachmentName)
+        Me.pnlAttachment.Controls.Add(Me.btnNext)
+        Me.pnlAttachment.Controls.Add(Me.btnPrevious)
+        Me.pnlAttachment.Controls.Add(Me.btnRemove)
+        Me.pnlAttachment.Controls.Add(Me.btnBrowse)
+        Me.pnlAttachment.Controls.Add(Me.picImage)
+        Me.pnlAttachment.Controls.Add(Me.AxAcroPDF)
+        Me.pnlAttachment.Location = New System.Drawing.Point(4, 79)
+        Me.pnlAttachment.Name = "pnlAttachment"
+        Me.pnlAttachment.Size = New System.Drawing.Size(336, 340)
+        Me.pnlAttachment.TabIndex = 569
+        '
+        'lblAttachmentCount
+        '
+        Me.lblAttachmentCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblAttachmentCount.AutoSize = True
+        Me.lblAttachmentCount.Font = New System.Drawing.Font("Segoe UI", 8.5!)
+        Me.lblAttachmentCount.Location = New System.Drawing.Point(114, 315)
+        Me.lblAttachmentCount.Name = "lblAttachmentCount"
+        Me.lblAttachmentCount.Size = New System.Drawing.Size(24, 15)
+        Me.lblAttachmentCount.TabIndex = 578
+        Me.lblAttachmentCount.Text = "0/0"
+        '
+        'lblProgress
+        '
+        Me.lblProgress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblProgress.AutoSize = True
+        Me.lblProgress.BackColor = System.Drawing.Color.Gainsboro
+        Me.lblProgress.Font = New System.Drawing.Font("Segoe UI", 8.5!)
+        Me.lblProgress.Location = New System.Drawing.Point(11, 285)
+        Me.lblProgress.Name = "lblProgress"
+        Me.lblProgress.Size = New System.Drawing.Size(24, 15)
+        Me.lblProgress.TabIndex = 575
+        Me.lblProgress.Text = "0/0"
+        Me.lblProgress.Visible = False
+        '
+        'pbAttachment
+        '
+        Me.pbAttachment.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.pbAttachment.Location = New System.Drawing.Point(6, 280)
+        Me.pbAttachment.Name = "pbAttachment"
+        Me.pbAttachment.Size = New System.Drawing.Size(322, 23)
+        Me.pbAttachment.TabIndex = 574
+        Me.pbAttachment.Visible = False
+        '
+        'btnView
+        '
+        Me.btnView.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnView.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnView.DefaultScheme = False
+        Me.btnView.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnView.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnView.Hint = "View"
+        Me.btnView.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Expand_16_x_16
+        Me.btnView.Location = New System.Drawing.Point(59, 309)
+        Me.btnView.Name = "btnView"
+        Me.btnView.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnView.Size = New System.Drawing.Size(26, 26)
+        Me.btnView.TabIndex = 572
+        Me.btnView.TabStop = False
+        '
+        'txtAttachmentName
+        '
+        Me.txtAttachmentName.AutoSize = True
+        Me.txtAttachmentName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtAttachmentName.Location = New System.Drawing.Point(2, 3)
+        Me.txtAttachmentName.Name = "txtAttachmentName"
+        Me.txtAttachmentName.Size = New System.Drawing.Size(55, 15)
+        Me.txtAttachmentName.TabIndex = 571
+        Me.txtAttachmentName.Text = "Filename"
+        '
+        'btnNext
+        '
+        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnNext.DefaultScheme = False
+        Me.btnNext.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnNext.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnNext.Hint = "Next"
+        Me.btnNext.Location = New System.Drawing.Point(30, 309)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnNext.Size = New System.Drawing.Size(26, 26)
+        Me.btnNext.TabIndex = 1
+        Me.btnNext.TabStop = False
+        Me.btnNext.Text = ">"
+        '
+        'btnPrevious
+        '
+        Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPrevious.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnPrevious.DefaultScheme = False
+        Me.btnPrevious.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnPrevious.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPrevious.Hint = "Previous"
+        Me.btnPrevious.Location = New System.Drawing.Point(2, 309)
+        Me.btnPrevious.Name = "btnPrevious"
+        Me.btnPrevious.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnPrevious.Size = New System.Drawing.Size(26, 26)
+        Me.btnPrevious.TabIndex = 0
+        Me.btnPrevious.TabStop = False
+        Me.btnPrevious.Text = "<"
+        '
+        'btnRemove
+        '
+        Me.btnRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnRemove.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnRemove.DefaultScheme = False
+        Me.btnRemove.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnRemove.Font = New System.Drawing.Font("Verdana", 8.0!)
+        Me.btnRemove.Hint = "Remove"
+        Me.btnRemove.Location = New System.Drawing.Point(255, 309)
+        Me.btnRemove.Name = "btnRemove"
+        Me.btnRemove.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnRemove.Size = New System.Drawing.Size(76, 26)
+        Me.btnRemove.TabIndex = 3
+        Me.btnRemove.TabStop = False
+        Me.btnRemove.Text = "Remove"
+        '
+        'btnBrowse
+        '
+        Me.btnBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnBrowse.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnBrowse.DefaultScheme = False
+        Me.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnBrowse.Font = New System.Drawing.Font("Verdana", 8.0!)
+        Me.btnBrowse.Hint = "Browse files"
+        Me.btnBrowse.Location = New System.Drawing.Point(175, 309)
+        Me.btnBrowse.Name = "btnBrowse"
+        Me.btnBrowse.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnBrowse.Size = New System.Drawing.Size(76, 26)
+        Me.btnBrowse.TabIndex = 2
+        Me.btnBrowse.TabStop = False
+        Me.btnBrowse.Text = "Browse"
+        '
+        'picImage
+        '
+        Me.picImage.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.picImage.BackColor = System.Drawing.Color.White
+        Me.picImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.picImage.ErrorImage = Nothing
+        Me.picImage.InitialImage = Nothing
+        Me.picImage.Location = New System.Drawing.Point(4, 21)
+        Me.picImage.Name = "picImage"
+        Me.picImage.Size = New System.Drawing.Size(326, 284)
+        Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picImage.TabIndex = 576
+        Me.picImage.TabStop = False
+        '
+        'ofdRecDetail
+        '
+        Me.ofdRecDetail.Multiselect = True
+        '
+        'bgWorker
+        '
+        Me.bgWorker.WorkerReportsProgress = True
+        Me.bgWorker.WorkerSupportsCancellation = True
+        '
+        'AxAcroPDF
+        '
+        Me.AxAcroPDF.Enabled = True
+        Me.AxAcroPDF.Location = New System.Drawing.Point(4, 21)
+        Me.AxAcroPDF.Name = "AxAcroPDF"
+        Me.AxAcroPDF.OcxState = CType(resources.GetObject("AxAcroPDF.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxAcroPDF.Size = New System.Drawing.Size(326, 284)
+        Me.AxAcroPDF.TabIndex = 579
         '
         'MntJigModelDetail
         '
@@ -188,7 +382,8 @@ Partial Class MntJigModelDetail
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(324, 121)
+        Me.ClientSize = New System.Drawing.Size(344, 461)
+        Me.Controls.Add(Me.pnlAttachment)
         Me.Controls.Add(Me.txtModelName)
         Me.Controls.Add(Me.lblModelName)
         Me.Controls.Add(Me.lblExtension)
@@ -212,6 +407,10 @@ Partial Class MntJigModelDetail
         Me.Text = "Model Editor"
         Me.pnlRemarks.ResumeLayout(False)
         Me.pnlRemarks.PerformLayout()
+        Me.pnlAttachment.ResumeLayout(False)
+        Me.pnlAttachment.PerformLayout()
+        CType(Me.picImage, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.AxAcroPDF, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -228,4 +427,18 @@ Partial Class MntJigModelDetail
     Friend WithEvents rdActive As RadioButton
     Friend WithEvents cmbExtension As SergeUtils.EasyCompletionComboBox
     Friend WithEvents txtModelName As TextBox
+    Friend WithEvents pnlAttachment As Panel
+    Friend WithEvents lblProgress As Label
+    Friend WithEvents pbAttachment As ProgressBar
+    Friend WithEvents btnView As PinkieControls.ButtonXP
+    Friend WithEvents txtAttachmentName As Label
+    Friend WithEvents btnNext As PinkieControls.ButtonXP
+    Friend WithEvents btnPrevious As PinkieControls.ButtonXP
+    Friend WithEvents btnRemove As PinkieControls.ButtonXP
+    Friend WithEvents btnBrowse As PinkieControls.ButtonXP
+    Friend WithEvents picImage As PictureBox
+    Friend WithEvents lblAttachmentCount As Label
+    Friend WithEvents ofdRecDetail As OpenFileDialog
+    Friend WithEvents bgWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents AxAcroPDF As AxAcroPDFLib.AxAcroPDF
 End Class

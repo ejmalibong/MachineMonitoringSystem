@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.IO
 Imports BlackCoffeeLibrary
 
 Public Class MntJigModel
@@ -20,12 +21,27 @@ Public Class MntJigModel
 
     Private totalCount As Integer
 
+    Private dtModelAttachment As New DataTable
+
+
+    Private currentIndex As Integer
+
+    Private attachmentDirectories As New Directory
+    Private fileDirectory As String = attachmentDirectories.DrwIniDirectoryMt
+    Private lstAttachment As New List(Of FileAttachment)
+    Private lstAttachmentForCopy As New List(Of FileAttachment)
+    Private lstAttachmentForDelete As New List(Of FileAttachment)
+    Private lstDocumentFiles As New List(Of String)(New String() {".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt"})
+    Private lstImageFiles As New List(Of String)(New String() {".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tif", ".tiff"})
+    Private lstPdfFiles As New List(Of String)(New String() {".pdf"})
+
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
     End Sub
 
     Public Sub Reload()
@@ -282,9 +298,10 @@ Public Class MntJigModel
         LoadData()
 
         dbMain.EnableDoubleBuffered(dgvList)
-        ActiveControl = dgvList
 
         Me.dgvList.Columns(3).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+
+        ActiveControl = dgvList
     End Sub
 
     Private Sub GetScrollingIndex()
@@ -419,6 +436,7 @@ Public Class MntJigModel
 
     Private Sub FrmMntJigModel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvList.Dispose()
+        AxAcroPDF.Dispose()
     End Sub
 
     Private Sub SetScrollingIndex()
@@ -442,4 +460,176 @@ Public Class MntJigModel
         End If
     End Sub
 
+
+    Private Sub ShowAttachment()
+        Try
+            If lstAttachment.Count = 0 Then
+                picImage.Image = Nothing
+                AxAcroPDF.Visible = False
+                AxAcroPDF.LoadFile("Empty")
+                picImage.Visible = True
+                txtAttachmentName.Text = String.Empty
+                lblAttachmentCount.Text = ""
+                Exit Sub
+            Else
+                txtAttachmentName.Text = lstAttachment(currentIndex).safeName
+                lblAttachmentCount.Text = String.Format("{0}/{1}", currentIndex + 1, lstAttachment.Count)
+            End If
+
+            If lstImageFiles.Contains(lstAttachment(currentIndex).extensionName.ToString.Trim.ToLower) Then
+                picImage.Visible = True
+                AxAcroPDF.Visible = False
+
+                Using img As Image = Image.FromFile(lstAttachment(currentIndex).fileName)
+                    picImage.Image = New Bitmap(img)
+                End Using
+
+            ElseIf lstDocumentFiles.Contains(lstAttachment(currentIndex).extensionName.ToString.Trim.ToLower) Then
+                picImage.Visible = True
+                AxAcroPDF.Visible = False
+
+                Select Case lstAttachment(currentIndex).extensionName.ToString.Trim.ToLower
+                    Case ".doc", ".docx"
+                        picImage.Image = My.Resources.file_type_doc_512px
+
+                    Case ".xls", ".xlsx"
+                        picImage.Image = My.Resources.file_type_xls_512px
+
+                    Case ".ppt", ".pptx"
+                        picImage.Image = My.Resources.file_type_ppt_512px
+
+                    Case ".txt"
+                        picImage.Image = My.Resources.file_type_txt_512px
+                End Select
+
+            ElseIf lstPdfFiles.Contains(lstAttachment(currentIndex).extensionName.ToString.Trim.ToLower) Then
+                picImage.Visible = False
+                AxAcroPDF.Visible = True
+                AxAcroPDF.src = lstAttachment(currentIndex).fileName + "#toolbar=0&scrollbar=0&navpanes=0"
+                AxAcroPDF.setShowToolbar(False)
+                AxAcroPDF.setShowScrollbars(False)
+                AxAcroPDF.setView("Fit")
+                AxAcroPDF.setLayoutMode("SinglePage")
+
+            Else
+                picImage.Visible = True
+                AxAcroPDF.Visible = False
+                picImage.Image = My.Resources.file_type_unknown_512px
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub dgvList_SelectionChanged(sender As Object, e As EventArgs) Handles dgvList.SelectionChanged
+        Try
+            If dgvList.Rows.Count > 0 Then
+                Dim modelId As Integer = CType(Me.bsModel.Current, DataRowView).Item("ModelId")
+
+                Dim attachmentCount As Integer = 0
+                Dim prmCnt(0) As SqlParameter
+                prmCnt(0) = New SqlParameter("@ModelId", SqlDbType.Int)
+                prmCnt(0).Value = modelId
+
+                attachmentCount = dbMethod.ExecuteScalar("CntMntJigModelAttachmentByModelId", CommandType.StoredProcedure, prmCnt)
+
+                If attachmentCount > 0 Then
+                    Dim prmAttachment(0) As SqlParameter
+                    prmAttachment(0) = New SqlParameter("@ModelId", SqlDbType.Int)
+                    prmAttachment(0).Value = modelId
+
+                    dtModelAttachment = dbMethod.FillDataTable("RdMntJigModelAttachmentByModelId", CommandType.StoredProcedure, prmAttachment)
+
+                    lstAttachment.Clear()
+
+                    For i As Integer = 0 To dtModelAttachment.Rows.Count - 1
+                        Dim attachment As New FileAttachment(Path.Combine(fileDirectory, dtModelAttachment.Rows(i).Item("Filename").ToString),
+                                                             dtModelAttachment.Rows(i).Item("Filename").ToString,
+                                                             Path.GetExtension(Path.Combine(fileDirectory, dtModelAttachment.Rows(i).Item("Filename").ToString)),
+                                                             dtModelAttachment.Rows(i).Item("AttachmentId"))
+                        lstAttachment.Add(attachment)
+                    Next
+                    ShowAttachment()
+                Else
+                    AxAcroPDF.LoadFile("Empty")
+                    picImage.Image = Nothing
+                    picImage.Visible = True
+                    AxAcroPDF.Visible = False
+                    txtAttachmentName.Text = String.Empty
+                    lblAttachmentCount.Text = ""
+                    lstAttachment.Clear()
+                End If
+            Else
+                AxAcroPDF.LoadFile("Empty")
+                picImage.Image = Nothing
+                picImage.Visible = True
+                AxAcroPDF.Visible = False
+                txtAttachmentName.Text = String.Empty
+                lblAttachmentCount.Text = ""
+                lstAttachment.Clear()
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnPrevious_Click(sender As Object, e As EventArgs) Handles btnPrevious.Click
+        Try
+            NextImage(-1)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        Try
+            NextImage(1)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
+        Try
+            If lstAttachment.Count > 0 Then
+                Process.Start(lstAttachment(currentIndex).fileName)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub NextImage(val As Integer)
+        Try
+            If lstAttachment.Count = 0 Then
+                picImage.Image = Nothing
+                txtAttachmentName.Text = String.Empty
+                AxAcroPDF.Visible = False
+                AxAcroPDF.LoadFile("Empty")
+                picImage.Visible = True
+                Exit Sub
+            End If
+
+            currentIndex += val
+            If currentIndex < 0 Then currentIndex = lstAttachment.Count - 1
+            If currentIndex > lstAttachment.Count - 1 Then currentIndex = 0
+            If currentIndex = lstAttachment.Count - 1 Then currentIndex = lstAttachment.Count - 1
+            ShowAttachment()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub dgvList_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles dgvList.DataBindingComplete
+        Dim dataGridView As DataGridView
+        dataGridView = CType(sender, DataGridView)
+        dataGridView.ClearSelection()
+
+        AxAcroPDF.LoadFile("Empty")
+        picImage.Image = Nothing
+        picImage.Visible = True
+        AxAcroPDF.Visible = False
+        txtAttachmentName.Text = String.Empty
+        lblAttachmentCount.Text = ""
+    End Sub
 End Class

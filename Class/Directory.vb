@@ -26,6 +26,18 @@
         End If
     End Function
 
+    Public Function DrwIniDirectoryMt() As String
+        If isDebug = True Then
+            If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachment\DrwAttachmentMt"
+            Else
+                Return "B:\Users BACKUP\NBCP-LT-043\Desktop\Attachment\DrwAttachmentMt"
+            End If
+        Else
+            Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\DrwAttachmentMt"
+        End If
+    End Function
+
     Public Function ImgIniDirectoryFc() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then

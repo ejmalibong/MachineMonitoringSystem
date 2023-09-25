@@ -1303,7 +1303,7 @@ Partial Class MntTrxDetailOth
         Me.cmbRoutingStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbRoutingStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.cmbRoutingStatus.FormattingEnabled = True
-        Me.cmbRoutingStatus.Location = New System.Drawing.Point(409, 0)
+        Me.cmbRoutingStatus.Location = New System.Drawing.Point(420, 0)
         Me.cmbRoutingStatus.Name = "cmbRoutingStatus"
         Me.cmbRoutingStatus.Size = New System.Drawing.Size(250, 23)
         Me.cmbRoutingStatus.TabIndex = 583

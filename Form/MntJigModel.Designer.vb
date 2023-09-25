@@ -59,11 +59,22 @@ Partial Class MntJigModel
         Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.pnlImage = New System.Windows.Forms.Panel()
+        Me.picImage = New System.Windows.Forms.PictureBox()
+        Me.lblAttachmentCount = New System.Windows.Forms.Label()
+        Me.txtAttachmentName = New System.Windows.Forms.Label()
+        Me.btnView = New PinkieControls.ButtonXP()
+        Me.btnNext = New PinkieControls.ButtonXP()
+        Me.btnPrevious = New PinkieControls.ButtonXP()
+        Me.AxAcroPDF = New AxAcroPDFLib.AxAcroPDF()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByText.SuspendLayout()
+        Me.pnlImage.SuspendLayout()
+        CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.AxAcroPDF, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btnClose
@@ -74,7 +85,7 @@ Partial Class MntJigModel
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(597, 476)
+        Me.btnClose.Location = New System.Drawing.Point(891, 526)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -91,7 +102,7 @@ Partial Class MntJigModel
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(503, 476)
+        Me.btnDelete.Location = New System.Drawing.Point(797, 526)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -108,7 +119,7 @@ Partial Class MntJigModel
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(409, 476)
+        Me.btnEdit.Location = New System.Drawing.Point(703, 526)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -125,7 +136,7 @@ Partial Class MntJigModel
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(315, 476)
+        Me.btnAdd.Location = New System.Drawing.Point(609, 526)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -145,7 +156,7 @@ Partial Class MntJigModel
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(4, 480)
+        Me.bindingNavigator.Location = New System.Drawing.Point(0, 530)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
@@ -189,7 +200,6 @@ Partial Class MntJigModel
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -297,9 +307,8 @@ Partial Class MntJigModel
         Me.dgvList.AllowUserToAddRows = False
         Me.dgvList.AllowUserToDeleteRows = False
         Me.dgvList.AllowUserToResizeRows = False
-        Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvList.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -319,8 +328,9 @@ Partial Class MntJigModel
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(690, 440)
+        Me.dgvList.Size = New System.Drawing.Size(470, 490)
         Me.dgvList.TabIndex = 549
+        Me.dgvList.TabStop = False
         '
         'ColModelId
         '
@@ -339,7 +349,7 @@ Partial Class MntJigModel
         Me.ColModelName.HeaderText = "Model Name"
         Me.ColModelName.Name = "ColModelName"
         Me.ColModelName.ReadOnly = True
-        Me.ColModelName.Width = 400
+        Me.ColModelName.Width = 250
         '
         'ColExtensionId
         '
@@ -430,6 +440,117 @@ Partial Class MntJigModel
         Me.DataGridViewComboBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewComboBoxColumn3.Width = 120
         '
+        'pnlImage
+        '
+        Me.pnlImage.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pnlImage.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.pnlImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlImage.Controls.Add(Me.picImage)
+        Me.pnlImage.Controls.Add(Me.AxAcroPDF)
+        Me.pnlImage.Controls.Add(Me.lblAttachmentCount)
+        Me.pnlImage.Controls.Add(Me.txtAttachmentName)
+        Me.pnlImage.Controls.Add(Me.btnView)
+        Me.pnlImage.Controls.Add(Me.btnNext)
+        Me.pnlImage.Controls.Add(Me.btnPrevious)
+        Me.pnlImage.Location = New System.Drawing.Point(473, 33)
+        Me.pnlImage.Name = "pnlImage"
+        Me.pnlImage.Size = New System.Drawing.Size(508, 490)
+        Me.pnlImage.TabIndex = 550
+        '
+        'picImage
+        '
+        Me.picImage.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.picImage.BackColor = System.Drawing.Color.White
+        Me.picImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.picImage.ErrorImage = Nothing
+        Me.picImage.InitialImage = Nothing
+        Me.picImage.Location = New System.Drawing.Point(3, 20)
+        Me.picImage.Name = "picImage"
+        Me.picImage.Size = New System.Drawing.Size(500, 438)
+        Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picImage.TabIndex = 0
+        Me.picImage.TabStop = False
+        '
+        'lblAttachmentCount
+        '
+        Me.lblAttachmentCount.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblAttachmentCount.AutoSize = True
+        Me.lblAttachmentCount.Font = New System.Drawing.Font("Segoe UI", 8.5!)
+        Me.lblAttachmentCount.Location = New System.Drawing.Point(261, 466)
+        Me.lblAttachmentCount.Name = "lblAttachmentCount"
+        Me.lblAttachmentCount.Size = New System.Drawing.Size(24, 15)
+        Me.lblAttachmentCount.TabIndex = 577
+        Me.lblAttachmentCount.Text = "0/0"
+        '
+        'txtAttachmentName
+        '
+        Me.txtAttachmentName.AutoSize = True
+        Me.txtAttachmentName.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.txtAttachmentName.Location = New System.Drawing.Point(3, 2)
+        Me.txtAttachmentName.Name = "txtAttachmentName"
+        Me.txtAttachmentName.Size = New System.Drawing.Size(55, 15)
+        Me.txtAttachmentName.TabIndex = 576
+        Me.txtAttachmentName.Text = "Filename"
+        '
+        'btnView
+        '
+        Me.btnView.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnView.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnView.DefaultScheme = False
+        Me.btnView.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnView.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnView.Hint = "View"
+        Me.btnView.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Expand_16_x_16
+        Me.btnView.Location = New System.Drawing.Point(66, 460)
+        Me.btnView.Name = "btnView"
+        Me.btnView.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnView.Size = New System.Drawing.Size(28, 26)
+        Me.btnView.TabIndex = 575
+        Me.btnView.TabStop = False
+        '
+        'btnNext
+        '
+        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnNext.DefaultScheme = False
+        Me.btnNext.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnNext.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnNext.Hint = "Next"
+        Me.btnNext.Location = New System.Drawing.Point(34, 460)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnNext.Size = New System.Drawing.Size(28, 26)
+        Me.btnNext.TabIndex = 574
+        Me.btnNext.TabStop = False
+        Me.btnNext.Text = ">"
+        '
+        'btnPrevious
+        '
+        Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnPrevious.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.btnPrevious.DefaultScheme = False
+        Me.btnPrevious.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnPrevious.Font = New System.Drawing.Font("Verdana", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPrevious.Hint = "Previous"
+        Me.btnPrevious.Location = New System.Drawing.Point(2, 460)
+        Me.btnPrevious.Name = "btnPrevious"
+        Me.btnPrevious.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnPrevious.Size = New System.Drawing.Size(28, 26)
+        Me.btnPrevious.TabIndex = 573
+        Me.btnPrevious.TabStop = False
+        Me.btnPrevious.Text = "<"
+        '
+        'AxAcroPDF
+        '
+        Me.AxAcroPDF.Enabled = True
+        Me.AxAcroPDF.Location = New System.Drawing.Point(3, 20)
+        Me.AxAcroPDF.Name = "AxAcroPDF"
+        Me.AxAcroPDF.OcxState = CType(resources.GetObject("AxAcroPDF.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxAcroPDF.Size = New System.Drawing.Size(500, 438)
+        Me.AxAcroPDF.TabIndex = 578
+        '
         'MntJigModel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -437,7 +558,8 @@ Partial Class MntJigModel
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(690, 511)
+        Me.ClientSize = New System.Drawing.Size(984, 561)
+        Me.Controls.Add(Me.pnlImage)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.dgvList)
         Me.Controls.Add(Me.btnReset)
@@ -465,6 +587,10 @@ Partial Class MntJigModel
         Me.pnlSearchByCmb.ResumeLayout(False)
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
+        Me.pnlImage.ResumeLayout(False)
+        Me.pnlImage.PerformLayout()
+        CType(Me.picImage, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.AxAcroPDF, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -504,4 +630,12 @@ Partial Class MntJigModel
     Friend WithEvents ColExtensionId As DataGridViewTextBoxColumn
     Friend WithEvents ColExtensionName As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
+    Friend WithEvents pnlImage As Panel
+    Friend WithEvents picImage As PictureBox
+    Friend WithEvents btnView As PinkieControls.ButtonXP
+    Friend WithEvents btnNext As PinkieControls.ButtonXP
+    Friend WithEvents btnPrevious As PinkieControls.ButtonXP
+    Friend WithEvents lblAttachmentCount As Label
+    Friend WithEvents txtAttachmentName As Label
+    Friend WithEvents AxAcroPDF As AxAcroPDFLib.AxAcroPDF
 End Class
