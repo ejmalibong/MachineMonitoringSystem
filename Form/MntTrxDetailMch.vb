@@ -702,11 +702,9 @@ Public Class MntTrxDetailMch
         colNickname.SortMode = DataGridViewColumnSortMode.NotSortable
         dgvDetail.Columns.Insert(3, colNickname)
 
-        Dim prmPart(1) As SqlParameter
-        prmPart(0) = New SqlParameter("@IsNoStock", SqlDbType.Bit)
-        prmPart(0).Value = 0
-        prmPart(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-        prmPart(1).Value = 1
+        Dim prmPart(0) As SqlParameter
+        prmPart(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        prmPart(0).Value = 1
         dtSparePart = dbMethod.FillDataTable("RdMntSparePart", CommandType.StoredProcedure, prmPart)
 
         Me.bsSparePart.DataSource = dtSparePart

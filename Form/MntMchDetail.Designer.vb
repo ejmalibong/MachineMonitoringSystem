@@ -41,6 +41,8 @@ Partial Class MntMchDetail
         Me.cmbPartGroup = New SergeUtils.EasyCompletionComboBox()
         Me.lblFrequency = New System.Windows.Forms.Label()
         Me.cmbFrequency = New SergeUtils.EasyCompletionComboBox()
+        Me.lblSerialNumber = New System.Windows.Forms.Label()
+        Me.txtSerialNumber = New System.Windows.Forms.TextBox()
         Me.pnlStatus.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -52,11 +54,11 @@ Partial Class MntMchDetail
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(230, 185)
+        Me.btnClose.Location = New System.Drawing.Point(230, 215)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
-        Me.btnClose.TabIndex = 11
+        Me.btnClose.TabIndex = 8
         Me.btnClose.TabStop = False
         Me.btnClose.Text = "Close"
         '
@@ -69,11 +71,11 @@ Partial Class MntMchDetail
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.Hint = "Delete record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(136, 185)
+        Me.btnDelete.Location = New System.Drawing.Point(136, 215)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(90, 32)
-        Me.btnDelete.TabIndex = 10
+        Me.btnDelete.TabIndex = 7
         Me.btnDelete.TabStop = False
         Me.btnDelete.Text = " Delete"
         '
@@ -86,11 +88,11 @@ Partial Class MntMchDetail
         Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnSave.Hint = "Save record"
         Me.btnSave.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Save_16_x_16
-        Me.btnSave.Location = New System.Drawing.Point(42, 185)
+        Me.btnSave.Location = New System.Drawing.Point(42, 215)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSave.Size = New System.Drawing.Size(90, 32)
-        Me.btnSave.TabIndex = 9
+        Me.btnSave.TabIndex = 6
         Me.btnSave.TabStop = False
         Me.btnSave.Text = "  Save"
         '
@@ -114,7 +116,7 @@ Partial Class MntMchDetail
         Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(4, 104)
+        Me.lblStatus.Location = New System.Drawing.Point(4, 129)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblStatus.Size = New System.Drawing.Size(100, 23)
@@ -128,7 +130,7 @@ Partial Class MntMchDetail
         Me.lblRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblRemarks.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblRemarks.ForeColor = System.Drawing.Color.Black
-        Me.lblRemarks.Location = New System.Drawing.Point(4, 154)
+        Me.lblRemarks.Location = New System.Drawing.Point(4, 179)
         Me.lblRemarks.Name = "lblRemarks"
         Me.lblRemarks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblRemarks.Size = New System.Drawing.Size(100, 23)
@@ -143,10 +145,10 @@ Partial Class MntMchDetail
         Me.pnlStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pnlStatus.Controls.Add(Me.rdInactive)
         Me.pnlStatus.Controls.Add(Me.rdActive)
-        Me.pnlStatus.Location = New System.Drawing.Point(103, 154)
+        Me.pnlStatus.Location = New System.Drawing.Point(103, 179)
         Me.pnlStatus.Name = "pnlStatus"
         Me.pnlStatus.Size = New System.Drawing.Size(217, 23)
-        Me.pnlStatus.TabIndex = 6
+        Me.pnlStatus.TabIndex = 5
         '
         'rdInactive
         '
@@ -210,7 +212,7 @@ Partial Class MntMchDetail
         Me.txtMachineStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtMachineStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtMachineStatus.ForeColor = System.Drawing.Color.Black
-        Me.txtMachineStatus.Location = New System.Drawing.Point(103, 104)
+        Me.txtMachineStatus.Location = New System.Drawing.Point(103, 129)
         Me.txtMachineStatus.Name = "txtMachineStatus"
         Me.txtMachineStatus.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
         Me.txtMachineStatus.Size = New System.Drawing.Size(217, 23)
@@ -224,7 +226,7 @@ Partial Class MntMchDetail
         Me.txtMachineSubStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtMachineSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtMachineSubStatus.ForeColor = System.Drawing.Color.Black
-        Me.txtMachineSubStatus.Location = New System.Drawing.Point(103, 129)
+        Me.txtMachineSubStatus.Location = New System.Drawing.Point(103, 154)
         Me.txtMachineSubStatus.Name = "txtMachineSubStatus"
         Me.txtMachineSubStatus.Padding = New System.Windows.Forms.Padding(2, 0, 0, 0)
         Me.txtMachineSubStatus.Size = New System.Drawing.Size(217, 23)
@@ -238,7 +240,7 @@ Partial Class MntMchDetail
         Me.lblSubStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblSubStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblSubStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblSubStatus.Location = New System.Drawing.Point(4, 129)
+        Me.lblSubStatus.Location = New System.Drawing.Point(4, 154)
         Me.lblSubStatus.Name = "lblSubStatus"
         Me.lblSubStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblSubStatus.Size = New System.Drawing.Size(100, 23)
@@ -296,13 +298,38 @@ Partial Class MntMchDetail
         Me.cmbFrequency.Size = New System.Drawing.Size(217, 23)
         Me.cmbFrequency.TabIndex = 3
         '
+        'lblSerialNumber
+        '
+        Me.lblSerialNumber.BackColor = System.Drawing.SystemColors.Control
+        Me.lblSerialNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSerialNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSerialNumber.ForeColor = System.Drawing.Color.Black
+        Me.lblSerialNumber.Location = New System.Drawing.Point(4, 104)
+        Me.lblSerialNumber.Name = "lblSerialNumber"
+        Me.lblSerialNumber.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblSerialNumber.Size = New System.Drawing.Size(100, 23)
+        Me.lblSerialNumber.TabIndex = 591
+        Me.lblSerialNumber.Text = "Serial Number"
+        Me.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtSerialNumber
+        '
+        Me.txtSerialNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtSerialNumber.Location = New System.Drawing.Point(103, 104)
+        Me.txtSerialNumber.MaxLength = 50
+        Me.txtSerialNumber.Name = "txtSerialNumber"
+        Me.txtSerialNumber.Size = New System.Drawing.Size(217, 23)
+        Me.txtSerialNumber.TabIndex = 4
+        '
         'MntMchDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(324, 221)
+        Me.ClientSize = New System.Drawing.Size(324, 251)
+        Me.Controls.Add(Me.txtSerialNumber)
+        Me.Controls.Add(Me.lblSerialNumber)
         Me.Controls.Add(Me.lblFrequency)
         Me.Controls.Add(Me.cmbFrequency)
         Me.Controls.Add(Me.lblPartGroup)
@@ -331,7 +358,7 @@ Partial Class MntMchDetail
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Machine Editor"
+        Me.Text = "Machine Details"
         Me.pnlStatus.ResumeLayout(False)
         Me.pnlStatus.PerformLayout()
         Me.ResumeLayout(False)
@@ -359,4 +386,6 @@ Partial Class MntMchDetail
     Friend WithEvents cmbPartGroup As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblFrequency As Label
     Friend WithEvents cmbFrequency As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents lblSerialNumber As Label
+    Friend WithEvents txtSerialNumber As TextBox
 End Class

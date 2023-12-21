@@ -28,14 +28,13 @@ Partial Class MntTrxConsole
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntTrxConsole))
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
@@ -43,7 +42,6 @@ Partial Class MntTrxConsole
         Me.dgvMachine = New System.Windows.Forms.DataGridView()
         Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineStatusId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineLastTransaction = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineElapsedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -67,7 +65,6 @@ Partial Class MntTrxConsole
         Me.dgvJig = New System.Windows.Forms.DataGridView()
         Me.ColJig = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColJigCompleteName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColJigAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColJigStatusId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColJigModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColJigExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -96,8 +93,9 @@ Partial Class MntTrxConsole
         Me.ColTechnician = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColShiftId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineName2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColActivity = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColDatetimeStarted = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColDatetimeEnded = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTotalAccumulatedTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColRoutingStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -193,7 +191,7 @@ Partial Class MntTrxConsole
         Me.dgvMachine.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvMachine.ColumnHeadersHeight = 25
         Me.dgvMachine.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvMachine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColAreaName, Me.ColMachineStatusId, Me.ColMachineLastTransaction, Me.ColMachineElapsedTime})
+        Me.dgvMachine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColMachineStatusId, Me.ColMachineLastTransaction, Me.ColMachineElapsedTime})
         Me.dgvMachine.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvMachine.Location = New System.Drawing.Point(3, 3)
         Me.dgvMachine.MultiSelect = False
@@ -204,7 +202,7 @@ Partial Class MntTrxConsole
         Me.dgvMachine.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dgvMachine.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvMachine.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvMachine.Size = New System.Drawing.Size(336, 566)
+        Me.dgvMachine.Size = New System.Drawing.Size(236, 566)
         Me.dgvMachine.TabIndex = 156
         '
         'ColMachineId
@@ -220,19 +218,10 @@ Partial Class MntTrxConsole
         Me.ColMachineName.DataPropertyName = "MachineName"
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         Me.ColMachineName.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColMachineName.HeaderText = "Machine"
+        Me.ColMachineName.HeaderText = ""
         Me.ColMachineName.Name = "ColMachineName"
         Me.ColMachineName.ReadOnly = True
         Me.ColMachineName.Width = 140
-        '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.ColAreaName.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
         '
         'ColMachineStatusId
         '
@@ -245,9 +234,9 @@ Partial Class MntTrxConsole
         'ColMachineLastTransaction
         '
         Me.ColMachineLastTransaction.DataPropertyName = "TrxFrom"
-        DataGridViewCellStyle4.Format = "G"
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle3.Format = "G"
+        DataGridViewCellStyle3.NullValue = Nothing
+        Me.ColMachineLastTransaction.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColMachineLastTransaction.HeaderText = "Last Transaction"
         Me.ColMachineLastTransaction.Name = "ColMachineLastTransaction"
         Me.ColMachineLastTransaction.ReadOnly = True
@@ -255,9 +244,9 @@ Partial Class MntTrxConsole
         '
         'ColMachineElapsedTime
         '
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle5.NullValue = Nothing
-        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.ColMachineElapsedTime.DefaultCellStyle = DataGridViewCellStyle4
         Me.ColMachineElapsedTime.HeaderText = "Time"
         Me.ColMachineElapsedTime.Name = "ColMachineElapsedTime"
         Me.ColMachineElapsedTime.ReadOnly = True
@@ -271,17 +260,17 @@ Partial Class MntTrxConsole
         Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxId, Me.ColTechnician, Me.ColShiftId, Me.ColMachineName2, Me.ColDatetimeStarted, Me.ColActivity, Me.ColDatetimeEnded, Me.ColTotalAccumulatedTime, Me.ColRoutingStatusName})
-        Me.dgvList.Location = New System.Drawing.Point(346, 33)
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColTrxId, Me.ColTechnician, Me.ColShiftId, Me.ColMachineName2, Me.ColStatusName, Me.ColActivity, Me.ColDatetimeStarted, Me.ColDatetimeEnded, Me.ColTotalAccumulatedTime, Me.ColRoutingStatusName})
+        Me.dgvList.Location = New System.Drawing.Point(249, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
         Me.dgvList.ReadOnly = True
@@ -290,22 +279,21 @@ Partial Class MntTrxConsole
         Me.dgvList.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1048, 529)
+        Me.dgvList.Size = New System.Drawing.Size(1145, 529)
         Me.dgvList.TabIndex = 158
         '
         'btnRefresh
         '
-        Me.btnRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnRefresh.DefaultScheme = False
         Me.btnRefresh.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnRefresh.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnRefresh.Hint = "Refresh lists"
         Me.btnRefresh.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Refresh_16_x_16
-        Me.btnRefresh.Location = New System.Drawing.Point(654, 566)
+        Me.btnRefresh.Location = New System.Drawing.Point(971, 2)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnRefresh.Size = New System.Drawing.Size(90, 29)
+        Me.btnRefresh.Size = New System.Drawing.Size(85, 29)
         Me.btnRefresh.TabIndex = 160
         Me.btnRefresh.Text = "Refresh"
         '
@@ -313,13 +301,13 @@ Partial Class MntTrxConsole
         '
         Me.lblSearchCriteria.BackColor = System.Drawing.SystemColors.Control
         Me.lblSearchCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSearchCriteria.ForeColor = System.Drawing.Color.Black
-        Me.lblSearchCriteria.Location = New System.Drawing.Point(346, 4)
+        Me.lblSearchCriteria.Location = New System.Drawing.Point(249, 4)
         Me.lblSearchCriteria.Name = "lblSearchCriteria"
-        Me.lblSearchCriteria.Size = New System.Drawing.Size(60, 25)
+        Me.lblSearchCriteria.Size = New System.Drawing.Size(55, 25)
         Me.lblSearchCriteria.TabIndex = 534
-        Me.lblSearchCriteria.Text = "Criteria"
+        Me.lblSearchCriteria.Text = "Filter by"
         Me.lblSearchCriteria.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'bindingNavigator
@@ -436,7 +424,7 @@ Partial Class MntTrxConsole
         Me.tabCtrl.Padding = New System.Drawing.Point(0, 0)
         Me.tabCtrl.SelectedIndex = 0
         Me.tabCtrl.ShowToolTips = True
-        Me.tabCtrl.Size = New System.Drawing.Size(350, 600)
+        Me.tabCtrl.Size = New System.Drawing.Size(250, 600)
         Me.tabCtrl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.tabCtrl.TabIndex = 540
         '
@@ -446,7 +434,7 @@ Partial Class MntTrxConsole
         Me.pgMachine.Location = New System.Drawing.Point(4, 24)
         Me.pgMachine.Name = "pgMachine"
         Me.pgMachine.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgMachine.Size = New System.Drawing.Size(342, 572)
+        Me.pgMachine.Size = New System.Drawing.Size(242, 572)
         Me.pgMachine.TabIndex = 0
         Me.pgMachine.Text = "Machine"
         Me.pgMachine.UseVisualStyleBackColor = True
@@ -457,7 +445,7 @@ Partial Class MntTrxConsole
         Me.pgJig.Location = New System.Drawing.Point(4, 24)
         Me.pgJig.Name = "pgJig"
         Me.pgJig.Padding = New System.Windows.Forms.Padding(3)
-        Me.pgJig.Size = New System.Drawing.Size(342, 572)
+        Me.pgJig.Size = New System.Drawing.Size(242, 572)
         Me.pgJig.TabIndex = 1
         Me.pgJig.Text = "Jig"
         Me.pgJig.UseVisualStyleBackColor = True
@@ -468,16 +456,16 @@ Partial Class MntTrxConsole
         Me.dgvJig.AllowUserToDeleteRows = False
         Me.dgvJig.AllowUserToResizeColumns = False
         Me.dgvJig.AllowUserToResizeRows = False
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvJig.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvJig.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
         Me.dgvJig.ColumnHeadersHeight = 25
         Me.dgvJig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvJig.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJig, Me.ColJigCompleteName, Me.ColJigAreaName, Me.ColJigStatusId, Me.ColJigModelId, Me.ColJigExtensionId, Me.ColJigLastTransaction, Me.ColJigElapsedTime})
+        Me.dgvJig.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColJig, Me.ColJigCompleteName, Me.ColJigStatusId, Me.ColJigModelId, Me.ColJigExtensionId, Me.ColJigLastTransaction, Me.ColJigElapsedTime})
         Me.dgvJig.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvJig.Location = New System.Drawing.Point(3, 3)
         Me.dgvJig.MultiSelect = False
@@ -487,7 +475,7 @@ Partial Class MntTrxConsole
         Me.dgvJig.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 8.5!)
         Me.dgvJig.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvJig.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvJig.Size = New System.Drawing.Size(336, 566)
+        Me.dgvJig.Size = New System.Drawing.Size(236, 566)
         Me.dgvJig.TabIndex = 0
         '
         'ColJig
@@ -501,18 +489,10 @@ Partial Class MntTrxConsole
         'ColJigCompleteName
         '
         Me.ColJigCompleteName.DataPropertyName = "JigCompleteName"
-        Me.ColJigCompleteName.HeaderText = "Jig Name"
+        Me.ColJigCompleteName.HeaderText = ""
         Me.ColJigCompleteName.Name = "ColJigCompleteName"
         Me.ColJigCompleteName.ReadOnly = True
         Me.ColJigCompleteName.Width = 205
-        '
-        'ColJigAreaName
-        '
-        Me.ColJigAreaName.DataPropertyName = "AreaName"
-        Me.ColJigAreaName.HeaderText = "Area"
-        Me.ColJigAreaName.Name = "ColJigAreaName"
-        Me.ColJigAreaName.ReadOnly = True
-        Me.ColJigAreaName.Width = 90
         '
         'ColJigStatusId
         '
@@ -548,8 +528,8 @@ Partial Class MntTrxConsole
         '
         'ColJigElapsedTime
         '
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColJigElapsedTime.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColJigElapsedTime.DefaultCellStyle = DataGridViewCellStyle11
         Me.ColJigElapsedTime.HeaderText = "Time"
         Me.ColJigElapsedTime.Name = "ColJigElapsedTime"
         Me.ColJigElapsedTime.ReadOnly = True
@@ -560,9 +540,9 @@ Partial Class MntTrxConsole
         Me.lblStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
         Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(351, 568)
+        Me.lblStatus.Location = New System.Drawing.Point(249, 568)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(60, 25)
         Me.lblStatus.TabIndex = 541
@@ -576,9 +556,9 @@ Partial Class MntTrxConsole
         Me.cmbStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbStatus.FormattingEnabled = True
         Me.cmbStatus.IntegralHeight = False
-        Me.cmbStatus.Location = New System.Drawing.Point(410, 568)
+        Me.cmbStatus.Location = New System.Drawing.Point(308, 568)
         Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(240, 25)
+        Me.cmbStatus.Size = New System.Drawing.Size(250, 25)
         Me.cmbStatus.TabIndex = 542
         '
         'cmbSearchCriteria
@@ -586,7 +566,7 @@ Partial Class MntTrxConsole
         Me.cmbSearchCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbSearchCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmbSearchCriteria.FormattingEnabled = True
-        Me.cmbSearchCriteria.Location = New System.Drawing.Point(405, 4)
+        Me.cmbSearchCriteria.Location = New System.Drawing.Point(303, 4)
         Me.cmbSearchCriteria.Name = "cmbSearchCriteria"
         Me.cmbSearchCriteria.Size = New System.Drawing.Size(165, 25)
         Me.cmbSearchCriteria.TabIndex = 535
@@ -599,7 +579,7 @@ Partial Class MntTrxConsole
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnSearch.Hint = "Search"
         Me.btnSearch.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Find_16_x_16
-        Me.btnSearch.Location = New System.Drawing.Point(894, 2)
+        Me.btnSearch.Location = New System.Drawing.Point(793, 2)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnSearch.Size = New System.Drawing.Size(85, 29)
@@ -615,7 +595,7 @@ Partial Class MntTrxConsole
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnReset.Hint = "Reset search filter"
         Me.btnReset.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Undo_16_x_16
-        Me.btnReset.Location = New System.Drawing.Point(983, 2)
+        Me.btnReset.Location = New System.Drawing.Point(882, 2)
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnReset.Size = New System.Drawing.Size(85, 29)
@@ -631,7 +611,7 @@ Partial Class MntTrxConsole
         Me.pnlSearchByDate.Controls.Add(Me.lblSearchStartDate)
         Me.pnlSearchByDate.Controls.Add(Me.dtpStartDate)
         Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.pnlSearchByDate.Location = New System.Drawing.Point(571, 1)
+        Me.pnlSearchByDate.Location = New System.Drawing.Point(469, 1)
         Me.pnlSearchByDate.Name = "pnlSearchByDate"
         Me.pnlSearchByDate.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByDate.TabIndex = 536
@@ -681,7 +661,7 @@ Partial Class MntTrxConsole
         Me.pnlSearchByCmb.BackColor = System.Drawing.Color.White
         Me.pnlSearchByCmb.Controls.Add(Me.cmbCommonCmb)
         Me.pnlSearchByCmb.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.pnlSearchByCmb.Location = New System.Drawing.Point(571, 1)
+        Me.pnlSearchByCmb.Location = New System.Drawing.Point(469, 1)
         Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
         Me.pnlSearchByCmb.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByCmb.TabIndex = 537
@@ -704,7 +684,7 @@ Partial Class MntTrxConsole
         Me.pnlSearchByText.BackColor = System.Drawing.Color.White
         Me.pnlSearchByText.Controls.Add(Me.txtCommonTxt)
         Me.pnlSearchByText.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.pnlSearchByText.Location = New System.Drawing.Point(571, 1)
+        Me.pnlSearchByText.Location = New System.Drawing.Point(469, 1)
         Me.pnlSearchByText.Name = "pnlSearchByText"
         Me.pnlSearchByText.Size = New System.Drawing.Size(322, 31)
         Me.pnlSearchByText.TabIndex = 538
@@ -760,8 +740,8 @@ Partial Class MntTrxConsole
         'ColShiftId
         '
         Me.ColShiftId.DataPropertyName = "ShiftId"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColShiftId.DefaultCellStyle = DataGridViewCellStyle6
         Me.ColShiftId.HeaderText = "Shift"
         Me.ColShiftId.Name = "ColShiftId"
         Me.ColShiftId.ReadOnly = True
@@ -775,30 +755,38 @@ Partial Class MntTrxConsole
         Me.ColMachineName2.ReadOnly = True
         Me.ColMachineName2.Width = 200
         '
+        'ColStatusName
+        '
+        Me.ColStatusName.DataPropertyName = "StatusName"
+        Me.ColStatusName.HeaderText = "Activity"
+        Me.ColStatusName.Name = "ColStatusName"
+        Me.ColStatusName.ReadOnly = True
+        '
+        'ColActivity
+        '
+        Me.ColActivity.DataPropertyName = "ActionTaken"
+        Me.ColActivity.HeaderText = "Action Taken"
+        Me.ColActivity.Name = "ColActivity"
+        Me.ColActivity.ReadOnly = True
+        Me.ColActivity.Width = 200
+        '
         'ColDatetimeStarted
         '
         Me.ColDatetimeStarted.DataPropertyName = "DatetimeStarted"
-        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle7.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle7.NullValue = Nothing
+        Me.ColDatetimeStarted.DefaultCellStyle = DataGridViewCellStyle7
         Me.ColDatetimeStarted.HeaderText = "Start"
         Me.ColDatetimeStarted.Name = "ColDatetimeStarted"
         Me.ColDatetimeStarted.ReadOnly = True
         Me.ColDatetimeStarted.Width = 120
         '
-        'ColActivity
-        '
-        Me.ColActivity.DataPropertyName = "ActionTaken"
-        Me.ColActivity.HeaderText = "Activity"
-        Me.ColActivity.Name = "ColActivity"
-        Me.ColActivity.ReadOnly = True
-        '
         'ColDatetimeEnded
         '
         Me.ColDatetimeEnded.DataPropertyName = "DatetimeEnded"
-        DataGridViewCellStyle9.Format = "MM/dd/yyyy hh:mm tt"
-        DataGridViewCellStyle9.NullValue = Nothing
-        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle8.Format = "MM/dd/yyyy hh:mm tt"
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.ColDatetimeEnded.DefaultCellStyle = DataGridViewCellStyle8
         Me.ColDatetimeEnded.HeaderText = "End"
         Me.ColDatetimeEnded.Name = "ColDatetimeEnded"
         Me.ColDatetimeEnded.ReadOnly = True
@@ -807,8 +795,8 @@ Partial Class MntTrxConsole
         'ColTotalAccumulatedTime
         '
         Me.ColTotalAccumulatedTime.DataPropertyName = "TotalAccumulatedDowntime"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTotalAccumulatedTime.DefaultCellStyle = DataGridViewCellStyle9
         Me.ColTotalAccumulatedTime.HeaderText = "Minutes"
         Me.ColTotalAccumulatedTime.Name = "ColTotalAccumulatedTime"
         Me.ColTotalAccumulatedTime.ReadOnly = True
@@ -820,7 +808,7 @@ Partial Class MntTrxConsole
         Me.ColRoutingStatusName.HeaderText = "Status"
         Me.ColRoutingStatusName.Name = "ColRoutingStatusName"
         Me.ColRoutingStatusName.ReadOnly = True
-        Me.ColRoutingStatusName.Width = 200
+        Me.ColRoutingStatusName.Width = 150
         '
         'MntTrxConsole
         '
@@ -902,20 +890,6 @@ Partial Class MntTrxConsole
     Friend WithEvents pnlSearchByDate As System.Windows.Forms.Panel
     Friend WithEvents tmrElapsedTime As System.Windows.Forms.Timer
     Friend WithEvents dgvJig As System.Windows.Forms.DataGridView
-    Friend WithEvents ColMachineId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColAreaName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineStatusId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineLastTransaction As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineElapsedTime As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJig As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigCompleteName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigAreaName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigStatusId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigModelId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigExtensionId As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigLastTransaction As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents ColJigElapsedTime As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents pnlSearchByCmb As System.Windows.Forms.Panel
     Friend WithEvents cmbCommonCmb As SergeUtils.EasyCompletionComboBox
     Friend WithEvents pnlSearchByText As System.Windows.Forms.Panel
@@ -928,12 +902,25 @@ Partial Class MntTrxConsole
     Friend WithEvents lblSearchEndDate As Label
     Friend WithEvents lblSearchStartDate As Label
     Friend WithEvents dtpStartDate As DateTimePicker
+    Friend WithEvents ColMachineId As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineStatusId As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineLastTransaction As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineElapsedTime As DataGridViewTextBoxColumn
+    Friend WithEvents ColJig As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigCompleteName As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigStatusId As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigModelId As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigExtensionId As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigLastTransaction As DataGridViewTextBoxColumn
+    Friend WithEvents ColJigElapsedTime As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
     Friend WithEvents ColTechnician As DataGridViewTextBoxColumn
     Friend WithEvents ColShiftId As DataGridViewTextBoxColumn
     Friend WithEvents ColMachineName2 As DataGridViewTextBoxColumn
-    Friend WithEvents ColDatetimeStarted As DataGridViewTextBoxColumn
+    Friend WithEvents ColStatusName As DataGridViewTextBoxColumn
     Friend WithEvents ColActivity As DataGridViewTextBoxColumn
+    Friend WithEvents ColDatetimeStarted As DataGridViewTextBoxColumn
     Friend WithEvents ColDatetimeEnded As DataGridViewTextBoxColumn
     Friend WithEvents ColTotalAccumulatedTime As DataGridViewTextBoxColumn
     Friend WithEvents ColRoutingStatusName As DataGridViewTextBoxColumn

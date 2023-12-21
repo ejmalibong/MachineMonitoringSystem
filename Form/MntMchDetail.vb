@@ -93,7 +93,7 @@ Public Class MntMchDetail
                     Return
                 End If
 
-                Dim prmMch(7) As SqlParameter
+                Dim prmMch(8) As SqlParameter
                 prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmMch(0).Direction = ParameterDirection.Output
                 prmMch(1) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
@@ -108,11 +108,14 @@ Public Class MntMchDetail
                 prmMch(5).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
                 prmMch(6) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
                 prmMch(6).Value = cmbFrequency.SelectedValue
-                prmMch(7) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmMch(7).Value = IIf(rdActive.Checked = True, True, False)
+                prmMch(7) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
+                prmMch(7).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
+                prmMch(8) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmMch(8).Value = IIf(rdActive.Checked = True, True, False)
 
                 dbMethod.ExecuteNonQuery("InsMntMachine", CommandType.StoredProcedure, prmMch)
                 pKey = prmMch(0).Value
+
             Else 'old record
                 If Not txtMachineName.Text.Trim.Equals(orgMachineName) Then
                     If IsMachineExist(txtMachineName.Text.Trim) = True Then
@@ -122,7 +125,7 @@ Public Class MntMchDetail
                     End If
                 End If
 
-                Dim prmMch(5) As SqlParameter
+                Dim prmMch(6) As SqlParameter
                 prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmMch(0).Value = machineId
                 prmMch(1) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
@@ -133,8 +136,10 @@ Public Class MntMchDetail
                 prmMch(3).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
                 prmMch(4) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
                 prmMch(4).Value = cmbFrequency.SelectedValue
-                prmMch(5) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmMch(5).Value = IIf(rdActive.Checked = True, True, False)
+                prmMch(5) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
+                prmMch(5).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
+                prmMch(6) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmMch(6).Value = IIf(rdActive.Checked = True, True, False)
 
                 dbMethod.ExecuteNonQuery("UpdMntMachine", CommandType.StoredProcedure, prmMch)
                 pKey = machineId
@@ -286,6 +291,7 @@ Public Class MntMchDetail
             Me.Text = "New Machine Entry"
 
             txtMachineName.Clear()
+            txtSerialNumber.Clear()
             cmbArea.SelectedValue = 0
             cmbPartGroup.SelectedValue = 0
             cmbFrequency.SelectedValue = 0
@@ -315,6 +321,10 @@ Public Class MntMchDetail
                 cmbFrequency.SelectedValue = row("PmFrequencyId")
                 txtMachineStatus.Text = GetMachineStatus(row("MachineStatusId"))
                 txtMachineSubStatus.Text = GetMachineSubStatus(row("MachineSubStatusId"))
+
+                If Not row("SerialNumber") Is DBNull.Value Then
+                    txtSerialNumber.Text = row("SerialNumber").ToString.Trim
+                End If
 
                 If row("IsActive") = True Then
                     rdActive.Checked = True

@@ -389,7 +389,7 @@ Partial Class MntJigDetail
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Jig Editor"
+        Me.Text = "Jig Details"
         Me.pnlStatus.ResumeLayout(False)
         Me.pnlStatus.PerformLayout()
         Me.ResumeLayout(False)

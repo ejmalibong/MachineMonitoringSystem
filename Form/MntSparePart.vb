@@ -111,7 +111,7 @@ Public Class MntSparePart
         Try
             Dim dt As New DataTable
 
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= MinStock", CommandType.Text)
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= MinStock AND IsActive = 1", CommandType.Text)
 
             Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
             Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
@@ -135,7 +135,7 @@ Public Class MntSparePart
         Try
             Dim dt As New DataTable
 
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= OrderingPoint", CommandType.Text)
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= OrderingPoint AND IsActive = 1", CommandType.Text)
 
             Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
             Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
@@ -259,14 +259,7 @@ Public Class MntSparePart
         End Try
     End Sub
 
-    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
-        Try
-            cmsExport.Show(btnExport, New Point(0, 0))
-            AllToolStripMenuItem.Select()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+
 
     Private Sub btnGo_Click(sender As Object, e As EventArgs) Handles btnGo.Click
         Go()
@@ -850,6 +843,21 @@ Public Class MntSparePart
         End If
     End Sub
 
+    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+        Try
+            cmsExport.Show(btnIncomingStocks, New Point(0, 0))
+            AllToolStripMenuItem.Select()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
+    Private Sub btnIncomingStocks_Click(sender As Object, e As EventArgs) Handles btnIncomingStocks.Click
+        Try
+
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
 End Class

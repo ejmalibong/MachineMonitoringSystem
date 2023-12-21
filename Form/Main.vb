@@ -224,7 +224,6 @@ Public Class Main
                     Next
 
                 Case 2 'manufacturing technology
-                    'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
 
                     Select Case workgroupId
                         Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
@@ -282,11 +281,12 @@ Public Class Main
                     Next
 
                     Select Case accessLevelId
-                        Case 1, 2, 3
+                        Case 1, 2, 3, 4
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-
                         Case Else
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
+                            tssMaintenance3.Visible = False
+                            SecUserToolStripMenuItem.Visible = False
                     End Select
 
                 Case 3 'facility

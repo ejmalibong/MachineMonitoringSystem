@@ -48,6 +48,10 @@ Public Class Login
             'txtEmployeeId.Text = "XXXX-XXX"
             'txtPassword.Text = "Adm1nAcc3ss"
 
+            'limuel
+            'txtEmployeeId.Text = "2307-009"
+            'txtPassword.Text = "Marino"
+
             'ej
             'txtEmployeeId.Text = "2009-002"
             'txtPassword.Text = "malibong"

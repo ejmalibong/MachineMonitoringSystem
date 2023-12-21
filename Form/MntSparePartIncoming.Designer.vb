@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntMch
+Partial Class MntSparePartIncoming
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,16 +23,23 @@ Partial Class MntMch
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePartIncoming))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMch))
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
+        Me.pnlSearchByDate = New System.Windows.Forms.Panel()
+        Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
+        Me.lblSearchEndDate = New System.Windows.Forms.Label()
+        Me.lblSearchStartDate = New System.Windows.Forms.Label()
+        Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.btnSearch = New PinkieControls.ButtonXP()
-        Me.dgvList = New System.Windows.Forms.DataGridView()
         Me.bindingNavigator = New System.Windows.Forms.BindingNavigator(Me.components)
         Me.txtTotalPageNumber = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
@@ -46,24 +53,38 @@ Partial Class MntMch
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.pnlSearchByCmb2 = New System.Windows.Forms.Panel()
+        Me.cmbCommon2 = New SergeUtils.EasyCompletionComboBox()
+        Me.cmsExport = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.AllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BelowOrderingPointToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lblSortBy = New System.Windows.Forms.Label()
+        Me.cmbSortCriteria = New System.Windows.Forms.ComboBox()
+        Me.grpSortMode = New System.Windows.Forms.GroupBox()
+        Me.rdDesc = New System.Windows.Forms.RadioButton()
+        Me.rdAsc = New System.Windows.Forms.RadioButton()
+        Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTransactionCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPartNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColPartName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColMachineSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColSerialNumber = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
-        CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlSearchByDate.SuspendLayout()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
+        Me.pnlSearchByCmb2.SuspendLayout()
+        Me.cmsExport.SuspendLayout()
+        Me.grpSortMode.SuspendLayout()
+        CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'cmbSearchCriteria
@@ -87,6 +108,7 @@ Partial Class MntMch
         'txtCommon
         '
         Me.txtCommon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtCommon.CausesValidation = False
         Me.txtCommon.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtCommon.Location = New System.Drawing.Point(3, 3)
         Me.txtCommon.Name = "txtCommon"
@@ -110,9 +132,63 @@ Partial Class MntMch
         Me.cmbCommon.Size = New System.Drawing.Size(316, 25)
         Me.cmbCommon.TabIndex = 546
         '
+        'pnlSearchByDate
+        '
+        Me.pnlSearchByDate.BackColor = System.Drawing.Color.White
+        Me.pnlSearchByDate.Controls.Add(Me.dtpEndDate)
+        Me.pnlSearchByDate.Controls.Add(Me.lblSearchEndDate)
+        Me.pnlSearchByDate.Controls.Add(Me.lblSearchStartDate)
+        Me.pnlSearchByDate.Controls.Add(Me.dtpStartDate)
+        Me.pnlSearchByDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.pnlSearchByDate.Location = New System.Drawing.Point(165, 1)
+        Me.pnlSearchByDate.Name = "pnlSearchByDate"
+        Me.pnlSearchByDate.Size = New System.Drawing.Size(322, 31)
+        Me.pnlSearchByDate.TabIndex = 550
+        '
+        'dtpEndDate
+        '
+        Me.dtpEndDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpEndDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpEndDate.Location = New System.Drawing.Point(194, 4)
+        Me.dtpEndDate.Name = "dtpEndDate"
+        Me.dtpEndDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpEndDate.TabIndex = 27
+        '
+        'lblSearchEndDate
+        '
+        Me.lblSearchEndDate.AutoSize = True
+        Me.lblSearchEndDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchEndDate.Location = New System.Drawing.Point(173, 8)
+        Me.lblSearchEndDate.Name = "lblSearchEndDate"
+        Me.lblSearchEndDate.Size = New System.Drawing.Size(19, 15)
+        Me.lblSearchEndDate.TabIndex = 29
+        Me.lblSearchEndDate.Text = "To"
+        '
+        'lblSearchStartDate
+        '
+        Me.lblSearchStartDate.AutoSize = True
+        Me.lblSearchStartDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSearchStartDate.Location = New System.Drawing.Point(5, 8)
+        Me.lblSearchStartDate.Name = "lblSearchStartDate"
+        Me.lblSearchStartDate.Size = New System.Drawing.Size(35, 15)
+        Me.lblSearchStartDate.TabIndex = 28
+        Me.lblSearchStartDate.Text = "From"
+        '
+        'dtpStartDate
+        '
+        Me.dtpStartDate.CustomFormat = "  MMM dd, yyyy"
+        Me.dtpStartDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpStartDate.Location = New System.Drawing.Point(44, 4)
+        Me.dtpStartDate.Name = "dtpStartDate"
+        Me.dtpStartDate.Size = New System.Drawing.Size(125, 24)
+        Me.dtpStartDate.TabIndex = 26
+        '
         'btnReset
         '
         Me.btnReset.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnReset.CausesValidation = False
         Me.btnReset.DefaultScheme = True
         Me.btnReset.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReset.Font = New System.Drawing.Font("Verdana", 8.0!)
@@ -129,6 +205,7 @@ Partial Class MntMch
         'btnSearch
         '
         Me.btnSearch.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnSearch.CausesValidation = False
         Me.btnSearch.DefaultScheme = True
         Me.btnSearch.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnSearch.Font = New System.Drawing.Font("Verdana", 8.0!)
@@ -142,35 +219,6 @@ Partial Class MntMch
         Me.btnSearch.TabIndex = 551
         Me.btnSearch.Text = "Search"
         '
-        'dgvList
-        '
-        Me.dgvList.AllowUserToAddRows = False
-        Me.dgvList.AllowUserToDeleteRows = False
-        Me.dgvList.AllowUserToResizeRows = False
-        Me.dgvList.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.dgvList.ColumnHeadersHeight = 25
-        Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColAreaName, Me.ColMachineStatusName, Me.ColMachineSubStatusName, Me.ColGroupName, Me.ColFrequencyName, Me.ColSerialNumber, Me.ColIsActive})
-        Me.dgvList.Location = New System.Drawing.Point(0, 33)
-        Me.dgvList.MultiSelect = False
-        Me.dgvList.Name = "dgvList"
-        Me.dgvList.ReadOnly = True
-        Me.dgvList.RowHeadersVisible = False
-        Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1114, 490)
-        Me.dgvList.TabIndex = 553
-        '
         'bindingNavigator
         '
         Me.bindingNavigator.AddNewItem = Nothing
@@ -183,7 +231,7 @@ Partial Class MntMch
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
-        Me.bindingNavigator.Location = New System.Drawing.Point(4, 527)
+        Me.bindingNavigator.Location = New System.Drawing.Point(4, 550)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
         Me.bindingNavigator.MoveNextItem = Me.BindingNavigatorMoveNextItem
@@ -289,179 +337,320 @@ Partial Class MntMch
         Me.btnRefresh.Text = " Refresh"
         Me.btnRefresh.ToolTipText = "Refresh list"
         '
+        'pnlSearchByCmb2
+        '
+        Me.pnlSearchByCmb2.Controls.Add(Me.cmbCommon2)
+        Me.pnlSearchByCmb2.Location = New System.Drawing.Point(165, 1)
+        Me.pnlSearchByCmb2.Name = "pnlSearchByCmb2"
+        Me.pnlSearchByCmb2.Size = New System.Drawing.Size(322, 31)
+        Me.pnlSearchByCmb2.TabIndex = 549
+        '
+        'cmbCommon2
+        '
+        Me.cmbCommon2.CausesValidation = False
+        Me.cmbCommon2.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmbCommon2.FormattingEnabled = True
+        Me.cmbCommon2.Location = New System.Drawing.Point(3, 3)
+        Me.cmbCommon2.Name = "cmbCommon2"
+        Me.cmbCommon2.Size = New System.Drawing.Size(316, 25)
+        Me.cmbCommon2.TabIndex = 592
+        '
+        'cmsExport
+        '
+        Me.cmsExport.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AllToolStripMenuItem, Me.BelowOrderingPointToolStripMenuItem})
+        Me.cmsExport.Name = "cmsConsole"
+        Me.cmsExport.Size = New System.Drawing.Size(188, 48)
+        '
+        'AllToolStripMenuItem
+        '
+        Me.AllToolStripMenuItem.Name = "AllToolStripMenuItem"
+        Me.AllToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.AllToolStripMenuItem.Text = "All"
+        '
+        'BelowOrderingPointToolStripMenuItem
+        '
+        Me.BelowOrderingPointToolStripMenuItem.Name = "BelowOrderingPointToolStripMenuItem"
+        Me.BelowOrderingPointToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.BelowOrderingPointToolStripMenuItem.Text = "Below Ordering Point"
+        '
+        'lblSortBy
+        '
+        Me.lblSortBy.BackColor = System.Drawing.SystemColors.Control
+        Me.lblSortBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblSortBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblSortBy.ForeColor = System.Drawing.Color.Black
+        Me.lblSortBy.Location = New System.Drawing.Point(666, 4)
+        Me.lblSortBy.Name = "lblSortBy"
+        Me.lblSortBy.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblSortBy.Size = New System.Drawing.Size(55, 25)
+        Me.lblSortBy.TabIndex = 563
+        Me.lblSortBy.Text = "Sort by"
+        Me.lblSortBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbSortCriteria
+        '
+        Me.cmbSortCriteria.CausesValidation = False
+        Me.cmbSortCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbSortCriteria.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbSortCriteria.FormattingEnabled = True
+        Me.cmbSortCriteria.Location = New System.Drawing.Point(720, 4)
+        Me.cmbSortCriteria.Name = "cmbSortCriteria"
+        Me.cmbSortCriteria.Size = New System.Drawing.Size(160, 25)
+        Me.cmbSortCriteria.TabIndex = 564
+        '
+        'grpSortMode
+        '
+        Me.grpSortMode.CausesValidation = False
+        Me.grpSortMode.Controls.Add(Me.rdDesc)
+        Me.grpSortMode.Controls.Add(Me.rdAsc)
+        Me.grpSortMode.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.grpSortMode.Location = New System.Drawing.Point(883, -4)
+        Me.grpSortMode.Name = "grpSortMode"
+        Me.grpSortMode.Size = New System.Drawing.Size(123, 34)
+        Me.grpSortMode.TabIndex = 566
+        Me.grpSortMode.TabStop = False
+        '
+        'rdDesc
+        '
+        Me.rdDesc.AutoSize = True
+        Me.rdDesc.CausesValidation = False
+        Me.rdDesc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.rdDesc.Location = New System.Drawing.Point(65, 10)
+        Me.rdDesc.Name = "rdDesc"
+        Me.rdDesc.Size = New System.Drawing.Size(54, 21)
+        Me.rdDesc.TabIndex = 3
+        Me.rdDesc.TabStop = True
+        Me.rdDesc.Text = "Desc"
+        Me.rdDesc.UseVisualStyleBackColor = True
+        '
+        'rdAsc
+        '
+        Me.rdAsc.AutoSize = True
+        Me.rdAsc.CausesValidation = False
+        Me.rdAsc.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.rdAsc.Location = New System.Drawing.Point(10, 10)
+        Me.rdAsc.Name = "rdAsc"
+        Me.rdAsc.Size = New System.Drawing.Size(46, 21)
+        Me.rdAsc.TabIndex = 2
+        Me.rdAsc.TabStop = True
+        Me.rdAsc.Text = "Asc"
+        Me.rdAsc.UseVisualStyleBackColor = True
+        '
+        'dgvList
+        '
+        Me.dgvList.AllowUserToAddRows = False
+        Me.dgvList.AllowUserToDeleteRows = False
+        Me.dgvList.AllowUserToResizeRows = False
+        Me.dgvList.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgvList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvList.ColumnHeadersHeight = 25
+        Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColQty, Me.ColTrxId, Me.ColReferenceNo})
+        Me.dgvList.Location = New System.Drawing.Point(0, 33)
+        Me.dgvList.MultiSelect = False
+        Me.dgvList.Name = "dgvList"
+        Me.dgvList.ReadOnly = True
+        Me.dgvList.RowHeadersVisible = False
+        Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvList.Size = New System.Drawing.Size(1134, 510)
+        Me.dgvList.TabIndex = 553
+        '
+        'ColCreatedDate
+        '
+        Me.ColCreatedDate.DataPropertyName = "TrxDate"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColCreatedDate.HeaderText = "Transaction Date"
+        Me.ColCreatedDate.Name = "ColCreatedDate"
+        Me.ColCreatedDate.ReadOnly = True
+        Me.ColCreatedDate.Width = 120
+        '
+        'ColTransactionCode
+        '
+        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColTransactionCode.HeaderText = "Type"
+        Me.ColTransactionCode.Name = "ColTransactionCode"
+        Me.ColTransactionCode.ReadOnly = True
+        Me.ColTransactionCode.Width = 50
+        '
+        'ColUserName
+        '
+        Me.ColUserName.DataPropertyName = "UserName"
+        Me.ColUserName.HeaderText = "User"
+        Me.ColUserName.Name = "ColUserName"
+        Me.ColUserName.ReadOnly = True
+        Me.ColUserName.Width = 180
+        '
+        'ColPartNo
+        '
+        Me.ColPartNo.DataPropertyName = "PartNo"
+        Me.ColPartNo.HeaderText = "Part No"
+        Me.ColPartNo.Name = "ColPartNo"
+        Me.ColPartNo.ReadOnly = True
+        Me.ColPartNo.Width = 280
+        '
+        'ColPartName
+        '
+        Me.ColPartName.DataPropertyName = "PartName"
+        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.Name = "ColPartName"
+        Me.ColPartName.ReadOnly = True
+        Me.ColPartName.Width = 280
+        '
+        'ColQty
+        '
+        Me.ColQty.DataPropertyName = "Qty"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColQty.HeaderText = "Qty"
+        Me.ColQty.Name = "ColQty"
+        Me.ColQty.ReadOnly = True
+        Me.ColQty.Width = 50
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "TrxId"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Visible = False
+        '
+        'ColReferenceNo
+        '
+        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
+        Me.ColReferenceNo.HeaderText = "Ref No"
+        Me.ColReferenceNo.Name = "ColReferenceNo"
+        Me.ColReferenceNo.ReadOnly = True
+        Me.ColReferenceNo.Width = 90
+        '
         'btnAdd
         '
         Me.btnAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnAdd.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnAdd.CausesValidation = False
         Me.btnAdd.DefaultScheme = True
-        Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(738, 526)
+        Me.btnAdd.Location = New System.Drawing.Point(758, 546)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAdd.Size = New System.Drawing.Size(90, 32)
-        Me.btnAdd.TabIndex = 558
+        Me.btnAdd.TabIndex = 570
         Me.btnAdd.Text = "  Add"
         '
         'btnEdit
         '
         Me.btnEdit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnEdit.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnEdit.CausesValidation = False
         Me.btnEdit.DefaultScheme = True
         Me.btnEdit.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(832, 526)
+        Me.btnEdit.Location = New System.Drawing.Point(852, 546)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnEdit.Size = New System.Drawing.Size(90, 32)
-        Me.btnEdit.TabIndex = 557
+        Me.btnEdit.TabIndex = 569
         Me.btnEdit.Text = "  Edit"
         '
         'btnDelete
         '
         Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnDelete.CausesValidation = False
         Me.btnDelete.DefaultScheme = True
         Me.btnDelete.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(926, 526)
+        Me.btnDelete.Location = New System.Drawing.Point(946, 546)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnDelete.Size = New System.Drawing.Size(90, 32)
-        Me.btnDelete.TabIndex = 556
+        Me.btnDelete.TabIndex = 568
         Me.btnDelete.Text = "Delete"
         '
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnClose.CausesValidation = False
         Me.btnClose.DefaultScheme = True
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1020, 526)
+        Me.btnClose.Location = New System.Drawing.Point(1040, 546)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnClose.Size = New System.Drawing.Size(90, 32)
-        Me.btnClose.TabIndex = 555
+        Me.btnClose.TabIndex = 567
         Me.btnClose.Text = "Close"
         '
-        'ColMachineId
-        '
-        Me.ColMachineId.DataPropertyName = "MachineId"
-        Me.ColMachineId.HeaderText = "Machine ID"
-        Me.ColMachineId.Name = "ColMachineId"
-        Me.ColMachineId.ReadOnly = True
-        Me.ColMachineId.Visible = False
-        '
-        'ColMachineName
-        '
-        Me.ColMachineName.DataPropertyName = "MachineName"
-        Me.ColMachineName.HeaderText = "Machine"
-        Me.ColMachineName.Name = "ColMachineName"
-        Me.ColMachineName.ReadOnly = True
-        Me.ColMachineName.Width = 150
-        '
-        'ColAreaName
-        '
-        Me.ColAreaName.DataPropertyName = "AreaName"
-        Me.ColAreaName.HeaderText = "Area"
-        Me.ColAreaName.Name = "ColAreaName"
-        Me.ColAreaName.ReadOnly = True
-        Me.ColAreaName.Width = 150
-        '
-        'ColMachineStatusName
-        '
-        Me.ColMachineStatusName.DataPropertyName = "MachineStatusName"
-        Me.ColMachineStatusName.HeaderText = "Status"
-        Me.ColMachineStatusName.Name = "ColMachineStatusName"
-        Me.ColMachineStatusName.ReadOnly = True
-        '
-        'ColMachineSubStatusName
-        '
-        Me.ColMachineSubStatusName.DataPropertyName = "MachineSubStatusName"
-        Me.ColMachineSubStatusName.HeaderText = "Sub-Status"
-        Me.ColMachineSubStatusName.Name = "ColMachineSubStatusName"
-        Me.ColMachineSubStatusName.ReadOnly = True
-        Me.ColMachineSubStatusName.Width = 150
-        '
-        'ColGroupName
-        '
-        Me.ColGroupName.DataPropertyName = "GroupName"
-        Me.ColGroupName.HeaderText = "Part Group"
-        Me.ColGroupName.Name = "ColGroupName"
-        Me.ColGroupName.ReadOnly = True
-        Me.ColGroupName.Width = 150
-        '
-        'ColFrequencyName
-        '
-        Me.ColFrequencyName.DataPropertyName = "FrequencyName"
-        Me.ColFrequencyName.HeaderText = "PM Frequency"
-        Me.ColFrequencyName.Name = "ColFrequencyName"
-        Me.ColFrequencyName.ReadOnly = True
-        '
-        'ColSerialNumber
-        '
-        Me.ColSerialNumber.DataPropertyName = "SerialNumber"
-        Me.ColSerialNumber.HeaderText = "SN"
-        Me.ColSerialNumber.Name = "ColSerialNumber"
-        Me.ColSerialNumber.ReadOnly = True
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.Width = 50
-        '
-        'MntMch
+        'MntSparePartIncoming
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
-        Me.CancelButton = Me.btnClose
-        Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(1114, 561)
-        Me.Controls.Add(Me.pnlSearchByText)
-        Me.Controls.Add(Me.pnlSearchByCmb)
+        Me.ClientSize = New System.Drawing.Size(1134, 581)
         Me.Controls.Add(Me.btnAdd)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnDelete)
         Me.Controls.Add(Me.btnClose)
-        Me.Controls.Add(Me.bindingNavigator)
-        Me.Controls.Add(Me.dgvList)
+        Me.Controls.Add(Me.grpSortMode)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnSearch)
         Me.Controls.Add(Me.cmbSearchCriteria)
+        Me.Controls.Add(Me.lblSortBy)
+        Me.Controls.Add(Me.cmbSortCriteria)
+        Me.Controls.Add(Me.pnlSearchByCmb2)
+        Me.Controls.Add(Me.pnlSearchByText)
+        Me.Controls.Add(Me.pnlSearchByCmb)
+        Me.Controls.Add(Me.pnlSearchByDate)
+        Me.Controls.Add(Me.bindingNavigator)
+        Me.Controls.Add(Me.dgvList)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntMch"
+        Me.Name = "MntSparePartIncoming"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
-        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Machine Masterlist"
+        Me.Text = "Incoming Stocks"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
-        CType(Me.dgvList, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlSearchByDate.ResumeLayout(False)
+        Me.pnlSearchByDate.PerformLayout()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).EndInit()
         Me.bindingNavigator.ResumeLayout(False)
         Me.bindingNavigator.PerformLayout()
+        Me.pnlSearchByCmb2.ResumeLayout(False)
+        Me.cmsExport.ResumeLayout(False)
+        Me.grpSortMode.ResumeLayout(False)
+        Me.grpSortMode.PerformLayout()
+        CType(Me.dgvList, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -472,9 +661,13 @@ Partial Class MntMch
     Friend WithEvents txtCommon As TextBox
     Friend WithEvents pnlSearchByCmb As Panel
     Friend WithEvents cmbCommon As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents pnlSearchByDate As Panel
+    Friend WithEvents dtpEndDate As DateTimePicker
+    Friend WithEvents lblSearchEndDate As Label
+    Friend WithEvents lblSearchStartDate As Label
+    Friend WithEvents dtpStartDate As DateTimePicker
     Friend WithEvents btnReset As PinkieControls.ButtonXP
     Friend WithEvents btnSearch As PinkieControls.ButtonXP
-    Friend WithEvents dgvList As DataGridView
     Private WithEvents bindingNavigator As BindingNavigator
     Friend WithEvents txtTotalPageNumber As ToolStripLabel
     Friend WithEvents BindingNavigatorMoveFirstItem As ToolStripButton
@@ -488,17 +681,27 @@ Partial Class MntMch
     Friend WithEvents btnGo As ToolStripButton
     Friend WithEvents BindingNavigatorSeparator4 As ToolStripSeparator
     Friend WithEvents btnRefresh As ToolStripButton
+    Friend WithEvents pnlSearchByCmb2 As Panel
+    Friend WithEvents cmbCommon2 As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents cmsExport As ContextMenuStrip
+    Friend WithEvents AllToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents lblSortBy As Label
+    Friend WithEvents cmbSortCriteria As ComboBox
+    Friend WithEvents BelowOrderingPointToolStripMenuItem As ToolStripMenuItem
+    Public WithEvents grpSortMode As GroupBox
+    Public WithEvents rdDesc As RadioButton
+    Public WithEvents rdAsc As RadioButton
+    Friend WithEvents dgvList As DataGridView
+    Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
+    Friend WithEvents ColTransactionCode As DataGridViewTextBoxColumn
+    Friend WithEvents ColUserName As DataGridViewTextBoxColumn
+    Friend WithEvents ColPartNo As DataGridViewTextBoxColumn
+    Friend WithEvents ColPartName As DataGridViewTextBoxColumn
+    Friend WithEvents ColQty As DataGridViewTextBoxColumn
+    Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
+    Friend WithEvents ColReferenceNo As DataGridViewTextBoxColumn
     Friend WithEvents btnAdd As PinkieControls.ButtonXP
     Friend WithEvents btnEdit As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
-    Friend WithEvents ColMachineId As DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
-    Friend WithEvents ColAreaName As DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColMachineSubStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColGroupName As DataGridViewTextBoxColumn
-    Friend WithEvents ColFrequencyName As DataGridViewTextBoxColumn
-    Friend WithEvents ColSerialNumber As DataGridViewTextBoxColumn
-    Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
 End Class

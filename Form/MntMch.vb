@@ -18,6 +18,7 @@ Public Class MntMch
     Private isFilterByGroup As Boolean = False
     Private isFilterByFrequency As Boolean = False
     Private isFilterByRemarks As Boolean = False
+    Private isFilterBySerialNo As Boolean = False
     Private pageCount As Integer
     Private pageIndex As Integer
     Private pageSize As Integer
@@ -152,6 +153,7 @@ Public Class MntMch
             isFilterByMachineSubStatus = False
             isFilterByGroup = False
             isFilterByFrequency = False
+            isFilterBySerialNo = False
 
             cmbSearchCriteria.SelectedValue = 1
 
@@ -173,6 +175,7 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = False
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 2
                     isFilterByMachineName = False
@@ -182,6 +185,7 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = False
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 3
                     isFilterByMachineName = False
@@ -191,6 +195,7 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = False
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 4
                     isFilterByMachineName = False
@@ -200,6 +205,7 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = False
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 5
                     isFilterByMachineName = False
@@ -209,6 +215,7 @@ Public Class MntMch
                     isFilterByGroup = True
                     isFilterByFrequency = False
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 6
                     isFilterByMachineName = False
@@ -218,6 +225,7 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = True
                     isFilterByRemarks = False
+                    isFilterBySerialNo = False
 
                 Case 7
                     isFilterByMachineName = False
@@ -227,6 +235,17 @@ Public Class MntMch
                     isFilterByGroup = False
                     isFilterByFrequency = False
                     isFilterByRemarks = True
+                    isFilterBySerialNo = False
+
+                Case 8
+                    isFilterByMachineName = False
+                    isFilterByArea = False
+                    isFilterByMachineStatus = False
+                    isFilterByMachineSubStatus = False
+                    isFilterByGroup = False
+                    isFilterByFrequency = False
+                    isFilterByRemarks = False
+                    isFilterBySerialNo = True
             End Select
 
             pageIndex = 0
@@ -299,13 +318,17 @@ Public Class MntMch
                     pnlSearchByText.Visible = False
 
                     LoadRemarks()
+
+                Case 8
+                    pnlSearchByCmb.Visible = False
+                    pnlSearchByText.Visible = True
             End Select
 
             Select Case cmbSearchCriteria.SelectedValue
                 Case 2, 3, 4, 5, 6
                     ActiveControl = cmbCommon
                     cmbCommon.SelectedValue = 0
-                Case 1
+                Case 1, 8
                     ActiveControl = txtCommon
                     txtCommon.Text = String.Empty
                 Case 7
@@ -500,6 +523,22 @@ Public Class MntMch
 
                 dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByIsActive", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
+
+            ElseIf isFilterBySerialNo = True Then
+                Dim prmMasterlist(3) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
+                prmMasterlist(3).Value = txtCommon.Text.Trim
+
+                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistBySerialNumber", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
+
             Else
                 Dim prmMasterlist(2) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
@@ -561,6 +600,7 @@ Public Class MntMch
             dicSearchCriteria.Add(" Part Group", 5)
             dicSearchCriteria.Add(" PM Frequency", 6)
             dicSearchCriteria.Add(" Remarks", 7)
+            dicSearchCriteria.Add(" Serial No.", 8)
 
             cmbSearchCriteria.DisplayMember = "Key"
             cmbSearchCriteria.ValueMember = "Value"
