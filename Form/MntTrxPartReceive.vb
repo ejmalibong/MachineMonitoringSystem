@@ -290,7 +290,8 @@ Public Class MntTrxPartReceive
                     Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartNo").ToString.Trim
-                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtActualStock.Text = rdr.Item("ActualStock") - rdr.Item("FloatQty")
+                            txtFloatQty.Text = rdr.Item("FloatQty")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
                             txtLocation.Text = rdr.Item("LocationName")
@@ -313,7 +314,8 @@ Public Class MntTrxPartReceive
                     Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartName").ToString.Trim
-                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtActualStock.Text = rdr.Item("ActualStock") - rdr.Item("FloatQty")
+                            txtFloatQty.Text = rdr.Item("FloatQty")
                             txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
                             txtLocation.Text = rdr.Item("LocationName")

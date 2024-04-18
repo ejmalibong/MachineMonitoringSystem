@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntSparePartLog
+Partial Class MntSparePartLogFloat
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,11 +23,11 @@ Partial Class MntSparePartLog
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePartLog))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePartLogFloat))
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -67,12 +67,6 @@ Partial Class MntSparePartLog
         Me.rdDesc = New System.Windows.Forms.RadioButton()
         Me.rdAsc = New System.Windows.Forms.RadioButton()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.lblTotal = New System.Windows.Forms.Label()
-        Me.txtTotal = New System.Windows.Forms.Label()
-        Me.grpTrxType = New System.Windows.Forms.GroupBox()
-        Me.rdIssue = New System.Windows.Forms.RadioButton()
-        Me.rdReceive = New System.Windows.Forms.RadioButton()
-        Me.rdAll = New System.Windows.Forms.RadioButton()
         Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTransactionCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -81,6 +75,12 @@ Partial Class MntSparePartLog
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lblTotal = New System.Windows.Forms.Label()
+        Me.txtTotal = New System.Windows.Forms.Label()
+        Me.grpTrxType = New System.Windows.Forms.GroupBox()
+        Me.rdIssue = New System.Windows.Forms.RadioButton()
+        Me.rdReceive = New System.Windows.Forms.RadioButton()
+        Me.rdAll = New System.Windows.Forms.RadioButton()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -504,13 +504,13 @@ Partial Class MntSparePartLog
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColQty, Me.ColTrxId, Me.ColReferenceNo})
@@ -523,6 +523,77 @@ Partial Class MntSparePartLog
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvList.Size = New System.Drawing.Size(1134, 480)
         Me.dgvList.TabIndex = 553
+        '
+        'ColCreatedDate
+        '
+        Me.ColCreatedDate.DataPropertyName = "TrxDate"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.Format = "MM/dd/yyyy"
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColCreatedDate.HeaderText = "Transaction Date"
+        Me.ColCreatedDate.Name = "ColCreatedDate"
+        Me.ColCreatedDate.ReadOnly = True
+        Me.ColCreatedDate.Width = 120
+        '
+        'ColTransactionCode
+        '
+        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle7
+        Me.ColTransactionCode.HeaderText = "Type"
+        Me.ColTransactionCode.Name = "ColTransactionCode"
+        Me.ColTransactionCode.ReadOnly = True
+        Me.ColTransactionCode.Width = 50
+        '
+        'ColUserName
+        '
+        Me.ColUserName.DataPropertyName = "UserName"
+        Me.ColUserName.HeaderText = "User"
+        Me.ColUserName.Name = "ColUserName"
+        Me.ColUserName.ReadOnly = True
+        Me.ColUserName.Width = 180
+        '
+        'ColPartNo
+        '
+        Me.ColPartNo.DataPropertyName = "PartNo"
+        Me.ColPartNo.HeaderText = "Part No"
+        Me.ColPartNo.Name = "ColPartNo"
+        Me.ColPartNo.ReadOnly = True
+        Me.ColPartNo.Width = 280
+        '
+        'ColPartName
+        '
+        Me.ColPartName.DataPropertyName = "PartName"
+        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.Name = "ColPartName"
+        Me.ColPartName.ReadOnly = True
+        Me.ColPartName.Width = 280
+        '
+        'ColQty
+        '
+        Me.ColQty.DataPropertyName = "Qty"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle8
+        Me.ColQty.HeaderText = "Qty"
+        Me.ColQty.Name = "ColQty"
+        Me.ColQty.ReadOnly = True
+        Me.ColQty.Width = 50
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "TrxId"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Visible = False
+        '
+        'ColReferenceNo
+        '
+        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
+        Me.ColReferenceNo.HeaderText = "Ref No"
+        Me.ColReferenceNo.Name = "ColReferenceNo"
+        Me.ColReferenceNo.ReadOnly = True
+        Me.ColReferenceNo.Width = 90
         '
         'lblTotal
         '
@@ -606,78 +677,7 @@ Partial Class MntSparePartLog
         Me.rdAll.Text = "All"
         Me.rdAll.UseVisualStyleBackColor = True
         '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "TrxDate"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColCreatedDate.HeaderText = "Transaction Date"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
-        'ColTransactionCode
-        '
-        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColTransactionCode.HeaderText = "Type"
-        Me.ColTransactionCode.Name = "ColTransactionCode"
-        Me.ColTransactionCode.ReadOnly = True
-        Me.ColTransactionCode.Width = 50
-        '
-        'ColUserName
-        '
-        Me.ColUserName.DataPropertyName = "UserName"
-        Me.ColUserName.HeaderText = "Technician"
-        Me.ColUserName.Name = "ColUserName"
-        Me.ColUserName.ReadOnly = True
-        Me.ColUserName.Width = 180
-        '
-        'ColPartNo
-        '
-        Me.ColPartNo.DataPropertyName = "PartNo"
-        Me.ColPartNo.HeaderText = "Part Number"
-        Me.ColPartNo.Name = "ColPartNo"
-        Me.ColPartNo.ReadOnly = True
-        Me.ColPartNo.Width = 280
-        '
-        'ColPartName
-        '
-        Me.ColPartName.DataPropertyName = "PartName"
-        Me.ColPartName.HeaderText = "Part Name"
-        Me.ColPartName.Name = "ColPartName"
-        Me.ColPartName.ReadOnly = True
-        Me.ColPartName.Width = 280
-        '
-        'ColQty
-        '
-        Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColQty.HeaderText = "Qty"
-        Me.ColQty.Name = "ColQty"
-        Me.ColQty.ReadOnly = True
-        Me.ColQty.Width = 50
-        '
-        'ColTrxId
-        '
-        Me.ColTrxId.DataPropertyName = "TrxId"
-        Me.ColTrxId.HeaderText = "TrxId"
-        Me.ColTrxId.Name = "ColTrxId"
-        Me.ColTrxId.ReadOnly = True
-        Me.ColTrxId.Visible = False
-        '
-        'ColReferenceNo
-        '
-        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
-        Me.ColReferenceNo.HeaderText = "Reference No"
-        Me.ColReferenceNo.Name = "ColReferenceNo"
-        Me.ColReferenceNo.ReadOnly = True
-        Me.ColReferenceNo.Width = 90
-        '
-        'MntSparePartLog
+        'MntSparePartLogFloat
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -707,11 +707,11 @@ Partial Class MntSparePartLog
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntSparePartLog"
+        Me.Name = "MntSparePartLogFloat"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Receive/Issue Logs"
+        Me.Text = "Consumed/Returned Logs"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)

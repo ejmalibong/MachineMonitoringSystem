@@ -704,7 +704,7 @@ Partial Class MntSparePartDetail
         Me.lblItemCode.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblItemCode.Size = New System.Drawing.Size(100, 23)
         Me.lblItemCode.TabIndex = 624
-        Me.lblItemCode.Text = "Item Code"
+        Me.lblItemCode.Text = "SAP Item Code"
         Me.lblItemCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'txtUnitPrice

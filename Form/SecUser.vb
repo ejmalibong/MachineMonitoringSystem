@@ -8,6 +8,7 @@ Public Class SecUser
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private departmentId As Integer = 0
     Private dictSearchCriteria As New Dictionary(Of String, Integer)
+    Private dicStatus As New Dictionary(Of String, Integer)
     Private dtUser As New DataTable
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
@@ -311,6 +312,7 @@ Public Class SecUser
 
     Private Sub frm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSearchCriteria()
+        LoadStatusCriteria()
 
         pageIndex = 0
         pageSize = 100
@@ -319,7 +321,24 @@ Public Class SecUser
         dbMain.EnableDoubleBuffered(dgvList)
         ActiveControl = dgvList
 
+        AddHandler cmbStatus.SelectedValueChanged, AddressOf cmbStatus_SelectedValueChanged
+        cmbStatus.SelectedValue = 1
+
         Me.dgvList.Columns(2).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+    End Sub
+
+    Private Sub LoadStatusCriteria()
+        Try
+            dicStatus.Add("< All >", 0)
+            dicStatus.Add("Active", 1)
+            dicStatus.Add("Inactive", 2)
+
+            cmbStatus.DisplayMember = "Key"
+            cmbStatus.ValueMember = "Value"
+            cmbStatus.DataSource = New BindingSource(dicStatus, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub GetScrollingIndex()
@@ -359,7 +378,7 @@ Public Class SecUser
             totalCount = 0
 
             If isFilterByUserName = True Then
-                Dim prmMasterlist(5) As SqlParameter
+                Dim prmMasterlist(6) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -373,12 +392,14 @@ Public Class SecUser
                 prmMasterlist(4).Value = sectionId
                 prmMasterlist(5) = New SqlParameter("@UserName", SqlDbType.VarChar)
                 prmMasterlist(5).Value = txtCommon.Text.Trim
+                prmMasterlist(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
                 dtUser = dbMethod.FillDataTable("RdSecUserMasterlistByUserName", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByWorkgroup = True Then
-                Dim prmMasterlist(5) As SqlParameter
+                Dim prmMasterlist(6) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -392,12 +413,14 @@ Public Class SecUser
                 prmMasterlist(4).Value = sectionId
                 prmMasterlist(5) = New SqlParameter("@WorkgroupId", SqlDbType.Int)
                 prmMasterlist(5).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmMasterlist(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
                 dtUser = dbMethod.FillDataTable("RdSecUserMasterlistByWorkgroupId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterBySection = True Then
-                Dim prmMasterlist(4) As SqlParameter
+                Dim prmMasterlist(5) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -408,6 +431,8 @@ Public Class SecUser
                 prmMasterlist(3) = New SqlParameter("@IsAdmin", SqlDbType.Bit)
                 prmMasterlist(3).Value = isAdmin
                 prmMasterlist(4) = New SqlParameter("@SectionId", SqlDbType.Int)
+                prmMasterlist(5) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(5).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
                 If isAdmin = 0 AndAlso Not (sectionId = 1 Or sectionId = 4) Then
                     prmMasterlist(4).Value = sectionId
@@ -418,7 +443,7 @@ Public Class SecUser
                 dtUser = dbMethod.FillDataTable("RdSecUserMasterlistBySectionId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
             Else
-                Dim prmMasterlist(4) As SqlParameter
+                Dim prmMasterlist(5) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -430,6 +455,8 @@ Public Class SecUser
                 prmMasterlist(3).Value = isAdmin
                 prmMasterlist(4) = New SqlParameter("@SectionId", SqlDbType.Int)
                 prmMasterlist(4).Value = sectionId
+                prmMasterlist(5) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(5).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
                 dtUser = dbMethod.FillDataTable("RdSecUserMasterlist", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
@@ -495,7 +522,12 @@ Public Class SecUser
     End Sub
 
     Private Sub SetScrollingIndex()
-        dgvList.FirstDisplayedScrollingRowIndex = indexScroll
+        If dgvList.FirstDisplayedScrollingRowIndex < indexScroll Then
+            dgvList.FirstDisplayedScrollingRowIndex = 0
+        Else
+            dgvList.FirstDisplayedScrollingRowIndex = indexScroll
+        End If
+
         If dgvList.Rows.Count > indexPosition Then
             dgvList.Rows(indexPosition).Selected = True
         Else
@@ -513,6 +545,10 @@ Public Class SecUser
         Else
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub cmbStatus_SelectedValueChanged(sender As Object, e As EventArgs)
+        Reload()
     End Sub
 
 End Class

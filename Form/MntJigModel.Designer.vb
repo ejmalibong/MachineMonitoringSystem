@@ -47,11 +47,6 @@ Partial Class MntJigModel
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.ColModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModelName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
@@ -61,12 +56,18 @@ Partial Class MntJigModel
         Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.pnlImage = New System.Windows.Forms.Panel()
         Me.picImage = New System.Windows.Forms.PictureBox()
+        Me.AxAcroPDF = New AxAcroPDFLib.AxAcroPDF()
         Me.lblAttachmentCount = New System.Windows.Forms.Label()
         Me.txtAttachmentName = New System.Windows.Forms.Label()
         Me.btnView = New PinkieControls.ButtonXP()
         Me.btnNext = New PinkieControls.ButtonXP()
         Me.btnPrevious = New PinkieControls.ButtonXP()
-        Me.AxAcroPDF = New AxAcroPDFLib.AxAcroPDF()
+        Me.ColModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModelName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.ColIsDrawing = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -200,6 +201,7 @@ Partial Class MntJigModel
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
+        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -318,7 +320,7 @@ Partial Class MntJigModel
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 24
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColModelId, Me.ColModelName, Me.ColExtensionId, Me.ColExtensionName, Me.ColIsActive})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColModelId, Me.ColModelName, Me.ColExtensionId, Me.ColExtensionName, Me.ColIsActive, Me.ColIsDrawing})
         Me.dgvList.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
@@ -328,53 +330,9 @@ Partial Class MntJigModel
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(470, 490)
+        Me.dgvList.Size = New System.Drawing.Size(523, 490)
         Me.dgvList.TabIndex = 549
         Me.dgvList.TabStop = False
-        '
-        'ColModelId
-        '
-        Me.ColModelId.DataPropertyName = "ModelId"
-        Me.ColModelId.HeaderText = "ModelId"
-        Me.ColModelId.Name = "ColModelId"
-        Me.ColModelId.ReadOnly = True
-        Me.ColModelId.Visible = False
-        '
-        'ColModelName
-        '
-        Me.ColModelName.DataPropertyName = "ModelName"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.ColModelName.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColModelName.HeaderText = "Model Name"
-        Me.ColModelName.Name = "ColModelName"
-        Me.ColModelName.ReadOnly = True
-        Me.ColModelName.Width = 250
-        '
-        'ColExtensionId
-        '
-        Me.ColExtensionId.DataPropertyName = "ExtensionId"
-        Me.ColExtensionId.HeaderText = "ExtensionId"
-        Me.ColExtensionId.Name = "ColExtensionId"
-        Me.ColExtensionId.ReadOnly = True
-        Me.ColExtensionId.Visible = False
-        '
-        'ColExtensionName
-        '
-        Me.ColExtensionName.DataPropertyName = "ExtensionName"
-        Me.ColExtensionName.HeaderText = "Extension Name"
-        Me.ColExtensionName.Name = "ColExtensionName"
-        Me.ColExtensionName.ReadOnly = True
-        Me.ColExtensionName.Width = 150
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsActive.Width = 55
         '
         'pnlSearchByCmb
         '
@@ -452,9 +410,9 @@ Partial Class MntJigModel
         Me.pnlImage.Controls.Add(Me.btnView)
         Me.pnlImage.Controls.Add(Me.btnNext)
         Me.pnlImage.Controls.Add(Me.btnPrevious)
-        Me.pnlImage.Location = New System.Drawing.Point(473, 33)
+        Me.pnlImage.Location = New System.Drawing.Point(526, 33)
         Me.pnlImage.Name = "pnlImage"
-        Me.pnlImage.Size = New System.Drawing.Size(508, 490)
+        Me.pnlImage.Size = New System.Drawing.Size(455, 490)
         Me.pnlImage.TabIndex = 550
         '
         'picImage
@@ -468,10 +426,22 @@ Partial Class MntJigModel
         Me.picImage.InitialImage = Nothing
         Me.picImage.Location = New System.Drawing.Point(3, 20)
         Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(500, 438)
+        Me.picImage.Size = New System.Drawing.Size(447, 438)
         Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.picImage.TabIndex = 0
         Me.picImage.TabStop = False
+        '
+        'AxAcroPDF
+        '
+        Me.AxAcroPDF.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AxAcroPDF.Enabled = True
+        Me.AxAcroPDF.Location = New System.Drawing.Point(3, 20)
+        Me.AxAcroPDF.Name = "AxAcroPDF"
+        Me.AxAcroPDF.OcxState = CType(resources.GetObject("AxAcroPDF.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxAcroPDF.Size = New System.Drawing.Size(447, 438)
+        Me.AxAcroPDF.TabIndex = 578
         '
         'lblAttachmentCount
         '
@@ -542,14 +512,59 @@ Partial Class MntJigModel
         Me.btnPrevious.TabStop = False
         Me.btnPrevious.Text = "<"
         '
-        'AxAcroPDF
+        'ColModelId
         '
-        Me.AxAcroPDF.Enabled = True
-        Me.AxAcroPDF.Location = New System.Drawing.Point(3, 20)
-        Me.AxAcroPDF.Name = "AxAcroPDF"
-        Me.AxAcroPDF.OcxState = CType(resources.GetObject("AxAcroPDF.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.AxAcroPDF.Size = New System.Drawing.Size(500, 438)
-        Me.AxAcroPDF.TabIndex = 578
+        Me.ColModelId.DataPropertyName = "ModelId"
+        Me.ColModelId.HeaderText = "ModelId"
+        Me.ColModelId.Name = "ColModelId"
+        Me.ColModelId.ReadOnly = True
+        Me.ColModelId.Visible = False
+        '
+        'ColModelName
+        '
+        Me.ColModelName.DataPropertyName = "ModelName"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.ColModelName.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColModelName.HeaderText = "Model Name"
+        Me.ColModelName.Name = "ColModelName"
+        Me.ColModelName.ReadOnly = True
+        Me.ColModelName.Width = 250
+        '
+        'ColExtensionId
+        '
+        Me.ColExtensionId.DataPropertyName = "ExtensionId"
+        Me.ColExtensionId.HeaderText = "ExtensionId"
+        Me.ColExtensionId.Name = "ColExtensionId"
+        Me.ColExtensionId.ReadOnly = True
+        Me.ColExtensionId.Visible = False
+        '
+        'ColExtensionName
+        '
+        Me.ColExtensionName.DataPropertyName = "ExtensionName"
+        Me.ColExtensionName.HeaderText = "Extension Name"
+        Me.ColExtensionName.Name = "ColExtensionName"
+        Me.ColExtensionName.ReadOnly = True
+        Me.ColExtensionName.Width = 150
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsActive.Width = 55
+        '
+        'ColIsDrawing
+        '
+        Me.ColIsDrawing.DataPropertyName = "IsDrawing"
+        Me.ColIsDrawing.HeaderText = "Drwg"
+        Me.ColIsDrawing.Name = "ColIsDrawing"
+        Me.ColIsDrawing.ReadOnly = True
+        Me.ColIsDrawing.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColIsDrawing.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsDrawing.Width = 55
         '
         'MntJigModel
         '
@@ -625,11 +640,6 @@ Partial Class MntJigModel
     Friend WithEvents DataGridViewNullableComboBoxColumn2 As MachineMonitoringSystem.DataGridViewNullableComboBoxColumn
     Friend WithEvents pnlSearchByText As System.Windows.Forms.Panel
     Friend WithEvents txtCommon As System.Windows.Forms.TextBox
-    Friend WithEvents ColModelId As DataGridViewTextBoxColumn
-    Friend WithEvents ColModelName As DataGridViewTextBoxColumn
-    Friend WithEvents ColExtensionId As DataGridViewTextBoxColumn
-    Friend WithEvents ColExtensionName As DataGridViewTextBoxColumn
-    Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
     Friend WithEvents pnlImage As Panel
     Friend WithEvents picImage As PictureBox
     Friend WithEvents btnView As PinkieControls.ButtonXP
@@ -638,4 +648,10 @@ Partial Class MntJigModel
     Friend WithEvents lblAttachmentCount As Label
     Friend WithEvents txtAttachmentName As Label
     Friend WithEvents AxAcroPDF As AxAcroPDFLib.AxAcroPDF
+    Friend WithEvents ColModelId As DataGridViewTextBoxColumn
+    Friend WithEvents ColModelName As DataGridViewTextBoxColumn
+    Friend WithEvents ColExtensionId As DataGridViewTextBoxColumn
+    Friend WithEvents ColExtensionName As DataGridViewTextBoxColumn
+    Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
+    Friend WithEvents ColIsDrawing As DataGridViewCheckBoxColumn
 End Class

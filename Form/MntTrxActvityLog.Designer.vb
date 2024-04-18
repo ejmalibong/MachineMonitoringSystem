@@ -22,9 +22,8 @@ Partial Class MntTrxActvityLog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dtpFrom = New System.Windows.Forms.DateTimePicker()
         Me.dtpTo = New System.Windows.Forms.DateTimePicker()
         Me.lblShift = New System.Windows.Forms.Label()
@@ -42,28 +41,29 @@ Partial Class MntTrxActvityLog
         Me.btnSave = New PinkieControls.ButtonXP()
         Me.cmbPart = New SergeUtils.EasyCompletionComboBox()
         Me.lblActivityLog = New System.Windows.Forms.Label()
-        Me.lblActualStock = New System.Windows.Forms.Label()
-        Me.txtActualStock = New System.Windows.Forms.Label()
-        Me.lblQty = New System.Windows.Forms.Label()
-        Me.txtQty = New System.Windows.Forms.TextBox()
+        Me.lblIssuedQty = New System.Windows.Forms.Label()
+        Me.txtIssuedQty = New System.Windows.Forms.Label()
+        Me.lblConsumedQty = New System.Windows.Forms.Label()
+        Me.txtConsumedQty = New System.Windows.Forms.TextBox()
         Me.lblUnit = New System.Windows.Forms.Label()
         Me.txtUnit = New System.Windows.Forms.Label()
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnRemove = New PinkieControls.ButtonXP()
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblPartDescription = New System.Windows.Forms.Label()
         Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtElapsedTime = New System.Windows.Forms.Label()
         Me.lblElapsedTime = New System.Windows.Forms.Label()
-        Me.txtOrderingPoint = New System.Windows.Forms.Label()
-        Me.lblOrderingPoint = New System.Windows.Forms.Label()
+        Me.txtRemainingQty = New System.Windows.Forms.Label()
+        Me.lblRemainingQty = New System.Windows.Forms.Label()
         Me.lblItemList = New System.Windows.Forms.Label()
         Me.cmbPartSelection = New System.Windows.Forms.ComboBox()
-        Me.txtLocation = New System.Windows.Forms.Label()
-        Me.lblLocation = New System.Windows.Forms.Label()
+        Me.txtIssuedDate = New System.Windows.Forms.Label()
+        Me.lblIssuedBy = New System.Windows.Forms.Label()
+        Me.txtIssuedBy = New System.Windows.Forms.Label()
+        Me.lblIssuedDate = New System.Windows.Forms.Label()
         Me.grpShift.SuspendLayout()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -199,7 +199,7 @@ Partial Class MntTrxActvityLog
         Me.lblPartIssuance.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblPartIssuance.Size = New System.Drawing.Size(751, 24)
         Me.lblPartIssuance.TabIndex = 565
-        Me.lblPartIssuance.Text = "Parts Issuance Form"
+        Me.lblPartIssuance.Text = "Parts Consumption Log"
         Me.lblPartIssuance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btnClose
@@ -294,58 +294,58 @@ Partial Class MntTrxActvityLog
         Me.lblActivityLog.Text = "Activity Log"
         Me.lblActivityLog.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lblActualStock
+        'lblIssuedQty
         '
-        Me.lblActualStock.BackColor = System.Drawing.SystemColors.Control
-        Me.lblActualStock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblActualStock.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblActualStock.ForeColor = System.Drawing.Color.Black
-        Me.lblActualStock.Location = New System.Drawing.Point(552, 109)
-        Me.lblActualStock.Name = "lblActualStock"
-        Me.lblActualStock.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblActualStock.Size = New System.Drawing.Size(90, 25)
-        Me.lblActualStock.TabIndex = 593
-        Me.lblActualStock.Text = "Actual Stock"
-        Me.lblActualStock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblIssuedQty.BackColor = System.Drawing.SystemColors.Control
+        Me.lblIssuedQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblIssuedQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblIssuedQty.ForeColor = System.Drawing.Color.Black
+        Me.lblIssuedQty.Location = New System.Drawing.Point(360, 82)
+        Me.lblIssuedQty.Name = "lblIssuedQty"
+        Me.lblIssuedQty.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblIssuedQty.Size = New System.Drawing.Size(120, 25)
+        Me.lblIssuedQty.TabIndex = 593
+        Me.lblIssuedQty.Text = "Total Issued Qty"
+        Me.lblIssuedQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'txtActualStock
+        'txtIssuedQty
         '
-        Me.txtActualStock.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtActualStock.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtActualStock.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
-        Me.txtActualStock.ForeColor = System.Drawing.Color.Black
-        Me.txtActualStock.Location = New System.Drawing.Point(641, 109)
-        Me.txtActualStock.Name = "txtActualStock"
-        Me.txtActualStock.Size = New System.Drawing.Size(80, 25)
-        Me.txtActualStock.TabIndex = 592
-        Me.txtActualStock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.txtActualStock.UseCompatibleTextRendering = True
+        Me.txtIssuedQty.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtIssuedQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtIssuedQty.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtIssuedQty.ForeColor = System.Drawing.Color.Black
+        Me.txtIssuedQty.Location = New System.Drawing.Point(479, 82)
+        Me.txtIssuedQty.Name = "txtIssuedQty"
+        Me.txtIssuedQty.Size = New System.Drawing.Size(100, 25)
+        Me.txtIssuedQty.TabIndex = 592
+        Me.txtIssuedQty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtIssuedQty.UseCompatibleTextRendering = True
         '
-        'lblQty
+        'lblConsumedQty
         '
-        Me.lblQty.BackColor = System.Drawing.SystemColors.Control
-        Me.lblQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblQty.ForeColor = System.Drawing.Color.Black
-        Me.lblQty.Location = New System.Drawing.Point(360, 109)
-        Me.lblQty.Name = "lblQty"
-        Me.lblQty.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblQty.Size = New System.Drawing.Size(120, 25)
-        Me.lblQty.TabIndex = 595
-        Me.lblQty.Text = "Quantity"
-        Me.lblQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblConsumedQty.BackColor = System.Drawing.SystemColors.Control
+        Me.lblConsumedQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblConsumedQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblConsumedQty.ForeColor = System.Drawing.Color.Black
+        Me.lblConsumedQty.Location = New System.Drawing.Point(360, 109)
+        Me.lblConsumedQty.Name = "lblConsumedQty"
+        Me.lblConsumedQty.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblConsumedQty.Size = New System.Drawing.Size(120, 25)
+        Me.lblConsumedQty.TabIndex = 595
+        Me.lblConsumedQty.Text = "Consumed Qty"
+        Me.lblConsumedQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'txtQty
+        'txtConsumedQty
         '
-        Me.txtQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtQty.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.txtQty.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtQty.Location = New System.Drawing.Point(479, 109)
-        Me.txtQty.MaxLength = 15
-        Me.txtQty.Name = "txtQty"
-        Me.txtQty.Size = New System.Drawing.Size(70, 25)
-        Me.txtQty.TabIndex = 4
-        Me.txtQty.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.txtConsumedQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtConsumedQty.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.txtConsumedQty.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.txtConsumedQty.Location = New System.Drawing.Point(479, 109)
+        Me.txtConsumedQty.MaxLength = 15
+        Me.txtConsumedQty.Name = "txtConsumedQty"
+        Me.txtConsumedQty.Size = New System.Drawing.Size(100, 25)
+        Me.txtConsumedQty.TabIndex = 4
+        Me.txtConsumedQty.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblUnit
         '
@@ -353,10 +353,10 @@ Partial Class MntTrxActvityLog
         Me.lblUnit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblUnit.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblUnit.ForeColor = System.Drawing.Color.Black
-        Me.lblUnit.Location = New System.Drawing.Point(906, 109)
+        Me.lblUnit.Location = New System.Drawing.Point(844, 82)
         Me.lblUnit.Name = "lblUnit"
         Me.lblUnit.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblUnit.Size = New System.Drawing.Size(50, 25)
+        Me.lblUnit.Size = New System.Drawing.Size(71, 25)
         Me.lblUnit.TabIndex = 598
         Me.lblUnit.Text = "UOM"
         Me.lblUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -367,9 +367,9 @@ Partial Class MntTrxActvityLog
         Me.txtUnit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtUnit.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.txtUnit.ForeColor = System.Drawing.Color.Black
-        Me.txtUnit.Location = New System.Drawing.Point(955, 109)
+        Me.txtUnit.Location = New System.Drawing.Point(913, 82)
         Me.txtUnit.Name = "txtUnit"
-        Me.txtUnit.Size = New System.Drawing.Size(156, 25)
+        Me.txtUnit.Size = New System.Drawing.Size(198, 25)
         Me.txtUnit.TabIndex = 597
         Me.txtUnit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.txtUnit.UseCompatibleTextRendering = True
@@ -411,16 +411,16 @@ Partial Class MntTrxActvityLog
         Me.dgvPartDetail.AllowUserToResizeColumns = False
         Me.dgvPartDetail.AllowUserToResizeRows = False
         Me.dgvPartDetail.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColCreatedDate, Me.ColQty})
+        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColQty})
         Me.dgvPartDetail.Location = New System.Drawing.Point(3, 193)
         Me.dgvPartDetail.MultiSelect = False
         Me.dgvPartDetail.Name = "dgvPartDetail"
@@ -440,21 +440,11 @@ Partial Class MntTrxActvityLog
         Me.ColPartId.ReadOnly = True
         Me.ColPartId.Visible = False
         '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColCreatedDate.HeaderText = "Date Created"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
         'ColQty
         '
         Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColQty.HeaderText = "Qty"
         Me.ColQty.Name = "ColQty"
         Me.ColQty.ReadOnly = True
@@ -466,7 +456,7 @@ Partial Class MntTrxActvityLog
         Me.lblPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lblPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblPartDescription.ForeColor = System.Drawing.Color.Black
-        Me.lblPartDescription.Location = New System.Drawing.Point(360, 82)
+        Me.lblPartDescription.Location = New System.Drawing.Point(360, 55)
         Me.lblPartDescription.Name = "lblPartDescription"
         Me.lblPartDescription.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
         Me.lblPartDescription.Size = New System.Drawing.Size(120, 25)
@@ -480,7 +470,7 @@ Partial Class MntTrxActvityLog
         Me.txtPartDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.txtPartDescription.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.txtPartDescription.ForeColor = System.Drawing.Color.Black
-        Me.txtPartDescription.Location = New System.Drawing.Point(479, 82)
+        Me.txtPartDescription.Location = New System.Drawing.Point(479, 55)
         Me.txtPartDescription.Name = "txtPartDescription"
         Me.txtPartDescription.Size = New System.Drawing.Size(632, 25)
         Me.txtPartDescription.TabIndex = 605
@@ -511,32 +501,32 @@ Partial Class MntTrxActvityLog
         Me.lblElapsedTime.Text = "Elapsed Time"
         Me.lblElapsedTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'txtOrderingPoint
+        'txtRemainingQty
         '
-        Me.txtOrderingPoint.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtOrderingPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtOrderingPoint.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.txtOrderingPoint.ForeColor = System.Drawing.Color.Black
-        Me.txtOrderingPoint.Location = New System.Drawing.Point(823, 109)
-        Me.txtOrderingPoint.Name = "txtOrderingPoint"
-        Me.txtOrderingPoint.Size = New System.Drawing.Size(80, 25)
-        Me.txtOrderingPoint.TabIndex = 599
-        Me.txtOrderingPoint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.txtOrderingPoint.UseCompatibleTextRendering = True
+        Me.txtRemainingQty.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtRemainingQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtRemainingQty.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.txtRemainingQty.ForeColor = System.Drawing.Color.Black
+        Me.txtRemainingQty.Location = New System.Drawing.Point(681, 82)
+        Me.txtRemainingQty.Name = "txtRemainingQty"
+        Me.txtRemainingQty.Size = New System.Drawing.Size(160, 25)
+        Me.txtRemainingQty.TabIndex = 599
+        Me.txtRemainingQty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtRemainingQty.UseCompatibleTextRendering = True
         '
-        'lblOrderingPoint
+        'lblRemainingQty
         '
-        Me.lblOrderingPoint.BackColor = System.Drawing.SystemColors.Control
-        Me.lblOrderingPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblOrderingPoint.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblOrderingPoint.ForeColor = System.Drawing.Color.Black
-        Me.lblOrderingPoint.Location = New System.Drawing.Point(724, 109)
-        Me.lblOrderingPoint.Name = "lblOrderingPoint"
-        Me.lblOrderingPoint.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblOrderingPoint.Size = New System.Drawing.Size(100, 25)
-        Me.lblOrderingPoint.TabIndex = 600
-        Me.lblOrderingPoint.Text = "Ordering Point"
-        Me.lblOrderingPoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblRemainingQty.BackColor = System.Drawing.SystemColors.Control
+        Me.lblRemainingQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblRemainingQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblRemainingQty.ForeColor = System.Drawing.Color.Black
+        Me.lblRemainingQty.Location = New System.Drawing.Point(582, 82)
+        Me.lblRemainingQty.Name = "lblRemainingQty"
+        Me.lblRemainingQty.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblRemainingQty.Size = New System.Drawing.Size(100, 25)
+        Me.lblRemainingQty.TabIndex = 600
+        Me.lblRemainingQty.Text = "Remaining Qty"
+        Me.lblRemainingQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblItemList
         '
@@ -563,34 +553,63 @@ Partial Class MntTrxActvityLog
         Me.cmbPartSelection.Size = New System.Drawing.Size(120, 25)
         Me.cmbPartSelection.TabIndex = 619
         '
-        'txtLocation
+        'txtIssuedDate
         '
-        Me.txtLocation.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtLocation.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtLocation.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.txtLocation.ForeColor = System.Drawing.Color.Black
-        Me.txtLocation.Location = New System.Drawing.Point(479, 55)
-        Me.txtLocation.Name = "txtLocation"
-        Me.txtLocation.Size = New System.Drawing.Size(632, 25)
-        Me.txtLocation.TabIndex = 643
-        Me.txtLocation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.txtLocation.UseCompatibleTextRendering = True
+        Me.txtIssuedDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtIssuedDate.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtIssuedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtIssuedDate.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtIssuedDate.ForeColor = System.Drawing.Color.Black
+        Me.txtIssuedDate.Location = New System.Drawing.Point(681, 109)
+        Me.txtIssuedDate.Name = "txtIssuedDate"
+        Me.txtIssuedDate.Size = New System.Drawing.Size(160, 25)
+        Me.txtIssuedDate.TabIndex = 643
+        Me.txtIssuedDate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtIssuedDate.UseCompatibleTextRendering = True
         '
-        'lblLocation
+        'lblIssuedBy
         '
-        Me.lblLocation.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblLocation.BackColor = System.Drawing.SystemColors.Control
-        Me.lblLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblLocation.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblLocation.ForeColor = System.Drawing.Color.Black
-        Me.lblLocation.Location = New System.Drawing.Point(360, 55)
-        Me.lblLocation.Name = "lblLocation"
-        Me.lblLocation.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
-        Me.lblLocation.Size = New System.Drawing.Size(120, 25)
-        Me.lblLocation.TabIndex = 642
-        Me.lblLocation.Text = "Location"
-        Me.lblLocation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblIssuedBy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblIssuedBy.BackColor = System.Drawing.SystemColors.Control
+        Me.lblIssuedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblIssuedBy.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblIssuedBy.ForeColor = System.Drawing.Color.Black
+        Me.lblIssuedBy.Location = New System.Drawing.Point(844, 109)
+        Me.lblIssuedBy.Name = "lblIssuedBy"
+        Me.lblIssuedBy.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblIssuedBy.Size = New System.Drawing.Size(71, 25)
+        Me.lblIssuedBy.TabIndex = 642
+        Me.lblIssuedBy.Text = "Issued By"
+        Me.lblIssuedBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtIssuedBy
+        '
+        Me.txtIssuedBy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtIssuedBy.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtIssuedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtIssuedBy.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtIssuedBy.ForeColor = System.Drawing.Color.Black
+        Me.txtIssuedBy.Location = New System.Drawing.Point(913, 109)
+        Me.txtIssuedBy.Name = "txtIssuedBy"
+        Me.txtIssuedBy.Size = New System.Drawing.Size(198, 25)
+        Me.txtIssuedBy.TabIndex = 645
+        Me.txtIssuedBy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtIssuedBy.UseCompatibleTextRendering = True
+        '
+        'lblIssuedDate
+        '
+        Me.lblIssuedDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblIssuedDate.BackColor = System.Drawing.SystemColors.Control
+        Me.lblIssuedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblIssuedDate.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblIssuedDate.ForeColor = System.Drawing.Color.Black
+        Me.lblIssuedDate.Location = New System.Drawing.Point(582, 109)
+        Me.lblIssuedDate.Name = "lblIssuedDate"
+        Me.lblIssuedDate.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblIssuedDate.Size = New System.Drawing.Size(100, 25)
+        Me.lblIssuedDate.TabIndex = 644
+        Me.lblIssuedDate.Text = "Issued Date"
+        Me.lblIssuedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MntTrxActvityLog
         '
@@ -598,8 +617,10 @@ Partial Class MntTrxActvityLog
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1114, 386)
-        Me.Controls.Add(Me.txtLocation)
-        Me.Controls.Add(Me.lblLocation)
+        Me.Controls.Add(Me.txtIssuedBy)
+        Me.Controls.Add(Me.lblIssuedDate)
+        Me.Controls.Add(Me.txtIssuedDate)
+        Me.Controls.Add(Me.lblIssuedBy)
         Me.Controls.Add(Me.cmbPart)
         Me.Controls.Add(Me.cmbPartSelection)
         Me.Controls.Add(Me.lblItemList)
@@ -610,14 +631,14 @@ Partial Class MntTrxActvityLog
         Me.Controls.Add(Me.dgvPartDetail)
         Me.Controls.Add(Me.btnRemove)
         Me.Controls.Add(Me.btnAdd)
-        Me.Controls.Add(Me.lblOrderingPoint)
-        Me.Controls.Add(Me.txtOrderingPoint)
+        Me.Controls.Add(Me.lblRemainingQty)
+        Me.Controls.Add(Me.txtRemainingQty)
         Me.Controls.Add(Me.lblUnit)
         Me.Controls.Add(Me.txtUnit)
-        Me.Controls.Add(Me.txtQty)
-        Me.Controls.Add(Me.lblQty)
-        Me.Controls.Add(Me.lblActualStock)
-        Me.Controls.Add(Me.txtActualStock)
+        Me.Controls.Add(Me.txtConsumedQty)
+        Me.Controls.Add(Me.lblConsumedQty)
+        Me.Controls.Add(Me.lblIssuedQty)
+        Me.Controls.Add(Me.txtIssuedQty)
         Me.Controls.Add(Me.lblActivityLog)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.btnDelete)
@@ -665,10 +686,10 @@ Partial Class MntTrxActvityLog
     Friend WithEvents btnSave As PinkieControls.ButtonXP
     Friend WithEvents cmbPart As SergeUtils.EasyCompletionComboBox
     Friend WithEvents lblActivityLog As Label
-    Friend WithEvents lblActualStock As Label
-    Public WithEvents txtActualStock As Label
-    Friend WithEvents lblQty As Label
-    Friend WithEvents txtQty As TextBox
+    Friend WithEvents lblIssuedQty As Label
+    Public WithEvents txtIssuedQty As Label
+    Friend WithEvents lblConsumedQty As Label
+    Friend WithEvents txtConsumedQty As TextBox
     Friend WithEvents lblUnit As Label
     Public WithEvents txtUnit As Label
     Friend WithEvents btnAdd As PinkieControls.ButtonXP
@@ -677,16 +698,17 @@ Partial Class MntTrxActvityLog
     Public WithEvents txtPartDescription As Label
     Friend WithEvents txtElapsedTime As Label
     Friend WithEvents lblElapsedTime As Label
-    Public WithEvents txtOrderingPoint As Label
-    Friend WithEvents lblOrderingPoint As Label
+    Public WithEvents txtRemainingQty As Label
+    Friend WithEvents lblRemainingQty As Label
     Public WithEvents dgvPartDetail As DataGridView
     Public WithEvents rdNight As RadioButton
     Public WithEvents rdDay As RadioButton
     Friend WithEvents lblItemList As Label
     Friend WithEvents cmbPartSelection As ComboBox
-    Public WithEvents txtLocation As Label
-    Friend WithEvents lblLocation As Label
+    Public WithEvents txtIssuedDate As Label
+    Friend WithEvents lblIssuedBy As Label
+    Public WithEvents txtIssuedBy As Label
+    Friend WithEvents lblIssuedDate As Label
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
-    Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
 End Class

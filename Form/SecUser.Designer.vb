@@ -47,6 +47,15 @@ Partial Class SecUser
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
+        Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
+        Me.pnlSearchByText = New System.Windows.Forms.Panel()
+        Me.txtCommon = New System.Windows.Forms.TextBox()
+        Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
+        Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
         Me.ColUserId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColEmployeeId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -57,15 +66,8 @@ Partial Class SecUser
         Me.ColWorkgroup = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsAdmin = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
-        Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
-        Me.pnlSearchByText = New System.Windows.Forms.Panel()
-        Me.txtCommon = New System.Windows.Forms.TextBox()
-        Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
-        Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -196,7 +198,6 @@ Partial Class SecUser
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -329,91 +330,6 @@ Partial Class SecUser
         Me.dgvList.Size = New System.Drawing.Size(1084, 440)
         Me.dgvList.TabIndex = 549
         '
-        'ColUserId
-        '
-        Me.ColUserId.DataPropertyName = "UserId"
-        Me.ColUserId.HeaderText = "UserId"
-        Me.ColUserId.Name = "ColUserId"
-        Me.ColUserId.ReadOnly = True
-        Me.ColUserId.Visible = False
-        '
-        'ColEmployeeId
-        '
-        Me.ColEmployeeId.DataPropertyName = "EmployeeId"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.ColEmployeeId.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColEmployeeId.HeaderText = "Employee ID"
-        Me.ColEmployeeId.Name = "ColEmployeeId"
-        Me.ColEmployeeId.ReadOnly = True
-        Me.ColEmployeeId.Width = 90
-        '
-        'ColUserName
-        '
-        Me.ColUserName.DataPropertyName = "UserName"
-        Me.ColUserName.HeaderText = "Name"
-        Me.ColUserName.Name = "ColUserName"
-        Me.ColUserName.ReadOnly = True
-        Me.ColUserName.Width = 120
-        '
-        'ColPassword
-        '
-        Me.ColPassword.DataPropertyName = "Password"
-        Me.ColPassword.HeaderText = "Password"
-        Me.ColPassword.Name = "ColPassword"
-        Me.ColPassword.ReadOnly = True
-        Me.ColPassword.Width = 95
-        '
-        'ColNickname
-        '
-        Me.ColNickname.DataPropertyName = "Nickname"
-        Me.ColNickname.HeaderText = "Nickname"
-        Me.ColNickname.Name = "ColNickname"
-        Me.ColNickname.ReadOnly = True
-        Me.ColNickname.Width = 90
-        '
-        'ColUserItem
-        '
-        Me.ColUserItem.DataPropertyName = "UserItem"
-        Me.ColUserItem.HeaderText = "User Item"
-        Me.ColUserItem.Name = "ColUserItem"
-        Me.ColUserItem.ReadOnly = True
-        Me.ColUserItem.Width = 150
-        '
-        'ColSection
-        '
-        Me.ColSection.DataPropertyName = "SectionName"
-        Me.ColSection.HeaderText = "Section"
-        Me.ColSection.Name = "ColSection"
-        Me.ColSection.ReadOnly = True
-        Me.ColSection.Width = 180
-        '
-        'ColWorkgroup
-        '
-        Me.ColWorkgroup.DataPropertyName = "WorkgroupName"
-        Me.ColWorkgroup.HeaderText = "Workgroup"
-        Me.ColWorkgroup.Name = "ColWorkgroup"
-        Me.ColWorkgroup.ReadOnly = True
-        Me.ColWorkgroup.Width = 180
-        '
-        'ColIsAdmin
-        '
-        Me.ColIsAdmin.DataPropertyName = "IsAdmin"
-        Me.ColIsAdmin.HeaderText = "Admin"
-        Me.ColIsAdmin.Name = "ColIsAdmin"
-        Me.ColIsAdmin.ReadOnly = True
-        Me.ColIsAdmin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsAdmin.Width = 55
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsActive.Width = 55
-        '
         'pnlSearchByCmb
         '
         Me.pnlSearchByCmb.Controls.Add(Me.cmbCommon)
@@ -496,6 +412,119 @@ Partial Class SecUser
         Me.DataGridViewNullableComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewNullableComboBoxColumn2.Width = 150
         '
+        'ColUserId
+        '
+        Me.ColUserId.DataPropertyName = "UserId"
+        Me.ColUserId.HeaderText = "UserId"
+        Me.ColUserId.Name = "ColUserId"
+        Me.ColUserId.ReadOnly = True
+        Me.ColUserId.Visible = False
+        '
+        'ColEmployeeId
+        '
+        Me.ColEmployeeId.DataPropertyName = "EmployeeId"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.ColEmployeeId.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColEmployeeId.HeaderText = "Employee ID"
+        Me.ColEmployeeId.Name = "ColEmployeeId"
+        Me.ColEmployeeId.ReadOnly = True
+        Me.ColEmployeeId.Width = 90
+        '
+        'ColUserName
+        '
+        Me.ColUserName.DataPropertyName = "UserName"
+        Me.ColUserName.HeaderText = "Name"
+        Me.ColUserName.Name = "ColUserName"
+        Me.ColUserName.ReadOnly = True
+        Me.ColUserName.Width = 120
+        '
+        'ColPassword
+        '
+        Me.ColPassword.DataPropertyName = "Password"
+        Me.ColPassword.HeaderText = "Password"
+        Me.ColPassword.Name = "ColPassword"
+        Me.ColPassword.ReadOnly = True
+        Me.ColPassword.Width = 95
+        '
+        'ColNickname
+        '
+        Me.ColNickname.DataPropertyName = "Nickname"
+        Me.ColNickname.HeaderText = "Nickname"
+        Me.ColNickname.Name = "ColNickname"
+        Me.ColNickname.ReadOnly = True
+        Me.ColNickname.Width = 90
+        '
+        'ColUserItem
+        '
+        Me.ColUserItem.DataPropertyName = "UserItem"
+        Me.ColUserItem.HeaderText = "Position"
+        Me.ColUserItem.Name = "ColUserItem"
+        Me.ColUserItem.ReadOnly = True
+        Me.ColUserItem.Width = 150
+        '
+        'ColSection
+        '
+        Me.ColSection.DataPropertyName = "SectionName"
+        Me.ColSection.HeaderText = "Section"
+        Me.ColSection.Name = "ColSection"
+        Me.ColSection.ReadOnly = True
+        Me.ColSection.Width = 180
+        '
+        'ColWorkgroup
+        '
+        Me.ColWorkgroup.DataPropertyName = "WorkgroupName"
+        Me.ColWorkgroup.HeaderText = "Workgroup"
+        Me.ColWorkgroup.Name = "ColWorkgroup"
+        Me.ColWorkgroup.ReadOnly = True
+        Me.ColWorkgroup.Visible = False
+        Me.ColWorkgroup.Width = 180
+        '
+        'ColIsAdmin
+        '
+        Me.ColIsAdmin.DataPropertyName = "IsAdmin"
+        Me.ColIsAdmin.HeaderText = "Admin"
+        Me.ColIsAdmin.Name = "ColIsAdmin"
+        Me.ColIsAdmin.ReadOnly = True
+        Me.ColIsAdmin.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsAdmin.Width = 55
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsActive.Width = 55
+        '
+        'lblStatus
+        '
+        Me.lblStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblStatus.Location = New System.Drawing.Point(930, 3)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblStatus.Size = New System.Drawing.Size(55, 25)
+        Me.lblStatus.TabIndex = 569
+        Me.lblStatus.Text = "Status"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbStatus.CausesValidation = False
+        Me.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(984, 3)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(100, 25)
+        Me.cmbStatus.TabIndex = 570
+        '
         'SecUser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -504,6 +533,8 @@ Partial Class SecUser
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(1084, 511)
+        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.cmbStatus)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.dgvList)
         Me.Controls.Add(Me.btnReset)
@@ -575,4 +606,6 @@ Partial Class SecUser
     Friend WithEvents ColWorkgroup As DataGridViewTextBoxColumn
     Friend WithEvents ColIsAdmin As DataGridViewCheckBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
+    Friend WithEvents lblStatus As Label
+    Friend WithEvents cmbStatus As ComboBox
 End Class

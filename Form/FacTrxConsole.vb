@@ -347,31 +347,25 @@ Public Class FacTrxConsole
                     pnlSearchByText.Visible = False
                     Me.ActiveControl = dtpStartDate
 
-                Case 2, 3, 4, 5, 6, 12, 13
+                Case 2, 3, 6, 12, 13
                     cmbCommonCmb.SelectedValue = 0
                     cmbCommonCmb.DataSource = Nothing
                     cmbCommonCmb.Items.Clear()
 
                     Select Case cmbSearchCriteria.SelectedValue
                         Case 2
-                            dbMethod.FillCmbWithCaption("RdMntMachine", CommandType.StoredProcedure, "MachineId", "MachineName", cmbCommonCmb, "< All >")
+                            dbMethod.FillCmbWithCaption("RdFacMachine", CommandType.StoredProcedure, "MachineId", "MachineCode", cmbCommonCmb, "< All >")
 
                         Case 3
-                            dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbCommonCmb, "< All >")
-
-                        Case 4
-                            dbMethod.FillCmbWithCaption("RdMntJig", CommandType.StoredProcedure, "JigId", "JigCompleteName", cmbCommonCmb, "< All >")
-
-                        Case 5
-                            dbMethod.FillCmbWithCaption("RdMntJigStatus", CommandType.StoredProcedure, "JigStatusId", "JigStatusName", cmbCommonCmb, "< All >")
+                            dbMethod.FillCmbWithCaption("RdFacMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbCommonCmb, "< All >")
 
                         Case 6
-                            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbCommonCmb, "< All >")
+                            dbMethod.FillCmbWithCaption("RdFacArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbCommonCmb, "< All >")
 
                         Case 12
                             Dim prmSec(0) As SqlParameter
                             prmSec(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-                            prmSec(0).Value = sectionId
+                            prmSec(0).Value = 3
 
                             dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommonCmb, "< All >", prmSec)
 

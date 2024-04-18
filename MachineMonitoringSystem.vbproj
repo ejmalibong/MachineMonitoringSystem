@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>45</ApplicationRevision>
+    <ApplicationRevision>49</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -283,6 +283,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form\MntSparePartLogFloat.Designer.vb">
+      <DependentUpon>MntSparePartLogFloat.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Form\MntSparePartLogFloat.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form\MntSparePartLog.Designer.vb">
       <DependentUpon>MntSparePartLog.vb</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -402,6 +410,14 @@
     <Compile Include="Form\MntSparePartInvDetail.vb">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Form\MntTrxActvityLog20240403.Designer.vb">
+      <DependentUpon>MntTrxActvityLog20240403.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Form\MntTrxActvityLog20240403.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form\MntTrxPartIssue.Designer.vb">
       <DependentUpon>MntTrxPartIssue.vb</DependentUpon>
@@ -1008,6 +1024,10 @@
       <DependentUpon>MntSparePartIncoming.vb</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntSparePartLogFloat.resx">
+      <DependentUpon>MntSparePartLogFloat.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\MntSparePartLog.resx">
       <DependentUpon>MntSparePartLog.vb</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1066,6 +1086,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntSparePartInvDetail.resx">
       <DependentUpon>MntSparePartInvDetail.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MntTrxActvityLog20240403.resx">
+      <DependentUpon>MntTrxActvityLog20240403.vb</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\MntTrxPartIssue.resx">

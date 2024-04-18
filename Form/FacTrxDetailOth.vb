@@ -3355,4 +3355,51 @@ Public Class FacTrxDetailOth
         lblRootCause.BackColor = SystemColors.Control
     End Sub
 
+    Private Sub btnAddRow_Click(sender As Object, e As EventArgs) Handles btnAddRow.Click
+        Try
+            If trxId = 0 Then
+                Using frmDetailLog As New FacTrxActvityLog(userId)
+                    If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                        Me.bsTrxDetail.AddNew()
+                        Me.bsTrxDetail.MoveLast()
+                        Me.bsTrxDetail.Current("TrxId") = DBNull.Value
+                        Me.bsTrxDetail.Current("TrxDate") = CDate(dbMethod.GetServerDate).Date
+                        Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
+                        Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
+                        Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
+                        Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
+                        Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
+                        Me.bsTrxDetail.Sort = "TrxFrom"
+                        Me.bsTrxDetail.EndEdit()
+                    Else
+                        Me.bsTrxDetail.CancelEdit()
+                    End If
+                End Using
+            Else
+                Using frmDetailLog As New FacTrxActvityLog(userId, trxId)
+                    If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                        Me.bsTrxDetail.AddNew()
+                        Me.bsTrxDetail.MoveLast()
+                        Me.bsTrxDetail.Current("TrxId") = trxId
+                        Me.bsTrxDetail.Current("TrxDate") = DateTime.Now
+                        Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
+                        Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
+                        Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
+                        Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
+                        Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
+                        Me.bsTrxDetail.Sort = "TrxFrom"
+                        Me.bsTrxDetail.EndEdit()
+                    Else
+                        Me.bsTrxDetail.CancelEdit()
+                    End If
+                End Using
+            End If
+
+            FilterPicTable()
+            GetTotalDowntime()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 End Class

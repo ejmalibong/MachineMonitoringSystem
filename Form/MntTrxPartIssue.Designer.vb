@@ -22,9 +22,7 @@ Partial Class MntTrxPartIssue
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblPartsReceiving = New System.Windows.Forms.Label()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
@@ -40,9 +38,6 @@ Partial Class MntTrxPartIssue
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnRemove = New PinkieControls.ButtonXP()
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
-        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblPartDescription = New System.Windows.Forms.Label()
         Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtOrderingPoint = New System.Windows.Forms.Label()
@@ -61,6 +56,11 @@ Partial Class MntTrxPartIssue
         Me.txtReferenceNo = New System.Windows.Forms.TextBox()
         Me.txtLocation = New System.Windows.Forms.Label()
         Me.lblLocation = New System.Windows.Forms.Label()
+        Me.chkFloat = New System.Windows.Forms.CheckBox()
+        Me.btnComplete = New PinkieControls.ButtonXP()
+        Me.lblFloatQty = New System.Windows.Forms.Label()
+        Me.txtFloatQty = New System.Windows.Forms.Label()
+        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -284,16 +284,16 @@ Partial Class MntTrxPartIssue
         Me.dgvPartDetail.AllowUserToResizeRows = False
         Me.dgvPartDetail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColCreatedDate, Me.ColQty})
+        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId})
         Me.dgvPartDetail.Location = New System.Drawing.Point(3, 335)
         Me.dgvPartDetail.MultiSelect = False
         Me.dgvPartDetail.Name = "dgvPartDetail"
@@ -304,34 +304,6 @@ Partial Class MntTrxPartIssue
         Me.dgvPartDetail.Size = New System.Drawing.Size(1034, 150)
         Me.dgvPartDetail.TabIndex = 603
         Me.dgvPartDetail.TabStop = False
-        '
-        'ColPartId
-        '
-        Me.ColPartId.DataPropertyName = "PartId"
-        Me.ColPartId.HeaderText = "Part ID"
-        Me.ColPartId.Name = "ColPartId"
-        Me.ColPartId.ReadOnly = True
-        Me.ColPartId.Visible = False
-        '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColCreatedDate.HeaderText = "Date Created"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
-        'ColQty
-        '
-        Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle6
-        Me.ColQty.HeaderText = "Qty"
-        Me.ColQty.Name = "ColQty"
-        Me.ColQty.ReadOnly = True
-        Me.ColQty.Width = 60
         '
         'lblPartDescription
         '
@@ -554,7 +526,7 @@ Partial Class MntTrxPartIssue
         Me.txtLocation.ForeColor = System.Drawing.Color.Black
         Me.txtLocation.Location = New System.Drawing.Point(405, 136)
         Me.txtLocation.Name = "txtLocation"
-        Me.txtLocation.Size = New System.Drawing.Size(632, 25)
+        Me.txtLocation.Size = New System.Drawing.Size(426, 25)
         Me.txtLocation.TabIndex = 641
         Me.txtLocation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.txtLocation.UseCompatibleTextRendering = True
@@ -574,6 +546,72 @@ Partial Class MntTrxPartIssue
         Me.lblLocation.Text = "Location"
         Me.lblLocation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'chkFloat
+        '
+        Me.chkFloat.AutoSize = True
+        Me.chkFloat.Checked = True
+        Me.chkFloat.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkFloat.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.chkFloat.Location = New System.Drawing.Point(289, 282)
+        Me.chkFloat.Name = "chkFloat"
+        Me.chkFloat.Size = New System.Drawing.Size(139, 23)
+        Me.chkFloat.TabIndex = 642
+        Me.chkFloat.Text = "Float Issued Items"
+        Me.chkFloat.UseVisualStyleBackColor = True
+        '
+        'btnComplete
+        '
+        Me.btnComplete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnComplete.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnComplete.DefaultScheme = False
+        Me.btnComplete.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnComplete.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnComplete.Hint = ""
+        Me.btnComplete.Location = New System.Drawing.Point(3, 493)
+        Me.btnComplete.Name = "btnComplete"
+        Me.btnComplete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnComplete.Size = New System.Drawing.Size(200, 32)
+        Me.btnComplete.TabIndex = 643
+        Me.btnComplete.TabStop = False
+        Me.btnComplete.Text = "Items Returned by Technician"
+        '
+        'lblFloatQty
+        '
+        Me.lblFloatQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblFloatQty.BackColor = System.Drawing.SystemColors.Control
+        Me.lblFloatQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblFloatQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblFloatQty.ForeColor = System.Drawing.Color.Black
+        Me.lblFloatQty.Location = New System.Drawing.Point(834, 136)
+        Me.lblFloatQty.Name = "lblFloatQty"
+        Me.lblFloatQty.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.lblFloatQty.Size = New System.Drawing.Size(50, 25)
+        Me.lblFloatQty.TabIndex = 645
+        Me.lblFloatQty.Text = "Float"
+        Me.lblFloatQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtFloatQty
+        '
+        Me.txtFloatQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtFloatQty.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtFloatQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtFloatQty.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtFloatQty.ForeColor = System.Drawing.Color.Black
+        Me.txtFloatQty.Location = New System.Drawing.Point(883, 136)
+        Me.txtFloatQty.Name = "txtFloatQty"
+        Me.txtFloatQty.Size = New System.Drawing.Size(154, 25)
+        Me.txtFloatQty.TabIndex = 644
+        Me.txtFloatQty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtFloatQty.UseCompatibleTextRendering = True
+        '
+        'ColPartId
+        '
+        Me.ColPartId.DataPropertyName = "PartId"
+        Me.ColPartId.HeaderText = "Part ID"
+        Me.ColPartId.Name = "ColPartId"
+        Me.ColPartId.ReadOnly = True
+        Me.ColPartId.Visible = False
+        '
         'MntTrxPartIssue
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -581,6 +619,10 @@ Partial Class MntTrxPartIssue
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1040, 528)
+        Me.Controls.Add(Me.lblFloatQty)
+        Me.Controls.Add(Me.txtFloatQty)
+        Me.Controls.Add(Me.btnComplete)
+        Me.Controls.Add(Me.chkFloat)
         Me.Controls.Add(Me.txtLocation)
         Me.Controls.Add(Me.lblLocation)
         Me.Controls.Add(Me.lblDateReceived)
@@ -664,7 +706,9 @@ Partial Class MntTrxPartIssue
     Friend WithEvents txtReferenceNo As TextBox
     Public WithEvents txtLocation As Label
     Friend WithEvents lblLocation As Label
+    Friend WithEvents chkFloat As CheckBox
+    Friend WithEvents btnComplete As PinkieControls.ButtonXP
+    Friend WithEvents lblFloatQty As Label
+    Public WithEvents txtFloatQty As Label
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
-    Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
-    Friend WithEvents ColQty As DataGridViewTextBoxColumn
 End Class

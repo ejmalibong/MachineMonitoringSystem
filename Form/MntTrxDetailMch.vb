@@ -9,6 +9,7 @@ Public Class MntTrxDetailMch
     Private WithEvents bsSparePart As New BindingSource
     Private WithEvents bsTrxDetail As New BindingSource
     Private WithEvents bsTrxPartDetail As New BindingSource
+    Private WithEvents bsTrxPartDetailFloat As New BindingSource
     Private WithEvents bsTrxPartHeader As New BindingSource
     Private WithEvents bsTrxUser As New BindingSource
     Private WithEvents bsUserLog As New BindingSource
@@ -16,6 +17,7 @@ Public Class MntTrxDetailMch
     Private accessLevelId As Integer = 0
     Private adpTrxDetail As New SqlDataAdapter
     Private adpTrxPartDetail As New SqlDataAdapter
+    Private adpTrxPartDetailFloat As New SqlDataAdapter
     Private adpTrxPartHeader As New SqlDataAdapter
     Private areaId As Integer = 0
     Private bite As Byte() 'the word `byte` is not a valid identifier
@@ -26,7 +28,6 @@ Public Class MntTrxDetailMch
     Private dicApp1Action As New Dictionary(Of String, Integer)
     Private dicApp2Action As New Dictionary(Of String, Integer)
     Private dicApp3Action As New Dictionary(Of String, Integer)
-
     Private directory As New Directory
     Private dtRoutingStatus As New DataTable
     Private dtSparePart As New DataTable
@@ -34,16 +35,13 @@ Public Class MntTrxDetailMch
     Private dtTrxHeader As New DataTable
     Private dtTrxMachinePart As New DataTable
     Private dtTrxPartDetail As New DataTable
-
-    'Private dtTrxSparePart As New DataTable
+    Private dtTrxPartDetailFloat As New DataTable
     Private dtTrxPartHeader As New DataTable
-
     Private dtTrxUser As New DataTable
     Private dtUserLog As New DataTable
     Private dtUserPic As New DataTable
     Private imgDirectory As String = directory.ImgIniDirectoryMt
     Private imgTmp As String = String.Empty
-    'Private impersonation As New UserImpersonation.UserImpersonation
     Private isAdmin As Boolean = True
     Private lstImgAttachment As New List(Of ImgAttachment)
     Private machineId As Integer = 0
@@ -80,25 +78,18 @@ Public Class MntTrxDetailMch
         isAdmin = _isAdmin
         trxId = _trxId
 
-        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
-
         Select Case workgroupId
             Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
                 accessLevelId = 1
             Case 35, 40 'mngr, asst mngr
                 accessLevelId = 2
-            Case 5 'sr tech
-                accessLevelId = 3
             Case 29, 30 'sv, asv
-                accessLevelId = 4
-            Case Else
-                accessLevelId = 99
+                accessLevelId = 3
         End Select
 
         InitializeContructor()
     End Sub
 
-    'sr mngr action
     Public Property fromPmCalendar As Boolean = False
 
     Public Sub DisableForm(isDisable As Boolean)
@@ -125,7 +116,6 @@ Public Class MntTrxDetailMch
             txt4M.ReadOnly = True
 
             btnAddLog.Enabled = False
-            btnEditLog.Enabled = False
             btnDeleteLog.Enabled = False
 
             btnViewImage.Enabled = False
@@ -183,7 +173,6 @@ Public Class MntTrxDetailMch
                 txt4M.ReadOnly = False
 
                 btnAddLog.Enabled = True
-                btnEditLog.Enabled = True
                 btnDeleteLog.Enabled = True
                 btnBrowseImage.Enabled = True
                 btnRemoveImage.Enabled = True
@@ -266,7 +255,6 @@ Public Class MntTrxDetailMch
                     txtChecksheet.ReadOnly = False
                     txt4M.ReadOnly = False
                     btnAddLog.Enabled = True
-                    btnEditLog.Enabled = True
                     btnDeleteLog.Enabled = True
                     btnBrowseImage.Enabled = True
                     btnRemoveImage.Enabled = True
@@ -310,7 +298,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = True
 
                                     btnAddLog.Enabled = False
-                                    btnEditLog.Enabled = False
                                     btnDeleteLog.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
@@ -354,7 +341,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = False
 
                                     btnAddLog.Enabled = True
-                                    btnEditLog.Enabled = True
                                     btnDeleteLog.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
@@ -363,12 +349,7 @@ Public Class MntTrxDetailMch
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
-
-                                    If String.IsNullOrEmpty(txtApp3Date.Text.Trim) Then
-                                        cmbApp3Name.Enabled = True
-                                    Else
-                                        cmbApp3Name.Enabled = False
-                                    End If
+                                    cmbApp3Name.Enabled = False
 
                                     btnSave.Enabled = True
                                     btnCancel.Enabled = True
@@ -431,7 +412,7 @@ Public Class MntTrxDetailMch
 
                         Case 3 'sv, asv
                             Select Case orgRoutingStatusId
-                                Case 1, 2 'from `for approval of approver 2` to `completed`, disable the form
+                                Case 1, 2, 3 'from `for approval of approver 2` to `completed`, disable the form
                                     cmbTransactionStatus.Enabled = False
                                     cmbMachineName.Enabled = False
 
@@ -448,7 +429,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = True
 
                                     btnAddLog.Enabled = False
-                                    btnEditLog.Enabled = False
                                     btnDeleteLog.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
@@ -492,7 +472,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = False
 
                                     btnAddLog.Enabled = True
-                                    btnEditLog.Enabled = True
                                     btnDeleteLog.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
@@ -501,12 +480,7 @@ Public Class MntTrxDetailMch
 
                                     cmbApp3Status.Enabled = False
                                     txtApp3Remarks.Enabled = False
-
-                                    If String.IsNullOrEmpty(txtApp3Date.Text.Trim) Then
-                                        cmbApp3Name.Enabled = True
-                                    Else
-                                        cmbApp3Name.Enabled = False
-                                    End If
+                                    cmbApp3Name.Enabled = False
 
                                     btnSave.Enabled = True
                                     btnCancel.Enabled = True
@@ -518,12 +492,7 @@ Public Class MntTrxDetailMch
 
                                             cmbApp2Status.Enabled = False
                                             txtApp2Remarks.Enabled = False
-
-                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                                cmbApp2Name.Enabled = True
-                                            Else
-                                                cmbApp2Name.Enabled = False
-                                            End If
+                                            cmbApp2Name.Enabled = False
 
                                             cmbApp1Status.SelectedValue = 0
                                             cmbApp1Name.SelectedValue = 0
@@ -538,12 +507,7 @@ Public Class MntTrxDetailMch
 
                                             cmbApp2Status.Enabled = False
                                             txtApp2Remarks.Enabled = False
-
-                                            If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                                cmbApp2Name.Enabled = True
-                                            Else
-                                                cmbApp2Name.Enabled = False
-                                            End If
+                                            cmbApp2Name.Enabled = False
 
                                             cmbApp1Status.Enabled = True
                                             cmbApp1Name.Enabled = False
@@ -581,7 +545,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = False
 
                                     btnAddLog.Enabled = True
-                                    btnEditLog.Enabled = True
                                     btnDeleteLog.Enabled = True
                                     btnBrowseImage.Enabled = True
                                     btnRemoveImage.Enabled = True
@@ -594,31 +557,16 @@ Public Class MntTrxDetailMch
                                     dgvPic.Enabled = True
 
                                     cmbApp3Status.Enabled = False
+                                    cmbApp3Name.Enabled = True
                                     txtApp3Remarks.Enabled = False
 
-                                    If String.IsNullOrWhiteSpace(txtApp3Date.Text.Trim) Then
-                                        cmbApp3Name.Enabled = True
-                                    Else
-                                        cmbApp3Name.Enabled = False
-                                    End If
-
                                     cmbApp2Status.Enabled = False
+                                    cmbApp2Name.Enabled = True
                                     txtApp2Remarks.Enabled = False
 
-                                    If String.IsNullOrWhiteSpace(txtApp2Date.Text.Trim) Then
-                                        cmbApp2Name.Enabled = True
-                                    Else
-                                        cmbApp2Name.Enabled = False
-                                    End If
-
                                     cmbApp1Status.Enabled = False
+                                    cmbApp1Name.Enabled = True
                                     txtApp1Remarks.Enabled = False
-
-                                    If String.IsNullOrWhiteSpace(txtApp1Date.Text.Trim) Then
-                                        cmbApp1Name.Enabled = True
-                                    Else
-                                        cmbApp1Name.Enabled = False
-                                    End If
 
                                     btnSave.Enabled = True
                                     btnCancel.Enabled = True
@@ -641,7 +589,6 @@ Public Class MntTrxDetailMch
                                     txt4M.ReadOnly = True
 
                                     btnAddLog.Enabled = False
-                                    btnEditLog.Enabled = False
                                     btnDeleteLog.Enabled = False
                                     btnBrowseImage.Enabled = False
                                     btnRemoveImage.Enabled = False
@@ -682,6 +629,7 @@ Public Class MntTrxDetailMch
 
         dtTrxDetail = CreateTrxDetail()
         dtTrxPartDetail = CreateTrxPartDetail()
+        dtTrxPartDetailFloat = CreateTrxPartDetailFloat()
         dtRoutingStatus = dbMethod.FillDataTable("RdGenRoutingStatus", CommandType.StoredProcedure)
         dtUserLog = dbMethod.FillDataTable("RdSecUser", CommandType.StoredProcedure)
         dtUserPic = dbMethod.FillDataTable("RdSecUser", CommandType.StoredProcedure)
@@ -757,8 +705,6 @@ Public Class MntTrxDetailMch
 
         LoadTransactionStatus()
         LoadMachine()
-        'GetSetting(My.Settings.SettingsId)
-        'impersonation.ImpersonateUser(serverNetUserName, "", serverNetUserPassword)
 
         If trxId = 0 Then
             Me.bsTrxDetail.DataSource = dtTrxDetail
@@ -768,6 +714,8 @@ Public Class MntTrxDetailMch
             Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
             dgvPartDetail.AutoGenerateColumns = False
             dgvPartDetail.DataSource = Me.bsTrxPartDetail
+
+            Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
         Else
             'transaction header
             Dim prmHeader(0) As SqlParameter
@@ -814,6 +762,8 @@ Public Class MntTrxDetailMch
                 Me.bsTrxPartDetail.Sort = "CreatedDate, SeqId"
                 dgvPartDetail.AutoGenerateColumns = False
                 dgvPartDetail.DataSource = Me.bsTrxPartDetail
+
+                Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
             End If
 
             'transaction user
@@ -864,8 +814,9 @@ Public Class MntTrxDetailMch
     Private Sub btnAddLog_Click(sender As Object, e As EventArgs) Handles btnAddLog.Click
         Try
             If trxId = 0 Then
-                Using frmDetailLog As New MntTrxActvityLog()
+                Using frmDetailLog As New MntTrxActvityLog(0, userId)
                     frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
+                    frmDetailLog.childBsTrxDetailFloat = Me.bsTrxPartDetailFloat
 
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                         Me.bsTrxDetail.AddNew()
@@ -894,13 +845,29 @@ Public Class MntTrxDetailMch
                             Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
                             Me.bsTrxPartDetail.EndEdit()
                         Next
+
+                        For Each dr As DataRow In frmDetailLog.dtTrxPartDetailFloat.Rows
+                            Me.bsTrxPartDetailFloat.AddNew()
+                            Me.bsTrxPartDetailFloat.MoveLast()
+                            Me.bsTrxPartDetailFloat.Current("PartTrxDetailId") = DBNull.Value
+                            Me.bsTrxPartDetailFloat.Current("PartTrxId") = DBNull.Value
+                            Me.bsTrxPartDetailFloat.Current("SeqId") = dgvDetail.Rows.Count
+                            Me.bsTrxPartDetailFloat.Current("CreatedBy") = frmDetailLog.cmbTechnician.SelectedValue
+                            Me.bsTrxPartDetailFloat.Current("CreatedDate") = dbMethod.GetServerDate
+                            Me.bsTrxPartDetailFloat.Current("IssuedTo") = frmDetailLog.cmbTechnician.SelectedValue
+                            Me.bsTrxPartDetailFloat.Current("PartId") = dr("PartId")
+                            Me.bsTrxPartDetailFloat.Current("IssuedQty") = dr("IssuedQty")
+                            Me.bsTrxPartDetailFloat.Current("ConsumedQty") = dr("ConsumedQty")
+                            Me.bsTrxPartDetailFloat.Current("RemainingQty") = dr("RemainingQty")
+                            Me.bsTrxPartDetailFloat.EndEdit()
+                        Next
                     Else
                         Me.bsTrxDetail.CancelEdit()
                     End If
                 End Using
 
             Else
-                Using frmDetailLog As New MntTrxActvityLog(trxId, 0)
+                Using frmDetailLog As New MntTrxActvityLog(trxId, userId)
                     frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
 
                     If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -930,6 +897,22 @@ Public Class MntTrxDetailMch
                             Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
                             Me.bsTrxPartDetail.EndEdit()
                         Next
+
+                        For Each dr As DataRow In frmDetailLog.dtTrxPartDetailFloat.Rows
+                            Me.bsTrxPartDetailFloat.AddNew()
+                            Me.bsTrxPartDetailFloat.MoveLast()
+                            Me.bsTrxPartDetailFloat.Current("PartTrxDetailId") = DBNull.Value
+                            Me.bsTrxPartDetailFloat.Current("PartTrxId") = DBNull.Value
+                            Me.bsTrxPartDetailFloat.Current("SeqId") = dgvDetail.Rows.Count
+                            Me.bsTrxPartDetailFloat.Current("CreatedBy") = frmDetailLog.cmbTechnician.SelectedValue
+                            Me.bsTrxPartDetailFloat.Current("CreatedDate") = dbMethod.GetServerDate
+                            Me.bsTrxPartDetailFloat.Current("IssuedTo") = frmDetailLog.cmbTechnician.SelectedValue
+                            Me.bsTrxPartDetailFloat.Current("PartId") = dr("PartId")
+                            Me.bsTrxPartDetailFloat.Current("IssuedQty") = dr("IssuedQty")
+                            Me.bsTrxPartDetailFloat.Current("ConsumedQty") = dr("ConsumedQty")
+                            Me.bsTrxPartDetailFloat.Current("RemainingQty") = dr("RemainingQty")
+                            Me.bsTrxPartDetailFloat.EndEdit()
+                        Next
                     Else
                         Me.bsTrxDetail.CancelEdit()
                     End If
@@ -937,6 +920,7 @@ Public Class MntTrxDetailMch
             End If
 
             Me.bsTrxDetail.Sort = "TrxFrom"
+            Me.bsTrxPartDetail.Sort = "CreatedDate"
 
             FilterPicTable()
             GetTotalDowntime()
@@ -1046,10 +1030,9 @@ Public Class MntTrxDetailMch
                 Dim question As String = String.Empty
 
                 If dgvPartDetail.Rows.Count > 0 And trxId = 0 Then
-                    question = String.Format("Are you sure you want to delete this activity log?" & Environment.NewLine & "NOTE: Record of parts issued will be deleted.")
-
+                    question = String.Format("Are you sure you want to delete this activity and parts consumed log?")
                 ElseIf dgvPartDetail.Rows.Count > 0 AndAlso trxId <> 0 Then
-                    question = String.Format("Are you sure you want to delete this activity log?" & Environment.NewLine & "NOTE: Record of parts issued will not be deleted.")
+                    question = String.Format("Are you sure you want to delete this activity log?")
                 Else
                     question = "Are you sure you want to delete this activity log?"
                 End If
@@ -1086,166 +1069,6 @@ Public Class MntTrxDetailMch
                             End If
                         Next
                     End If
-                End If
-
-                Me.bsTrxDetail.Sort = "TrxFrom"
-
-                FilterPicTable()
-                GetTotalDowntime()
-            End If
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnEditLog_Click(sender As Object, e As EventArgs) Handles btnEditLog.Click
-        Try
-            If dgvDetail.Rows.Count > 0 Then
-                If trxId = 0 Then
-                    Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
-                    Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
-
-                    Using frmDetailLog As New MntTrxActvityLog(0, userId)
-                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
-
-                        frmDetailLog.cmbTechnician.SelectedValue = userId
-                        frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
-                        frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
-
-                        If CType(Me.bsTrxDetail.Current, DataRowView).Item("ShiftId").ToString = "D" Then
-                            frmDetailLog.rdDay.Checked = True
-                        Else
-                            frmDetailLog.rdNight.Checked = True
-                        End If
-
-                        If dgvPartDetail.Rows.Count > 0 Then
-                            For Each dr As DataRow In dtTrxPartDetail.Rows
-                                If dr("SeqId") = seqId Then
-                                    Dim row As DataRow = frmDetailLog.dtTrxPartDetail.NewRow
-
-                                    row("PartTrxDetailId") = DBNull.Value
-                                    row("PartTrxId") = DBNull.Value
-                                    row("SeqId") = seqId
-                                    row("CreatedBy") = dr("CreatedBy")
-                                    row("CreatedDate") = dr("CreatedDate")
-                                    row("UserId") = dr("UserId")
-                                    row("PartId") = dr("PartId")
-                                    row("Qty") = dr("Qty")
-                                    frmDetailLog.dtTrxPartDetail.Rows.Add(row)
-                                End If
-                            Next
-                        End If
-
-                        If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                            Me.bsTrxDetail.Current("TrxId") = DBNull.Value
-                            Me.bsTrxDetail.Current("TrxDate") = dbMethod.GetServerDate
-                            Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
-                            Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
-                            Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
-                            Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                            Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
-                            Me.bsTrxDetail.EndEdit()
-
-                            If frmDetailLog.dgvPartDetail.Rows.Count > 0 Then
-                                For Each row As DataRowView In Me.bsTrxPartDetail
-                                    If row("SeqId") = seqId Then
-                                        Me.bsTrxPartDetail.Remove(row)
-                                    End If
-                                Next
-
-                                For Each dr As DataRow In frmDetailLog.dtTrxPartDetail.Rows
-                                    Me.bsTrxPartDetail.AddNew()
-                                    Me.bsTrxPartDetail.MoveLast()
-                                    Me.bsTrxPartDetail.Current("PartTrxDetailId") = DBNull.Value
-                                    Me.bsTrxPartDetail.Current("PartTrxId") = DBNull.Value
-                                    Me.bsTrxPartDetail.Current("SeqId") = seqId
-                                    Me.bsTrxPartDetail.Current("CreatedBy") = frmDetailLog.cmbTechnician.SelectedValue
-                                    Me.bsTrxPartDetail.Current("CreatedDate") = dbMethod.GetServerDate
-                                    Me.bsTrxPartDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                                    Me.bsTrxPartDetail.Current("PartId") = dr("PartId")
-                                    Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
-                                    Me.bsTrxPartDetail.EndEdit()
-                                Next
-                            End If
-                        Else
-                            Me.bsTrxDetail.CancelEdit()
-                        End If
-                    End Using
-
-                Else
-                    Dim seqId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("SeqId")
-                    Dim userId As Integer = CType(Me.bsTrxDetail.Current, DataRowView).Item("UserId")
-
-                    Using frmDetailLog As New MntTrxActvityLog(trxId, userId)
-                        frmDetailLog.childBsTrxDetail = Me.bsTrxDetail
-
-                        frmDetailLog.dtpFrom.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxFrom")
-                        frmDetailLog.dtpTo.Value = CType(Me.bsTrxDetail.Current, DataRowView).Item("TrxTo")
-                        frmDetailLog.cmbTechnician.SelectedValue = userId
-
-                        If CType(Me.bsTrxDetail.Current, DataRowView).Item("ShiftId").ToString = "D" Then
-                            frmDetailLog.rdDay.Checked = True
-                        Else
-                            frmDetailLog.rdNight.Checked = True
-                        End If
-
-                        If dgvPartDetail.Rows.Count > 0 Then
-                            For Each dr As DataRow In dtTrxPartDetail.Rows
-                                If dr("SeqId") = seqId Then
-                                    Dim row As DataRow = frmDetailLog.dtTrxPartDetail.NewRow
-
-                                    row("PartTrxDetailId") = DBNull.Value
-                                    row("PartTrxId") = dtTrxPartHeader.Rows(0).Item("PartTrxId")
-                                    row("SeqId") = seqId
-                                    row("CreatedBy") = dr("CreatedBy")
-                                    row("CreatedDate") = dr("CreatedDate")
-                                    row("UserId") = dr("UserId")
-                                    row("PartId") = dr("PartId")
-                                    row("Qty") = dr("Qty")
-                                    frmDetailLog.dtTrxPartDetail.Rows.Add(row)
-                                End If
-                            Next
-                        End If
-
-                        If frmDetailLog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                            Me.bsTrxDetail.Current("TrxId") = trxId
-                            Me.bsTrxDetail.Current("TrxFrom") = frmDetailLog.dtpFrom.Value
-                            Me.bsTrxDetail.Current("TrxTo") = frmDetailLog.dtpTo.Value
-                            Me.bsTrxDetail.Current("ElapsedTime") = frmDetailLog.txtElapsedTime.Text.Trim
-                            Me.bsTrxDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                            Me.bsTrxDetail.Current("ShiftId") = IIf(frmDetailLog.rdDay.Checked = True, "D", "N")
-                            Me.bsTrxDetail.Current("ModifiedBy") = frmDetailLog.cmbTechnician.SelectedValue
-                            Me.bsTrxDetail.Current("ModifiedDate") = dbMethod.GetServerDate
-                            Me.bsTrxDetail.EndEdit()
-
-                            If frmDetailLog.dgvPartDetail.Rows.Count > 0 Then
-                                For Each row As DataRowView In Me.bsTrxPartDetail
-                                    If row("SeqId") = seqId Then
-                                        Me.bsTrxPartDetail.Remove(row)
-                                    End If
-                                Next
-
-                                For Each dr As DataRow In frmDetailLog.dtTrxPartDetail.Rows
-                                    Me.bsTrxPartDetail.AddNew()
-                                    Me.bsTrxPartDetail.MoveLast()
-                                    Me.bsTrxPartDetail.Current("PartTrxDetailId") = DBNull.Value
-                                    Me.bsTrxPartDetail.Current("PartTrxId") = dtTrxPartHeader.Rows(0).Item("PartTrxId")
-                                    Me.bsTrxPartDetail.Current("SeqId") = seqId
-                                    Me.bsTrxPartDetail.Current("CreatedBy") = dr("CreatedBy")
-                                    Me.bsTrxPartDetail.Current("CreatedDate") = dr("CreatedDate")
-                                    Me.bsTrxPartDetail.Current("UserId") = frmDetailLog.cmbTechnician.SelectedValue
-                                    Me.bsTrxPartDetail.Current("PartId") = dr("PartId")
-                                    Me.bsTrxPartDetail.Current("Qty") = dr("Qty")
-                                    Me.bsTrxPartDetail.Current("ModifiedBy") = dr("ModifiedBy")
-                                    Me.bsTrxPartDetail.Current("ModifiedDate") = dr("ModifiedDate")
-                                    Me.bsTrxPartDetail.EndEdit()
-                                Next
-                            End If
-                        Else
-                            Me.bsTrxDetail.CancelEdit()
-                        End If
-                    End Using
-
                 End If
 
                 Me.bsTrxDetail.Sort = "TrxFrom"
@@ -1854,6 +1677,37 @@ Public Class MntTrxDetailMch
                         Dim row = dataRowView.Row
                         row.Item("PartTrxId") = prmPrHeader(0).Value
                         row.Item("SeqId") = partIssRowCount
+
+                        Dim prmPrDetailFloat(4) As SqlParameter
+                        prmPrDetailFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                        prmPrDetailFloat(0).Direction = ParameterDirection.Output
+                        prmPrDetailFloat(1) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                        prmPrDetailFloat(1).Direction = ParameterDirection.Output
+                        prmPrDetailFloat(2) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                        prmPrDetailFloat(2).Value = row.Item("UserId")
+                        prmPrDetailFloat(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                        prmPrDetailFloat(3).Value = row.Item("PartId")
+                        prmPrDetailFloat(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                        prmPrDetailFloat(4).Value = row.Item("Qty")
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmPrDetailFloat)
+
+                        Dim prmPrDetailLogFloat(4) As SqlParameter
+                        prmPrDetailLogFloat(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                        prmPrDetailLogFloat(0).Value = prmPrDetailFloat(1).Value
+                        prmPrDetailLogFloat(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                        prmPrDetailLogFloat(1).Value = prmHeader(0).Value
+                        prmPrDetailLogFloat(2) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                        prmPrDetailLogFloat(2).Value = 4
+                        prmPrDetailLogFloat(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                        prmPrDetailLogFloat(3).Value = row.Item("PartId")
+                        prmPrDetailLogFloat(4) = New SqlParameter("@Qty", SqlDbType.Int)
+                        prmPrDetailLogFloat(4).Value = row.Item("Qty")
+                        dbMethod.ExecuteNonQuery("InsMntTransactionPartDetailLogFloat", CommandType.StoredProcedure, prmPrDetailLogFloat)
+
+                        Dim prmPrDetailHeaderFloat(0) As SqlParameter
+                        prmPrDetailHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                        prmPrDetailHeaderFloat(0).Value = prmPrDetailFloat(0).Value
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderlFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
                     Next
                     Me.bsTrxPartDetail.EndEdit()
                     adpTrxPartDetail.Update(dtTrxPartDetail)
@@ -2937,9 +2791,53 @@ Public Class MntTrxDetailMch
                     dbMethod.ExecuteNonQuery("UpdMntTransactionMachinePart", CommandType.StoredProcedure, prmMchPart)
                 End If
 
-                ''''
-                '''' do not allow modification of spare part issuance record
-                ''''
+                If dgvPartDetail.Rows.Count > 0 Then
+                    For Each dataRowView As DataRowView In Me.bsTrxPartDetail
+                        Dim row = dataRowView.Row
+
+                        If row.Item("PartTrxDetailId") Is DBNull.Value Then
+                            Dim prmPrDetailFloat(4) As SqlParameter
+                            prmPrDetailFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                            prmPrDetailFloat(0).Direction = ParameterDirection.Output
+                            prmPrDetailFloat(1) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                            prmPrDetailFloat(1).Direction = ParameterDirection.Output
+                            prmPrDetailFloat(2) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                            prmPrDetailFloat(2).Value = row.Item("UserId")
+                            prmPrDetailFloat(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                            prmPrDetailFloat(3).Value = row.Item("PartId")
+                            prmPrDetailFloat(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                            prmPrDetailFloat(4).Value = row.Item("Qty")
+                            dbMethod.ExecuteNonQuery("UpdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmPrDetailFloat)
+
+                            Dim prmPrDetailLogFloat(4) As SqlParameter
+                            prmPrDetailLogFloat(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                            prmPrDetailLogFloat(0).Value = prmPrDetailFloat(1).Value
+                            prmPrDetailLogFloat(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                            prmPrDetailLogFloat(1).Value = prmHeader(0).Value
+                            prmPrDetailLogFloat(2) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                            prmPrDetailLogFloat(2).Value = 4
+                            prmPrDetailLogFloat(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                            prmPrDetailLogFloat(3).Value = row.Item("PartId")
+                            prmPrDetailLogFloat(4) = New SqlParameter("@Qty", SqlDbType.Int)
+                            prmPrDetailLogFloat(4).Value = row.Item("Qty")
+                            dbMethod.ExecuteNonQuery("InsMntTransactionPartDetailLogFloat", CommandType.StoredProcedure, prmPrDetailLogFloat)
+
+                            Dim prmPrDetailHeaderFloat(0) As SqlParameter
+                            prmPrDetailHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                            prmPrDetailHeaderFloat(0).Value = prmPrDetailFloat(0).Value
+                            dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderlFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
+
+                            Dim prmIss(1) As SqlParameter
+                            prmIss(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                            prmIss(0).Value = row.Item("PartId")
+                            prmIss(1) = New SqlParameter("@Qty", SqlDbType.Int)
+                            prmIss(1).Value = row.Item("Qty")
+                            dbMethod.ExecuteNonQuery("UpdMntSparePartIss", CommandType.StoredProcedure, prmIss)
+                        End If
+                    Next
+                    Me.bsTrxPartDetail.EndEdit()
+                    adpTrxPartDetail.Update(dtTrxPartDetail)
+                End If
 
                 'transaction user - insert from pic gridview
                 For Each row As DataGridViewRow In dgvPic.Rows
@@ -3240,8 +3138,12 @@ Public Class MntTrxDetailMch
                         cmbDowntimeSubStatus.Enabled = True
                     Else
                         Select Case accessLevelId
-                            Case 2, 3
-                                If orgRoutingStatusId = 3 Or orgRoutingStatusId = 4 Then
+                            Case 2
+                                If orgRoutingStatusId >= 3 Then
+                                    cmbDowntimeSubStatus.Enabled = True
+                                End If
+                            Case 3
+                                If orgRoutingStatusId >= 4 Then
                                     cmbDowntimeSubStatus.Enabled = True
                                 End If
                             Case Else
@@ -3345,7 +3247,7 @@ Public Class MntTrxDetailMch
                         Select Case accessLevelId
                             Case 2
                                 Select Case orgRoutingStatusId
-                                    Case 1, 2
+                                    Case 1, 2, 3
                                         cmbMachinePart.Enabled = False
                                     Case Else
                                         If cmbMachinePart.Items.Count > 0 Then
@@ -3357,7 +3259,7 @@ Public Class MntTrxDetailMch
 
                             Case 3
                                 Select Case orgRoutingStatusId
-                                    Case 1, 2
+                                    Case 1, 2, 3
                                         cmbMachinePart.Enabled = False
                                     Case Else
                                         If cmbMachinePart.Items.Count > 0 Then
@@ -3382,7 +3284,7 @@ Public Class MntTrxDetailMch
                     End If
                 End If
 
-                'selected another machine then select again the orig machine
+                'selected another machine then selected again the original machine
                 If orgMachineId = cmbMachineName.SelectedValue AndAlso trxId <> 0 Then
                     If Not dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime") Is DBNull.Value Then
                         txtRuntimeAccumulated.Text = dtTrxHeader.Rows(0).Item("TotalAccumulatedRuntime")
@@ -3637,18 +3539,77 @@ Public Class MntTrxDetailMch
         Return dtMntTrxPartDetail
     End Function
 
+    Private Function CreateTrxPartDetailFloat() As DataTable
+        Dim dtMntTrxPartDetailFloat As New DataTable
+        Dim con As New SqlConnection(dbConnection.GetConnectionString)
+
+        Try
+
+            Dim query As String = "SELECT PartTrxDetailId, PartTrxId, SeqId, CreatedBy, CreatedDate, IssuedTo, PartId, IssuedQty, ConsumedQty, RemainingQty, ModifiedBy, ModifiedDate FROM dbo.MntTransactionPartDetailFloat WHERE PartTrxId IS NULL"
+            Dim cmd As New SqlCommand(query, con)
+            adpTrxPartDetailFloat = New SqlDataAdapter(cmd)
+            Dim cbTrxDetail As New SqlCommandBuilder(adpTrxPartDetailFloat)
+
+            Dim colPartTrxDetailId As DataColumn = New DataColumn("PartTrxDetailId")
+            colPartTrxDetailId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxDetailId)
+
+            Dim colPartTrxId As DataColumn = New DataColumn("PartTrxId")
+            colPartTrxId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxId)
+
+            Dim colSeqId As DataColumn = New DataColumn("SeqId")
+            colSeqId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colSeqId)
+
+            Dim colCreatedBy As DataColumn = New DataColumn("CreatedBy")
+            colCreatedBy.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colCreatedBy)
+
+            Dim colCreateDate As DataColumn = New DataColumn("CreatedDate")
+            colCreateDate.DataType = System.Type.GetType("System.DateTime")
+            dtMntTrxPartDetailFloat.Columns.Add(colCreateDate)
+
+            Dim colIssuedTo As DataColumn = New DataColumn("IssuedTo")
+            colIssuedTo.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colIssuedTo)
+
+            Dim colPartId As DataColumn = New DataColumn("PartId")
+            colPartId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartId)
+
+            Dim colIssuedQty As DataColumn = New DataColumn("IssuedQty")
+            colIssuedQty.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colIssuedQty)
+
+            Dim colConsumedQty As DataColumn = New DataColumn("ConsumedQty")
+            colConsumedQty.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colConsumedQty)
+
+            Dim colRemainingQty As DataColumn = New DataColumn("RemainingQty")
+            colRemainingQty.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colRemainingQty)
+
+            Dim colModifiedBy As DataColumn = New DataColumn("ModifiedBy")
+            colModifiedBy.DataType = System.Type.GetType("System.Int32")
+            colModifiedBy.AllowDBNull = True
+            dtMntTrxPartDetailFloat.Columns.Add(colModifiedBy)
+
+            Dim colModifiedDate As DataColumn = New DataColumn("ModifiedDate")
+            colModifiedDate.DataType = System.Type.GetType("System.DateTime")
+            colModifiedDate.AllowDBNull = True
+            dtMntTrxPartDetailFloat.Columns.Add(colModifiedDate)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        Return dtMntTrxPartDetailFloat
+    End Function
+
     Private Sub DeleteTempImg(ByVal sender As Object, ByVal e As System.EventArgs)
         If File.Exists(imgTmp) Then
             File.Delete(imgTmp)
         End If
-    End Sub
-
-    Private Sub dgvDetail_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvDetail.CellDoubleClick
-        Try
-            btnEditLog.PerformClick()
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
     End Sub
 
     Private Sub dgvDetail_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvDetail.DataError
@@ -3805,7 +3766,7 @@ Public Class MntTrxDetailMch
                 prmApp2(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
                 prmApp2(2).Value = 1
 
-                dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, "< All Approver 2 >", prmApp2)
+                dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp2Name, prmApp2)
 
                 Dim prmApp1(2) As SqlParameter
                 prmApp1(0) = New SqlParameter("@WorkgroupIdLevel", SqlDbType.Int)
@@ -3815,7 +3776,7 @@ Public Class MntTrxDetailMch
                 prmApp1(2) = New SqlParameter("@IsActive", SqlDbType.Bit)
                 prmApp1(2).Value = 1
 
-                dbMethod.FillCmbWithCaption("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, "< All Approver 1 >", prmApp1)
+                dbMethod.FillCmb("RdSecUserApprover", CommandType.StoredProcedure, "UserId", "UserName", cmbApp1Name, prmApp1)
 
                 If cmbApp3Name.Items.Count = 1 Then
                     cmbApp3Name.SelectedIndex = 0
@@ -4077,7 +4038,6 @@ Public Class MntTrxDetailMch
                 txt4M.Enabled = False
 
                 btnAddLog.Enabled = False
-                btnEditLog.Enabled = False
                 btnDeleteLog.Enabled = False
                 btnBrowseImage.Enabled = False
                 btnRemoveImage.Enabled = False
@@ -4116,10 +4076,6 @@ Public Class MntTrxDetailMch
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-
-    Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        'impersonation.UndoImpersonateUser()
     End Sub
 
     Private Sub GetMachineArea(machineId As Integer)

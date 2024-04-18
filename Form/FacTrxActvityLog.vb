@@ -18,15 +18,16 @@ Public Class FacTrxActvityLog
         userId = _userId
         trxId = _trxId
 
-        Dim prmUser(0) As SqlParameter
+        Dim prmUser(1) As SqlParameter
         prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
         prmUser(0).Value = 3
-        dbMethod.FillCmb("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, prmUser)
+        prmUser(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        prmUser(1).Value = 1
+        dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
     End Sub
 
     Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtTrxDate.Text = String.Format("{0:MMMM dd, yyyy hh:mm tt}", dbMethod.GetServerDate)
-        cmbTechnician.SelectedValue = userId
         GetCurrentShift()
         dtpFrom.Value = CDate(dbMethod.GetServerDate).Date
         dtpTo.Value = CDate(dbMethod.GetServerDate).Date
@@ -50,6 +51,12 @@ Public Class FacTrxActvityLog
             Dim datetimeEnded As New DateTime(dtpTo.Value.Year, dtpTo.Value.Month, dtpTo.Value.Day, dtpTo.Value.Hour, dtpTo.Value.Minute, 0)
 
             GetElapsedTime()
+
+            If cmbTechnician.SelectedValue = 0 Then
+                MessageBox.Show("Please select technician.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                cmbTechnician.Focus()
+                Return
+            End If
 
             If dtpFrom.Value.Equals(dtpTo.Value) Or txtElapsedTime.Text.Trim = "0" Then
                 MessageBox.Show("Datetime started should not be equals to datetime ended.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)

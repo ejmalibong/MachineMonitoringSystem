@@ -230,12 +230,8 @@ Public Class Main
                             accessLevelId = 1
                         Case 35, 40 'mngr, asst mngr
                             accessLevelId = 2
-                        Case 29, 30 'sv, asv
+                        Case 29, 30, 5 'sv, asv, sr tech
                             accessLevelId = 3
-                        Case 5 'sr tech
-                            accessLevelId = 4
-                        Case Else
-                            accessLevelId = 99
                     End Select
 
                     For Each itm As ToolStripItem In FileToolStripMenuItem.DropDownItems
@@ -281,12 +277,23 @@ Public Class Main
                     Next
 
                     Select Case accessLevelId
-                        Case 1, 2, 3, 4
+                        Case 1, 2, 3
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                         Case Else
                             dbMain.FormLoader(Me, New MntTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
-                            tssMaintenance3.Visible = False
-                            SecUserToolStripMenuItem.Visible = False
+
+                            Dim prm(0) As SqlParameter
+                            prm(0) = New SqlParameter("@UserId", SqlDbType.Int)
+                            prm(0).Value = userId
+
+                            'spart part in-charge
+                            If dbMethod.ExecuteScalar("CntMntSparePartPic", CommandType.StoredProcedure, prm) <> 1 Then
+                                tssMaintenance3.Visible = True
+                                SecUserToolStripMenuItem.Visible = True
+                            Else
+                                tssMaintenance3.Visible = False
+                                SecUserToolStripMenuItem.Visible = False
+                            End If
                     End Select
 
                 Case 3 'facility

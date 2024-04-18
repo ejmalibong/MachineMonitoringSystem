@@ -958,7 +958,7 @@ Public Class MntTrxConsole
                         Case 12
                             Dim prmSec(0) As SqlParameter
                             prmSec(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-                            prmSec(0).Value = sectionId
+                            prmSec(0).Value = 2
 
                             dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommonCmb, "< All >", prmSec)
 

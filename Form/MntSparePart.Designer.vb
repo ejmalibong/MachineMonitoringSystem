@@ -67,7 +67,6 @@ Partial Class MntSparePart
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.btnExport = New System.Windows.Forms.ToolStripButton()
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
@@ -76,7 +75,6 @@ Partial Class MntSparePart
         Me.cmbCommon2 = New SergeUtils.EasyCompletionComboBox()
         Me.btnViewLogs = New PinkieControls.ButtonXP()
         Me.btnReceiveStock = New PinkieControls.ButtonXP()
-        Me.btnIncomingStocks = New PinkieControls.ButtonXP()
         Me.cmsExport = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BelowOrderingPointToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -106,6 +104,12 @@ Partial Class MntSparePart
         Me.ColItemCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColRemarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
+        Me.btnExport = New PinkieControls.ButtonXP()
+        Me.cmsLogs = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ReceiveIssueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConsumedReturnedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -115,6 +119,7 @@ Partial Class MntSparePart
         Me.cmsExport.SuspendLayout()
         Me.grpSortMode.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.cmsLogs.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmbSearchCriteria
@@ -260,7 +265,7 @@ Partial Class MntSparePart
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.btnExport})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5})
         Me.bindingNavigator.Location = New System.Drawing.Point(4, 529)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -269,7 +274,7 @@ Partial Class MntSparePart
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
         Me.bindingNavigator.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.bindingNavigator.Size = New System.Drawing.Size(311, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(266, 25)
         Me.bindingNavigator.TabIndex = 554
         '
         'txtTotalPageNumber
@@ -372,16 +377,6 @@ Partial Class MntSparePart
         Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
         Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
         '
-        'btnExport
-        '
-        Me.btnExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.btnExport.Image = CType(resources.GetObject("btnExport.Image"), System.Drawing.Image)
-        Me.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(45, 22)
-        Me.btnExport.Text = "Export"
-        Me.btnExport.ToolTipText = "Export selected records"
-        '
         'btnAdd
         '
         Me.btnAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -392,7 +387,7 @@ Partial Class MntSparePart
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(756, 526)
+        Me.btnAdd.Location = New System.Drawing.Point(792, 526)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -408,9 +403,9 @@ Partial Class MntSparePart
         Me.btnEdit.DefaultScheme = True
         Me.btnEdit.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnEdit.Hint = "Modify record"
+        Me.btnEdit.Hint = ""
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(850, 526)
+        Me.btnEdit.Location = New System.Drawing.Point(886, 526)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -428,7 +423,7 @@ Partial Class MntSparePart
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(944, 526)
+        Me.btnDelete.Location = New System.Drawing.Point(980, 526)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -445,7 +440,7 @@ Partial Class MntSparePart
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1038, 526)
+        Me.btnClose.Location = New System.Drawing.Point(1074, 526)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -479,8 +474,8 @@ Partial Class MntSparePart
         Me.btnViewLogs.DefaultScheme = True
         Me.btnViewLogs.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnViewLogs.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnViewLogs.Hint = "View transaction history"
-        Me.btnViewLogs.Location = New System.Drawing.Point(464, 526)
+        Me.btnViewLogs.Hint = "View receiving or issuance logs"
+        Me.btnViewLogs.Location = New System.Drawing.Point(500, 526)
         Me.btnViewLogs.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewLogs.Name = "btnViewLogs"
         Me.btnViewLogs.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -496,32 +491,14 @@ Partial Class MntSparePart
         Me.btnReceiveStock.DefaultScheme = True
         Me.btnReceiveStock.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReceiveStock.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnReceiveStock.Hint = "Modify record"
-        Me.btnReceiveStock.Location = New System.Drawing.Point(657, 526)
+        Me.btnReceiveStock.Hint = ""
+        Me.btnReceiveStock.Location = New System.Drawing.Point(693, 526)
         Me.btnReceiveStock.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReceiveStock.Name = "btnReceiveStock"
         Me.btnReceiveStock.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnReceiveStock.Size = New System.Drawing.Size(95, 32)
         Me.btnReceiveStock.TabIndex = 559
         Me.btnReceiveStock.Text = "Receive Stock"
-        '
-        'btnIncomingStocks
-        '
-        Me.btnIncomingStocks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnIncomingStocks.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnIncomingStocks.CausesValidation = False
-        Me.btnIncomingStocks.DefaultScheme = True
-        Me.btnIncomingStocks.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnIncomingStocks.Enabled = False
-        Me.btnIncomingStocks.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnIncomingStocks.Hint = "Export to excel"
-        Me.btnIncomingStocks.Location = New System.Drawing.Point(340, 526)
-        Me.btnIncomingStocks.Margin = New System.Windows.Forms.Padding(2)
-        Me.btnIncomingStocks.Name = "btnIncomingStocks"
-        Me.btnIncomingStocks.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnIncomingStocks.Size = New System.Drawing.Size(120, 32)
-        Me.btnIncomingStocks.TabIndex = 561
-        Me.btnIncomingStocks.Text = "Incoming Stocks"
         '
         'cmsExport
         '
@@ -580,8 +557,8 @@ Partial Class MntSparePart
         Me.btnIssueStock.DefaultScheme = True
         Me.btnIssueStock.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnIssueStock.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnIssueStock.Hint = "Modify record"
-        Me.btnIssueStock.Location = New System.Drawing.Point(558, 526)
+        Me.btnIssueStock.Hint = ""
+        Me.btnIssueStock.Location = New System.Drawing.Point(594, 526)
         Me.btnIssueStock.Margin = New System.Windows.Forms.Padding(2)
         Me.btnIssueStock.Name = "btnIssueStock"
         Me.btnIssueStock.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -655,7 +632,7 @@ Partial Class MntSparePart
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.RowTemplate.Height = 100
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1132, 490)
+        Me.dgvList.Size = New System.Drawing.Size(1168, 490)
         Me.dgvList.TabIndex = 553
         '
         'ColPartId
@@ -673,7 +650,7 @@ Partial Class MntSparePart
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColPartNo.Frozen = True
-        Me.ColPartNo.HeaderText = "Part No"
+        Me.ColPartNo.HeaderText = "Part Number"
         Me.ColPartNo.Name = "ColPartNo"
         Me.ColPartNo.ReadOnly = True
         Me.ColPartNo.Width = 300
@@ -812,7 +789,7 @@ Partial Class MntSparePart
         Me.ColItemCode.DataPropertyName = "ItemCode"
         DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle16
-        Me.ColItemCode.HeaderText = "Item Code"
+        Me.ColItemCode.HeaderText = "SAP Item Code"
         Me.ColItemCode.Name = "ColItemCode"
         Me.ColItemCode.ReadOnly = True
         '
@@ -824,6 +801,7 @@ Partial Class MntSparePart
         Me.ColRemarks.HeaderText = "Remarks"
         Me.ColRemarks.Name = "ColRemarks"
         Me.ColRemarks.ReadOnly = True
+        Me.ColRemarks.Visible = False
         '
         'ColIsActive
         '
@@ -834,13 +812,76 @@ Partial Class MntSparePart
         Me.ColIsActive.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.ColIsActive.Width = 50
         '
+        'lblStatus
+        '
+        Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblStatus.Location = New System.Drawing.Point(1009, 4)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblStatus.Size = New System.Drawing.Size(55, 25)
+        Me.lblStatus.TabIndex = 567
+        Me.lblStatus.Text = "Status"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'cmbStatus
+        '
+        Me.cmbStatus.CausesValidation = False
+        Me.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(1063, 4)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(100, 25)
+        Me.cmbStatus.TabIndex = 568
+        '
+        'btnExport
+        '
+        Me.btnExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnExport.CausesValidation = False
+        Me.btnExport.DefaultScheme = True
+        Me.btnExport.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnExport.Hint = ""
+        Me.btnExport.Location = New System.Drawing.Point(406, 526)
+        Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnExport.Name = "btnExport"
+        Me.btnExport.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnExport.Size = New System.Drawing.Size(90, 32)
+        Me.btnExport.TabIndex = 561
+        Me.btnExport.Text = "Export"
+        '
+        'cmsLogs
+        '
+        Me.cmsLogs.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReceiveIssueToolStripMenuItem, Me.ConsumedReturnedToolStripMenuItem})
+        Me.cmsLogs.Name = "cmsConsole"
+        Me.cmsLogs.Size = New System.Drawing.Size(214, 70)
+        '
+        'ReceiveIssueToolStripMenuItem
+        '
+        Me.ReceiveIssueToolStripMenuItem.Name = "ReceiveIssueToolStripMenuItem"
+        Me.ReceiveIssueToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.ReceiveIssueToolStripMenuItem.Text = "Receive/Issue Logs"
+        '
+        'ConsumedReturnedToolStripMenuItem
+        '
+        Me.ConsumedReturnedToolStripMenuItem.Name = "ConsumedReturnedToolStripMenuItem"
+        Me.ConsumedReturnedToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.ConsumedReturnedToolStripMenuItem.Text = "Consumed/Returned Logs"
+        Me.ConsumedReturnedToolStripMenuItem.Visible = False
+        '
         'MntSparePart
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(1132, 561)
+        Me.ClientSize = New System.Drawing.Size(1168, 561)
+        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.cmbStatus)
         Me.Controls.Add(Me.grpSortMode)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnSearch)
@@ -848,7 +889,7 @@ Partial Class MntSparePart
         Me.Controls.Add(Me.btnIssueStock)
         Me.Controls.Add(Me.lblSortBy)
         Me.Controls.Add(Me.cmbSortCriteria)
-        Me.Controls.Add(Me.btnIncomingStocks)
+        Me.Controls.Add(Me.btnExport)
         Me.Controls.Add(Me.btnViewLogs)
         Me.Controls.Add(Me.btnReceiveStock)
         Me.Controls.Add(Me.pnlSearchByCmb2)
@@ -885,6 +926,7 @@ Partial Class MntSparePart
         Me.grpSortMode.ResumeLayout(False)
         Me.grpSortMode.PerformLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.cmsLogs.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -923,7 +965,6 @@ Partial Class MntSparePart
     Friend WithEvents cmbCommon2 As SergeUtils.EasyCompletionComboBox
     Friend WithEvents btnViewLogs As PinkieControls.ButtonXP
     Friend WithEvents btnReceiveStock As PinkieControls.ButtonXP
-    Friend WithEvents btnIncomingStocks As PinkieControls.ButtonXP
     Friend WithEvents cmsExport As ContextMenuStrip
     Friend WithEvents AllToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents lblSortBy As Label
@@ -935,6 +976,13 @@ Partial Class MntSparePart
     Public WithEvents rdAsc As RadioButton
     Friend WithEvents dgvList As DataGridView
     Friend WithEvents BelowMinStockToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents lblStatus As Label
+    Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents btnExport As PinkieControls.ButtonXP
+    Friend WithEvents cmsLogs As ContextMenuStrip
+    Friend WithEvents ReceiveIssueToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ConsumedReturnedToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColPartNo As DataGridViewTextBoxColumn
     Friend WithEvents ColPartName As DataGridViewTextBoxColumn
@@ -953,6 +1001,4 @@ Partial Class MntSparePart
     Friend WithEvents ColItemCode As DataGridViewTextBoxColumn
     Friend WithEvents ColRemarks As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
-    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
-    Friend WithEvents btnExport As ToolStripButton
 End Class

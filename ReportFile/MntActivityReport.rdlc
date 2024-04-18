@@ -667,7 +667,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Parts Issued</Value>
+                                  <Value>Parts Consumed</Value>
                                   <Style>
                                     <FontSize>8.5pt</FontSize>
                                     <FontWeight>SemiBold</FontWeight>
@@ -1218,7 +1218,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

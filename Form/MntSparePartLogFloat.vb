@@ -4,7 +4,7 @@ Imports BlackCoffeeLibrary
 Imports ClosedXML.Excel
 Imports DocumentFormat.OpenXml.Drawing
 
-Public Class MntSparePartLog
+Public Class MntSparePartLogFloat
     Public bsTransactionPartDetail As New BindingSource
     Private connection As New Connection
 

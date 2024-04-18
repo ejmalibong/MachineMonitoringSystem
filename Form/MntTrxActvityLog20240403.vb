@@ -2,21 +2,12 @@
 Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 
-Public Class MntTrxActvityLog
+Public Class MntTrxActvityLog20240403
     Public bsTrxPartDetail As New BindingSource
-    Public bsTrxPartDetailFloat As New BindingSource
-
     Public dtTrxPartDetail As New DataTable
-    Public dtTrxPartDetailFloat As New DataTable
-
     Private adpTrxPartDetail As New SqlDataAdapter
-    Private adpTrxPartDetailFloat As New SqlDataAdapter
-
     Private bsSparePart As New BindingSource
-
     Private bsTrxDetail As New BindingSource
-    Private bsTrxDetailFloat As New BindingSource
-
     Private dbConnection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(dbConnection.GetConnectionString)
@@ -39,7 +30,6 @@ Public Class MntTrxActvityLog
         dbMain.EnableDoubleBuffered(dgvPartDetail)
 
         dtTrxPartDetail = CreateMntTransactionPartDetail()
-        dtTrxPartDetailFloat = CreateMntTransactionPartDetailFloat()
 
         Dim prmUser(1) As SqlParameter
         prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
@@ -48,7 +38,11 @@ Public Class MntTrxActvityLog
         prmUser(1).Value = 1
         dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
 
-        dtSparePart = dbMethod.FillDataTable("SELECT PartId, TRIM(PartNo) AS PartNo, TRIM(PartName) AS PartName FROM dbo.MntSparePart", CommandType.Text)
+        Dim prmPart(0) As SqlParameter
+        prmPart(0) = New SqlParameter("@IsActive", SqlDbType.Bit)
+        prmPart(0).Value = 1
+        dtSparePart = dbMethod.FillDataTable("SELECT PartId, TRIM(PartNo) AS PartNo, TRIM(PartName) AS PartName FROM dbo.MntSparePart WHERE IsActive = @IsActive AND ActualStock > 0", CommandType.Text, prmPart)
+
         Me.bsSparePart.DataSource = dtSparePart
 
         'transaction part detail table
@@ -63,7 +57,7 @@ Public Class MntTrxActvityLog
         colPartNo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         colPartNo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
         colPartNo.SortMode = DataGridViewColumnSortMode.Automatic
-        dgvPartDetail.Columns.Insert(1, colPartNo)
+        dgvPartDetail.Columns.Insert(2, colPartNo)
 
         Dim colPartName As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn()
         colPartName.Name = "ColPartName"
@@ -76,7 +70,7 @@ Public Class MntTrxActvityLog
         colPartName.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         colPartName.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
         colPartName.SortMode = DataGridViewColumnSortMode.Automatic
-        dgvPartDetail.Columns.Insert(2, colPartName)
+        dgvPartDetail.Columns.Insert(3, colPartName)
     End Sub
 
     Public Property childBsTrxDetail() As BindingSource
@@ -88,15 +82,6 @@ Public Class MntTrxActvityLog
         End Set
     End Property
 
-    Public Property childBsTrxDetailFloat() As BindingSource
-        Get
-            Return bsTrxDetailFloat
-        End Get
-        Set(value As BindingSource)
-            bsTrxDetailFloat = value
-        End Set
-    End Property
-
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Try
             If cmbPart.SelectedValue = 0 Then
@@ -105,15 +90,15 @@ Public Class MntTrxActvityLog
                 Exit Sub
             End If
 
-            If String.IsNullOrWhiteSpace(txtConsumedQty.Text) OrElse CInt(txtConsumedQty.Text.Trim) = 0 Then
-                MessageBox.Show("Please input the consumed quantity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                txtConsumedQty.Focus()
+            If String.IsNullOrWhiteSpace(txtQty.Text) OrElse CInt(txtQty.Text.Trim) = 0 Then
+                MessageBox.Show("Please input quantity to be issued.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txtQty.Focus()
                 Exit Sub
             End If
 
-            If CInt(txtConsumedQty.Text.Trim) > CInt(txtRemainingQty.Text.Trim) Then
-                MessageBox.Show("Consumed quantity is greater than to remaining quantity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                txtConsumedQty.Focus()
+            If CInt(txtQty.Text.Trim) > CInt(txtActualStock.Text.Trim) Then
+                MessageBox.Show("Quantity to issue is greater than to stock quantity.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txtQty.Focus()
                 Exit Sub
             End If
 
@@ -136,27 +121,16 @@ Public Class MntTrxActvityLog
             Me.bsTrxPartDetail.Current("CreatedDate") = dbMethod.GetServerDate
             Me.bsTrxPartDetail.Current("UserId") = cmbTechnician.SelectedValue
             Me.bsTrxPartDetail.Current("PartId") = cmbPart.SelectedValue
-            Me.bsTrxPartDetail.Current("Qty") = txtConsumedQty.Text.Trim
+            Me.bsTrxPartDetail.Current("Qty") = txtQty.Text.Trim
             Me.bsTrxPartDetail.EndEdit()
-
-            Me.bsTrxPartDetailFloat.AddNew()
-            Me.bsTrxPartDetailFloat.MoveLast()
-            Me.bsTrxPartDetailFloat.Current("CreatedBy") = cmbTechnician.SelectedValue
-            Me.bsTrxPartDetailFloat.Current("CreatedDate") = dbMethod.GetServerDate
-            Me.bsTrxPartDetailFloat.Current("IssuedTo") = cmbTechnician.SelectedValue
-            Me.bsTrxPartDetailFloat.Current("PartId") = cmbPart.SelectedValue
-            Me.bsTrxPartDetailFloat.Current("IssuedQty") = CInt(txtIssuedQty.Text)
-            Me.bsTrxPartDetailFloat.Current("ConsumedQty") = CInt(txtConsumedQty.Text)
-            Me.bsTrxPartDetailFloat.Current("RemainingQty") = CInt(txtIssuedQty.Text) - CInt(txtConsumedQty.Text)
-            Me.bsTrxPartDetailFloat.EndEdit()
 
             cmbPart.SelectedValue = 0
 
             txtPartDescription.Text = ""
-            txtIssuedQty.Text = ""
-            txtRemainingQty.Text = ""
+            txtActualStock.Text = ""
+            txtOrderingPoint.Text = ""
             txtUnit.Text = ""
-            txtConsumedQty.Clear()
+            txtQty.Clear()
 
             cmbPart.Focus()
         Catch ex As Exception
@@ -258,7 +232,7 @@ Public Class MntTrxActvityLog
                 Next
 
                 If hit > 0 Then
-                    Dim msg As String = String.Format("Date or time already exists in the activity log.")
+                    Dim msg As String = String.Format("Date/time already exists in the activity log." & Environment.NewLine & "NOTE: Select the name from Included PIC if more than 1 technician worked on this activity.")
                     MessageBox.Show(msg, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Exit Sub
                 End If
@@ -269,77 +243,54 @@ Public Class MntTrxActvityLog
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
     Private Sub cmbPart_SelectedValueChanged(sender As Object, e As EventArgs)
         Try
             If cmbPart.SelectedValue <> 0 Then
                 If cmbPartSelection.SelectedValue = 1 Then
-                    Dim prmDetail(0) As SqlParameter
-                    prmDetail(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmDetail(0).Value = cmbPart.SelectedValue
+                    Dim prmPartNo(0) As SqlParameter
+                    prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmPartNo(0).Value = cmbPart.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmDetail)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartNo").ToString.Trim
-                            txtIssuedQty.Text = rdr.Item("IssuedQty")
-                            txtRemainingQty.Text = rdr.Item("RemainingQty")
+                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
-                        End While
-                        rdr.Close()
-                    End Using
-
-                    Dim prmHeader(1) As SqlParameter
-                    prmHeader(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmHeader(0).Value = cmbPart.SelectedItem
-                    prmHeader(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(1).Value = cmbTechnician.SelectedItem
-
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure)
-                        While rdr.Read
-                            txtIssuedDate.Text = String.Format("{0:MMM dd, yyyy HH:mm}", rdr.Item("CreatedDate"))
-                            txtIssuedBy.Text = rdr.Item("CreatedBy")
+                            txtLocation.Text = rdr.Item("LocationName")
                         End While
                         rdr.Close()
                     End Using
 
                 Else
-                    Dim prmDetail(0) As SqlParameter
-                    prmDetail(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmDetail(0).Value = cmbPart.SelectedValue
+                    Dim prmPartNo(0) As SqlParameter
+                    prmPartNo(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmPartNo(0).Value = cmbPart.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmDetail)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prmPartNo)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartName").ToString.Trim
-                            txtIssuedQty.Text = rdr.Item("IssuedQty")
-                            txtRemainingQty.Text = rdr.Item("RemainingQty")
+                            txtActualStock.Text = rdr.Item("ActualStock")
+                            txtOrderingPoint.Text = rdr.Item("OrderingPoint")
                             txtUnit.Text = rdr.Item("UnitCode")
-                        End While
-                        rdr.Close()
-                    End Using
-
-                    Dim prmHeader(1) As SqlParameter
-                    prmHeader(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmHeader(0).Value = cmbPart.SelectedItem
-                    prmHeader(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(1).Value = cmbTechnician.SelectedItem
-
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure)
-                        While rdr.Read
-                            txtIssuedDate.Text = String.Format("{0:MMM dd, yyyy HH:mm}", rdr.Item("CreatedDate"))
-                            txtIssuedBy.Text = rdr.Item("CreatedBy")
+                            txtLocation.Text = rdr.Item("LocationName")
                         End While
                         rdr.Close()
                     End Using
                 End If
 
+                If CInt(txtActualStock.Text) <= CInt(txtOrderingPoint.Text) Then
+                    txtActualStock.ForeColor = Color.Red
+                Else
+                    txtActualStock.ForeColor = Color.Black
+                End If
             Else
                 txtPartDescription.Text = ""
-                txtIssuedQty.Text = ""
-                txtIssuedDate.Text = ""
-                txtIssuedBy.Text = ""
-                txtRemainingQty.Text = ""
+                txtLocation.Text = ""
+                txtActualStock.Text = ""
+                txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
-                txtConsumedQty.Clear()
+                txtQty.Clear()
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -350,11 +301,11 @@ Public Class MntTrxActvityLog
         Try
             If cmbPart.SelectedValue = 0 Then
                 txtPartDescription.Text = ""
-                txtIssuedDate.Text = ""
-                txtIssuedQty.Text = ""
-                txtRemainingQty.Text = ""
+                txtLocation.Text = ""
+                txtActualStock.Text = ""
+                txtOrderingPoint.Text = ""
                 txtUnit.Text = ""
-                txtConsumedQty.Clear()
+                txtQty.Clear()
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -363,20 +314,14 @@ Public Class MntTrxActvityLog
 
     Private Sub cmbPart_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
         Try
-            If cmbPart.Items.Count > 1 Then
-                e.Cancel = sender.FindStringExact(sender.text) < 0
-                If e.Cancel Then Beep()
-            End If
+            e.Cancel = sender.FindStringExact(sender.text) < 0
+            If e.Cancel Then Beep()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub cmbPartSelection_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbPartSelection.SelectedValueChanged
-        LoadIssuedParts()
-    End Sub
-
-    Private Sub LoadIssuedParts()
         Try
             cmbPart.DataSource = Nothing
 
@@ -384,87 +329,23 @@ Public Class MntTrxActvityLog
                 cmbPart.DisplayMember = "PartName"
                 cmbPart.ValueMember = "PartId"
 
-                Dim prm(0) As SqlParameter
-                prm(0) = New SqlParameter("@IssuedTo", SqlDbType.Int)
-                prm(0).Value = cmbTechnician.SelectedValue
-
-                dbMethod.FillCmbWithCaption("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, "PartId", "PartName", cmbPart, "", prm)
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartName) + ' ' + TRIM(PartNo) AS PartName FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartName", cmbPart, "")
 
                 lblPartDescription.Text = "Part No"
             Else
                 cmbPart.DisplayMember = "PartNo"
                 cmbPart.ValueMember = "PartId"
 
-                Dim prm(0) As SqlParameter
-                prm(0) = New SqlParameter("@IssuedTo", SqlDbType.Int)
-                prm(0).Value = cmbTechnician.SelectedValue
-
-                dbMethod.FillCmbWithCaption("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, "PartId", "PartNo", cmbPart, "", prm)
+                dbMethod.FillCmbWithCaption("SELECT PartId, TRIM(PartNo) AS PartNo FROM dbo.MntSparePart WHERE ActualStock > 0 AND IsActive = 1",
+                                            CommandType.Text, "PartId", "PartNo", cmbPart, "")
 
                 lblPartDescription.Text = "Part Name"
             End If
 
-            cmbPart.SelectedValue = 0
-            If cmbPart.Items.Count > 0 Then
-                cmbPartSelection.Enabled = True
-                cmbPart.Enabled = True
-                txtConsumedQty.Enabled = True
-                btnAdd.Enabled = True
-                btnRemove.Enabled = True
-            Else
-                cmbPartSelection.Enabled = False
-                cmbPart.Enabled = False
-                txtConsumedQty.Enabled = False
-                btnAdd.Enabled = False
-                btnRemove.Enabled = False
-            End If
-
-            txtPartDescription.Text = ""
-            txtIssuedQty.Text = ""
-            txtRemainingQty.Text = ""
-            txtUnit.Text = ""
-            txtConsumedQty.Clear()
-            txtIssuedDate.Text = ""
-            txtIssuedBy.Text = ""
-
             AddHandler cmbPart.SelectedValueChanged, AddressOf cmbPart_SelectedValueChanged
             AddHandler cmbPart.Validated, AddressOf cmbPart_Validated
             AddHandler cmbPart.Validating, AddressOf cmbPart_Validating
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub cmbTechnician_SelectedValueChanged(sender As Object, e As EventArgs)
-        Try
-            If dgvPartDetail.Rows.Count > 0 Then
-                If MessageBox.Show("All items below will be cleared. Continue?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) =
-                         DialogResult.No Then
-                    Exit Sub
-                End If
-            End If
-
-            dtTrxPartDetail.Clear()
-
-            If cmbTechnician.SelectedValue = 0 Then
-                cmbPartSelection.Enabled = False
-                cmbPart.Enabled = False
-                txtConsumedQty.Enabled = False
-                btnAdd.Enabled = False
-                btnRemove.Enabled = False
-
-                Me.ActiveControl = cmbTechnician
-            Else
-                cmbPartSelection.Enabled = True
-                cmbPart.Enabled = True
-                txtConsumedQty.Enabled = True
-                btnAdd.Enabled = True
-                btnRemove.Enabled = True
-
-                Me.ActiveControl = cmbPart
-            End If
-
-            LoadIssuedParts()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -550,72 +431,6 @@ Public Class MntTrxActvityLog
         End Try
 
         Return dtMntTrxPartDetail
-    End Function
-
-    Private Function CreateMntTransactionPartDetailFloat() As DataTable
-        Dim dtMntTrxPartDetailFloat As New DataTable
-        Dim con As New SqlConnection(dbConnection.GetConnectionString)
-
-        Try
-            Dim query As String = "SELECT PartTrxDetailId, PartTrxId, SeqId, CreatedBy, CreatedDate, IssuedTo, PartId, IssuedQty, ConsumedQty, RemainingQty, ModifiedBy, ModifiedDate FROM dbo.MntTransactionPartDetailFloat"
-            Dim cmd As New SqlCommand(query, con)
-            adpTrxPartDetailFloat = New SqlDataAdapter(cmd)
-            Dim cbTrxDetail As New SqlCommandBuilder(adpTrxPartDetailFloat)
-
-            Dim colPartTrxDetailId As DataColumn = New DataColumn("PartTrxDetailId")
-            colPartTrxDetailId.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxDetailId)
-
-            Dim colPartTrxId As DataColumn = New DataColumn("PartTrxId")
-            colPartTrxId.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxId)
-
-            Dim colSeqId As DataColumn = New DataColumn("SeqId")
-            colSeqId.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colSeqId)
-
-            Dim colCreatedBy As DataColumn = New DataColumn("CreatedBy")
-            colCreatedBy.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colCreatedBy)
-
-            Dim colCreateDate As DataColumn = New DataColumn("CreatedDate")
-            colCreateDate.DataType = System.Type.GetType("System.DateTime")
-            dtMntTrxPartDetailFloat.Columns.Add(colCreateDate)
-
-            Dim colIssuedTo As DataColumn = New DataColumn("IssuedTo")
-            colIssuedTo.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colIssuedTo)
-
-            Dim colPartId As DataColumn = New DataColumn("PartId")
-            colPartId.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colPartId)
-
-            Dim colIssuedQty As DataColumn = New DataColumn("IssuedQty")
-            colIssuedQty.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colIssuedQty)
-
-            Dim colConsumedQty As DataColumn = New DataColumn("ConsumedQty")
-            colConsumedQty.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colConsumedQty)
-
-            Dim colRemainingQty As DataColumn = New DataColumn("RemainingQty")
-            colRemainingQty.DataType = System.Type.GetType("System.Int32")
-            dtMntTrxPartDetailFloat.Columns.Add(colRemainingQty)
-
-            Dim colModifiedBy As DataColumn = New DataColumn("ModifiedBy")
-            colModifiedBy.DataType = System.Type.GetType("System.Int32")
-            colModifiedBy.AllowDBNull = True
-            dtMntTrxPartDetailFloat.Columns.Add(colModifiedBy)
-
-            Dim colModifiedDate As DataColumn = New DataColumn("ModifiedDate")
-            colModifiedDate.DataType = System.Type.GetType("System.DateTime")
-            colModifiedDate.AllowDBNull = True
-            dtMntTrxPartDetailFloat.Columns.Add(colModifiedDate)
-        Catch ex As Exception
-            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-
-        Return dtMntTrxPartDetailFloat
     End Function
 
     Private Sub dgvPartDetail_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvPartDetail.DataError
@@ -722,16 +537,6 @@ Public Class MntTrxActvityLog
     End Sub
 
     Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        cmbPartSelection.Enabled = False
-        cmbPart.Enabled = False
-        txtConsumedQty.Enabled = False
-        btnAdd.Enabled = False
-        btnRemove.Enabled = False
-
-        LoadPartSelection()
-
-        AddHandler cmbTechnician.SelectedValueChanged, AddressOf cmbTechnician_SelectedValueChanged
-
         If trxId = 0 Then
             If isEditMode Then
 
@@ -751,19 +556,35 @@ Public Class MntTrxActvityLog
                 dtpFrom.Value = CDate(dbMethod.GetServerDate).Date
                 dtpTo.Value = CDate(dbMethod.GetServerDate).Date
             End If
+
+            'If userId = 0 Then
+            '    cmbPart.Enabled = True
+            '    txtQty.Enabled = True
+            '    btnAdd.Enabled = True
+            '    btnRemove.Enabled = True
+            '    dgvPartDetail.Enabled = True
+
+            '    GetCurrentShift()
+            '    dtpFrom.Value = CDate(dbMethod.GetServerDate).Date
+            '    dtpTo.Value = CDate(dbMethod.GetServerDate).Date
+            'Else
+            '    cmbPart.Enabled = False
+            '    txtQty.Enabled = False
+            '    btnAdd.Enabled = False
+            '    btnRemove.Enabled = False
+            '    dgvPartDetail.Enabled = False
+            'End If
         End If
 
-        Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
+        LoadPartSelection()
+        cmbPartSelection.SelectedValue = 1
 
         Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
         dgvPartDetail.AutoGenerateColumns = False
         dgvPartDetail.DataSource = Me.bsTrxPartDetail
-
-        Me.dgvPartDetail.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
-        Me.dgvPartDetail.Columns(2).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
     End Sub
 
-    Private Sub txtQty_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtConsumedQty.KeyPress
+    Private Sub txtQty_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtQty.KeyPress
         Try
             If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
                 e.Handled = True
@@ -772,5 +593,4 @@ Public Class MntTrxActvityLog
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
 End Class

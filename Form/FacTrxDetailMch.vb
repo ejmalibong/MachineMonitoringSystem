@@ -898,6 +898,8 @@ Public Class FacTrxDetailMch
                 End Using
             End If
 
+            Me.bsTrxDetail.Sort = "TrxFrom"
+
             FilterPicTable()
             GetTotalDowntime()
         Catch ex As Exception

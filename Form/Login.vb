@@ -40,21 +40,25 @@ Public Class Login
             'txtEmployeeId.Text = "1701-066"
             'txtPassword.Text = "ESandoval"
 
+            'sir michael
+            'txtEmployeeId.Text = "2401-001"
+            'txtPassword.Text = "salazar"
+
             'sir harry
             'txtEmployeeId.Text = "1807-002"
             'txtPassword.Text = "tanega"
+
+            'karlin
+            'txtEmployeeId.Text = "2106-020"
+            'txtPassword.Text = "tano"
 
             'sys admin
             'txtEmployeeId.Text = "XXXX-XXX"
             'txtPassword.Text = "Adm1nAcc3ss"
 
-            'limuel
-            'txtEmployeeId.Text = "2307-009"
-            'txtPassword.Text = "Marino"
-
             'ej
             'txtEmployeeId.Text = "2009-002"
-            'txtPassword.Text = "malibong"
+            'txtPassword.Text = "ej"
 
             'karlin
             'txtEmployeeId.Text = "2106-020"

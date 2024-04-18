@@ -143,7 +143,6 @@ Partial Class MntTrxDetailJig
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.btnEditLog = New PinkieControls.ButtonXP()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.dgvPic, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -462,7 +461,7 @@ Partial Class MntTrxDetailJig
         Me.btnAddLog.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnAddLog.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnAddLog.Hint = "Add activity log"
-        Me.btnAddLog.Location = New System.Drawing.Point(981, 2)
+        Me.btnAddLog.Location = New System.Drawing.Point(1062, 2)
         Me.btnAddLog.Name = "btnAddLog"
         Me.btnAddLog.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAddLog.Size = New System.Drawing.Size(80, 26)
@@ -1636,7 +1635,7 @@ Partial Class MntTrxDetailJig
         Me.lblSpareParts.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblSpareParts.Size = New System.Drawing.Size(554, 24)
         Me.lblSpareParts.TabIndex = 605
-        Me.lblSpareParts.Text = "Parts Issued"
+        Me.lblSpareParts.Text = "Parts Consumed"
         Me.lblSpareParts.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'dgvPartDetail
@@ -1685,22 +1684,6 @@ Partial Class MntTrxDetailJig
         Me.ColQty.ReadOnly = True
         Me.ColQty.Width = 50
         '
-        'btnEditLog
-        '
-        Me.btnEditLog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEditLog.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnEditLog.DefaultScheme = False
-        Me.btnEditLog.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnEditLog.Font = New System.Drawing.Font("Verdana", 8.0!)
-        Me.btnEditLog.Hint = "Add activity log"
-        Me.btnEditLog.Location = New System.Drawing.Point(1062, 2)
-        Me.btnEditLog.Name = "btnEditLog"
-        Me.btnEditLog.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnEditLog.Size = New System.Drawing.Size(80, 26)
-        Me.btnEditLog.TabIndex = 607
-        Me.btnEditLog.TabStop = False
-        Me.btnEditLog.Text = "Edit"
-        '
         'MntTrxDetailJig
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1708,7 +1691,6 @@ Partial Class MntTrxDetailJig
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(1230, 628)
-        Me.Controls.Add(Me.btnEditLog)
         Me.Controls.Add(Me.lblSpareParts)
         Me.Controls.Add(Me.dgvPartDetail)
         Me.Controls.Add(Me.lbl4M)
@@ -1909,5 +1891,4 @@ Partial Class MntTrxDetailJig
     Friend WithEvents dgvPartDetail As DataGridView
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
-    Friend WithEvents btnEditLog As PinkieControls.ButtonXP
 End Class

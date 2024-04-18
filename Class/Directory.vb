@@ -5,9 +5,9 @@
     Public Function ImgIniDirectoryMt() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
-                Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachments\ImgAttachmentMt"
             Else
-                Return "C:\Users\NBCP-LT-043\OneDrive 2\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-LT-144\Desktop\Attachments\ImgAttachmentMt"
             End If
         Else
             Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\ImgAttachmentMt"
@@ -17,9 +17,9 @@
     Public Function AtchIniDirectoryMt() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
-                Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachments\CsAttachmentMt"
             Else
-                Return "C:\Users\NBCP-LT-043\OneDrive 2\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-LT-144\Desktop\Attachments\CsAttachmentMt"
             End If
         Else
             Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\CsAttachmentMt"
@@ -29,9 +29,9 @@
     Public Function DrwIniDirectoryMt() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
-                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachment\DrwAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachments\DrwAttachmentMt"
             Else
-                Return "B:\Users BACKUP\NBCP-LT-043\Desktop\Attachment\DrwAttachmentMt"
+                Return "B:\Users BACKUP\NBCP-LT-144\Desktop\Attachments\DrwAttachmentMt"
             End If
         Else
             Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\DrwAttachmentMt"
@@ -41,9 +41,9 @@
     Public Function ImgIniDirectoryFc() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
-                Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentFc"
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachments\ImgAttachmentFc"
             Else
-                Return "C:\Users\NBCP-LT-043\OneDrive 2\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\ImgAttachmentFc"
+                Return "B:\Users BACKUP\NBCP-LT-144\Desktop\Attachments\ImgAttachmentFc"
             End If
         Else
             Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\ImgAttachmentFc"
@@ -53,9 +53,9 @@
     Public Function AtchIniDirectoryFc() As String
         If isDebug = True Then
             If Environment.MachineName.ToString.ToString = "NBCP-DT-032" Then
-                Return "B:\Users BACKUP\NBCP-DT-032\OneDrive (it1@nbcphilippines.onmicrosoft.com)\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentFc"
+                Return "B:\Users BACKUP\NBCP-DT-032\Desktop\Attachments\CsAttachmentFc"
             Else
-                Return "C:\Users\NBCP-LT-043\OneDrive 2\OneDrive - NBC (Philippines) Car Technology Corporation\Machine Monitoring System\Attachments\CsAttachmentFc"
+                Return "B:\Users BACKUP\NBCP-LT-144\Desktop\Attachments\CsAttachmentFc"
             End If
         Else
             Return "\\192.168.20.11\Engineering\IT System\Machine Monitoring System\Attachments\CsAttachmentFc"

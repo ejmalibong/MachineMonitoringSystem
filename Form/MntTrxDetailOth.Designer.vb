@@ -126,7 +126,6 @@ Partial Class MntTrxDetailOth
         Me.btnViewChecksheet = New PinkieControls.ButtonXP()
         Me.lblAttachment = New System.Windows.Forms.Label()
         Me.lblProgress = New System.Windows.Forms.Label()
-        Me.btnEditLog = New PinkieControls.ButtonXP()
         Me.lblSpareParts = New System.Windows.Forms.Label()
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
         Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -411,7 +410,7 @@ Partial Class MntTrxDetailOth
         Me.btnAddLog.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnAddLog.Font = New System.Drawing.Font("Verdana", 8.0!)
         Me.btnAddLog.Hint = "Add activity log"
-        Me.btnAddLog.Location = New System.Drawing.Point(982, 2)
+        Me.btnAddLog.Location = New System.Drawing.Point(1063, 2)
         Me.btnAddLog.Name = "btnAddLog"
         Me.btnAddLog.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnAddLog.Size = New System.Drawing.Size(80, 26)
@@ -1401,22 +1400,6 @@ Partial Class MntTrxDetailOth
         Me.lblProgress.Text = "0/0"
         Me.lblProgress.Visible = False
         '
-        'btnEditLog
-        '
-        Me.btnEditLog.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnEditLog.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnEditLog.DefaultScheme = False
-        Me.btnEditLog.DialogResult = System.Windows.Forms.DialogResult.None
-        Me.btnEditLog.Font = New System.Drawing.Font("Verdana", 8.0!)
-        Me.btnEditLog.Hint = "Add activity log"
-        Me.btnEditLog.Location = New System.Drawing.Point(1063, 2)
-        Me.btnEditLog.Name = "btnEditLog"
-        Me.btnEditLog.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnEditLog.Size = New System.Drawing.Size(80, 26)
-        Me.btnEditLog.TabIndex = 584
-        Me.btnEditLog.TabStop = False
-        Me.btnEditLog.Text = "Edit"
-        '
         'lblSpareParts
         '
         Me.lblSpareParts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -1429,7 +1412,7 @@ Partial Class MntTrxDetailOth
         Me.lblSpareParts.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.lblSpareParts.Size = New System.Drawing.Size(555, 24)
         Me.lblSpareParts.TabIndex = 605
-        Me.lblSpareParts.Text = "Parts Issued"
+        Me.lblSpareParts.Text = "Parts Consumed"
         Me.lblSpareParts.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'dgvPartDetail
@@ -1488,7 +1471,6 @@ Partial Class MntTrxDetailOth
         Me.ClientSize = New System.Drawing.Size(1230, 628)
         Me.Controls.Add(Me.lblSpareParts)
         Me.Controls.Add(Me.dgvPartDetail)
-        Me.Controls.Add(Me.btnEditLog)
         Me.Controls.Add(Me.lblRoutingStatus)
         Me.Controls.Add(Me.txtModifiedBy)
         Me.Controls.Add(Me.txtModifiedDate)
@@ -1655,7 +1637,6 @@ Partial Class MntTrxDetailOth
     Friend WithEvents btnViewChecksheet As PinkieControls.ButtonXP
     Friend WithEvents lblAttachment As Label
     Friend WithEvents lblProgress As Label
-    Friend WithEvents btnEditLog As PinkieControls.ButtonXP
     Friend WithEvents lblSpareParts As Label
     Friend WithEvents dgvPartDetail As DataGridView
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
