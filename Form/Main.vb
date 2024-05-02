@@ -75,6 +75,10 @@ Public Class Main
         dbMain.FormLoader(Me, New MntSparePartLog)
     End Sub
 
+    Public Sub ClickSparePartsFloatLogs()
+        dbMain.FormLoader(Me, New MntSparePartLogFloat)
+    End Sub
+
     Public Sub MntSparePartLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartLogToolStripMenuItem.Click
         dbMain.FormLoader(Me, New MntSparePartLog)
     End Sub
@@ -717,4 +721,9 @@ Public Class Main
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    Private Sub MntSparePartFloatLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartFloatLogToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New MntSparePartLogFloat)
+    End Sub
+
 End Class

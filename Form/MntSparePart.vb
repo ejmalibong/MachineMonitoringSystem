@@ -856,6 +856,8 @@ Public Class MntSparePart
         AddHandler cmbSortCriteria.SelectedValueChanged, AddressOf cmbSortCriteria_SelectedValueChanged
         AddHandler cmbStatus.SelectedValueChanged, AddressOf cmbStatus_SelectedValueChanged
 
+        DirectCast(Me.MdiParent, Main).ClickSparePartsFloatLogs()
+
         Me.ActiveControl = dgvList
     End Sub
     Private Sub SetScrollingIndex()
@@ -902,9 +904,10 @@ Public Class MntSparePart
         End Try
     End Sub
 
-    Private Sub ConsumedReturnedToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConsumedReturnedToolStripMenuItem.Click
+    Private Sub FloatTransactionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FloatTransactionToolStripMenuItem.Click
         Try
-
+            'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
+            DirectCast(Me.MdiParent, Main).ClickSparePartsFloatLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

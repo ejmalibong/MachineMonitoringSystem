@@ -24,23 +24,23 @@ Partial Class MntSparePart
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePart))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle52 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle53 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle54 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle55 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle56 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle57 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle58 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle59 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle60 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle61 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle62 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle63 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle64 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle65 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle66 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle67 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle68 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -109,7 +109,7 @@ Partial Class MntSparePart
         Me.btnExport = New PinkieControls.ButtonXP()
         Me.cmsLogs = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ReceiveIssueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConsumedReturnedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FloatTransactionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -311,7 +311,6 @@ Partial Class MntSparePart
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -613,13 +612,13 @@ Partial Class MntSparePart
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle52.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle52.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle52.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle52.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle52.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle52.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle52
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColPartNo, Me.ColPartName, Me.ColImage, Me.ColItemType, Me.ColUnitPrice, Me.ColActualStock, Me.ColActualStockAmount, Me.ColOrderingPoint, Me.ColMinStock, Me.ColMaxStock, Me.ColForPr, Me.ColExpectedStock, Me.ColLocatioName, Me.ColMachineType, Me.ColItemCode, Me.ColRemarks, Me.ColIsActive})
@@ -647,8 +646,8 @@ Partial Class MntSparePart
         'ColPartNo
         '
         Me.ColPartNo.DataPropertyName = "PartNo"
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle53.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartNo.DefaultCellStyle = DataGridViewCellStyle53
         Me.ColPartNo.Frozen = True
         Me.ColPartNo.HeaderText = "Part Number"
         Me.ColPartNo.Name = "ColPartNo"
@@ -658,8 +657,8 @@ Partial Class MntSparePart
         'ColPartName
         '
         Me.ColPartName.DataPropertyName = "PartName"
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle54.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle54
         Me.ColPartName.Frozen = True
         Me.ColPartName.HeaderText = "Part Name"
         Me.ColPartName.Name = "ColPartName"
@@ -669,9 +668,9 @@ Partial Class MntSparePart
         'ColImage
         '
         Me.ColImage.DataPropertyName = "Image"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle55.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle55.NullValue = Nothing
+        Me.ColImage.DefaultCellStyle = DataGridViewCellStyle55
         Me.ColImage.HeaderText = "Image"
         Me.ColImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch
         Me.ColImage.Name = "ColImage"
@@ -681,8 +680,8 @@ Partial Class MntSparePart
         'ColItemType
         '
         Me.ColItemType.DataPropertyName = "ItemTypeName"
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColItemType.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle56.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemType.DefaultCellStyle = DataGridViewCellStyle56
         Me.ColItemType.HeaderText = "Item Type"
         Me.ColItemType.Name = "ColItemType"
         Me.ColItemType.ReadOnly = True
@@ -690,9 +689,9 @@ Partial Class MntSparePart
         'ColUnitPrice
         '
         Me.ColUnitPrice.DataPropertyName = "UnitPrice"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.NullValue = Nothing
-        Me.ColUnitPrice.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle57.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle57.NullValue = Nothing
+        Me.ColUnitPrice.DefaultCellStyle = DataGridViewCellStyle57
         Me.ColUnitPrice.HeaderText = "Unit Price"
         Me.ColUnitPrice.Name = "ColUnitPrice"
         Me.ColUnitPrice.ReadOnly = True
@@ -700,8 +699,8 @@ Partial Class MntSparePart
         'ColActualStock
         '
         Me.ColActualStock.DataPropertyName = "ActualStock"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle58.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColActualStock.DefaultCellStyle = DataGridViewCellStyle58
         Me.ColActualStock.HeaderText = "Act Stock"
         Me.ColActualStock.Name = "ColActualStock"
         Me.ColActualStock.ReadOnly = True
@@ -710,8 +709,8 @@ Partial Class MntSparePart
         'ColActualStockAmount
         '
         Me.ColActualStockAmount.DataPropertyName = "ActualStockAmount"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.ColActualStockAmount.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle59.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.ColActualStockAmount.DefaultCellStyle = DataGridViewCellStyle59
         Me.ColActualStockAmount.HeaderText = "Stock Amount"
         Me.ColActualStockAmount.Name = "ColActualStockAmount"
         Me.ColActualStockAmount.ReadOnly = True
@@ -719,8 +718,8 @@ Partial Class MntSparePart
         'ColOrderingPoint
         '
         Me.ColOrderingPoint.DataPropertyName = "OrderingPoint"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle60.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColOrderingPoint.DefaultCellStyle = DataGridViewCellStyle60
         Me.ColOrderingPoint.HeaderText = "Ord Point"
         Me.ColOrderingPoint.Name = "ColOrderingPoint"
         Me.ColOrderingPoint.ReadOnly = True
@@ -729,8 +728,8 @@ Partial Class MntSparePart
         'ColMinStock
         '
         Me.ColMinStock.DataPropertyName = "MinStock"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle61.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMinStock.DefaultCellStyle = DataGridViewCellStyle61
         Me.ColMinStock.HeaderText = "Min Stock"
         Me.ColMinStock.Name = "ColMinStock"
         Me.ColMinStock.ReadOnly = True
@@ -739,8 +738,8 @@ Partial Class MntSparePart
         'ColMaxStock
         '
         Me.ColMaxStock.DataPropertyName = "MaxStock"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle62.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColMaxStock.DefaultCellStyle = DataGridViewCellStyle62
         Me.ColMaxStock.HeaderText = "Max Stock"
         Me.ColMaxStock.Name = "ColMaxStock"
         Me.ColMaxStock.ReadOnly = True
@@ -749,8 +748,8 @@ Partial Class MntSparePart
         'ColForPr
         '
         Me.ColForPr.DataPropertyName = "ForPr"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColForPr.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle63.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColForPr.DefaultCellStyle = DataGridViewCellStyle63
         Me.ColForPr.HeaderText = "For PR"
         Me.ColForPr.Name = "ColForPr"
         Me.ColForPr.ReadOnly = True
@@ -759,8 +758,8 @@ Partial Class MntSparePart
         'ColExpectedStock
         '
         Me.ColExpectedStock.DataPropertyName = "ExpectedStock"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColExpectedStock.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle64.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColExpectedStock.DefaultCellStyle = DataGridViewCellStyle64
         Me.ColExpectedStock.HeaderText = "Exp Stock"
         Me.ColExpectedStock.Name = "ColExpectedStock"
         Me.ColExpectedStock.ReadOnly = True
@@ -769,8 +768,8 @@ Partial Class MntSparePart
         'ColLocatioName
         '
         Me.ColLocatioName.DataPropertyName = "LocationName"
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle65.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColLocatioName.DefaultCellStyle = DataGridViewCellStyle65
         Me.ColLocatioName.HeaderText = "Location"
         Me.ColLocatioName.Name = "ColLocatioName"
         Me.ColLocatioName.ReadOnly = True
@@ -778,8 +777,8 @@ Partial Class MntSparePart
         'ColMachineType
         '
         Me.ColMachineType.DataPropertyName = "MachineTypeName"
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle66.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColMachineType.DefaultCellStyle = DataGridViewCellStyle66
         Me.ColMachineType.HeaderText = "Machine Type"
         Me.ColMachineType.Name = "ColMachineType"
         Me.ColMachineType.ReadOnly = True
@@ -787,8 +786,8 @@ Partial Class MntSparePart
         'ColItemCode
         '
         Me.ColItemCode.DataPropertyName = "ItemCode"
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle67.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColItemCode.DefaultCellStyle = DataGridViewCellStyle67
         Me.ColItemCode.HeaderText = "SAP Item Code"
         Me.ColItemCode.Name = "ColItemCode"
         Me.ColItemCode.ReadOnly = True
@@ -796,8 +795,8 @@ Partial Class MntSparePart
         'ColRemarks
         '
         Me.ColRemarks.DataPropertyName = "Remarks"
-        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColRemarks.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle68.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColRemarks.DefaultCellStyle = DataGridViewCellStyle68
         Me.ColRemarks.HeaderText = "Remarks"
         Me.ColRemarks.Name = "ColRemarks"
         Me.ColRemarks.ReadOnly = True
@@ -856,22 +855,21 @@ Partial Class MntSparePart
         '
         'cmsLogs
         '
-        Me.cmsLogs.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReceiveIssueToolStripMenuItem, Me.ConsumedReturnedToolStripMenuItem})
+        Me.cmsLogs.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReceiveIssueToolStripMenuItem, Me.FloatTransactionToolStripMenuItem})
         Me.cmsLogs.Name = "cmsConsole"
-        Me.cmsLogs.Size = New System.Drawing.Size(214, 70)
+        Me.cmsLogs.Size = New System.Drawing.Size(192, 70)
         '
         'ReceiveIssueToolStripMenuItem
         '
         Me.ReceiveIssueToolStripMenuItem.Name = "ReceiveIssueToolStripMenuItem"
-        Me.ReceiveIssueToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.ReceiveIssueToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
         Me.ReceiveIssueToolStripMenuItem.Text = "Receive/Issue Logs"
         '
-        'ConsumedReturnedToolStripMenuItem
+        'FloatTransactionToolStripMenuItem
         '
-        Me.ConsumedReturnedToolStripMenuItem.Name = "ConsumedReturnedToolStripMenuItem"
-        Me.ConsumedReturnedToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
-        Me.ConsumedReturnedToolStripMenuItem.Text = "Consumed/Returned Logs"
-        Me.ConsumedReturnedToolStripMenuItem.Visible = False
+        Me.FloatTransactionToolStripMenuItem.Name = "FloatTransactionToolStripMenuItem"
+        Me.FloatTransactionToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.FloatTransactionToolStripMenuItem.Text = "Float Transaction Logs"
         '
         'MntSparePart
         '
@@ -982,7 +980,7 @@ Partial Class MntSparePart
     Friend WithEvents btnExport As PinkieControls.ButtonXP
     Friend WithEvents cmsLogs As ContextMenuStrip
     Friend WithEvents ReceiveIssueToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ConsumedReturnedToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents FloatTransactionToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
     Friend WithEvents ColPartNo As DataGridViewTextBoxColumn
     Friend WithEvents ColPartName As DataGridViewTextBoxColumn

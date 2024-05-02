@@ -24,10 +24,12 @@ Partial Class MntSparePartLogFloat
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePartLogFloat))
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -72,15 +74,21 @@ Partial Class MntSparePartLogFloat
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColPartNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColPartName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIssuedQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColConsumedQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColRemainingQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lblTotal = New System.Windows.Forms.Label()
-        Me.txtTotal = New System.Windows.Forms.Label()
+        Me.txtTotalIssued = New System.Windows.Forms.Label()
         Me.grpTrxType = New System.Windows.Forms.GroupBox()
         Me.rdIssue = New System.Windows.Forms.RadioButton()
         Me.rdReceive = New System.Windows.Forms.RadioButton()
         Me.rdAll = New System.Windows.Forms.RadioButton()
+        Me.txtTotalConsumed = New System.Windows.Forms.Label()
+        Me.txtTotalRemaining = New System.Windows.Forms.Label()
+        Me.lblTotalIssued = New System.Windows.Forms.Label()
+        Me.lblTotalConsumed = New System.Windows.Forms.Label()
+        Me.lblTotalRemaining = New System.Windows.Forms.Label()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -353,13 +361,14 @@ Partial Class MntSparePartLogFloat
         Me.btnExport.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnExport.Hint = "Export selected data"
         Me.btnExport.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Download_16_x_16
-        Me.btnExport.Location = New System.Drawing.Point(802, 546)
+        Me.btnExport.Location = New System.Drawing.Point(937, 546)
         Me.btnExport.Margin = New System.Windows.Forms.Padding(2)
         Me.btnExport.Name = "btnExport"
         Me.btnExport.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnExport.Size = New System.Drawing.Size(90, 32)
         Me.btnExport.TabIndex = 557
         Me.btnExport.Text = "Export"
+        Me.btnExport.Visible = False
         '
         'btnView
         '
@@ -371,13 +380,14 @@ Partial Class MntSparePartLogFloat
         Me.btnView.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnView.Hint = "View transaction details"
         Me.btnView.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Text_preview_16_x_16
-        Me.btnView.Location = New System.Drawing.Point(896, 546)
+        Me.btnView.Location = New System.Drawing.Point(1031, 546)
         Me.btnView.Margin = New System.Windows.Forms.Padding(2)
         Me.btnView.Name = "btnView"
         Me.btnView.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnView.Size = New System.Drawing.Size(140, 32)
         Me.btnView.TabIndex = 556
         Me.btnView.Text = "View Transaction"
+        Me.btnView.Visible = False
         '
         'btnClose
         '
@@ -388,7 +398,7 @@ Partial Class MntSparePartLogFloat
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1040, 546)
+        Me.btnClose.Location = New System.Drawing.Point(1175, 546)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -504,16 +514,16 @@ Partial Class MntSparePartLogFloat
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvList.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColQty, Me.ColTrxId, Me.ColReferenceNo})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColCreatedDate, Me.ColTransactionCode, Me.ColUserName, Me.ColPartNo, Me.ColPartName, Me.ColIssuedQty, Me.ColConsumedQty, Me.ColRemainingQty, Me.ColTrxId, Me.ColReferenceNo})
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
@@ -521,15 +531,15 @@ Partial Class MntSparePartLogFloat
         Me.dgvList.RowHeadersVisible = False
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1134, 480)
+        Me.dgvList.Size = New System.Drawing.Size(1269, 480)
         Me.dgvList.TabIndex = 553
         '
         'ColCreatedDate
         '
-        Me.ColCreatedDate.DataPropertyName = "TrxDate"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.Format = "MM/dd/yyyy"
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
         Me.ColCreatedDate.HeaderText = "Transaction Date"
         Me.ColCreatedDate.Name = "ColCreatedDate"
         Me.ColCreatedDate.ReadOnly = True
@@ -538,8 +548,8 @@ Partial Class MntSparePartLogFloat
         'ColTransactionCode
         '
         Me.ColTransactionCode.DataPropertyName = "TransactionCode"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColTransactionCode.HeaderText = "Type"
         Me.ColTransactionCode.Name = "ColTransactionCode"
         Me.ColTransactionCode.ReadOnly = True
@@ -569,15 +579,35 @@ Partial Class MntSparePartLogFloat
         Me.ColPartName.ReadOnly = True
         Me.ColPartName.Width = 280
         '
-        'ColQty
+        'ColIssuedQty
         '
-        Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle8
-        Me.ColQty.HeaderText = "Qty"
-        Me.ColQty.Name = "ColQty"
-        Me.ColQty.ReadOnly = True
-        Me.ColQty.Width = 50
+        Me.ColIssuedQty.DataPropertyName = "IssuedQty"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColIssuedQty.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColIssuedQty.HeaderText = "Issued"
+        Me.ColIssuedQty.Name = "ColIssuedQty"
+        Me.ColIssuedQty.ReadOnly = True
+        Me.ColIssuedQty.Width = 80
+        '
+        'ColConsumedQty
+        '
+        Me.ColConsumedQty.DataPropertyName = "ConsumedQty"
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColConsumedQty.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColConsumedQty.HeaderText = "Consumed"
+        Me.ColConsumedQty.Name = "ColConsumedQty"
+        Me.ColConsumedQty.ReadOnly = True
+        Me.ColConsumedQty.Width = 80
+        '
+        'ColRemainingQty
+        '
+        Me.ColRemainingQty.DataPropertyName = "RemainingQty"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColRemainingQty.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColRemainingQty.HeaderText = "Remaining"
+        Me.ColRemainingQty.Name = "ColRemainingQty"
+        Me.ColRemainingQty.ReadOnly = True
+        Me.ColRemainingQty.Width = 80
         '
         'ColTrxId
         '
@@ -595,34 +625,19 @@ Partial Class MntSparePartLogFloat
         Me.ColReferenceNo.ReadOnly = True
         Me.ColReferenceNo.Width = 90
         '
-        'lblTotal
+        'txtTotalIssued
         '
-        Me.lblTotal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblTotal.BackColor = System.Drawing.SystemColors.Control
-        Me.lblTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblTotal.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblTotal.ForeColor = System.Drawing.Color.Black
-        Me.lblTotal.Location = New System.Drawing.Point(952, 512)
-        Me.lblTotal.Name = "lblTotal"
-        Me.lblTotal.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblTotal.Size = New System.Drawing.Size(65, 25)
-        Me.lblTotal.TabIndex = 567
-        Me.lblTotal.Text = "Total Qty"
-        Me.lblTotal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'txtTotal
-        '
-        Me.txtTotal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTotal.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtTotal.Font = New System.Drawing.Font("Segoe UI", 9.5!)
-        Me.txtTotal.ForeColor = System.Drawing.Color.Black
-        Me.txtTotal.Location = New System.Drawing.Point(1014, 512)
-        Me.txtTotal.Name = "txtTotal"
-        Me.txtTotal.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
-        Me.txtTotal.Size = New System.Drawing.Size(120, 25)
-        Me.txtTotal.TabIndex = 568
-        Me.txtTotal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txtTotalIssued.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtTotalIssued.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtTotalIssued.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtTotalIssued.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtTotalIssued.ForeColor = System.Drawing.Color.Black
+        Me.txtTotalIssued.Location = New System.Drawing.Point(832, 512)
+        Me.txtTotalIssued.Name = "txtTotalIssued"
+        Me.txtTotalIssued.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
+        Me.txtTotalIssued.Size = New System.Drawing.Size(77, 25)
+        Me.txtTotalIssued.TabIndex = 568
+        Me.txtTotalIssued.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'grpTrxType
         '
@@ -677,13 +692,86 @@ Partial Class MntSparePartLogFloat
         Me.rdAll.Text = "All"
         Me.rdAll.UseVisualStyleBackColor = True
         '
+        'txtTotalConsumed
+        '
+        Me.txtTotalConsumed.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtTotalConsumed.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtTotalConsumed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtTotalConsumed.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtTotalConsumed.ForeColor = System.Drawing.Color.Black
+        Me.txtTotalConsumed.Location = New System.Drawing.Point(1012, 512)
+        Me.txtTotalConsumed.Name = "txtTotalConsumed"
+        Me.txtTotalConsumed.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
+        Me.txtTotalConsumed.Size = New System.Drawing.Size(77, 25)
+        Me.txtTotalConsumed.TabIndex = 570
+        Me.txtTotalConsumed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txtTotalRemaining
+        '
+        Me.txtTotalRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtTotalRemaining.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtTotalRemaining.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtTotalRemaining.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtTotalRemaining.ForeColor = System.Drawing.Color.Black
+        Me.txtTotalRemaining.Location = New System.Drawing.Point(1192, 512)
+        Me.txtTotalRemaining.Name = "txtTotalRemaining"
+        Me.txtTotalRemaining.Padding = New System.Windows.Forms.Padding(0, 0, 5, 0)
+        Me.txtTotalRemaining.Size = New System.Drawing.Size(77, 25)
+        Me.txtTotalRemaining.TabIndex = 571
+        Me.txtTotalRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lblTotalIssued
+        '
+        Me.lblTotalIssued.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalIssued.BackColor = System.Drawing.SystemColors.Control
+        Me.lblTotalIssued.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTotalIssued.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblTotalIssued.ForeColor = System.Drawing.Color.Black
+        Me.lblTotalIssued.Location = New System.Drawing.Point(748, 512)
+        Me.lblTotalIssued.Name = "lblTotalIssued"
+        Me.lblTotalIssued.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblTotalIssued.Size = New System.Drawing.Size(85, 25)
+        Me.lblTotalIssued.TabIndex = 572
+        Me.lblTotalIssued.Text = "Total Issued"
+        Me.lblTotalIssued.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblTotalConsumed
+        '
+        Me.lblTotalConsumed.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalConsumed.BackColor = System.Drawing.SystemColors.Control
+        Me.lblTotalConsumed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTotalConsumed.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblTotalConsumed.ForeColor = System.Drawing.Color.Black
+        Me.lblTotalConsumed.Location = New System.Drawing.Point(908, 512)
+        Me.lblTotalConsumed.Name = "lblTotalConsumed"
+        Me.lblTotalConsumed.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblTotalConsumed.Size = New System.Drawing.Size(105, 25)
+        Me.lblTotalConsumed.TabIndex = 573
+        Me.lblTotalConsumed.Text = "Total Consumed"
+        Me.lblTotalConsumed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblTotalRemaining
+        '
+        Me.lblTotalRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalRemaining.BackColor = System.Drawing.SystemColors.Control
+        Me.lblTotalRemaining.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTotalRemaining.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblTotalRemaining.ForeColor = System.Drawing.Color.Black
+        Me.lblTotalRemaining.Location = New System.Drawing.Point(1088, 512)
+        Me.lblTotalRemaining.Name = "lblTotalRemaining"
+        Me.lblTotalRemaining.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblTotalRemaining.Size = New System.Drawing.Size(105, 25)
+        Me.lblTotalRemaining.TabIndex = 574
+        Me.lblTotalRemaining.Text = "Total Remaining"
+        Me.lblTotalRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'MntSparePartLogFloat
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
-        Me.ClientSize = New System.Drawing.Size(1134, 581)
+        Me.ClientSize = New System.Drawing.Size(1269, 581)
         Me.Controls.Add(Me.grpSortMode)
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnSearch)
@@ -699,9 +787,13 @@ Partial Class MntSparePartLogFloat
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.bindingNavigator)
         Me.Controls.Add(Me.dgvList)
-        Me.Controls.Add(Me.txtTotal)
-        Me.Controls.Add(Me.lblTotal)
+        Me.Controls.Add(Me.txtTotalIssued)
         Me.Controls.Add(Me.grpTrxType)
+        Me.Controls.Add(Me.txtTotalConsumed)
+        Me.Controls.Add(Me.txtTotalRemaining)
+        Me.Controls.Add(Me.lblTotalIssued)
+        Me.Controls.Add(Me.lblTotalConsumed)
+        Me.Controls.Add(Me.lblTotalRemaining)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
@@ -711,7 +803,7 @@ Partial Class MntSparePartLogFloat
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Consumed/Returned Logs"
+        Me.Text = "Float Transaction Logs"
         Me.pnlSearchByText.ResumeLayout(False)
         Me.pnlSearchByText.PerformLayout()
         Me.pnlSearchByCmb.ResumeLayout(False)
@@ -771,8 +863,7 @@ Partial Class MntSparePartLogFloat
     Public WithEvents rdDesc As RadioButton
     Public WithEvents rdAsc As RadioButton
     Friend WithEvents dgvList As DataGridView
-    Friend WithEvents lblTotal As Label
-    Friend WithEvents txtTotal As Label
+    Friend WithEvents txtTotalIssued As Label
     Public WithEvents grpTrxType As GroupBox
     Public WithEvents rdReceive As RadioButton
     Public WithEvents rdAll As RadioButton
@@ -782,7 +873,14 @@ Partial Class MntSparePartLogFloat
     Friend WithEvents ColUserName As DataGridViewTextBoxColumn
     Friend WithEvents ColPartNo As DataGridViewTextBoxColumn
     Friend WithEvents ColPartName As DataGridViewTextBoxColumn
-    Friend WithEvents ColQty As DataGridViewTextBoxColumn
+    Friend WithEvents ColIssuedQty As DataGridViewTextBoxColumn
+    Friend WithEvents ColConsumedQty As DataGridViewTextBoxColumn
+    Friend WithEvents ColRemainingQty As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
     Friend WithEvents ColReferenceNo As DataGridViewTextBoxColumn
+    Friend WithEvents txtTotalConsumed As Label
+    Friend WithEvents txtTotalRemaining As Label
+    Friend WithEvents lblTotalIssued As Label
+    Friend WithEvents lblTotalConsumed As Label
+    Friend WithEvents lblTotalRemaining As Label
 End Class

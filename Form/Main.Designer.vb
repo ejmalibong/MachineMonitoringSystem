@@ -69,6 +69,7 @@ Partial Class Main
         Me.SectionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.VersionToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
+        Me.MntSparePartFloatLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnuMain.SuspendLayout()
         Me.stsMain.SuspendLayout()
         Me.SuspendLayout()
@@ -115,7 +116,7 @@ Partial Class Main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFileFa, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.tssFileMtPart, Me.MntSparePartInventoryToolStripMenuItem, Me.MntSparePartLogToolStripMenuItem, Me.tssFileMt, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FacTransactionConsoleToolStripMenuItem, Me.FacActivtyApprovalToolStripMenuItem, Me.FacMachineScheduleToolStripMenuItem, Me.tssFileFa, Me.MntTransactionConsoleToolStripMenuItem, Me.MntActivtyApprovalToolStripMenuItem, Me.MntMachineScheduleToolStripMenuItem, Me.MntJigScheduleToolStripMenuItem, Me.tssFileMtPart, Me.MntSparePartInventoryToolStripMenuItem, Me.MntSparePartLogToolStripMenuItem, Me.MntSparePartFloatLogToolStripMenuItem, Me.tssFileMt, Me.LogOutToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -403,6 +404,13 @@ Partial Class Main
         'tmrMain
         '
         '
+        'MntSparePartFloatLogToolStripMenuItem
+        '
+        Me.MntSparePartFloatLogToolStripMenuItem.Name = "MntSparePartFloatLogToolStripMenuItem"
+        Me.MntSparePartFloatLogToolStripMenuItem.Size = New System.Drawing.Size(192, 22)
+        Me.MntSparePartFloatLogToolStripMenuItem.Tag = "MT"
+        Me.MntSparePartFloatLogToolStripMenuItem.Text = "Float Transaction Logs"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -475,4 +483,5 @@ Partial Class Main
     Friend WithEvents CloseAllToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MntSparePartInventoryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents tssFileMtPart As ToolStripSeparator
+    Friend WithEvents MntSparePartFloatLogToolStripMenuItem As ToolStripMenuItem
 End Class

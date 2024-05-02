@@ -25,7 +25,9 @@ Public Class MntSparePartLogFloat
     Private pageIndex As Integer
     Private pageSize As Integer
     Private totalCount As Integer
-    Private totalQty As Integer
+    Private issuedQty As Integer
+    Private consumedQty As Integer
+    Private remainingQty As Integer
 
     Private mStream As New MemoryStream
     Private bite As Byte() 'the word `byte` is not a valid identifier
@@ -104,117 +106,117 @@ Public Class MntSparePartLogFloat
 
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
-            Dim dt As DataTable = New DataTable()
-            Dim dtReport As DataTable = New DataTable()
+            'Dim dt As DataTable = New DataTable()
+            'Dim dtReport As DataTable = New DataTable()
 
-            Dim query As String = "SELECT TrxId, TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, ParticularName, AreaName, MachinePartName, MachineStatusName, MachineSubStatusName, Problem, RootCause, ActionTaken, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
+            'Dim query As String = "SELECT TrxId, TrxDate, TransactionCode, UserName, PartNo, PartName, Qty, ReferenceNo, ParticularName, AreaName, MachinePartName, MachineStatusName, MachineSubStatusName, Problem, RootCause, ActionTaken, Remarks FROM dbo.VwMntTransactionPartLogs WHERE "
 
-            Select Case cmbSearchCriteria.SelectedValue
-                Case 1
-                    query += " CAST(TrxDate AS DATE) BETWEEN '" & dtpStartDate.Value.Date & "' AND '" & dtpEndDate.Value.Date & "'"
+            'Select Case cmbSearchCriteria.SelectedValue
+            '    Case 1
+            '        query += " CAST(TrxDate AS DATE) BETWEEN '" & dtpStartDate.Value.Date & "' AND '" & dtpEndDate.Value.Date & "'"
 
-                Case 2
-                    query += " UserId = '" & cmbCommon2.SelectedValue & "'"
+            '    Case 2
+            '        query += " UserId = '" & cmbCommon2.SelectedValue & "'"
 
-                Case 3
-                    query += " PartId = '" & cmbCommon2.SelectedValue & "'"
+            '    Case 3
+            '        query += " PartId = '" & cmbCommon2.SelectedValue & "'"
 
-                Case 4
-                    query += " PartId = '" & cmbCommon2.SelectedValue & "'"
-            End Select
+            '    Case 4
+            '        query += " PartId = '" & cmbCommon2.SelectedValue & "'"
+            'End Select
 
-            Select Case GetTrxType()
-                Case 1, 2
-                    query += " AND TransactionTypeId = '" & GetTrxType() & "'"
-            End Select
+            'Select Case GetTrxType()
+            '    Case 1, 2
+            '        query += " AND TransactionTypeId = '" & GetTrxType() & "'"
+            'End Select
 
-            query += " ORDER BY " & cmbSortCriteria.SelectedValue & " " & GetSortMode() & " "
+            'query += " ORDER BY " & cmbSortCriteria.SelectedValue & " " & GetSortMode() & " "
 
-            dt = dbMethod.FillDataTable(query, CommandType.Text)
+            'dt = dbMethod.FillDataTable(query, CommandType.Text)
 
-            If dt.Rows.Count = 0 Then
-                MessageBox.Show("No records found.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
-            End If
+            'If dt.Rows.Count = 0 Then
+            '    MessageBox.Show("No records found.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            '    Exit Sub
+            'End If
 
-            Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
-            Dim imgDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\Temp"
-            Dim expFilename As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Logs.xlsx")
+            'Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
+            'Dim imgDir As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\Temp"
+            'Dim expFilename As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Logs.xlsx")
 
-            If dtReport.Rows.Count > 0 Then
-                dtReport.Clear()
-            End If
+            'If dtReport.Rows.Count > 0 Then
+            '    dtReport.Clear()
+            'End If
 
-            BuildContainerTable(dtReport)
+            'BuildContainerTable(dtReport)
 
-            If Not System.IO.Directory.Exists(imgDir) Then
-                System.IO.Directory.CreateDirectory(imgDir)
-            End If
+            'If Not System.IO.Directory.Exists(imgDir) Then
+            '    System.IO.Directory.CreateDirectory(imgDir)
+            'End If
 
-            For i As Integer = 0 To dt.Rows.Count - 1
-                Dim newRow As DataRow = dtReport.NewRow
-                newRow("TrxDate") = dt.Rows(i).Item("TrxDate")
-                newRow("TransactionCode") = dt.Rows(i).Item("TransactionCode")
-                newRow("UserName") = dt.Rows(i).Item("UserName")
-                newRow("PartNo") = dt.Rows(i).Item("PartNo")
-                newRow("PartName") = dt.Rows(i).Item("PartName")
-                newRow("Qty") = dt.Rows(i).Item("Qty")
-                newRow("ReferenceNo") = dt.Rows(i).Item("ReferenceNo")
-                newRow("ParticularName") = dt.Rows(i).Item("ParticularName")
-                newRow("AreaName") = dt.Rows(i).Item("AreaName")
-                newRow("MachinePartName") = dt.Rows(i).Item("MachinePartName")
-                newRow("MachineStatusName") = dt.Rows(i).Item("MachineStatusName")
-                newRow("MachineSubStatusName") = dt.Rows(i).Item("MachineSubStatusName")
-                newRow("Problem") = dt.Rows(i).Item("Problem")
-                newRow("RootCause") = dt.Rows(i).Item("RootCause")
-                newRow("ActionTaken") = dt.Rows(i).Item("ActionTaken")
-                newRow("Remarks") = dt.Rows(i).Item("Remarks")
+            'For i As Integer = 0 To dt.Rows.Count - 1
+            '    Dim newRow As DataRow = dtReport.NewRow
+            '    newRow("TrxDate") = dt.Rows(i).Item("TrxDate")
+            '    newRow("TransactionCode") = dt.Rows(i).Item("TransactionCode")
+            '    newRow("UserName") = dt.Rows(i).Item("UserName")
+            '    newRow("PartNo") = dt.Rows(i).Item("PartNo")
+            '    newRow("PartName") = dt.Rows(i).Item("PartName")
+            '    newRow("Qty") = dt.Rows(i).Item("Qty")
+            '    newRow("ReferenceNo") = dt.Rows(i).Item("ReferenceNo")
+            '    newRow("ParticularName") = dt.Rows(i).Item("ParticularName")
+            '    newRow("AreaName") = dt.Rows(i).Item("AreaName")
+            '    newRow("MachinePartName") = dt.Rows(i).Item("MachinePartName")
+            '    newRow("MachineStatusName") = dt.Rows(i).Item("MachineStatusName")
+            '    newRow("MachineSubStatusName") = dt.Rows(i).Item("MachineSubStatusName")
+            '    newRow("Problem") = dt.Rows(i).Item("Problem")
+            '    newRow("RootCause") = dt.Rows(i).Item("RootCause")
+            '    newRow("ActionTaken") = dt.Rows(i).Item("ActionTaken")
+            '    newRow("Remarks") = dt.Rows(i).Item("Remarks")
 
-                'bite = dt.Rows(i).Item("Image")
+            '    'bite = dt.Rows(i).Item("Image")
 
-                'Using ms As New MemoryStream(bite)
-                '    Dim img As Image = Image.FromStream(ms)
-                '    img.Save(IO.Path.Combine(imgDir, dt.Rows(i).Item("ImageName")))
-                'End Using
+            '    'Using ms As New MemoryStream(bite)
+            '    '    Dim img As Image = Image.FromStream(ms)
+            '    '    img.Save(IO.Path.Combine(imgDir, dt.Rows(i).Item("ImageName")))
+            '    'End Using
 
-                dtReport.Rows.Add(newRow)
-            Next
+            '    dtReport.Rows.Add(newRow)
+            'Next
 
-            Using wb As New XLWorkbook()
-                Dim ws = wb.Worksheets.Add(dtReport, "Spare Parts Logs")
+            'Using wb As New XLWorkbook()
+            '    Dim ws = wb.Worksheets.Add(dtReport, "Spare Parts Logs")
 
-                'adding header column
-                For column As Integer = 0 To dtReport.Columns.Count - 1
-                    ws.Cell(1, column + 1).Value = dtReport.Columns(column).ColumnName
-                Next
+            '    'adding header column
+            '    For column As Integer = 0 To dtReport.Columns.Count - 1
+            '        ws.Cell(1, column + 1).Value = dtReport.Columns(column).ColumnName
+            '    Next
 
-                'adding rows in cell
-                For row As Integer = 0 To dtReport.Rows.Count - 1
-                    For column As Integer = 0 To dtReport.Columns.Count - 1 - 1
-                        ws.Cell(row + 2, column + 1).Value = dtReport.Rows(row)(column)
-                    Next
-                Next
+            '    'adding rows in cell
+            '    For row As Integer = 0 To dtReport.Rows.Count - 1
+            '        For column As Integer = 0 To dtReport.Columns.Count - 1 - 1
+            '            ws.Cell(row + 2, column + 1).Value = dtReport.Rows(row)(column)
+            '        Next
+            '    Next
 
-                ''adding image in cell
-                'For row As Integer = 0 To dtReport.Rows.Count - 1
-                '    For column As Integer = dtReport.Columns.Count - 1 To dtReport.Columns.Count - 1
-                '        Dim image = ws.AddPicture(dtReport.Rows(row)(column).ToString()).MoveTo(ws.Cell(row + 2, column + 1))
-                '        image.Width = 50
-                '        Image.Height = 50
-                '    Next
-                'Next
+            '    ''adding image in cell
+            '    'For row As Integer = 0 To dtReport.Rows.Count - 1
+            '    '    For column As Integer = dtReport.Columns.Count - 1 To dtReport.Columns.Count - 1
+            '    '        Dim image = ws.AddPicture(dtReport.Rows(row)(column).ToString()).MoveTo(ws.Cell(row + 2, column + 1))
+            '    '        image.Width = 50
+            '    '        Image.Height = 50
+            '    '    Next
+            '    'Next
 
-                Dim directoryInfo As DirectoryInfo = New DirectoryInfo(imgDir)
-                For Each file As FileInfo In directoryInfo.GetFiles()
-                    file.Delete()
-                Next
+            '    Dim directoryInfo As DirectoryInfo = New DirectoryInfo(imgDir)
+            '    For Each file As FileInfo In directoryInfo.GetFiles()
+            '        file.Delete()
+            '    Next
 
-                directoryInfo.Delete()
+            '    directoryInfo.Delete()
 
-                wb.SaveAs(expFilename)
-            End Using
+            '    wb.SaveAs(expFilename)
+            'End Using
 
-            Process.Start(expFilename)
+            'Process.Start(expFilename)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -292,62 +294,62 @@ Public Class MntSparePartLogFloat
 
     Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
         Try
-            If Me.dgvList.Rows.Count > 0 Then
-                Dim trxId As Integer = 0
-                Dim partTrxId As Integer = 0
+            'If Me.dgvList.Rows.Count > 0 Then
+            '    Dim trxId As Integer = 0
+            '    Dim partTrxId As Integer = 0
 
-                If Not CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId") Is DBNull.Value Then
-                    trxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId")
-                Else
-                    partTrxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("PartTrxId")
-                End If
+            '    If Not CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId") Is DBNull.Value Then
+            '        trxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId")
+            '    Else
+            '        partTrxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("PartTrxId")
+            '    End If
 
-                If trxId = 0 Then
-                    If CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TransactionTypeId") = 1 Then
-                        Using frmReceive As New MntTrxPartReceive(0, partTrxId)
-                            frmReceive.ShowDialog()
-                        End Using
-                    Else
-                        Using frmIssue As New MntTrxPartIssue(0, partTrxId)
-                            frmIssue.ShowDialog()
-                        End Using
-                    End If
+            '    If trxId = 0 Then
+            '        If CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TransactionTypeId") = 1 Then
+            '            Using frmReceive As New MntTrxPartReceive(0, partTrxId)
+            '                frmReceive.ShowDialog()
+            '            End Using
+            '        Else
+            '            Using frmIssue As New MntTrxPartIssue(0, partTrxId)
+            '                frmIssue.ShowDialog()
+            '            End Using
+            '        End If
 
-                Else
-                    Dim isMachineActivity As Boolean = False
-                    Dim isJigActivity As Boolean = False
-                    Dim isOthActivity As Boolean = False
+            '    Else
+            '        Dim isMachineActivity As Boolean = False
+            '        Dim isJigActivity As Boolean = False
+            '        Dim isOthActivity As Boolean = False
 
-                    Dim prm(0) As SqlParameter
-                    prm(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-                    prm(0).Value = trxId
+            '        Dim prm(0) As SqlParameter
+            '        prm(0) = New SqlParameter("@TrxId", SqlDbType.Int)
+            '        prm(0).Value = trxId
 
-                    Dim rdr As IDataReader = dbMethod.ExecuteReader("SELECT Machineid, JigId FROM MntTransactionHeader WHERE TrxId = @TrxId", CommandType.Text, prm)
+            '        Dim rdr As IDataReader = dbMethod.ExecuteReader("SELECT Machineid, JigId FROM MntTransactionHeader WHERE TrxId = @TrxId", CommandType.Text, prm)
 
-                    While rdr.Read
-                        If rdr.Item("MachineId") Is DBNull.Value AndAlso rdr.Item("JigId") Is DBNull.Value Then
-                            Using frmDetail As New MntTrxDetailOth(0, 0, 0, trxId)
-                                frmDetail.ShowDialog()
-                            End Using
-                        End If
+            '        While rdr.Read
+            '            If rdr.Item("MachineId") Is DBNull.Value AndAlso rdr.Item("JigId") Is DBNull.Value Then
+            '                Using frmDetail As New MntTrxDetailOth(0, 0, 0, trxId)
+            '                    frmDetail.ShowDialog()
+            '                End Using
+            '            End If
 
-                        If Not rdr.Item("MachineId") Is DBNull.Value Then
-                            Using frmDetail As New MntTrxDetailMch(0, 0, 0, trxId)
-                                frmDetail.fromPmCalendar = True
-                                frmDetail.ShowDialog()
-                            End Using
-                        End If
+            '            If Not rdr.Item("MachineId") Is DBNull.Value Then
+            '                Using frmDetail As New MntTrxDetailMch(0, 0, 0, trxId)
+            '                    frmDetail.fromPmCalendar = True
+            '                    frmDetail.ShowDialog()
+            '                End Using
+            '            End If
 
-                        If Not rdr.Item("JigId") Is DBNull.Value Then
-                            Using frmDetail As New MntTrxDetailJig(0, 0, 0, trxId)
-                                frmDetail.fromPmCalendar = True
-                                frmDetail.ShowDialog()
-                            End Using
-                        End If
-                    End While
-                    rdr.Close()
-                End If
-            End If
+            '            If Not rdr.Item("JigId") Is DBNull.Value Then
+            '                Using frmDetail As New MntTrxDetailJig(0, 0, 0, trxId)
+            '                    frmDetail.fromPmCalendar = True
+            '                    frmDetail.ShowDialog()
+            '                End Using
+            '            End If
+            '        End While
+            '        rdr.Close()
+            '    End If
+            'End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -497,9 +499,112 @@ Public Class MntSparePartLogFloat
     Private Sub LoadLogs()
         Try
             totalCount = 0
-            totalQty = 0
+            issuedQty = 0
+            consumedQty = 0
+            remainingQty = 0
 
             If isFilterByTrxDate = True Then
+                Dim prmPart(10) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@IssuedQty", SqlDbType.Int)
+                prmPart(3).Direction = ParameterDirection.Output
+                prmPart(3).Value = issuedQty
+                prmPart(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                prmPart(4).Direction = ParameterDirection.Output
+                prmPart(4).Value = consumedQty
+                prmPart(5) = New SqlParameter("@RemainingQty", SqlDbType.Int)
+                prmPart(5).Direction = ParameterDirection.Output
+                prmPart(5).Value = remainingQty
+                prmPart(6) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
+                prmPart(6).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
+                prmPart(7) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(7).Value = cmbSortCriteria.SelectedValue
+                prmPart(8) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(8).Value = GetSortMode()
+                prmPart(9) = New SqlParameter("@StartDate", SqlDbType.Date)
+                prmPart(9).Value = CDate(dtpStartDate.Value)
+                prmPart(10) = New SqlParameter("@EndDate", SqlDbType.Date)
+                prmPart(10).Value = CDate(dtpEndDate.Value)
+
+                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartFloatLogCreatedDate", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+                issuedQty = prmPart(3).Value
+                consumedQty = prmPart(4).Value
+                remainingQty = prmPart(5).Value
+
+            ElseIf isFilterByUsername = True Then
+                Dim prmPart(9) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@IssuedQty", SqlDbType.Int)
+                prmPart(3).Direction = ParameterDirection.Output
+                prmPart(3).Value = issuedQty
+                prmPart(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                prmPart(4).Direction = ParameterDirection.Output
+                prmPart(4).Value = consumedQty
+                prmPart(5) = New SqlParameter("@RemainingQty", SqlDbType.Int)
+                prmPart(5).Direction = ParameterDirection.Output
+                prmPart(5).Value = remainingQty
+                prmPart(6) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
+                prmPart(6).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
+                prmPart(7) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(7).Value = cmbSortCriteria.SelectedValue
+                prmPart(8) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(8).Value = GetSortMode()
+                prmPart(9) = New SqlParameter("@UserId", SqlDbType.Int)
+                prmPart(9).Value = cmbCommon2.SelectedValue
+
+                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartFloatLogUserId", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+                issuedQty = prmPart(3).Value
+                consumedQty = prmPart(4).Value
+                remainingQty = prmPart(5).Value
+
+            ElseIf isFilterByPartNo = True Or isFilterByPartName = True Then
+                Dim prmPart(9) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@IssuedQty", SqlDbType.Int)
+                prmPart(3).Direction = ParameterDirection.Output
+                prmPart(3).Value = issuedQty
+                prmPart(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                prmPart(4).Direction = ParameterDirection.Output
+                prmPart(4).Value = consumedQty
+                prmPart(5) = New SqlParameter("@RemainingQty", SqlDbType.Int)
+                prmPart(5).Direction = ParameterDirection.Output
+                prmPart(5).Value = remainingQty
+                prmPart(6) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
+                prmPart(6).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
+                prmPart(7) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(7).Value = cmbSortCriteria.SelectedValue
+                prmPart(8) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(8).Value = GetSortMode()
+                prmPart(9) = New SqlParameter("@PartId", SqlDbType.Int)
+                prmPart(9).Value = cmbCommon2.SelectedValue
+
+                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartFloatLogPartId", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+                issuedQty = prmPart(3).Value
+                consumedQty = prmPart(4).Value
+                remainingQty = prmPart(5).Value
+
+            Else
                 Dim prmPart(8) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
@@ -508,109 +613,33 @@ Public Class MntSparePartLogFloat
                 prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
                 prmPart(2).Direction = ParameterDirection.Output
                 prmPart(2).Value = totalCount
-                prmPart(3) = New SqlParameter("@TotalQty", SqlDbType.Int)
+                prmPart(3) = New SqlParameter("@IssuedQty", SqlDbType.Int)
                 prmPart(3).Direction = ParameterDirection.Output
-                prmPart(3).Value = totalQty
-                prmPart(4) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
-                prmPart(4).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
-                prmPart(5) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
-                prmPart(5).Value = cmbSortCriteria.SelectedValue
-                prmPart(6) = New SqlParameter("@SortType", SqlDbType.VarChar)
-                prmPart(6).Value = GetSortMode()
-                prmPart(7) = New SqlParameter("@StartDate", SqlDbType.Date)
-                prmPart(7).Value = CDate(dtpStartDate.Value)
-                prmPart(8) = New SqlParameter("@EndDate", SqlDbType.Date)
-                prmPart(8).Value = CDate(dtpEndDate.Value)
+                prmPart(3).Value = issuedQty
+                prmPart(4) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                prmPart(4).Direction = ParameterDirection.Output
+                prmPart(4).Value = consumedQty
+                prmPart(5) = New SqlParameter("@RemainingQty", SqlDbType.Int)
+                prmPart(5).Direction = ParameterDirection.Output
+                prmPart(5).Value = remainingQty
+                prmPart(6) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
+                prmPart(6).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
+                prmPart(7) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(7).Value = cmbSortCriteria.SelectedValue
+                prmPart(8) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(8).Value = GetSortMode()
 
-                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogsTrxDate", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartFloatLog", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
-                totalQty = prmPart(3).Value
-
-            ElseIf isFilterByUsername = True Then
-                Dim prmPart(7) As SqlParameter
-                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmPart(0).Value = pageIndex
-                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmPart(1).Value = pageSize
-                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmPart(2).Direction = ParameterDirection.Output
-                prmPart(2).Value = totalCount
-                prmPart(3) = New SqlParameter("@TotalQty", SqlDbType.Int)
-                prmPart(3).Direction = ParameterDirection.Output
-                prmPart(3).Value = totalQty
-                prmPart(4) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
-                prmPart(4).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
-                prmPart(5) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
-                prmPart(5).Value = cmbSortCriteria.SelectedValue
-                prmPart(6) = New SqlParameter("@SortType", SqlDbType.VarChar)
-                prmPart(6).Value = GetSortMode()
-                prmPart(7) = New SqlParameter("@UserId", SqlDbType.Int)
-                prmPart(7).Value = cmbCommon2.SelectedValue
-
-                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogsUserId", CommandType.StoredProcedure, prmPart)
-                totalCount = prmPart(2).Value
-                totalQty = prmPart(3).Value
-
-            ElseIf isFilterByPartNo = True Or isFilterByPartName = True Then
-                Dim prmPart(7) As SqlParameter
-                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmPart(0).Value = pageIndex
-                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmPart(1).Value = pageSize
-                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmPart(2).Direction = ParameterDirection.Output
-                prmPart(2).Value = totalCount
-                prmPart(3) = New SqlParameter("@TotalQty", SqlDbType.Int)
-                prmPart(3).Direction = ParameterDirection.Output
-                prmPart(3).Value = totalQty
-                prmPart(4) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
-                prmPart(4).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
-                prmPart(5) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
-                prmPart(5).Value = cmbSortCriteria.SelectedValue
-                prmPart(6) = New SqlParameter("@SortType", SqlDbType.VarChar)
-                prmPart(6).Value = GetSortMode()
-                prmPart(7) = New SqlParameter("@PartId", SqlDbType.Int)
-                prmPart(7).Value = cmbCommon2.SelectedValue
-
-                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogsPartId", CommandType.StoredProcedure, prmPart)
-                totalCount = prmPart(2).Value
-                totalQty = prmPart(3).Value
-
-            Else
-                Dim prmPart(6) As SqlParameter
-                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmPart(0).Value = pageIndex
-                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmPart(1).Value = pageSize
-                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmPart(2).Direction = ParameterDirection.Output
-                prmPart(2).Value = totalCount
-                prmPart(3) = New SqlParameter("@TotalQty", SqlDbType.Int)
-                prmPart(3).Direction = ParameterDirection.Output
-                prmPart(3).Value = totalQty
-                prmPart(4) = New SqlParameter("@TrxTypeId", SqlDbType.Int)
-                prmPart(4).Value = IIf(GetTrxType() = 0, Nothing, GetTrxType)
-                prmPart(5) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
-                prmPart(5).Value = cmbSortCriteria.SelectedValue
-                prmPart(6) = New SqlParameter("@SortType", SqlDbType.VarChar)
-                prmPart(6).Value = GetSortMode()
-
-                dtSparePart = dbMethod.FillDataTable("RdMntTransactionPartLogs", CommandType.StoredProcedure, prmPart)
-                totalCount = prmPart(2).Value
-                totalQty = prmPart(3).Value
+                issuedQty = prmPart(3).Value
+                consumedQty = prmPart(4).Value
+                remainingQty = prmPart(5).Value
             End If
 
             bsTransactionPartDetail.DataSource = dtSparePart
             bsTransactionPartDetail.ResetBindings(True)
             dgvList.AutoGenerateColumns = False
             dgvList.DataSource = bsTransactionPartDetail
-
-            Me.Text = String.Empty
-            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
-                Me.Text = "Spare Parts Logs - " & totalCount.ToString("N0") & " item"
-            Else
-                Me.Text = "Spare Parts Logs - " & totalCount.ToString("N0") & " items"
-            End If
 
             If totalCount Mod pageSize = 0 Then
                 If totalCount = 0 Then
@@ -626,7 +655,9 @@ Public Class MntSparePartLogFloat
             txtPageNumber.Text = pageIndex + 1
             txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
 
-            txtTotal.Text = totalQty.ToString("N0")
+            txtTotalIssued.Text = issuedQty.ToString("N0")
+            txtTotalConsumed.Text = consumedQty.ToString("N0")
+            txtTotalRemaining.Text = remainingQty.ToString("N0")
 
             'enables pager
             txtPageNumber.Enabled = True
@@ -665,7 +696,7 @@ Public Class MntSparePartLogFloat
 
     Private Sub LoadSortCriteria()
         Try
-            dicSortCriteria.Add(" Transaction Date", "TrxDate")
+            dicSortCriteria.Add(" Transaction Date", "CreatedDate")
             dicSortCriteria.Add(" Transaction", "TransactionCode")
             dicSortCriteria.Add(" Username", "UserName")
             dicSortCriteria.Add(" Part Number", "PartNo")
@@ -705,11 +736,11 @@ Public Class MntSparePartLogFloat
         End If
     End Sub
 
-    Private Sub MntSparePartLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub MntSparePartLogFloat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSearchCriteria()
         LoadSortCriteria()
 
-        cmbSortCriteria.SelectedValue = "TrxDate"
+        cmbSortCriteria.SelectedValue = "CreatedDate"
         rdDesc.Checked = True
         rdAll.Checked = True
 
