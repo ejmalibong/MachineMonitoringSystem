@@ -3316,7 +3316,7 @@ Public Class MntTrxDetailOth
                 End If
 
                 If cmbApp1Name.Items.Count = 2 Then
-                    cmbApp1Name.SelectedIndex = 1
+                    cmbApp1Name.SelectedIndex = 0
                 ElseIf cmbApp1Name.Items.Count > 2 Then
                     cmbApp1Name.SelectedValue = 0
                 End If
