@@ -26,14 +26,14 @@ Public Class FacTrxActvityLog
         dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
     End Sub
 
-    Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         txtTrxDate.Text = String.Format("{0:MMMM dd, yyyy hh:mm tt}", dbMethod.GetServerDate)
         GetCurrentShift()
         dtpFrom.Value = CDate(dbMethod.GetServerDate).Date
         dtpTo.Value = CDate(dbMethod.GetServerDate).Date
     End Sub
 
-    Private Sub MntTrxActvityLog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+    Private Sub FacTrxActvityLog_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode.Equals(Keys.F10) Then
             e.Handled = True
             btnSave.PerformClick()

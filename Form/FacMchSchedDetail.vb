@@ -333,7 +333,7 @@ Public Class FacMchSchedDetail
         End Try
     End Sub
 
-    Private Sub MntMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub FacMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F8) Then
             e.Handled = True
             btnDelete.PerformClick()
@@ -343,7 +343,7 @@ Public Class FacMchSchedDetail
         End If
     End Sub
 
-    Private Sub MntMchSchedDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacMchSchedDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If scheduleId = 0 Then
             Me.Text = "New Schedule Entry"
 

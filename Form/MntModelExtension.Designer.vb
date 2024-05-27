@@ -42,10 +42,15 @@ Partial Class MntModelExtension
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
@@ -55,9 +60,6 @@ Partial Class MntModelExtension
         Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
         Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
-        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -73,7 +75,7 @@ Partial Class MntModelExtension
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(597, 476)
+        Me.btnClose.Location = New System.Drawing.Point(691, 476)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -90,7 +92,7 @@ Partial Class MntModelExtension
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(503, 476)
+        Me.btnDelete.Location = New System.Drawing.Point(597, 476)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -107,7 +109,7 @@ Partial Class MntModelExtension
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(409, 476)
+        Me.btnEdit.Location = New System.Drawing.Point(503, 476)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -124,7 +126,7 @@ Partial Class MntModelExtension
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(315, 476)
+        Me.btnAdd.Location = New System.Drawing.Point(409, 476)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -143,7 +145,7 @@ Partial Class MntModelExtension
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.CountToolStripLabel})
         Me.bindingNavigator.Location = New System.Drawing.Point(4, 480)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -151,7 +153,7 @@ Partial Class MntModelExtension
         Me.bindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
-        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(266, 25)
         Me.bindingNavigator.TabIndex = 543
         '
         'txtTotalPageNumber
@@ -188,7 +190,6 @@ Partial Class MntModelExtension
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -248,6 +249,16 @@ Partial Class MntModelExtension
         Me.btnRefresh.Size = New System.Drawing.Size(53, 22)
         Me.btnRefresh.Text = " Refresh"
         Me.btnRefresh.ToolTipText = "Refresh list"
+        '
+        'BindingNavigatorSeparator5
+        '
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'CountToolStripLabel
+        '
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
         '
         'cmbSearchCriteria
         '
@@ -318,8 +329,33 @@ Partial Class MntModelExtension
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(690, 440)
+        Me.dgvList.Size = New System.Drawing.Size(784, 440)
         Me.dgvList.TabIndex = 549
+        '
+        'ColExtensionId
+        '
+        Me.ColExtensionId.DataPropertyName = "ExtensionId"
+        Me.ColExtensionId.HeaderText = "ExtensionId"
+        Me.ColExtensionId.Name = "ColExtensionId"
+        Me.ColExtensionId.ReadOnly = True
+        Me.ColExtensionId.Visible = False
+        '
+        'ColExtensionName
+        '
+        Me.ColExtensionName.DataPropertyName = "ExtensionName"
+        Me.ColExtensionName.HeaderText = "Extension Name"
+        Me.ColExtensionName.Name = "ColExtensionName"
+        Me.ColExtensionName.ReadOnly = True
+        Me.ColExtensionName.Width = 150
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsActive.Width = 55
         '
         'pnlSearchByCmb
         '
@@ -403,31 +439,6 @@ Partial Class MntModelExtension
         Me.DataGridViewNullableComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewNullableComboBoxColumn2.Width = 150
         '
-        'ColExtensionId
-        '
-        Me.ColExtensionId.DataPropertyName = "ExtensionId"
-        Me.ColExtensionId.HeaderText = "ExtensionId"
-        Me.ColExtensionId.Name = "ColExtensionId"
-        Me.ColExtensionId.ReadOnly = True
-        Me.ColExtensionId.Visible = False
-        '
-        'ColExtensionName
-        '
-        Me.ColExtensionName.DataPropertyName = "ExtensionName"
-        Me.ColExtensionName.HeaderText = "Extension Name"
-        Me.ColExtensionName.Name = "ColExtensionName"
-        Me.ColExtensionName.ReadOnly = True
-        Me.ColExtensionName.Width = 150
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsActive.Width = 55
-        '
         'MntModelExtension
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -435,7 +446,7 @@ Partial Class MntModelExtension
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(690, 511)
+        Me.ClientSize = New System.Drawing.Size(784, 511)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.dgvList)
         Me.Controls.Add(Me.btnReset)
@@ -500,4 +511,6 @@ Partial Class MntModelExtension
     Friend WithEvents ColExtensionId As DataGridViewTextBoxColumn
     Friend WithEvents ColExtensionName As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
 End Class

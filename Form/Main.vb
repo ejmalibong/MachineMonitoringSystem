@@ -71,12 +71,16 @@ Public Class Main
         GetFormAccess(workgroupId, sectionId)
     End Sub
 
-    Public Sub ClickSparePartsLogs()
+    Public Sub ClickMntSparePartsLogs()
         dbMain.FormLoader(Me, New MntSparePartLog)
     End Sub
 
-    Public Sub ClickSparePartsFloatLogs()
+    Public Sub ClickMntSparePartsFloatLogs()
         dbMain.FormLoader(Me, New MntSparePartLogFloat)
+    End Sub
+
+    Public Sub ClickFacSparePartsLogs()
+        dbMain.FormLoader(Me, New FacSparePartLog)
     End Sub
 
     Public Sub MntSparePartLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartLogToolStripMenuItem.Click
@@ -279,6 +283,7 @@ Public Class Main
                             End If
                         End If
                     Next
+                    Separator1.Visible = False
 
                     Select Case accessLevelId
                         Case 1, 2, 3
@@ -292,10 +297,10 @@ Public Class Main
 
                             'spart part in-charge
                             If dbMethod.ExecuteScalar("CntMntSparePartPic", CommandType.StoredProcedure, prm) <> 1 Then
-                                tssMaintenance3.Visible = True
+                                Separator2.Visible = True
                                 SecUserToolStripMenuItem.Visible = True
                             Else
-                                tssMaintenance3.Visible = False
+                                Separator2.Visible = False
                                 SecUserToolStripMenuItem.Visible = False
                             End If
                     End Select
@@ -355,6 +360,7 @@ Public Class Main
                             End If
                         End If
                     Next
+                    Separator1.Visible = False
 
                     Select Case accessLevelId
                         Case 1
@@ -365,9 +371,6 @@ Public Class Main
                         Case Else
                             dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                             SecUserToolStripMenuItem.Visible = False
-                            tssMaintenance2.Visible = False
-
-                            dbMain.FormLoader(Me, New FacTrxConsole(userId, workgroupId, sectionId, isAdmin), True)
                     End Select
 
                 Case 6 'acctg
@@ -610,67 +613,133 @@ Public Class Main
             Dim lstParts As New List(Of String)
             lstParts.Clear()
 
-            Select Case stockStatusId
-                Case 1
-                    Dim prm(0) As SqlParameter
-                    prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
-                    prm(0).Value = 1
+            If sectionId = 2 Then
+                Select Case stockStatusId
+                    Case 1
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 1
 
-                    Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
-                    While rdrSparePart.Read
-                        lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
-                    End While
-                    rdrSparePart.Close()
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
 
-                    Dim partCount As Integer = lstParts.Count
+                        Dim partCount As Integer = lstParts.Count
 
-                    If partCount > 0 Then
-                        Dim notification = New Notification(String.Format("There are {0} spare parts with zero stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 1)
-                        PlayNotificationSound("festival")
-                        notification.Show()
-                    End If
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts with zero stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 1)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
 
-                Case 2
-                    Dim prm(0) As SqlParameter
-                    prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
-                    prm(0).Value = 2
+                    Case 2
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 2
 
-                    Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
-                    While rdrSparePart.Read
-                        lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
-                    End While
-                    rdrSparePart.Close()
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
 
-                    Dim partCount As Integer = lstParts.Count
+                        Dim partCount As Integer = lstParts.Count
 
-                    If partCount > 0 Then
-                        Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the ordering point!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 2)
-                        PlayNotificationSound("festival")
-                        notification.Show()
-                    End If
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the ordering point!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 2)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
 
-                Case 3
-                    Dim prm(0) As SqlParameter
-                    prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
-                    prm(0).Value = 3
+                    Case 3
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 3
 
-                    Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
-                    While rdrSparePart.Read
-                        lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
-                    End While
-                    rdrSparePart.Close()
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
 
-                    Dim partCount As Integer = lstParts.Count
+                        Dim partCount As Integer = lstParts.Count
 
-                    If partCount > 0 Then
-                        Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the minimum stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 3)
-                        PlayNotificationSound("festival")
-                        notification.Show()
-                    End If
-            End Select
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the minimum stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 3)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
+                End Select
+
+            ElseIf sectionId = 3 Then
+                Select Case stockStatusId
+                    Case 1
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 1
+
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdFacSparePart", CommandType.StoredProcedure, prm)
+
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
+
+                        Dim partCount As Integer = lstParts.Count
+
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts with zero stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 1)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
+
+                    Case 2
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 2
+
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdFacSparePart", CommandType.StoredProcedure, prm)
+
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
+
+                        Dim partCount As Integer = lstParts.Count
+
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the ordering point!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 2)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
+
+                    Case 3
+                        Dim prm(0) As SqlParameter
+                        prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                        prm(0).Value = 3
+
+                        Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdFacSparePart", CommandType.StoredProcedure, prm)
+
+                        While rdrSparePart.Read
+                            lstParts.Add(" ● " & rdrSparePart("PartName").ToString.Trim & " " & rdrSparePart("PartNo").ToString.Trim)
+                        End While
+                        rdrSparePart.Close()
+
+                        Dim partCount As Integer = lstParts.Count
+
+                        If partCount > 0 Then
+                            Dim notification = New Notification(String.Format("There are {0} spare parts have a stock level that is equal to or below the minimum stock!", partCount), lstParts, -1, FormAnimator.AnimationMethod.Slide, FormAnimator.AnimationDirection.Up, 3)
+                            PlayNotificationSound("festival")
+                            notification.Show()
+                        End If
+                End Select
+
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -724,6 +793,18 @@ Public Class Main
 
     Private Sub MntSparePartFloatLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartFloatLogToolStripMenuItem.Click
         dbMain.FormLoader(Me, New MntSparePartLogFloat)
+    End Sub
+
+    Private Sub FacSpartPartToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacSpartPartToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacSparePart(userId, workgroupId, isAdmin), True)
+    End Sub
+
+    Private Sub FacSparePartsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacSparePartsToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacSparePartLog)
+    End Sub
+
+    Private Sub FacMchToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacMchToolStripMenuItem.Click
+        dbMain.FormLoader(Me, New FacMch(userId))
     End Sub
 
 End Class

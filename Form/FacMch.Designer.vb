@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntMch
+Partial Class FacMch
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,7 +24,7 @@ Partial Class MntMch
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntMch))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacMch))
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
         Me.txtCommon = New System.Windows.Forms.TextBox()
@@ -35,10 +35,11 @@ Partial Class MntMch
         Me.dgvList = New System.Windows.Forms.DataGridView()
         Me.ColMachineId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColMachineDescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColAreaName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColMachineSubStatusName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColGroupName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColFrequencyName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColSerialNumber = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -55,12 +56,14 @@ Partial Class MntMch
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
-        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.cmbStatus = New System.Windows.Forms.ComboBox()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -161,7 +164,7 @@ Partial Class MntMch
         Me.dgvList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvList.ColumnHeadersHeight = 25
         Me.dgvList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColAreaName, Me.ColMachineStatusName, Me.ColMachineSubStatusName, Me.ColGroupName, Me.ColFrequencyName, Me.ColSerialNumber, Me.ColIsActive})
+        Me.dgvList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColMachineId, Me.ColMachineName, Me.ColGroupName, Me.ColMachineDescription, Me.ColAreaName, Me.ColMachineStatusName, Me.ColMachineSubStatusName, Me.ColFrequencyName, Me.ColSerialNumber, Me.ColIsActive})
         Me.dgvList.Location = New System.Drawing.Point(0, 33)
         Me.dgvList.MultiSelect = False
         Me.dgvList.Name = "dgvList"
@@ -170,7 +173,7 @@ Partial Class MntMch
         Me.dgvList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dgvList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvList.Size = New System.Drawing.Size(1114, 490)
+        Me.dgvList.Size = New System.Drawing.Size(1164, 490)
         Me.dgvList.TabIndex = 553
         '
         'ColMachineId
@@ -188,6 +191,22 @@ Partial Class MntMch
         Me.ColMachineName.Name = "ColMachineName"
         Me.ColMachineName.ReadOnly = True
         Me.ColMachineName.Width = 150
+        '
+        'ColGroupName
+        '
+        Me.ColGroupName.DataPropertyName = "MachineCode"
+        Me.ColGroupName.HeaderText = "Code"
+        Me.ColGroupName.Name = "ColGroupName"
+        Me.ColGroupName.ReadOnly = True
+        Me.ColGroupName.Width = 150
+        '
+        'ColMachineDescription
+        '
+        Me.ColMachineDescription.DataPropertyName = "MachineDescription"
+        Me.ColMachineDescription.HeaderText = "Description"
+        Me.ColMachineDescription.Name = "ColMachineDescription"
+        Me.ColMachineDescription.ReadOnly = True
+        Me.ColMachineDescription.Width = 150
         '
         'ColAreaName
         '
@@ -211,14 +230,6 @@ Partial Class MntMch
         Me.ColMachineSubStatusName.Name = "ColMachineSubStatusName"
         Me.ColMachineSubStatusName.ReadOnly = True
         Me.ColMachineSubStatusName.Width = 150
-        '
-        'ColGroupName
-        '
-        Me.ColGroupName.DataPropertyName = "GroupName"
-        Me.ColGroupName.HeaderText = "Part Group"
-        Me.ColGroupName.Name = "ColGroupName"
-        Me.ColGroupName.ReadOnly = True
-        Me.ColGroupName.Width = 150
         '
         'ColFrequencyName
         '
@@ -359,6 +370,16 @@ Partial Class MntMch
         Me.btnRefresh.Text = " Refresh"
         Me.btnRefresh.ToolTipText = "Refresh list"
         '
+        'BindingNavigatorSeparator5
+        '
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'CountToolStripLabel
+        '
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
+        '
         'btnAdd
         '
         Me.btnAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -368,7 +389,7 @@ Partial Class MntMch
         Me.btnAdd.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnAdd.Hint = ""
         Me.btnAdd.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Create_16_x_16
-        Me.btnAdd.Location = New System.Drawing.Point(738, 526)
+        Me.btnAdd.Location = New System.Drawing.Point(788, 526)
         Me.btnAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -385,7 +406,7 @@ Partial Class MntMch
         Me.btnEdit.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnEdit.Hint = "Modify record"
         Me.btnEdit.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Modify_16_x_16
-        Me.btnEdit.Location = New System.Drawing.Point(832, 526)
+        Me.btnEdit.Location = New System.Drawing.Point(882, 526)
         Me.btnEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -402,7 +423,7 @@ Partial Class MntMch
         Me.btnDelete.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnDelete.Hint = "Delete the selected record"
         Me.btnDelete.Image = Global.MachineMonitoringSystem.My.Resources.Resources.Erase_16_x_16
-        Me.btnDelete.Location = New System.Drawing.Point(926, 526)
+        Me.btnDelete.Location = New System.Drawing.Point(976, 526)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
         Me.btnDelete.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -418,7 +439,7 @@ Partial Class MntMch
         Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Font = New System.Drawing.Font("Verdana", 8.5!)
         Me.btnClose.Hint = "Close"
-        Me.btnClose.Location = New System.Drawing.Point(1020, 526)
+        Me.btnClose.Location = New System.Drawing.Point(1070, 526)
         Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Scheme = PinkieControls.ButtonXP.Schemes.Blue
@@ -426,24 +447,41 @@ Partial Class MntMch
         Me.btnClose.TabIndex = 555
         Me.btnClose.Text = "Close"
         '
-        'BindingNavigatorSeparator5
+        'lblStatus
         '
-        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
-        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        Me.lblStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblStatus.Location = New System.Drawing.Point(665, 4)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblStatus.Size = New System.Drawing.Size(55, 25)
+        Me.lblStatus.TabIndex = 569
+        Me.lblStatus.Text = "Status"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'CountToolStripLabel
+        'cmbStatus
         '
-        Me.CountToolStripLabel.Name = "CountToolStripLabel"
-        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
+        Me.cmbStatus.CausesValidation = False
+        Me.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStatus.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.cmbStatus.FormattingEnabled = True
+        Me.cmbStatus.Location = New System.Drawing.Point(719, 4)
+        Me.cmbStatus.Name = "cmbStatus"
+        Me.cmbStatus.Size = New System.Drawing.Size(100, 25)
+        Me.cmbStatus.TabIndex = 570
         '
-        'MntMch
+        'FacMch
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.CausesValidation = False
-        Me.ClientSize = New System.Drawing.Size(1114, 561)
+        Me.ClientSize = New System.Drawing.Size(1164, 561)
+        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.cmbStatus)
         Me.Controls.Add(Me.pnlSearchByText)
         Me.Controls.Add(Me.pnlSearchByCmb)
         Me.Controls.Add(Me.btnAdd)
@@ -460,7 +498,7 @@ Partial Class MntMch
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntMch"
+        Me.Name = "FacMch"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
@@ -503,15 +541,18 @@ Partial Class MntMch
     Friend WithEvents btnEdit As PinkieControls.ButtonXP
     Friend WithEvents btnDelete As PinkieControls.ButtonXP
     Friend WithEvents btnClose As PinkieControls.ButtonXP
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
     Friend WithEvents ColMachineId As DataGridViewTextBoxColumn
     Friend WithEvents ColMachineName As DataGridViewTextBoxColumn
+    Friend WithEvents ColGroupName As DataGridViewTextBoxColumn
+    Friend WithEvents ColMachineDescription As DataGridViewTextBoxColumn
     Friend WithEvents ColAreaName As DataGridViewTextBoxColumn
     Friend WithEvents ColMachineStatusName As DataGridViewTextBoxColumn
     Friend WithEvents ColMachineSubStatusName As DataGridViewTextBoxColumn
-    Friend WithEvents ColGroupName As DataGridViewTextBoxColumn
     Friend WithEvents ColFrequencyName As DataGridViewTextBoxColumn
     Friend WithEvents ColSerialNumber As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
-    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
-    Friend WithEvents CountToolStripLabel As ToolStripLabel
+    Friend WithEvents lblStatus As Label
+    Friend WithEvents cmbStatus As ComboBox
 End Class

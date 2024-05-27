@@ -93,7 +93,7 @@ Public Class FacTrxConsole
         End Select
     End Sub
 
-    Private Sub MntTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacTrxConsole_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         SearchCriteria()
         TransactionStatus()
 
@@ -113,7 +113,7 @@ Public Class FacTrxConsole
         cmbStatus.SelectedValue = 7
     End Sub
 
-    Private Sub MntTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub FacTrxConsole_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F2) Then
             e.Handled = True
             btnCreate.PerformClick()
@@ -129,7 +129,7 @@ Public Class FacTrxConsole
         End If
     End Sub
 
-    Private Sub MntTrxConsole_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub FacTrxConsole_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvMachine.Dispose()
         dgvList.Dispose()
         tmrElapsedTime.Stop()
@@ -2134,7 +2134,7 @@ Public Class FacTrxConsole
                     prmRouting(4) = New SqlParameter("@ActionTaken", SqlDbType.NVarChar)
                     prmRouting(4).Value = IIf(String.IsNullOrEmpty(txtCommonTxt.Text.Trim), Nothing, txtCommonTxt.Text.Trim)
 
-                    dtTrxHeader = dbMethod.FillDataTable("RdMntTransactRdFacTransactionHeaderByRoutingStatusIdActionTakenionHeaderByRoutingStatusIdActionTaken", CommandType.StoredProcedure, prmRouting)
+                    dtTrxHeader = dbMethod.FillDataTable("RdFacTransactionHeaderByRoutingStatusIdActionTakenHeaderByRoutingStatusIdActionTaken", CommandType.StoredProcedure, prmRouting)
                     totalCount = prmRouting(2).Value
                 ElseIf cmbStatus.SelectedValue = 6 Then 'completed
                     Dim prmRouting(4) As SqlParameter

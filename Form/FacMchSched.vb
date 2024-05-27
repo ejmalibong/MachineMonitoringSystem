@@ -590,11 +590,11 @@ Public Class FacMchSched
         dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommon, "< All >", prmUser)
     End Sub
 
-    Private Sub MntMchSchedule_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub FacMchSchedule_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvList.Dispose()
     End Sub
 
-    Private Sub MntMchSchedule_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub FacMchSchedule_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F2) Then
             e.Handled = True
             btnAdd.PerformClick()
@@ -610,7 +610,7 @@ Public Class FacMchSched
         End If
     End Sub
 
-    Private Sub MntMchSchedule_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacMchSchedule_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSearchCriteria()
 
         pageIndex = 0

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MntSparePart
+Partial Class FacSparePart
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class MntSparePart
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MntSparePart))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FacSparePart))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -67,6 +67,7 @@ Partial Class MntSparePart
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnEdit = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
@@ -110,7 +111,6 @@ Partial Class MntSparePart
         Me.cmsLogs = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ReceiveIssueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FloatTransactionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -376,6 +376,11 @@ Partial Class MntSparePart
         '
         Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
         Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'CountToolStripLabel
+        '
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
         '
         'btnAdd
         '
@@ -661,7 +666,7 @@ Partial Class MntSparePart
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.ColPartName.DefaultCellStyle = DataGridViewCellStyle3
         Me.ColPartName.Frozen = True
-        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.HeaderText = "Specs"
         Me.ColPartName.Name = "ColPartName"
         Me.ColPartName.ReadOnly = True
         Me.ColPartName.Width = 300
@@ -872,12 +877,7 @@ Partial Class MntSparePart
         Me.FloatTransactionToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
         Me.FloatTransactionToolStripMenuItem.Text = "Float Transaction Logs"
         '
-        'CountToolStripLabel
-        '
-        Me.CountToolStripLabel.Name = "CountToolStripLabel"
-        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
-        '
-        'MntSparePart
+        'FacSparePart
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
@@ -911,7 +911,7 @@ Partial Class MntSparePart
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MntSparePart"
+        Me.Name = "FacSparePart"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

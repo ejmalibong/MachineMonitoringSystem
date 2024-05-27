@@ -43,19 +43,12 @@ Partial Class SecUser
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.cmbSearchCriteria = New System.Windows.Forms.ComboBox()
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
-        Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
-        Me.pnlSearchByText = New System.Windows.Forms.Panel()
-        Me.txtCommon = New System.Windows.Forms.TextBox()
-        Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
-        Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
         Me.ColUserId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColEmployeeId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -66,6 +59,15 @@ Partial Class SecUser
         Me.ColWorkgroup = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColIsAdmin = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
+        Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
+        Me.pnlSearchByText = New System.Windows.Forms.Panel()
+        Me.txtCommon = New System.Windows.Forms.TextBox()
+        Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewNullableComboBoxColumn1 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
+        Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewNullableComboBoxColumn2 = New MachineMonitoringSystem.DataGridViewNullableComboBoxColumn()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.cmbStatus = New System.Windows.Forms.ComboBox()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -153,7 +155,7 @@ Partial Class SecUser
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.CountToolStripLabel})
         Me.bindingNavigator.Location = New System.Drawing.Point(4, 480)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -161,7 +163,7 @@ Partial Class SecUser
         Me.bindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
-        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(297, 25)
         Me.bindingNavigator.TabIndex = 543
         '
         'txtTotalPageNumber
@@ -258,6 +260,16 @@ Partial Class SecUser
         Me.btnRefresh.Text = " Refresh"
         Me.btnRefresh.ToolTipText = "Refresh list"
         '
+        'BindingNavigatorSeparator5
+        '
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'CountToolStripLabel
+        '
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
+        '
         'cmbSearchCriteria
         '
         Me.cmbSearchCriteria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
@@ -329,88 +341,6 @@ Partial Class SecUser
         Me.dgvList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgvList.Size = New System.Drawing.Size(1084, 440)
         Me.dgvList.TabIndex = 549
-        '
-        'pnlSearchByCmb
-        '
-        Me.pnlSearchByCmb.Controls.Add(Me.cmbCommon)
-        Me.pnlSearchByCmb.Location = New System.Drawing.Point(164, 3)
-        Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
-        Me.pnlSearchByCmb.Size = New System.Drawing.Size(350, 27)
-        Me.pnlSearchByCmb.TabIndex = 545
-        '
-        'cmbCommon
-        '
-        Me.cmbCommon.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.cmbCommon.FormattingEnabled = True
-        Me.cmbCommon.Location = New System.Drawing.Point(3, 2)
-        Me.cmbCommon.Name = "cmbCommon"
-        Me.cmbCommon.Size = New System.Drawing.Size(344, 23)
-        Me.cmbCommon.TabIndex = 546
-        '
-        'pnlSearchByText
-        '
-        Me.pnlSearchByText.Controls.Add(Me.txtCommon)
-        Me.pnlSearchByText.Location = New System.Drawing.Point(164, 3)
-        Me.pnlSearchByText.Name = "pnlSearchByText"
-        Me.pnlSearchByText.Size = New System.Drawing.Size(350, 27)
-        Me.pnlSearchByText.TabIndex = 547
-        '
-        'txtCommon
-        '
-        Me.txtCommon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txtCommon.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCommon.Location = New System.Drawing.Point(3, 2)
-        Me.txtCommon.Name = "txtCommon"
-        Me.txtCommon.Size = New System.Drawing.Size(344, 23)
-        Me.txtCommon.TabIndex = 0
-        '
-        'DataGridViewComboBoxColumn1
-        '
-        Me.DataGridViewComboBoxColumn1.DataPropertyName = "AreaId"
-        Me.DataGridViewComboBoxColumn1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
-        Me.DataGridViewComboBoxColumn1.HeaderText = "Area"
-        Me.DataGridViewComboBoxColumn1.Name = "DataGridViewComboBoxColumn1"
-        Me.DataGridViewComboBoxColumn1.ReadOnly = True
-        Me.DataGridViewComboBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.DataGridViewComboBoxColumn1.Width = 120
-        '
-        'DataGridViewComboBoxColumn2
-        '
-        Me.DataGridViewComboBoxColumn2.DataPropertyName = "MachineStatusId"
-        Me.DataGridViewComboBoxColumn2.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
-        Me.DataGridViewComboBoxColumn2.HeaderText = "Machine Status"
-        Me.DataGridViewComboBoxColumn2.Name = "DataGridViewComboBoxColumn2"
-        Me.DataGridViewComboBoxColumn2.ReadOnly = True
-        Me.DataGridViewComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.DataGridViewComboBoxColumn2.Width = 120
-        '
-        'DataGridViewNullableComboBoxColumn1
-        '
-        Me.DataGridViewNullableComboBoxColumn1.DataPropertyName = "GroupId"
-        Me.DataGridViewNullableComboBoxColumn1.HeaderText = "Part Group"
-        Me.DataGridViewNullableComboBoxColumn1.Name = "DataGridViewNullableComboBoxColumn1"
-        Me.DataGridViewNullableComboBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewNullableComboBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.DataGridViewNullableComboBoxColumn1.Width = 150
-        '
-        'DataGridViewComboBoxColumn3
-        '
-        Me.DataGridViewComboBoxColumn3.DataPropertyName = "MachineSubStatusId"
-        Me.DataGridViewComboBoxColumn3.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
-        Me.DataGridViewComboBoxColumn3.HeaderText = ""
-        Me.DataGridViewComboBoxColumn3.Name = "DataGridViewComboBoxColumn3"
-        Me.DataGridViewComboBoxColumn3.ReadOnly = True
-        Me.DataGridViewComboBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.DataGridViewComboBoxColumn3.Width = 120
-        '
-        'DataGridViewNullableComboBoxColumn2
-        '
-        Me.DataGridViewNullableComboBoxColumn2.DataPropertyName = "GroupId"
-        Me.DataGridViewNullableComboBoxColumn2.HeaderText = "Part Group"
-        Me.DataGridViewNullableComboBoxColumn2.Name = "DataGridViewNullableComboBoxColumn2"
-        Me.DataGridViewNullableComboBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewNullableComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.DataGridViewNullableComboBoxColumn2.Width = 150
         '
         'ColUserId
         '
@@ -497,6 +427,88 @@ Partial Class SecUser
         Me.ColIsActive.ReadOnly = True
         Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.ColIsActive.Width = 55
+        '
+        'pnlSearchByCmb
+        '
+        Me.pnlSearchByCmb.Controls.Add(Me.cmbCommon)
+        Me.pnlSearchByCmb.Location = New System.Drawing.Point(164, 3)
+        Me.pnlSearchByCmb.Name = "pnlSearchByCmb"
+        Me.pnlSearchByCmb.Size = New System.Drawing.Size(350, 27)
+        Me.pnlSearchByCmb.TabIndex = 545
+        '
+        'cmbCommon
+        '
+        Me.cmbCommon.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbCommon.FormattingEnabled = True
+        Me.cmbCommon.Location = New System.Drawing.Point(3, 2)
+        Me.cmbCommon.Name = "cmbCommon"
+        Me.cmbCommon.Size = New System.Drawing.Size(344, 23)
+        Me.cmbCommon.TabIndex = 546
+        '
+        'pnlSearchByText
+        '
+        Me.pnlSearchByText.Controls.Add(Me.txtCommon)
+        Me.pnlSearchByText.Location = New System.Drawing.Point(164, 3)
+        Me.pnlSearchByText.Name = "pnlSearchByText"
+        Me.pnlSearchByText.Size = New System.Drawing.Size(350, 27)
+        Me.pnlSearchByText.TabIndex = 547
+        '
+        'txtCommon
+        '
+        Me.txtCommon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.txtCommon.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCommon.Location = New System.Drawing.Point(3, 2)
+        Me.txtCommon.Name = "txtCommon"
+        Me.txtCommon.Size = New System.Drawing.Size(344, 23)
+        Me.txtCommon.TabIndex = 0
+        '
+        'DataGridViewComboBoxColumn1
+        '
+        Me.DataGridViewComboBoxColumn1.DataPropertyName = "AreaId"
+        Me.DataGridViewComboBoxColumn1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
+        Me.DataGridViewComboBoxColumn1.HeaderText = "Area"
+        Me.DataGridViewComboBoxColumn1.Name = "DataGridViewComboBoxColumn1"
+        Me.DataGridViewComboBoxColumn1.ReadOnly = True
+        Me.DataGridViewComboBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DataGridViewComboBoxColumn1.Width = 120
+        '
+        'DataGridViewComboBoxColumn2
+        '
+        Me.DataGridViewComboBoxColumn2.DataPropertyName = "MachineStatusId"
+        Me.DataGridViewComboBoxColumn2.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
+        Me.DataGridViewComboBoxColumn2.HeaderText = "Machine Status"
+        Me.DataGridViewComboBoxColumn2.Name = "DataGridViewComboBoxColumn2"
+        Me.DataGridViewComboBoxColumn2.ReadOnly = True
+        Me.DataGridViewComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DataGridViewComboBoxColumn2.Width = 120
+        '
+        'DataGridViewNullableComboBoxColumn1
+        '
+        Me.DataGridViewNullableComboBoxColumn1.DataPropertyName = "GroupId"
+        Me.DataGridViewNullableComboBoxColumn1.HeaderText = "Part Group"
+        Me.DataGridViewNullableComboBoxColumn1.Name = "DataGridViewNullableComboBoxColumn1"
+        Me.DataGridViewNullableComboBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewNullableComboBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DataGridViewNullableComboBoxColumn1.Width = 150
+        '
+        'DataGridViewComboBoxColumn3
+        '
+        Me.DataGridViewComboBoxColumn3.DataPropertyName = "MachineSubStatusId"
+        Me.DataGridViewComboBoxColumn3.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.[Nothing]
+        Me.DataGridViewComboBoxColumn3.HeaderText = ""
+        Me.DataGridViewComboBoxColumn3.Name = "DataGridViewComboBoxColumn3"
+        Me.DataGridViewComboBoxColumn3.ReadOnly = True
+        Me.DataGridViewComboBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DataGridViewComboBoxColumn3.Width = 120
+        '
+        'DataGridViewNullableComboBoxColumn2
+        '
+        Me.DataGridViewNullableComboBoxColumn2.DataPropertyName = "GroupId"
+        Me.DataGridViewNullableComboBoxColumn2.HeaderText = "Part Group"
+        Me.DataGridViewNullableComboBoxColumn2.Name = "DataGridViewNullableComboBoxColumn2"
+        Me.DataGridViewNullableComboBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewNullableComboBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DataGridViewNullableComboBoxColumn2.Width = 150
         '
         'lblStatus
         '
@@ -608,4 +620,6 @@ Partial Class SecUser
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
     Friend WithEvents lblStatus As Label
     Friend WithEvents cmbStatus As ComboBox
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
 End Class

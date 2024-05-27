@@ -1517,7 +1517,7 @@ Public Class MntTrxDetailOth
                         Dim prmPrDetailHeaderFloat(0) As SqlParameter
                         prmPrDetailHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
                         prmPrDetailHeaderFloat(0).Value = prmPrDetailFloat(0).Value
-                        dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderlFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
+                        dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
                     Next
                     Me.bsTrxPartDetail.EndEdit()
                     adpTrxPartDetail.Update(dtTrxPartDetail)
@@ -2505,7 +2505,7 @@ Public Class MntTrxDetailOth
                             Dim prmPrDetailHeaderFloat(0) As SqlParameter
                             prmPrDetailHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
                             prmPrDetailHeaderFloat(0).Value = prmPrDetailFloat(0).Value
-                            dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderlFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
+                            dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmPrDetailHeaderFloat)
 
                             Dim prmIss(1) As SqlParameter
                             prmIss(0) = New SqlParameter("@PartId", SqlDbType.Int)

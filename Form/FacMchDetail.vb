@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 
-Public Class MntMchDetail
+Public Class FacMchDetail
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
@@ -10,6 +10,7 @@ Public Class MntMchDetail
 
     Private machineId As Integer = 0
     Private orgMachineName As String = String.Empty
+    Private orgMachineCode As String = String.Empty
 
     Public Sub New(Optional _machineId As Integer = 0)
 
@@ -21,6 +22,8 @@ Public Class MntMchDetail
 
         LoadArea()
         LoadPartGroup()
+        LoadFloor()
+        LoadBrand()
         LoadFrequency()
     End Sub
 
@@ -37,7 +40,7 @@ Public Class MntMchDetail
                 prmCnt(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmCnt(0).Value = machineId
 
-                Dim count As Integer = dbMethod.ExecuteScalar("CntMntMachineByTrx", CommandType.StoredProcedure, prmCnt)
+                Dim count As Integer = dbMethod.ExecuteScalar("CntFacMachineByTrx", CommandType.StoredProcedure, prmCnt)
 
                 If count > 0 Then
                     MessageBox.Show("This machine contains activities. Set to inactive instead.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -50,7 +53,7 @@ Public Class MntMchDetail
                     prmDel(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                     prmDel(0).Value = machineId
 
-                    dbMethod.ExecuteNonQuery("DelMntMachine", CommandType.StoredProcedure, prmDel)
+                    dbMethod.ExecuteNonQuery("DelFacMachine", CommandType.StoredProcedure, prmDel)
 
                     Me.DialogResult = DialogResult.OK
                 End If
@@ -68,15 +71,15 @@ Public Class MntMchDetail
                 Return
             End If
 
-            If cmbArea.SelectedValue = 0 Then
-                MessageBox.Show("Please select an area.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                cmbArea.Focus()
+            If String.IsNullOrEmpty(txtMachineCode.Text.Trim) Then
+                MessageBox.Show("Machine code is required.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                txtMachineCode.Focus()
                 Return
             End If
 
-            If cmbPartGroup.SelectedValue = 0 Then
-                MessageBox.Show("Please select a part group.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                cmbPartGroup.Focus()
+            If cmbArea.SelectedValue = 0 Then
+                MessageBox.Show("Please select an area.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                cmbArea.Focus()
                 Return
             End If
 
@@ -93,27 +96,41 @@ Public Class MntMchDetail
                     Return
                 End If
 
-                Dim prmMch(8) As SqlParameter
+                If IsCodeExist(txtMachineCode.Text.Trim) = True Then
+                    MessageBox.Show("Machine code is already exists.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    txtMachineCode.Focus()
+                    Return
+                End If
+
+                Dim prmMch(12) As SqlParameter
                 prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmMch(0).Direction = ParameterDirection.Output
                 prmMch(1) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
                 prmMch(1).Value = txtMachineName.Text.Trim
-                prmMch(2) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmMch(2).Value = cmbArea.SelectedValue
-                prmMch(3) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
-                prmMch(3).Value = 1
-                prmMch(4) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
-                prmMch(4).Value = 1
-                prmMch(5) = New SqlParameter("@GroupId", SqlDbType.Int)
-                prmMch(5).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
-                prmMch(6) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
-                prmMch(6).Value = cmbFrequency.SelectedValue
-                prmMch(7) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
-                prmMch(7).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
-                prmMch(8) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmMch(8).Value = IIf(rdActive.Checked = True, True, False)
+                prmMch(2) = New SqlParameter("@MachineCode", SqlDbType.NVarChar)
+                prmMch(2).Value = txtMachineCode.Text.Trim
+                prmMch(3) = New SqlParameter("@MachineDescription", SqlDbType.NVarChar)
+                prmMch(3).Value = IIf(String.IsNullOrWhiteSpace(txtMachineDescription.Text.Trim), Nothing, txtMachineDescription.Text.Trim)
+                prmMch(4) = New SqlParameter("@AreaId", SqlDbType.Int)
+                prmMch(4).Value = cmbArea.SelectedValue
+                prmMch(5) = New SqlParameter("@FloorId", SqlDbType.Int)
+                prmMch(5).Value = IIf(cmbFloor.SelectedValue = 0, Nothing, cmbFloor.SelectedValue)
+                prmMch(6) = New SqlParameter("@BrandId", SqlDbType.Int)
+                prmMch(6).Value = IIf(cmbBrand.SelectedValue = 0, Nothing, cmbBrand.SelectedValue)
+                prmMch(7) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
+                prmMch(7).Value = 1
+                prmMch(8) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
+                prmMch(8).Value = 1
+                prmMch(9) = New SqlParameter("@GroupId", SqlDbType.Int)
+                prmMch(9).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
+                prmMch(10) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
+                prmMch(10).Value = cmbFrequency.SelectedValue
+                prmMch(11) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
+                prmMch(11).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
+                prmMch(12) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmMch(12).Value = IIf(rdActive.Checked = True, True, False)
 
-                dbMethod.ExecuteNonQuery("InsMntMachine", CommandType.StoredProcedure, prmMch)
+                dbMethod.ExecuteNonQuery("InsFacMachine", CommandType.StoredProcedure, prmMch)
                 pKey = prmMch(0).Value
 
             Else 'old record
@@ -125,23 +142,39 @@ Public Class MntMchDetail
                     End If
                 End If
 
-                Dim prmMch(6) As SqlParameter
+                If Not txtMachineCode.Text.Trim.Equals(orgMachineCode) Then
+                    If IsCodeExist(txtMachineCode.Text.Trim) = True Then
+                        MessageBox.Show("Machine code is already exists.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        txtMachineCode.Focus()
+                        Return
+                    End If
+                End If
+
+                Dim prmMch(10) As SqlParameter
                 prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmMch(0).Value = machineId
                 prmMch(1) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
                 prmMch(1).Value = txtMachineName.Text.Trim
-                prmMch(2) = New SqlParameter("@AreaId", SqlDbType.Int)
-                prmMch(2).Value = cmbArea.SelectedValue
-                prmMch(3) = New SqlParameter("@GroupId", SqlDbType.Int)
-                prmMch(3).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
-                prmMch(4) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
-                prmMch(4).Value = cmbFrequency.SelectedValue
-                prmMch(5) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
-                prmMch(5).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
-                prmMch(6) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmMch(6).Value = IIf(rdActive.Checked = True, True, False)
+                prmMch(2) = New SqlParameter("@MachineCode", SqlDbType.NVarChar)
+                prmMch(2).Value = txtMachineCode.Text.Trim
+                prmMch(3) = New SqlParameter("@MachineDescription", SqlDbType.NVarChar)
+                prmMch(3).Value = IIf(String.IsNullOrWhiteSpace(txtMachineDescription.Text.Trim), Nothing, txtMachineDescription.Text.Trim)
+                prmMch(4) = New SqlParameter("@AreaId", SqlDbType.Int)
+                prmMch(4).Value = cmbArea.SelectedValue
+                prmMch(5) = New SqlParameter("@FloorId", SqlDbType.Int)
+                prmMch(5).Value = IIf(cmbFloor.SelectedValue = 0, Nothing, cmbFloor.SelectedValue)
+                prmMch(6) = New SqlParameter("@BrandId", SqlDbType.Int)
+                prmMch(6).Value = IIf(cmbBrand.SelectedValue = 0, Nothing, cmbBrand.SelectedValue)
+                prmMch(7) = New SqlParameter("@GroupId", SqlDbType.Int)
+                prmMch(7).Value = IIf(cmbPartGroup.SelectedValue = 0, Nothing, cmbPartGroup.SelectedValue)
+                prmMch(8) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
+                prmMch(8).Value = cmbFrequency.SelectedValue
+                prmMch(9) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
+                prmMch(9).Value = IIf(String.IsNullOrWhiteSpace(txtSerialNumber.Text.Trim), Nothing, txtSerialNumber.Text.Trim)
+                prmMch(10) = New SqlParameter("@IsActive", SqlDbType.Bit)
+                prmMch(10).Value = IIf(rdActive.Checked = True, True, False)
 
-                dbMethod.ExecuteNonQuery("UpdMntMachine", CommandType.StoredProcedure, prmMch)
+                dbMethod.ExecuteNonQuery("UpdFacMachine", CommandType.StoredProcedure, prmMch)
                 pKey = machineId
             End If
 
@@ -178,6 +211,24 @@ Public Class MntMchDetail
         End Try
     End Sub
 
+    Private Sub cmbFloor_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbFloor.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbBrand_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs)
+        Try
+            e.Cancel = sender.FindStringExact(sender.text) < 0 Or String.IsNullOrEmpty(cmbBrand.Text)
+            If e.Cancel Then Beep()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     Private Function GetMachineStatus(machineStatusId As Integer) As String
         Dim status As String = String.Empty
 
@@ -186,7 +237,7 @@ Public Class MntMchDetail
             prm(0) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
             prm(0).Value = machineStatusId
 
-            Dim rdr As IDataReader = dbMethod.ExecuteReader("RdMntMachineStatus", CommandType.StoredProcedure, prm)
+            Dim rdr As IDataReader = dbMethod.ExecuteReader("RdFacMachineStatus", CommandType.StoredProcedure, prm)
 
             While rdr.Read
                 status = rdr("MachineStatusName").ToString
@@ -207,7 +258,7 @@ Public Class MntMchDetail
             prm(0) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
             prm(0).Value = machineSubStatusId
 
-            Dim rdr As IDataReader = dbMethod.ExecuteReader("RdMntMachineSubStatus", CommandType.StoredProcedure, prm)
+            Dim rdr As IDataReader = dbMethod.ExecuteReader("RdFacMachineSubStatus", CommandType.StoredProcedure, prm)
 
             While rdr.Read
                 status = rdr("MachineSubStatusName").ToString
@@ -228,7 +279,27 @@ Public Class MntMchDetail
             prmCnt(0) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
             prmCnt(0).Value = machineName
 
-            count = dbMethod.ExecuteScalar("SELECT COUNT(MachineId) FROM dbo.MntMachine WHERE TRIM(MachineName) = @MachineName", CommandType.Text, prmCnt)
+            count = dbMethod.ExecuteScalar("SELECT COUNT(MachineId) FROM dbo.FacMachine WHERE TRIM(MachineName) = @MachineName", CommandType.Text, prmCnt)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        If count > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Private Function IsCodeExist(machineCode As String) As Boolean
+        Dim count As Integer = 0
+
+        Try
+            Dim prmCnt(0) As SqlParameter
+            prmCnt(0) = New SqlParameter("@MachineCode", SqlDbType.NVarChar)
+            prmCnt(0).Value = machineCode
+
+            count = dbMethod.ExecuteScalar("SELECT COUNT(MachineId) FROM dbo.FacMachine WHERE TRIM(MachineCode) = @MachineCode", CommandType.Text, prmCnt)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -244,7 +315,7 @@ Public Class MntMchDetail
         Try
             cmbArea.DisplayMember = "AreaName"
             cmbArea.ValueMember = "AreaId"
-            dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< Select Area >")
+            dbMethod.FillCmbWithCaption("RdFacArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbArea, "< Select Area >")
 
             AddHandler cmbArea.Validating, AddressOf cmbArea_Validating
         Catch ex As Exception
@@ -268,15 +339,39 @@ Public Class MntMchDetail
         Try
             cmbPartGroup.DisplayMember = "GroupName"
             cmbPartGroup.ValueMember = "GroupId"
-            dbMethod.FillCmbWithCaption("RdMntMachinePartGroup", CommandType.StoredProcedure, "GroupId", "GroupName", cmbPartGroup, "< N/A >")
+            dbMethod.FillCmbWithCaption("RdFacMachinePartGroup", CommandType.StoredProcedure, "GroupId", "GroupName", cmbPartGroup, "< N/A >")
 
-            AddHandler cmbFrequency.Validating, AddressOf cmbPartGroup_Validating
+            AddHandler cmbPartGroup.Validating, AddressOf cmbPartGroup_Validating
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub MntMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub LoadFloor()
+        Try
+            cmbFloor.DisplayMember = "ShortName"
+            cmbFloor.ValueMember = "FloorId"
+            dbMethod.FillCmbWithCaption("RdFacFloor", CommandType.StoredProcedure, "FloorId", "ShortName", cmbFloor, "< N/A >")
+
+            AddHandler cmbFloor.Validating, AddressOf cmbFloor_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadBrand()
+        Try
+            cmbBrand.DisplayMember = "BrandName"
+            cmbBrand.ValueMember = "BrandId"
+            dbMethod.FillCmbWithCaption("RdFacBrand", CommandType.StoredProcedure, "BrandId", "BrandName", cmbBrand, "< N/A >")
+
+            AddHandler cmbBrand.Validating, AddressOf cmbBrand_Validating
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub FacMchSchedDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F8) Then
             e.Handled = True
             btnDelete.PerformClick()
@@ -286,56 +381,69 @@ Public Class MntMchDetail
         End If
     End Sub
 
-    Private Sub MntMchSchedDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If machineId = 0 Then
-            Me.Text = "New Machine Entry"
+    Private Sub FacMchSchedDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Try
+            If machineId = 0 Then
+                Me.Text = "New Machine Entry"
 
-            txtMachineName.Clear()
-            txtSerialNumber.Clear()
-            cmbArea.SelectedValue = 0
-            cmbPartGroup.SelectedValue = 0
-            cmbFrequency.SelectedValue = 0
-            rdActive.Checked = True
+                txtMachineName.Clear()
+                txtMachineCode.Clear()
+                txtMachineDescription.Clear()
+                txtSerialNumber.Clear()
+                cmbArea.SelectedValue = 0
+                cmbPartGroup.SelectedValue = 0
+                cmbFrequency.SelectedValue = 0
+                cmbFloor.SelectedValue = 0
+                cmbBrand.SelectedValue = 0
+                rdActive.Checked = True
 
-            txtMachineStatus.Text = GetMachineStatus(1)
-            txtMachineSubStatus.Text = GetMachineSubStatus(1)
-        Else
-            Me.Text = "Machine No. " & machineId
+                txtMachineStatus.Text = GetMachineStatus(1)
+                txtMachineSubStatus.Text = GetMachineSubStatus(1)
+            Else
+                Me.Text = "Machine No. " & machineId
 
-            Dim prmMch(0) As SqlParameter
-            prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
-            prmMch(0).Value = machineId
-            dtMachine = dbMethod.FillDataTable("RdMntMachine", CommandType.StoredProcedure, prmMch)
+                Dim prmMch(0) As SqlParameter
+                prmMch(0) = New SqlParameter("@MachineId", SqlDbType.Int)
+                prmMch(0).Value = machineId
+                dtMachine = dbMethod.FillDataTable("RdFacMachine", CommandType.StoredProcedure, prmMch)
 
-            For Each row As DataRow In dtMachine.Rows
-                txtMachineName.Text = row("MachineName").ToString.Trim
-                orgMachineName = row("MachineName").ToString.Trim
-                cmbArea.SelectedValue = row("AreaId")
+                For Each row As DataRow In dtMachine.Rows
+                    txtMachineName.Text = row("MachineName").ToString.Trim
+                    orgMachineName = row("MachineName").ToString.Trim
 
-                If row("GroupId") Is DBNull.Value Then
-                    cmbPartGroup.SelectedValue = 0
-                Else
-                    cmbPartGroup.SelectedValue = row("GroupId")
-                End If
+                    txtMachineCode.Text = row("MachineCode").ToString.Trim
+                    orgMachineCode = row("MachineCode").ToString.Trim
 
-                cmbFrequency.SelectedValue = row("PmFrequencyId")
-                txtMachineStatus.Text = GetMachineStatus(row("MachineStatusId"))
-                txtMachineSubStatus.Text = GetMachineSubStatus(row("MachineSubStatusId"))
+                    txtMachineDescription.Text = row("MachineDescription").ToString.Trim
+                    cmbArea.SelectedValue = row("AreaId")
 
-                If Not row("SerialNumber") Is DBNull.Value Then
-                    txtSerialNumber.Text = row("SerialNumber").ToString.Trim
-                End If
+                    If row("GroupId") Is DBNull.Value Then
+                        cmbPartGroup.SelectedValue = 0
+                    Else
+                        cmbPartGroup.SelectedValue = row("GroupId")
+                    End If
 
-                If row("IsActive") = True Then
-                    rdActive.Checked = True
-                Else
-                    rdInactive.Checked = True
-                End If
-            Next
-        End If
+                    cmbFrequency.SelectedValue = row("PmFrequencyId")
+                    txtMachineStatus.Text = GetMachineStatus(row("MachineStatusId"))
+                    txtMachineSubStatus.Text = GetMachineSubStatus(row("MachineSubStatusId"))
 
-        Me.ActiveControl = txtMachineName
-        txtMachineName.Select(txtMachineName.Text.Trim.Length, 0)
+                    If Not row("SerialNumber") Is DBNull.Value Then
+                        txtSerialNumber.Text = row("SerialNumber").ToString.Trim
+                    End If
+
+                    If row("IsActive") = True Then
+                        rdActive.Checked = True
+                    Else
+                        rdInactive.Checked = True
+                    End If
+                Next
+            End If
+
+            Me.ActiveControl = txtMachineName
+            txtMachineName.Select(txtMachineName.Text.Trim.Length, 0)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub ResetForm()

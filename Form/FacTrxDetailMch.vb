@@ -3264,7 +3264,7 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
 
-    Private Sub frmMntTrxDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+    Private Sub frmFacTrxDetail_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If fromPmCalendar = False Then
             If e.KeyCode.Equals(Keys.F8) Then 'delete
                 e.Handled = True
@@ -3280,7 +3280,7 @@ Public Class FacTrxDetailMch
         End If
     End Sub
 
-    Private Sub frmMntTrxDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub frmFacTrxDetail_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             If trxId = 0 Then
                 Me.Text = "New Activity Entry"
@@ -3595,7 +3595,7 @@ Public Class FacTrxDetailMch
         End Try
     End Sub
 
-    Private Sub frmMntTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub frmFacTrxDetailMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         'impersonation.UndoImpersonateUser()
     End Sub
 

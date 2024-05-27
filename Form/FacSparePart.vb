@@ -2,8 +2,8 @@
 Imports BlackCoffeeLibrary
 Imports ClosedXML.Excel
 
-Public Class MntSparePartInv
-    Public bsPartInventory As New BindingSource
+Public Class FacSparePart
+    Public bsSparePart As New BindingSource
     Private accessLevel As New AccessLevel
     Private accessLevelId As Integer = 0
 
@@ -13,15 +13,20 @@ Public Class MntSparePartInv
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
     Private dicSortCriteria As New Dictionary(Of String, String)
+    Private dicStockStatus As New Dictionary(Of String, Integer)
+    Private dicStatus As New Dictionary(Of String, Integer)
     Private dtSparePart As New DataTable
 
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
 
     Private isAdmin As Integer = 0
-    Private isFilterByYearId As Boolean = False
-    Private isFilterByMonthId As Boolean = False
-    Private isFilterByCreatedBy As Boolean = False
+    Private isFilterByItemTypeId As Boolean = False
+    Private isFilterByLocationId As Boolean = False
+    Private isFilterByMachineTypeId As Boolean = False
+    Private isFilterByPartName As Boolean = False
+    Private isFilterByPartNo As Boolean = False
+    Private isFilterByStockStatus As Boolean = False
 
     Private pageCount As Integer
     Private pageIndex As Integer
@@ -29,6 +34,7 @@ Public Class MntSparePartInv
     Private totalCount As Integer
     Private userId As Integer = 0
     Private workgroupId As Integer = 0
+
     Public Sub New(_userId As Integer, _workgroupId As Integer, _isAdmin As Boolean)
 
         ' This call is required by the designer.
@@ -41,44 +47,28 @@ Public Class MntSparePartInv
         workgroupId = _workgroupId
         isAdmin = _isAdmin
 
-        'accessLevelId = accessLevel.GetAccessLevel(workgroupId)
+        Select Case workgroupId
+            Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
+                accessLevelId = 1
+            Case 36 'am
+                accessLevelId = 2
+            Case 8 'engr
+                accessLevelId = 3
+        End Select
 
-        'Select Case workgroupId
-        '    Case 1, 2, 3 Or isAdmin 'sys admin, sr mngr, mngr
-        '        accessLevelId = 1
-        '    Case 35, 40 'mngr, asst mngr
-        '        accessLevelId = 2
-        '    Case 29, 30 'sv, asv
-        '        accessLevelId = 3
-        '    Case 5 'sr tech
-        '        accessLevelId = 4
-        '    Case 41, 42, 43, 44
-        '        accessLevelId = 10
-        '        btnIssueStock.Enabled = False
-        '        btnReceiveStock.Enabled = False
-        '        btnAdd.Enabled = False
-        '        btnEdit.Enabled = False
-        '        btnDelete.Enabled = False
-        '    Case Else
-        '        accessLevelId = 99
-        'End Select
+        'uncomment to use peso sign in currency columns
+        'Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.Format = "C"
+        'Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-PH")
 
-        ''uncomment to use peso sign in currency columns
-        ''Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.Format = "C"
-        ''Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-PH")
-
+        Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.Format = "N"
+        Me.dgvList.Columns("ColUnitPrice").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-US")
         Me.dgvList.Columns("ColActualStockAmount").DefaultCellStyle.Format = "N"
         Me.dgvList.Columns("ColActualStockAmount").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-US")
-        Me.dgvList.Columns("ColSystemStockAmount").DefaultCellStyle.Format = "N"
-        Me.dgvList.Columns("ColSystemStockAmount").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-US")
-        Me.dgvList.Columns("ColDiscrepancyAmount").DefaultCellStyle.Format = "N"
-        Me.dgvList.Columns("ColDiscrepancyAmount").DefaultCellStyle.FormatProvider = Globalization.CultureInfo.GetCultureInfo("en-US")
     End Sub
 
     Public Sub Reload()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf GetScrollingIndex))
-        pageIndex = 0
-        LoadInventory()
+        LoadPart()
         If dgvList IsNot Nothing AndAlso dgvList.CurrentRow IsNot Nothing Then Me.Invoke(New Action(AddressOf SetScrollingIndex))
     End Sub
 
@@ -86,7 +76,7 @@ Public Class MntSparePartInv
         Try
             Dim dt As New DataTable
 
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart", CommandType.Text)
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwFacSparePart", CommandType.Text)
 
             Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
             Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
@@ -110,7 +100,7 @@ Public Class MntSparePartInv
         Try
             Dim dt As New DataTable
 
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= MinStock", CommandType.Text)
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwFacSparePart WHERE ActualStock <= MinStock AND IsActive = 1", CommandType.Text)
 
             Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
             Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
@@ -134,7 +124,7 @@ Public Class MntSparePartInv
         Try
             Dim dt As New DataTable
 
-            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwMntSparePart WHERE ActualStock <= OrderingPoint", CommandType.Text)
+            dt = dbMethod.FillDataTable("SELECT * FROM dbo.VwFacSparePart WHERE ActualStock <= OrderingPoint AND IsActive = 1", CommandType.Text)
 
             Dim folderPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) & "\"
             Dim fileName As String = folderPath & Convert.ToString(CDate(dbMethod.GetServerDate).Date.ToString("yyyyMMdd") & " Spare Parts Inventory.xlsx")
@@ -155,12 +145,12 @@ Public Class MntSparePartInv
     End Sub
     Private Sub BindingNavigatorMoveFirstItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveFirstItem.Click
         pageIndex = 0
-        LoadInventory()
+        LoadPart()
     End Sub
 
     Private Sub BindingNavigatorMoveLastItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveLastItem.Click
         pageIndex = pageCount - 1
-        LoadInventory()
+        LoadPart()
     End Sub
 
     Private Sub BindingNavigatorMoveNextItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMoveNextItem.Click
@@ -169,7 +159,7 @@ Public Class MntSparePartInv
             pageIndex = pageCount - 1
         End If
 
-        LoadInventory()
+        LoadPart()
     End Sub
 
     Private Sub BindingNavigatorMovePreviousItem_Click(sender As Object, e As EventArgs) Handles BindingNavigatorMovePreviousItem.Click
@@ -178,15 +168,20 @@ Public Class MntSparePartInv
             pageIndex = 0
         End If
 
-        LoadInventory()
+        LoadPart()
     End Sub
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Try
-            Using frm As New MntSparePartInvDetail(userId)
+            Using frm As New FacSparePartDetail(userId, workgroupId, isAdmin)
                 If frm.ShowDialog(Me) = DialogResult.OK Then
                     Reload()
-                    'bsSparePart.Position = bsSparePart.Find("PartId", frm.pKey)
+
+                    cmbSearchCriteria.SelectedValue = 1
+                    txtCommon.Text = frm.partNo
+                    btnSearch.PerformClick()
+
+                    bsSparePart.Position = bsSparePart.Find("PartNo", frm.partNo)
                 End If
             End Using
         Catch ex As Exception
@@ -200,21 +195,20 @@ Public Class MntSparePartInv
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
         Try
-
             'allow delete function from senior technician and above only
-            If accessLevelId >= CInt(4) Then 'technician and below)
+            If Not (userId = 5 Or userId = 17 Or userId = 2 Or userId = 21) Then
                 MessageBox.Show("You do not have permission to delete a record.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End If
 
             If Me.dgvList.Rows.Count > 0 Then
-                Dim partId As Integer = CType(Me.bsPartInventory.Current, DataRowView).Item("PartId")
+                Dim partId As Integer = CType(Me.bsSparePart.Current, DataRowView).Item("PartId")
 
                 Dim prmCnt(0) As SqlParameter
                 prmCnt(0) = New SqlParameter("@PartId", SqlDbType.Int)
                 prmCnt(0).Value = partId
 
-                Dim count As Integer = dbMethod.ExecuteScalar("CntMntSparePartByPartId", CommandType.StoredProcedure, prmCnt)
+                Dim count As Integer = dbMethod.ExecuteScalar("CntFacSparePartByPartId", CommandType.StoredProcedure, prmCnt)
 
                 If count > 0 Then
                     MessageBox.Show("This item contains records. Set to inactive instead.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -227,7 +221,7 @@ Public Class MntSparePartInv
                     prmDel(0) = New SqlParameter("@PartId", SqlDbType.Int)
                     prmDel(0).Value = partId
 
-                    dbMethod.ExecuteNonQuery("DelMntSparePart", CommandType.StoredProcedure, prmDel)
+                    dbMethod.ExecuteNonQuery("DelFacSparePart", CommandType.StoredProcedure, prmDel)
                 End If
 
                 btnRefresh.PerformClick()
@@ -240,11 +234,12 @@ Public Class MntSparePartInv
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         Try
             If Me.dgvList.Rows.Count > 0 Then
-                Dim recordId As Integer = CType(Me.bsPartInventory.Current, DataRowView).Item("RecordId")
+                Dim partId As Integer = CType(Me.bsSparePart.Current, DataRowView).Item("PartId")
 
-                Using frm As New MntSparePartInvDetail(userId, recordId)
+                Using frm As New FacSparePartDetail(userId, workgroupId, isAdmin, partId)
                     If frm.ShowDialog(Me) = DialogResult.OK Then
                         Reload()
+                        bsSparePart.Position = bsSparePart.Find("PartId", frm.pKey)
                     End If
                 End Using
             End If
@@ -257,9 +252,9 @@ Public Class MntSparePartInv
         Go()
     End Sub
 
-    Private Sub btnIssueStock_Click(sender As Object, e As EventArgs)
+    Private Sub btnIssueStock_Click(sender As Object, e As EventArgs) Handles btnIssueStock.Click
         Try
-            Using frm As New MntTrxPartIssue(userId)
+            Using frm As New FacTrxPartIssue(userId)
                 If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                     Reload()
                 End If
@@ -269,10 +264,9 @@ Public Class MntSparePartInv
         End Try
     End Sub
 
-    Private Sub btnReceiveStock_Click(sender As Object, e As EventArgs)
+    Private Sub btnReceiveStock_Click(sender As Object, e As EventArgs) Handles btnReceiveStock.Click
         Try
-
-            Using frm As New MntTrxPartReceive(userId)
+            Using frm As New FacTrxPartReceive(userId)
                 If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                     Reload()
                 End If
@@ -288,9 +282,12 @@ Public Class MntSparePartInv
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Try
-            isFilterByMonthId = False
-            isFilterByYearId = False
-            isFilterByCreatedBy = False
+            isFilterByPartNo = False
+            isFilterByPartName = False
+            isFilterByLocationId = False
+            isFilterByItemTypeId = False
+            isFilterByMachineTypeId = False
+            isFilterByStockStatus = False
 
             cmbSearchCriteria.SelectedValue = 1
 
@@ -301,7 +298,7 @@ Public Class MntSparePartInv
             dtpEndDate.Value = CDate(dbMethod.GetServerDate).Date
 
             pageIndex = 0
-            LoadInventory()
+            LoadPart()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -311,33 +308,67 @@ Public Class MntSparePartInv
         Try
             Select Case cmbSearchCriteria.SelectedValue
                 Case 1
-                    isFilterByYearId = True
-                    isFilterByMonthId = False
-                    isFilterByCreatedBy = False
+                    isFilterByPartNo = True
+                    isFilterByPartName = False
+                    isFilterByLocationId = False
+                    isFilterByItemTypeId = False
+                    isFilterByMachineTypeId = False
+                    isFilterByStockStatus = False
 
                 Case 2
-                    isFilterByYearId = False
-                    isFilterByMonthId = True
-                    isFilterByCreatedBy = False
+                    isFilterByPartNo = False
+                    isFilterByPartName = True
+                    isFilterByLocationId = False
+                    isFilterByItemTypeId = False
+                    isFilterByMachineTypeId = False
+                    isFilterByStockStatus = False
 
                 Case 3
-                    isFilterByYearId = False
-                    isFilterByMonthId = False
-                    isFilterByCreatedBy = True
+                    isFilterByPartNo = False
+                    isFilterByPartName = False
+                    isFilterByLocationId = True
+                    isFilterByItemTypeId = False
+                    isFilterByMachineTypeId = False
+                    isFilterByStockStatus = False
 
+                Case 4
+                    isFilterByPartNo = False
+                    isFilterByPartName = False
+                    isFilterByLocationId = False
+                    isFilterByItemTypeId = True
+                    isFilterByMachineTypeId = False
+                    isFilterByStockStatus = False
+
+                Case 5
+                    isFilterByPartNo = False
+                    isFilterByPartName = False
+                    isFilterByLocationId = False
+                    isFilterByItemTypeId = False
+                    isFilterByMachineTypeId = True
+                    isFilterByStockStatus = False
+
+                Case 6
+                    isFilterByPartNo = False
+                    isFilterByPartName = False
+                    isFilterByLocationId = False
+                    isFilterByItemTypeId = False
+                    isFilterByMachineTypeId = False
+                    isFilterByStockStatus = True
             End Select
 
             pageIndex = 0
-            LoadInventory()
+            LoadPart()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub btnViewLogs_Click(sender As Object, e As EventArgs)
+    Private Sub btnViewLogs_Click(sender As Object, e As EventArgs) Handles btnViewLogs.Click
         Try
+            'cmsLogs.Show(btnViewLogs, New Point(0, 0))
+            'ReceiveIssueToolStripMenuItem.Select()
             'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
-            DirectCast(Me.MdiParent, Main).ClickMntSparePartsLogs()
+            DirectCast(Me.MdiParent, Main).ClickFacSparePartsLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -372,33 +403,51 @@ Public Class MntSparePartInv
                     pnlSearchByCmb2.Visible = False
                     pnlSearchByText.Visible = True
 
-                    AddHandler txtCommon.KeyPress, AddressOf NumberOnly_KeyPress
-
                 Case 2
-                    LoadMonth()
+                    txtCommon.Clear()
 
                     pnlSearchByDate.Visible = False
-                    pnlSearchByCmb.Visible = True
+                    pnlSearchByCmb.Visible = False
                     pnlSearchByCmb2.Visible = False
-                    pnlSearchByText.Visible = False
-
-                    RemoveHandler txtCommon.KeyPress, AddressOf NumberOnly_KeyPress
+                    pnlSearchByText.Visible = True
 
                 Case 3
-                    LoadUser()
+                    LoadLocation()
+
+                    pnlSearchByDate.Visible = False
+                    pnlSearchByCmb.Visible = False
+                    pnlSearchByCmb2.Visible = True
+                    pnlSearchByText.Visible = False
+
+                Case 4
+                    LoadItemType()
+
+                    pnlSearchByDate.Visible = False
+                    pnlSearchByCmb.Visible = False
+                    pnlSearchByCmb2.Visible = True
+                    pnlSearchByText.Visible = False
+
+                Case 5
+                    LoadMachineType()
+
+                    pnlSearchByDate.Visible = False
+                    pnlSearchByCmb.Visible = False
+                    pnlSearchByCmb2.Visible = True
+                    pnlSearchByText.Visible = False
+
+                Case 6
+                    LoadStockStatus()
 
                     pnlSearchByDate.Visible = False
                     pnlSearchByCmb.Visible = True
                     pnlSearchByCmb2.Visible = False
                     pnlSearchByText.Visible = False
-
-                    RemoveHandler txtCommon.KeyPress, AddressOf NumberOnly_KeyPress
             End Select
 
             Select Case cmbSearchCriteria.SelectedValue
-                Case 2, 3
+                Case 3, 4, 5
                     ActiveControl = cmbCommon
-                Case 1
+                Case 1, 2
                     ActiveControl = txtCommon
             End Select
         Catch ex As Exception
@@ -410,23 +459,31 @@ Public Class MntSparePartInv
         Reload()
     End Sub
 
+    Private Sub cmbStatus_SelectedValueChanged(sender As Object, e As EventArgs)
+        Reload()
+    End Sub
+
     'https://www.vbforums.com/showthread.php?600244-RESOLVED-DataGridView-Paint-and-Repaint-)
     Private Sub dgvList_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvList.CellPainting
-        'If (e.RowIndex < 0) Then
-        '    Exit Sub
-        'End If
+        If (e.RowIndex < 0) Then
+            Exit Sub
+        End If
 
-        'Dim act As Integer = dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value
-        'Dim ord As Integer = dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value
-        'Dim min As Integer = dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value
+        Dim act As Integer = dgvList.Rows(e.RowIndex).Cells("ColActualStock").Value
+        Dim ord As Integer = dgvList.Rows(e.RowIndex).Cells("ColOrderingPoint").Value
+        Dim min As Integer = dgvList.Rows(e.RowIndex).Cells("ColMinStock").Value
 
-        'If act < ord Then
-        '    e.CellStyle.BackColor = Color.Yellow
-        'End If
+        If act <= ord AndAlso Not act <= min Then
+            e.CellStyle.BackColor = Color.Yellow
+        End If
 
-        'If act < min Then
-        '    e.CellStyle.BackColor = Color.LightCoral
-        'End If
+        If act <= min Then
+            e.CellStyle.BackColor = Color.Orange
+        End If
+
+        If act = 0 Then
+            e.CellStyle.BackColor = Color.Red
+        End If
     End Sub
 
     Private Sub dgvTransactionHeader_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvList.CellDoubleClick
@@ -481,18 +538,46 @@ Public Class MntSparePartInv
             End If
 
             pageIndex = CInt(txtPageNumber.Text) - 1
-            LoadInventory()
+            LoadPart()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub LoadInventory()
+    Private Sub LoadItemType()
+        dbMethod.FillCmbWithCaption("RdFacSparePartItemType", CommandType.StoredProcedure, "ItemTypeId", "ItemTypeName", cmbCommon2, "< All >")
+    End Sub
+
+    Private Sub LoadLocation()
+        dbMethod.FillCmbWithCaption("RdFacSparePartLocation", CommandType.StoredProcedure, "LocationId", "LocationName", cmbCommon2, "< All >")
+    End Sub
+
+    Private Sub LoadMachineType()
+        dbMethod.FillCmbWithCaption("RdFacSparePartMachineType", CommandType.StoredProcedure, "MachineTypeId", "MachineTypeName", cmbCommon2, "< All >")
+    End Sub
+
+    Private Sub LoadStockStatus()
+        Try
+            dicStockStatus.Clear()
+
+            dicStockStatus.Add(" Zero Stock", 1)
+            dicStockStatus.Add(" Stock Below Min Stock", 2)
+            dicStockStatus.Add(" Stock Below Ordering Point", 3)
+
+            cmbCommon.DisplayMember = "Key"
+            cmbCommon.ValueMember = "Value"
+            cmbCommon.DataSource = New BindingSource(dicStockStatus, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub LoadPart()
         Try
             totalCount = 0
 
-            If isFilterByYearId = True Then
-                Dim prmPart(5) As SqlParameter
+            If isFilterByPartNo = True Then
+                Dim prmPart(6) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
                 prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -504,14 +589,16 @@ Public Class MntSparePartInv
                 prmPart(3).Value = cmbSortCriteria.SelectedValue
                 prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
                 prmPart(4).Value = GetSortMode()
-                prmPart(5) = New SqlParameter("@YearId", SqlDbType.Int)
-                prmPart(5).Value = IIf(String.IsNullOrWhiteSpace(txtCommon.Text.Trim), Nothing, txtCommon.Text.Trim)
+                prmPart(5) = New SqlParameter("@PartNo", SqlDbType.NVarChar)
+                prmPart(5).Value = txtCommon.Text.Trim
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtSparePart = dbMethod.FillDataTable("RdMntPartInventoryMasterlistByYearId", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByPartNo", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
 
-            ElseIf isFilterByMonthId = True Then
-                Dim prmPart(5) As SqlParameter
+            ElseIf isFilterByPartName = True Then
+                Dim prmPart(6) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
                 prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -523,14 +610,16 @@ Public Class MntSparePartInv
                 prmPart(3).Value = cmbSortCriteria.SelectedValue
                 prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
                 prmPart(4).Value = GetSortMode()
-                prmPart(5) = New SqlParameter("@MonthId", SqlDbType.Int)
-                prmPart(5).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmPart(5) = New SqlParameter("@PartName", SqlDbType.NVarChar)
+                prmPart(5).Value = txtCommon.Text.Trim
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtSparePart = dbMethod.FillDataTable("RdMntPartInventoryMasterlistByMonthId", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByPartName", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
 
-            ElseIf isFilterByCreatedBy = True Then
-                Dim prmPart(5) As SqlParameter
+            ElseIf isFilterByLocationId = True Then
+                Dim prmPart(6) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
                 prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -542,14 +631,79 @@ Public Class MntSparePartInv
                 prmPart(3).Value = cmbSortCriteria.SelectedValue
                 prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
                 prmPart(4).Value = GetSortMode()
-                prmPart(5) = New SqlParameter("@CreatedBy", SqlDbType.Int)
-                prmPart(5).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmPart(5) = New SqlParameter("@LocationId", SqlDbType.Int)
+                prmPart(5).Value = IIf(cmbCommon2.SelectedValue = 0, Nothing, cmbCommon2.SelectedValue)
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtSparePart = dbMethod.FillDataTable("RdMntPartInventoryMasterlistByCreatedBy", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByLocationId", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+
+            ElseIf isFilterByItemTypeId = True Then
+                Dim prmPart(6) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(3).Value = cmbSortCriteria.SelectedValue
+                prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(4).Value = GetSortMode()
+                prmPart(5) = New SqlParameter("@ItemTypeId", SqlDbType.Int)
+                prmPart(5).Value = IIf(cmbCommon2.SelectedValue = 0, Nothing, cmbCommon2.SelectedValue)
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
+
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByItemTypeId", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+
+            ElseIf isFilterByMachineTypeId = True Then
+                Dim prmPart(6) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(3).Value = cmbSortCriteria.SelectedValue
+                prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(4).Value = GetSortMode()
+                prmPart(5) = New SqlParameter("@MachineTypeId", SqlDbType.Int)
+                prmPart(5).Value = IIf(cmbCommon2.SelectedValue = 0, Nothing, cmbCommon2.SelectedValue)
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
+
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByMachineTypeId", CommandType.StoredProcedure, prmPart)
+                totalCount = prmPart(2).Value
+
+            ElseIf isFilterByStockStatus = True Then
+                Dim prmPart(6) As SqlParameter
+                prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmPart(0).Value = pageIndex
+                prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmPart(1).Value = pageSize
+                prmPart(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmPart(2).Direction = ParameterDirection.Output
+                prmPart(2).Value = totalCount
+                prmPart(3) = New SqlParameter("@SortingCol", SqlDbType.VarChar)
+                prmPart(3).Value = cmbSortCriteria.SelectedValue
+                prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
+                prmPart(4).Value = GetSortMode()
+                prmPart(5) = New SqlParameter("@StockStatusId", SqlDbType.Int)
+                prmPart(5).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmPart(6) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(6).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
+
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlistByStockStatusId", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
 
             Else
-                Dim prmPart(4) As SqlParameter
+                Dim prmPart(5) As SqlParameter
                 prmPart(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmPart(0).Value = pageIndex
                 prmPart(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -561,19 +715,25 @@ Public Class MntSparePartInv
                 prmPart(3).Value = cmbSortCriteria.SelectedValue
                 prmPart(4) = New SqlParameter("@SortType", SqlDbType.VarChar)
                 prmPart(4).Value = GetSortMode()
+                prmPart(5) = New SqlParameter("@Status", SqlDbType.Int)
+                prmPart(5).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtSparePart = dbMethod.FillDataTable("RdMntPartInventoryMasterlist", CommandType.StoredProcedure, prmPart)
+                dtSparePart = dbMethod.FillDataTable("RdFacSparePartMasterlist", CommandType.StoredProcedure, prmPart)
                 totalCount = prmPart(2).Value
             End If
 
-            bsPartInventory.DataSource = dtSparePart
-            bsPartInventory.ResetBindings(True)
-            dgvList.AutoGenerateColumns = False
-            dgvList.DataSource = bsPartInventory
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            Else
+                CountToolStripLabel.Text = totalCount & " items"
+            End If
 
             If totalCount Mod pageSize = 0 Then
                 If totalCount = 0 Then
                     pageCount = (totalCount / pageSize) + 1
+                    pageIndex = 0
                 Else
                     pageCount = totalCount / pageSize
                 End If
@@ -582,7 +742,18 @@ Public Class MntSparePartInv
             End If
 
             'current page index and total number of pages
-            txtPageNumber.Text = pageIndex + 1
+            If pageIndex > pageCount Then
+                pageIndex = 0
+                txtPageNumber.Text = pageIndex + 1
+            Else
+                txtPageNumber.Text = pageIndex + 1
+            End If
+
+            bsSparePart.DataSource = dtSparePart
+            bsSparePart.ResetBindings(True)
+            dgvList.AutoGenerateColumns = False
+            dgvList.DataSource = bsSparePart
+
             txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
 
             'enables pager
@@ -597,25 +768,14 @@ Public Class MntSparePartInv
         End Try
     End Sub
 
-    Private Sub LoadMonth()
-        dbMethod.FillCmbWithCaption("RdGenMonth", CommandType.StoredProcedure, "MonthId", "MonthName", cmbCommon, "< All >")
-    End Sub
-
-    Private Sub LoadUser()
-        Dim prm(1) As SqlParameter
-        prm(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-        prm(0).Value = 2
-        prm(1) = New SqlParameter("@IsActive", SqlDbType.Bit)
-        prm(1).Value = 1
-
-        dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbCommon, "< All >", prm)
-    End Sub
-
     Private Sub LoadSearchCriteria()
         Try
-            dicSearchCriteria.Add(" Year", 1)
-            dicSearchCriteria.Add(" Month", 2)
-            dicSearchCriteria.Add(" PIC", 3)
+            dicSearchCriteria.Add(" Part Number", 1)
+            dicSearchCriteria.Add(" Specs", 2)
+            dicSearchCriteria.Add(" Location", 3)
+            dicSearchCriteria.Add(" Item Type", 4)
+            dicSearchCriteria.Add(" Machine Type", 5)
+            dicSearchCriteria.Add(" Stock Status", 6)
 
             cmbSearchCriteria.DisplayMember = "Key"
             cmbSearchCriteria.ValueMember = "Value"
@@ -627,27 +787,39 @@ Public Class MntSparePartInv
 
     Private Sub LoadSortCriteria()
         Try
-            dicSortCriteria.Add(" Year", "YearId")
-            dicSortCriteria.Add(" Month", "MonthId")
-            dicSortCriteria.Add(" PIC", "CreatedBy")
-            dicSortCriteria.Add(" Inventory Date", "CreatedDate")
-            dicSortCriteria.Add(" Discrepancy Qty", "DiscrepancyQty")
+            dicSortCriteria.Add(" Part Number", "PartNo")
+            dicSortCriteria.Add(" Specs", "PartName")
+            dicSortCriteria.Add(" Location", "LocationName")
+            dicSortCriteria.Add(" Item Type", "ItemTypeName")
+            dicSortCriteria.Add(" Machine Type", "MachineTypeName")
 
             cmbSortCriteria.DisplayMember = "Key"
             cmbSortCriteria.ValueMember = "Value"
             cmbSortCriteria.DataSource = New BindingSource(dicSortCriteria, Nothing)
-
-            AddHandler cmbSortCriteria.SelectedValueChanged, AddressOf cmbSortCriteria_SelectedValueChanged
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub MntSpare_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub LoadStatusCriteria()
+        Try
+            dicStatus.Add("< All >", 0)
+            dicStatus.Add("Active", 1)
+            dicStatus.Add("Inactive", 2)
+
+            cmbStatus.DisplayMember = "Key"
+            cmbStatus.ValueMember = "Value"
+            cmbStatus.DataSource = New BindingSource(dicStatus, Nothing)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub FacSpare_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvList.Dispose()
     End Sub
 
-    Private Sub MntSpare_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub FacSpare_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F2) Then
             e.Handled = True
             btnAdd.PerformClick()
@@ -663,30 +835,39 @@ Public Class MntSparePartInv
         End If
     End Sub
 
-    Private Sub MntSpare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacSpare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSearchCriteria()
         LoadSortCriteria()
+        LoadStatusCriteria()
 
-        cmbSortCriteria.SelectedValue = "YearId"
         rdAsc.Checked = True
+        cmbSortCriteria.SelectedValue = "LocationName"
+        cmbStatus.SelectedValue = 1
 
         pageIndex = 0
         pageSize = 100
-        LoadInventory()
+        LoadPart()
 
         AddHandler rdAsc.CheckedChanged, AddressOf CheckedChanged
         AddHandler rdDesc.CheckedChanged, AddressOf CheckedChanged
+        AddHandler cmbSortCriteria.SelectedValueChanged, AddressOf cmbSortCriteria_SelectedValueChanged
+        AddHandler cmbStatus.SelectedValueChanged, AddressOf cmbStatus_SelectedValueChanged
 
         Me.ActiveControl = dgvList
     End Sub
     Private Sub SetScrollingIndex()
-        dgvList.FirstDisplayedScrollingRowIndex = indexScroll
+        If dgvList.FirstDisplayedScrollingRowIndex < indexScroll Then
+            dgvList.FirstDisplayedScrollingRowIndex = 0
+        Else
+            dgvList.FirstDisplayedScrollingRowIndex = indexScroll
+        End If
+
         If dgvList.Rows.Count > indexPosition Then
             dgvList.Rows(indexPosition).Selected = True
         Else
             dgvList.Rows(indexPosition - 1).Selected = True
         End If
-        Me.bsPartInventory.Position = dgvList.SelectedCells(0).RowIndex
+        Me.bsSparePart.Position = dgvList.SelectedCells(0).RowIndex
     End Sub
 
     Private Sub txtPageNumber_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPageNumber.KeyPress
@@ -700,11 +881,28 @@ Public Class MntSparePartInv
         End If
     End Sub
 
-    Private Sub NumberOnly_KeyPress(sender As Object, e As KeyPressEventArgs)
+    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
-            If Asc(e.KeyChar) <> 13 AndAlso Asc(e.KeyChar) <> 8 AndAlso Not IsNumeric(e.KeyChar) Then
-                e.Handled = True
-            End If
+            cmsExport.Show(btnExport, New Point(0, 0))
+            AllToolStripMenuItem.Select()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ReceiveIssueToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReceiveIssueToolStripMenuItem.Click
+        Try
+            'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
+            DirectCast(Me.MdiParent, Main).ClickFacSparePartsLogs()
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub FloatTransactionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FloatTransactionToolStripMenuItem.Click
+        Try
+            'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
+            DirectCast(Me.MdiParent, Main).ClickFacSparePartsLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

@@ -1,23 +1,24 @@
 ﻿Imports System.Data.SqlClient
 Imports BlackCoffeeLibrary
 
-Public Class MntMch
+Public Class FacMch
     Public WithEvents bsMachine As New BindingSource
     Private connection As New Connection
     Private dbMain As New BlackCoffeeLibrary.Main
     Private dbMethod As New SqlDbMethod(connection.GetConnectionString)
     Private dicSearchCriteria As New Dictionary(Of String, Integer)
     Private dicRemarks As New Dictionary(Of String, Object)
+    Private dicStatus As New Dictionary(Of String, Integer)
     Private dtMachine As New DataTable
     Private indexPosition As Integer = 0
     Private indexScroll As Integer = 0
     Private isFilterByMachineName As Boolean = False
+    Private isFilterByMachineCode As Boolean = False
+    Private isFilterByMachineDescription As Boolean = False
     Private isFilterByArea As Boolean = False
     Private isFilterByMachineStatus As Boolean = False
     Private isFilterByMachineSubStatus As Boolean = False
-    Private isFilterByGroup As Boolean = False
     Private isFilterByFrequency As Boolean = False
-    Private isFilterByRemarks As Boolean = False
     Private isFilterBySerialNo As Boolean = False
     Private pageCount As Integer
     Private pageIndex As Integer
@@ -71,7 +72,7 @@ Public Class MntMch
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         Try
-            Using frm As New MntMchDetail()
+            Using frm As New FacMchDetail()
                 If frm.ShowDialog(Me) = DialogResult.OK Then
                     Reload()
                     bsMachine.Position = bsMachine.Find("MachineId", frm.pKey)
@@ -95,7 +96,7 @@ Public Class MntMch
                 prmCnt(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                 prmCnt(0).Value = machineId
 
-                Dim count As Integer = dbMethod.ExecuteScalar("CntMntMachineByTrx", CommandType.StoredProcedure, prmCnt)
+                Dim count As Integer = dbMethod.ExecuteScalar("CntFacMachineByTrx", CommandType.StoredProcedure, prmCnt)
 
                 If count > 0 Then
                     MessageBox.Show("This machine contains activities. Set to inactive instead.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -108,7 +109,7 @@ Public Class MntMch
                     prmDel(0) = New SqlParameter("@MachineId", SqlDbType.Int)
                     prmDel(0).Value = machineId
 
-                    dbMethod.ExecuteNonQuery("DelMntMachine", CommandType.StoredProcedure, prmDel)
+                    dbMethod.ExecuteNonQuery("DelFacMachine", CommandType.StoredProcedure, prmDel)
 
                     Me.DialogResult = DialogResult.OK
                 End If
@@ -123,7 +124,7 @@ Public Class MntMch
             If Me.dgvList.Rows.Count > 0 Then
                 Dim machineId As Integer = CType(Me.bsMachine.Current, DataRowView).Item("MachineId")
 
-                Using frm As New MntMchDetail(machineId)
+                Using frm As New FacMchDetail(machineId)
                     If frm.ShowDialog(Me) = DialogResult.OK Then
                         Reload()
                         bsMachine.Position = bsMachine.Find("MachineId", frm.pKey)
@@ -148,10 +149,11 @@ Public Class MntMch
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Try
             isFilterByMachineName = False
+            isFilterByMachineCode = False
+            isFilterByMachineDescription = False
             isFilterByArea = False
             isFilterByMachineStatus = False
             isFilterByMachineSubStatus = False
-            isFilterByGroup = False
             isFilterByFrequency = False
             isFilterBySerialNo = False
 
@@ -169,82 +171,82 @@ Public Class MntMch
             Select Case cmbSearchCriteria.SelectedValue
                 Case 1
                     isFilterByMachineName = True
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
                     isFilterByArea = False
                     isFilterByMachineStatus = False
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = False
 
                 Case 2
                     isFilterByMachineName = False
-                    isFilterByArea = True
+                    isFilterByMachineCode = True
+                    isFilterByMachineDescription = False
+                    isFilterByArea = False
                     isFilterByMachineStatus = False
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = False
 
                 Case 3
                     isFilterByMachineName = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = True
                     isFilterByArea = False
-                    isFilterByMachineStatus = True
+                    isFilterByMachineStatus = False
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = False
 
                 Case 4
                     isFilterByMachineName = False
-                    isFilterByArea = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
+                    isFilterByArea = True
                     isFilterByMachineStatus = False
-                    isFilterByMachineSubStatus = True
-                    isFilterByGroup = False
+                    isFilterByMachineSubStatus = False
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = False
 
                 Case 5
                     isFilterByMachineName = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
                     isFilterByArea = False
-                    isFilterByMachineStatus = False
+                    isFilterByMachineStatus = True
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = True
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = False
 
                 Case 6
                     isFilterByMachineName = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
                     isFilterByArea = False
                     isFilterByMachineStatus = False
-                    isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
-                    isFilterByFrequency = True
-                    isFilterByRemarks = False
+                    isFilterByMachineSubStatus = True
+                    isFilterByFrequency = False
                     isFilterBySerialNo = False
 
                 Case 7
                     isFilterByMachineName = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
                     isFilterByArea = False
                     isFilterByMachineStatus = False
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
-                    isFilterByFrequency = False
-                    isFilterByRemarks = True
+                    isFilterByFrequency = True
                     isFilterBySerialNo = False
 
                 Case 8
                     isFilterByMachineName = False
+                    isFilterByMachineCode = False
+                    isFilterByMachineDescription = False
                     isFilterByArea = False
                     isFilterByMachineStatus = False
                     isFilterByMachineSubStatus = False
-                    isFilterByGroup = False
                     isFilterByFrequency = False
-                    isFilterByRemarks = False
                     isFilterBySerialNo = True
             End Select
 
@@ -256,7 +258,7 @@ Public Class MntMch
     End Sub
 
     Private Sub cmbCommon_Validated(sender As Object, e As EventArgs) Handles cmbCommon.Validated
-        If cmbSearchCriteria.SelectedValue = 6 Then
+        If cmbSearchCriteria.SelectedValue = 7 Then
             If cmbCommon.SelectedValue = CStr(0) Then
                 cmbCommon.SelectedValue = CStr(0)
             End If
@@ -279,56 +281,40 @@ Public Class MntMch
             cmbCommon.Items.Clear()
 
             Select Case cmbSearchCriteria.SelectedValue
-                Case 1
+                Case 1, 2, 3, 8
                     pnlSearchByCmb.Visible = False
                     pnlSearchByText.Visible = True
-
-                Case 2
-                    pnlSearchByCmb.Visible = True
-                    pnlSearchByText.Visible = False
-
-                    LoadArea()
-
-                Case 3
-                    pnlSearchByCmb.Visible = True
-                    pnlSearchByText.Visible = False
-
-                    LoadMachineStatus()
 
                 Case 4
                     pnlSearchByCmb.Visible = True
                     pnlSearchByText.Visible = False
 
-                    LoadMachineSubStatus()
+                    LoadArea()
 
                 Case 5
                     pnlSearchByCmb.Visible = True
                     pnlSearchByText.Visible = False
 
-                    LoadPartGroup()
+                    LoadMachineStatus()
 
                 Case 6
                     pnlSearchByCmb.Visible = True
                     pnlSearchByText.Visible = False
 
-                    LoadFrequency()
+                    LoadMachineSubStatus()
 
                 Case 7
                     pnlSearchByCmb.Visible = True
                     pnlSearchByText.Visible = False
 
-                    LoadRemarks()
-
-                Case 8
-                    pnlSearchByCmb.Visible = False
-                    pnlSearchByText.Visible = True
+                    LoadFrequency()
             End Select
 
             Select Case cmbSearchCriteria.SelectedValue
-                Case 2, 3, 4, 5, 6
+                Case 4, 5, 6
                     ActiveControl = cmbCommon
                     cmbCommon.SelectedValue = 0
-                Case 1, 8
+                Case 1, 2, 3, 8
                     ActiveControl = txtCommon
                     txtCommon.Text = String.Empty
                 Case 7
@@ -384,28 +370,21 @@ Public Class MntMch
         cmbCommon.DisplayMember = "AreaName"
         cmbCommon.ValueMember = "AreaId"
 
-        dbMethod.FillCmbWithCaption("RdMntArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbCommon, "< All >")
+        dbMethod.FillCmbWithCaption("RdFacArea", CommandType.StoredProcedure, "AreaId", "AreaName", cmbCommon, "< All >")
     End Sub
 
     Private Sub LoadMachineStatus()
         cmbCommon.DisplayMember = "MachineStatusName"
         cmbCommon.ValueMember = "MachineStatusId"
 
-        dbMethod.FillCmbWithCaption("RdMntMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbCommon, "< All >")
+        dbMethod.FillCmbWithCaption("RdFacMachineStatus", CommandType.StoredProcedure, "MachineStatusId", "MachineStatusName", cmbCommon, "< All >")
     End Sub
 
     Private Sub LoadMachineSubStatus()
         cmbCommon.DisplayMember = "MachineSubStatusName"
         cmbCommon.ValueMember = "MachineSubStatusId"
 
-        dbMethod.FillCmbWithCaption("RdMntMachineSubStatus", CommandType.StoredProcedure, "MachineSubStatusId", "MachineSubStatusName", cmbCommon, "< All >")
-    End Sub
-
-    Private Sub LoadPartGroup()
-        cmbCommon.DisplayMember = "GroupName"
-        cmbCommon.ValueMember = "GroupId"
-
-        dbMethod.FillCmbWithCaption("RdMntMachinePartGroup", CommandType.StoredProcedure, "GroupId", "GroupName", cmbCommon, "< All >")
+        dbMethod.FillCmbWithCaption("RdFacMachineSubStatus", CommandType.StoredProcedure, "MachineSubStatusId", "MachineSubStatusName", cmbCommon, "< All >")
     End Sub
 
     Private Sub LoadFrequency()
@@ -420,7 +399,7 @@ Public Class MntMch
             totalCount = 0
 
             If isFilterByMachineName = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -430,12 +409,48 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@MachineName", SqlDbType.NVarChar)
                 prmMasterlist(3).Value = txtCommon.Text.Trim
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineName", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByMachineName", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
+
+            ElseIf isFilterByMachineCode = True Then
+                Dim prmMasterlist(4) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@MachineCode", SqlDbType.NVarChar)
+                prmMasterlist(3).Value = txtCommon.Text.Trim
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
+
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByMachineCode", CommandType.StoredProcedure, prmMasterlist)
+                totalCount = prmMasterlist(2).Value
+
+            ElseIf isFilterByMachineDescription = True Then
+                Dim prmMasterlist(4) As SqlParameter
+                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
+                prmMasterlist(0).Value = pageIndex
+                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
+                prmMasterlist(1).Value = pageSize
+                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
+                prmMasterlist(2).Direction = ParameterDirection.Output
+                prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@MachineDescription", SqlDbType.NVarChar)
+                prmMasterlist(3).Value = txtCommon.Text.Trim
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
+
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByMachineDescription", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByArea = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -445,12 +460,14 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@AreaId", SqlDbType.Int)
                 prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByAreaId", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByAreaId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByMachineStatus = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -460,12 +477,14 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@MachineStatusId", SqlDbType.Int)
                 prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineStatusId", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByMachineStatusId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByMachineSubStatus = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -475,27 +494,14 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@MachineSubStatusId", SqlDbType.Int)
                 prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByMachineSubStatusId", CommandType.StoredProcedure, prmMasterlist)
-                totalCount = prmMasterlist(2).Value
-
-            ElseIf isFilterByGroup = True Then
-                Dim prmMasterlist(3) As SqlParameter
-                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmMasterlist(0).Value = pageIndex
-                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmMasterlist(1).Value = pageSize
-                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmMasterlist(2).Direction = ParameterDirection.Output
-                prmMasterlist(2).Value = totalCount
-                prmMasterlist(3) = New SqlParameter("@GroupId", SqlDbType.Int)
-                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = 0, Nothing, cmbCommon.SelectedValue)
-
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByGroupId", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByMachineSubStatusId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterByFrequency = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -505,27 +511,14 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@PmFrequencyId", SqlDbType.Char)
                 prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue = CStr(0), Nothing, cmbCommon.SelectedValue)
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmMasterlist)
-                totalCount = prmMasterlist(2).Value
-
-            ElseIf isFilterByRemarks = True Then
-                Dim prmMasterlist(3) As SqlParameter
-                prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
-                prmMasterlist(0).Value = pageIndex
-                prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
-                prmMasterlist(1).Value = pageSize
-                prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
-                prmMasterlist(2).Direction = ParameterDirection.Output
-                prmMasterlist(2).Value = totalCount
-                prmMasterlist(3) = New SqlParameter("@IsActive", SqlDbType.Bit)
-                prmMasterlist(3).Value = IIf(cmbCommon.SelectedValue Is Nothing, Nothing, IIf(cmbCommon.SelectedValue = 1, 1, 0))
-
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistByIsActive", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistByPmFrequencyId", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             ElseIf isFilterBySerialNo = True Then
-                Dim prmMasterlist(3) As SqlParameter
+                Dim prmMasterlist(4) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -535,12 +528,14 @@ Public Class MntMch
                 prmMasterlist(2).Value = totalCount
                 prmMasterlist(3) = New SqlParameter("@SerialNumber", SqlDbType.VarChar)
                 prmMasterlist(3).Value = txtCommon.Text.Trim
+                prmMasterlist(4) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(4).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlistBySerialNumber", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlistBySerialNumber", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
 
             Else
-                Dim prmMasterlist(2) As SqlParameter
+                Dim prmMasterlist(3) As SqlParameter
                 prmMasterlist(0) = New SqlParameter("@PageIndex", SqlDbType.Int)
                 prmMasterlist(0).Value = pageIndex
                 prmMasterlist(1) = New SqlParameter("@PageSize", SqlDbType.Int)
@@ -548,8 +543,10 @@ Public Class MntMch
                 prmMasterlist(2) = New SqlParameter("@TotalCount", SqlDbType.Int)
                 prmMasterlist(2).Direction = ParameterDirection.Output
                 prmMasterlist(2).Value = totalCount
+                prmMasterlist(3) = New SqlParameter("@Status", SqlDbType.Int)
+                prmMasterlist(3).Value = IIf(cmbStatus.SelectedValue = 0, Nothing, cmbStatus.SelectedValue)
 
-                dtMachine = dbMethod.FillDataTable("RdMntMachineMasterlist", CommandType.StoredProcedure, prmMasterlist)
+                dtMachine = dbMethod.FillDataTable("RdFacMachineMasterlist", CommandType.StoredProcedure, prmMasterlist)
                 totalCount = prmMasterlist(2).Value
             End If
 
@@ -595,13 +592,13 @@ Public Class MntMch
     Private Sub LoadSearchCriteria()
         Try
             dicSearchCriteria.Add(" Machine Name", 1)
-            dicSearchCriteria.Add(" Area", 2)
-            dicSearchCriteria.Add(" Status", 3)
-            dicSearchCriteria.Add(" Sub-Status", 4)
-            dicSearchCriteria.Add(" Part Group", 5)
-            dicSearchCriteria.Add(" PM Frequency", 6)
-            dicSearchCriteria.Add(" Remarks", 7)
-            dicSearchCriteria.Add(" Serial No.", 8)
+            dicSearchCriteria.Add(" Code", 2)
+            dicSearchCriteria.Add(" Description", 3)
+            dicSearchCriteria.Add(" Area", 4)
+            dicSearchCriteria.Add(" Status", 5)
+            dicSearchCriteria.Add(" Sub-Status", 6)
+            dicSearchCriteria.Add(" PM Frequency", 7)
+            dicSearchCriteria.Add(" Serial Number", 8)
 
             cmbSearchCriteria.DisplayMember = "Key"
             cmbSearchCriteria.ValueMember = "Value"
@@ -611,26 +608,25 @@ Public Class MntMch
         End Try
     End Sub
 
-    Private Sub LoadRemarks()
+    Private Sub LoadStatusCriteria()
         Try
-            dicRemarks.Clear()
+            dicStatus.Add("< All >", 0)
+            dicStatus.Add("Active", 1)
+            dicStatus.Add("Inactive", 2)
 
-            dicRemarks.Add("< All >", Nothing)
-            dicRemarks.Add(" Active", 1)
-            dicRemarks.Add(" Inactive", 2)
-            cmbCommon.DisplayMember = "Key"
-            cmbCommon.ValueMember = "Value"
-            cmbCommon.DataSource = New BindingSource(dicRemarks, Nothing)
+            cmbStatus.DisplayMember = "Key"
+            cmbStatus.ValueMember = "Value"
+            cmbStatus.DataSource = New BindingSource(dicStatus, Nothing)
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    Private Sub MntMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub FacMch_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         dgvList.Dispose()
     End Sub
 
-    Private Sub MntMch_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+    Private Sub FacMch_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode.Equals(Keys.F2) Then
             e.Handled = True
             btnAdd.PerformClick()
@@ -646,8 +642,10 @@ Public Class MntMch
         End If
     End Sub
 
-    Private Sub MntMch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub FacMch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadSearchCriteria()
+        LoadStatusCriteria()
+        cmbStatus.SelectedValue = 1
 
         pageIndex = 0
         pageSize = 100
@@ -657,6 +655,8 @@ Public Class MntMch
         Me.ActiveControl = dgvList
 
         Me.dgvList.Columns(1).AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+
+        AddHandler cmbStatus.SelectedValueChanged, AddressOf cmbStatus_SelectedValueChanged
     End Sub
 
     Private Sub SetScrollingIndex()
@@ -678,6 +678,10 @@ Public Class MntMch
         Else
             e.Handled = True
         End If
+    End Sub
+
+    Private Sub cmbStatus_SelectedValueChanged(sender As Object, e As EventArgs)
+        Reload()
     End Sub
 
 End Class

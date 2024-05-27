@@ -27,6 +27,7 @@ Public Class MntTrxActvityLog
     Private trxId As Integer = 0
     Private userId As Integer = 0
     Private isEditMode As Boolean = False
+
     Public Sub New(Optional _trxId As Integer = 0, Optional _userId As Integer = 0, Optional _isEditMode As Boolean = False)
         ' This call is required by the designer.
         InitializeComponent()
@@ -128,6 +129,22 @@ Public Class MntTrxActvityLog
                 MessageBox.Show("The selected item is already on the list.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 cmbPart.Focus()
                 Exit Sub
+            End If
+
+            If childBsTrxDetailFloat.Count > 0 Then
+                For Each view As DataRowView In childBsTrxDetailFloat
+                    Dim row = view.Row
+                    If row.Item("PartTrxDetailId") Is DBNull.Value AndAlso
+                            row.Item("PartTrxId") Is DBNull.Value Then
+
+                        If row.Item("IssuedTo").Equals(cmbTechnician.SelectedValue) AndAlso
+                                row.Item("PartId").Equals(cmbPart.SelectedValue) Then
+                            MessageBox.Show("The selected item is already on the list.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            cmbPart.Focus()
+                            Exit Sub
+                        End If
+                    End If
+                Next
             End If
 
             Me.bsTrxPartDetail.AddNew()
@@ -274,11 +291,13 @@ Public Class MntTrxActvityLog
         Try
             If cmbPart.SelectedValue <> 0 Then
                 If cmbPartSelection.SelectedValue = 1 Then
-                    Dim prmDetail(0) As SqlParameter
+                    Dim prmDetail(1) As SqlParameter
                     prmDetail(0) = New SqlParameter("@PartId", SqlDbType.Int)
                     prmDetail(0).Value = cmbPart.SelectedValue
+                    prmDetail(1) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                    prmDetail(1).Value = cmbTechnician.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmDetail)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloatPartCount", CommandType.StoredProcedure, prmDetail)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartNo").ToString.Trim
                             txtIssuedQty.Text = rdr.Item("IssuedQty")
@@ -290,11 +309,11 @@ Public Class MntTrxActvityLog
 
                     Dim prmHeader(1) As SqlParameter
                     prmHeader(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmHeader(0).Value = cmbPart.SelectedItem
-                    prmHeader(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(1).Value = cmbTechnician.SelectedItem
+                    prmHeader(0).Value = cmbPart.SelectedValue
+                    prmHeader(1) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                    prmHeader(1).Value = cmbTechnician.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmHeader)
                         While rdr.Read
                             txtIssuedDate.Text = String.Format("{0:MMM dd, yyyy HH:mm}", rdr.Item("CreatedDate"))
                             txtIssuedBy.Text = rdr.Item("CreatedBy")
@@ -303,11 +322,13 @@ Public Class MntTrxActvityLog
                     End Using
 
                 Else
-                    Dim prmDetail(0) As SqlParameter
+                    Dim prmDetail(1) As SqlParameter
                     prmDetail(0) = New SqlParameter("@PartId", SqlDbType.Int)
                     prmDetail(0).Value = cmbPart.SelectedValue
+                    prmDetail(1) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                    prmDetail(1).Value = cmbTechnician.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, prmDetail)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartDetailFloatPartCount", CommandType.StoredProcedure, prmDetail)
                         While rdr.Read
                             txtPartDescription.Text = rdr.Item("PartName").ToString.Trim
                             txtIssuedQty.Text = rdr.Item("IssuedQty")
@@ -319,11 +340,11 @@ Public Class MntTrxActvityLog
 
                     Dim prmHeader(1) As SqlParameter
                     prmHeader(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                    prmHeader(0).Value = cmbPart.SelectedItem
-                    prmHeader(1) = New SqlParameter("@UserId", SqlDbType.Int)
-                    prmHeader(1).Value = cmbTechnician.SelectedItem
+                    prmHeader(0).Value = cmbPart.SelectedValue
+                    prmHeader(1) = New SqlParameter("@IssuedTo", SqlDbType.Int)
+                    prmHeader(1).Value = cmbTechnician.SelectedValue
 
-                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure)
+                    Using rdr As IDataReader = dbMethod.ExecuteReader("RdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmHeader)
                         While rdr.Read
                             txtIssuedDate.Text = String.Format("{0:MMM dd, yyyy HH:mm}", rdr.Item("CreatedDate"))
                             txtIssuedBy.Text = rdr.Item("CreatedBy")
@@ -391,6 +412,7 @@ Public Class MntTrxActvityLog
                 dbMethod.FillCmbWithCaption("RdMntTransactionPartDetailFloat", CommandType.StoredProcedure, "PartId", "PartName", cmbPart, "", prm)
 
                 lblPartDescription.Text = "Part No"
+
             Else
                 cmbPart.DisplayMember = "PartNo"
                 cmbPart.ValueMember = "PartId"

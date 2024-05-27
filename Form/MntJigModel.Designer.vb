@@ -47,6 +47,12 @@ Partial Class MntJigModel
         Me.btnSearch = New PinkieControls.ButtonXP()
         Me.btnReset = New PinkieControls.ButtonXP()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.ColModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColModelName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.ColIsDrawing = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.pnlSearchByCmb = New System.Windows.Forms.Panel()
         Me.cmbCommon = New SergeUtils.EasyCompletionComboBox()
         Me.pnlSearchByText = New System.Windows.Forms.Panel()
@@ -62,12 +68,8 @@ Partial Class MntJigModel
         Me.btnView = New PinkieControls.ButtonXP()
         Me.btnNext = New PinkieControls.ButtonXP()
         Me.btnPrevious = New PinkieControls.ButtonXP()
-        Me.ColModelId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColModelName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColExtensionId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColExtensionName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColIsActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.ColIsDrawing = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         CType(Me.bindingNavigator, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.bindingNavigator.SuspendLayout()
         CType(Me.dgvList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -156,7 +158,7 @@ Partial Class MntJigModel
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.CountToolStripLabel})
         Me.bindingNavigator.Location = New System.Drawing.Point(0, 530)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -164,7 +166,7 @@ Partial Class MntJigModel
         Me.bindingNavigator.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
-        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(266, 25)
         Me.bindingNavigator.TabIndex = 543
         '
         'txtTotalPageNumber
@@ -201,7 +203,6 @@ Partial Class MntJigModel
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -333,6 +334,60 @@ Partial Class MntJigModel
         Me.dgvList.Size = New System.Drawing.Size(523, 490)
         Me.dgvList.TabIndex = 549
         Me.dgvList.TabStop = False
+        '
+        'ColModelId
+        '
+        Me.ColModelId.DataPropertyName = "ModelId"
+        Me.ColModelId.HeaderText = "ModelId"
+        Me.ColModelId.Name = "ColModelId"
+        Me.ColModelId.ReadOnly = True
+        Me.ColModelId.Visible = False
+        '
+        'ColModelName
+        '
+        Me.ColModelName.DataPropertyName = "ModelName"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.ColModelName.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColModelName.HeaderText = "Model Name"
+        Me.ColModelName.Name = "ColModelName"
+        Me.ColModelName.ReadOnly = True
+        Me.ColModelName.Width = 250
+        '
+        'ColExtensionId
+        '
+        Me.ColExtensionId.DataPropertyName = "ExtensionId"
+        Me.ColExtensionId.HeaderText = "ExtensionId"
+        Me.ColExtensionId.Name = "ColExtensionId"
+        Me.ColExtensionId.ReadOnly = True
+        Me.ColExtensionId.Visible = False
+        '
+        'ColExtensionName
+        '
+        Me.ColExtensionName.DataPropertyName = "ExtensionName"
+        Me.ColExtensionName.HeaderText = "Extension Name"
+        Me.ColExtensionName.Name = "ColExtensionName"
+        Me.ColExtensionName.ReadOnly = True
+        Me.ColExtensionName.Width = 150
+        '
+        'ColIsActive
+        '
+        Me.ColIsActive.DataPropertyName = "IsActive"
+        Me.ColIsActive.HeaderText = "Active"
+        Me.ColIsActive.Name = "ColIsActive"
+        Me.ColIsActive.ReadOnly = True
+        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsActive.Width = 55
+        '
+        'ColIsDrawing
+        '
+        Me.ColIsDrawing.DataPropertyName = "IsDrawing"
+        Me.ColIsDrawing.HeaderText = "Drwg"
+        Me.ColIsDrawing.Name = "ColIsDrawing"
+        Me.ColIsDrawing.ReadOnly = True
+        Me.ColIsDrawing.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ColIsDrawing.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ColIsDrawing.Width = 55
         '
         'pnlSearchByCmb
         '
@@ -512,59 +567,15 @@ Partial Class MntJigModel
         Me.btnPrevious.TabStop = False
         Me.btnPrevious.Text = "<"
         '
-        'ColModelId
+        'BindingNavigatorSeparator5
         '
-        Me.ColModelId.DataPropertyName = "ModelId"
-        Me.ColModelId.HeaderText = "ModelId"
-        Me.ColModelId.Name = "ColModelId"
-        Me.ColModelId.ReadOnly = True
-        Me.ColModelId.Visible = False
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
         '
-        'ColModelName
+        'CountToolStripLabel
         '
-        Me.ColModelName.DataPropertyName = "ModelName"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.ColModelName.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColModelName.HeaderText = "Model Name"
-        Me.ColModelName.Name = "ColModelName"
-        Me.ColModelName.ReadOnly = True
-        Me.ColModelName.Width = 250
-        '
-        'ColExtensionId
-        '
-        Me.ColExtensionId.DataPropertyName = "ExtensionId"
-        Me.ColExtensionId.HeaderText = "ExtensionId"
-        Me.ColExtensionId.Name = "ColExtensionId"
-        Me.ColExtensionId.ReadOnly = True
-        Me.ColExtensionId.Visible = False
-        '
-        'ColExtensionName
-        '
-        Me.ColExtensionName.DataPropertyName = "ExtensionName"
-        Me.ColExtensionName.HeaderText = "Extension Name"
-        Me.ColExtensionName.Name = "ColExtensionName"
-        Me.ColExtensionName.ReadOnly = True
-        Me.ColExtensionName.Width = 150
-        '
-        'ColIsActive
-        '
-        Me.ColIsActive.DataPropertyName = "IsActive"
-        Me.ColIsActive.HeaderText = "Active"
-        Me.ColIsActive.Name = "ColIsActive"
-        Me.ColIsActive.ReadOnly = True
-        Me.ColIsActive.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsActive.Width = 55
-        '
-        'ColIsDrawing
-        '
-        Me.ColIsDrawing.DataPropertyName = "IsDrawing"
-        Me.ColIsDrawing.HeaderText = "Drwg"
-        Me.ColIsDrawing.Name = "ColIsDrawing"
-        Me.ColIsDrawing.ReadOnly = True
-        Me.ColIsDrawing.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ColIsDrawing.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ColIsDrawing.Width = 55
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
         '
         'MntJigModel
         '
@@ -654,4 +665,6 @@ Partial Class MntJigModel
     Friend WithEvents ColExtensionName As DataGridViewTextBoxColumn
     Friend WithEvents ColIsActive As DataGridViewCheckBoxColumn
     Friend WithEvents ColIsDrawing As DataGridViewCheckBoxColumn
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
 End Class

@@ -27,30 +27,19 @@ Public Class Login
         If isDebug = True Then
             'sir alvin
             'txtEmployeeId.Text = "1705-025"
-            'txtPassword.Text = "aranes"
+            'txtPassword.Text = "alvin"
 
             'sir mon
             'txtEmployeeId.Text = "1506-001"
             'txtPassword.Text = "bayani"
 
-            'txtEmployeeId.Text = "1605-002"
-            'txtPassword.Text = "atienza"
-
             'sir emman
             'txtEmployeeId.Text = "1701-066"
             'txtPassword.Text = "ESandoval"
 
-            'sir michael
-            'txtEmployeeId.Text = "2401-001"
-            'txtPassword.Text = "salazar"
-
             'sir harry
             'txtEmployeeId.Text = "1807-002"
             'txtPassword.Text = "tanega"
-
-            'karlin
-            'txtEmployeeId.Text = "2106-020"
-            'txtPassword.Text = "tano"
 
             'sys admin
             'txtEmployeeId.Text = "XXXX-XXX"
@@ -60,9 +49,9 @@ Public Class Login
             'txtEmployeeId.Text = "2009-002"
             'txtPassword.Text = "ej"
 
-            'karlin
-            'txtEmployeeId.Text = "2106-020"
-            'txtPassword.Text = "tano"
+            'sir tony
+            'txtEmployeeId.Text = "1605-002"
+            'txtPassword.Text = "atienza"
 
             'noriel
             'txtEmployeeId.Text = "1901-033"

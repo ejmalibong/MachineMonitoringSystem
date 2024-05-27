@@ -462,11 +462,12 @@ Public Class SecUser
                 totalCount = prmMasterlist(2).Value
             End If
 
-            Me.Text = String.Empty
-            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
-                Me.Text = "User Masterlist - " & totalCount & " item"
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
             Else
-                Me.Text = "User Masterlist - " & totalCount & " items"
+                CountToolStripLabel.Text = totalCount & " items"
             End If
 
             bsUser.DataSource = dtUser

@@ -733,6 +733,14 @@ Public Class MntSparePart
                 totalCount = prmPart(2).Value
             End If
 
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            Else
+                CountToolStripLabel.Text = totalCount & " items"
+            End If
+
             If totalCount Mod pageSize = 0 Then
                 If totalCount = 0 Then
                     pageCount = (totalCount / pageSize) + 1
@@ -856,8 +864,6 @@ Public Class MntSparePart
         AddHandler cmbSortCriteria.SelectedValueChanged, AddressOf cmbSortCriteria_SelectedValueChanged
         AddHandler cmbStatus.SelectedValueChanged, AddressOf cmbStatus_SelectedValueChanged
 
-        DirectCast(Me.MdiParent, Main).ClickSparePartsFloatLogs()
-
         Me.ActiveControl = dgvList
     End Sub
     Private Sub SetScrollingIndex()
@@ -898,7 +904,7 @@ Public Class MntSparePart
     Private Sub ReceiveIssueToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReceiveIssueToolStripMenuItem.Click
         Try
             'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
-            DirectCast(Me.MdiParent, Main).ClickSparePartsLogs()
+            DirectCast(Me.MdiParent, Main).ClickMntSparePartsLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -907,7 +913,7 @@ Public Class MntSparePart
     Private Sub FloatTransactionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FloatTransactionToolStripMenuItem.Click
         Try
             'https://www.vbforums.com/showthread.php?369474-RESOLVED-Accessing-MDI-Parent-object-from-MDI-Child
-            DirectCast(Me.MdiParent, Main).ClickSparePartsFloatLogs()
+            DirectCast(Me.MdiParent, Main).ClickMntSparePartsFloatLogs()
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

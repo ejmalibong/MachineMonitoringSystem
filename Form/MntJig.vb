@@ -563,11 +563,12 @@ Public Class MntJig
                 totalCount = prmJigMasterlist(2).Value
             End If
 
-            Me.Text = String.Empty
-            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
-                Me.Text = "Jig Masterlist - " & totalCount & " item"
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
             Else
-                Me.Text = "Jig Masterlist - " & totalCount & " items"
+                CountToolStripLabel.Text = totalCount & " items"
             End If
 
             bsJig.DataSource = dtJig
