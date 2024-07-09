@@ -23,8 +23,6 @@ Partial Class MntTrxPartReceive
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblPartsReceiving = New System.Windows.Forms.Label()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
@@ -40,9 +38,6 @@ Partial Class MntTrxPartReceive
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnRemove = New PinkieControls.ButtonXP()
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
-        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblPartDescription = New System.Windows.Forms.Label()
         Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtOrderingPoint = New System.Windows.Forms.Label()
@@ -63,6 +58,10 @@ Partial Class MntTrxPartReceive
         Me.lblLocation = New System.Windows.Forms.Label()
         Me.lblFloatQty = New System.Windows.Forms.Label()
         Me.txtFloatQty = New System.Windows.Forms.Label()
+        Me.chkFloat = New System.Windows.Forms.CheckBox()
+        Me.btnReceiveItem = New PinkieControls.ButtonXP()
+        Me.btnReceiveAllItem = New PinkieControls.ButtonXP()
+        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -295,7 +294,7 @@ Partial Class MntTrxPartReceive
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId, Me.ColCreatedDate, Me.ColQty})
+        Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId})
         Me.dgvPartDetail.Location = New System.Drawing.Point(3, 335)
         Me.dgvPartDetail.MultiSelect = False
         Me.dgvPartDetail.Name = "dgvPartDetail"
@@ -306,34 +305,6 @@ Partial Class MntTrxPartReceive
         Me.dgvPartDetail.Size = New System.Drawing.Size(1034, 150)
         Me.dgvPartDetail.TabIndex = 603
         Me.dgvPartDetail.TabStop = False
-        '
-        'ColPartId
-        '
-        Me.ColPartId.DataPropertyName = "PartId"
-        Me.ColPartId.HeaderText = "Part ID"
-        Me.ColPartId.Name = "ColPartId"
-        Me.ColPartId.ReadOnly = True
-        Me.ColPartId.Visible = False
-        '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColCreatedDate.HeaderText = "Date Created"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
-        'ColQty
-        '
-        Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColQty.HeaderText = "Quantity"
-        Me.ColQty.Name = "ColQty"
-        Me.ColQty.ReadOnly = True
-        Me.ColQty.Width = 60
         '
         'lblPartDescription
         '
@@ -606,6 +577,59 @@ Partial Class MntTrxPartReceive
         Me.txtFloatQty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.txtFloatQty.UseCompatibleTextRendering = True
         '
+        'chkFloat
+        '
+        Me.chkFloat.AutoSize = True
+        Me.chkFloat.Checked = True
+        Me.chkFloat.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkFloat.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.chkFloat.Location = New System.Drawing.Point(289, 283)
+        Me.chkFloat.Name = "chkFloat"
+        Me.chkFloat.Size = New System.Drawing.Size(128, 23)
+        Me.chkFloat.TabIndex = 643
+        Me.chkFloat.Text = "Incoming Stocks"
+        Me.chkFloat.UseVisualStyleBackColor = True
+        '
+        'btnReceiveItem
+        '
+        Me.btnReceiveItem.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnReceiveItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnReceiveItem.DefaultScheme = False
+        Me.btnReceiveItem.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnReceiveItem.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnReceiveItem.Hint = "Receive highlighted item"
+        Me.btnReceiveItem.Location = New System.Drawing.Point(517, 493)
+        Me.btnReceiveItem.Name = "btnReceiveItem"
+        Me.btnReceiveItem.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnReceiveItem.Size = New System.Drawing.Size(120, 32)
+        Me.btnReceiveItem.TabIndex = 648
+        Me.btnReceiveItem.TabStop = False
+        Me.btnReceiveItem.Text = "Receive Item"
+        '
+        'btnReceiveAllItem
+        '
+        Me.btnReceiveAllItem.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnReceiveAllItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnReceiveAllItem.DefaultScheme = False
+        Me.btnReceiveAllItem.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnReceiveAllItem.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnReceiveAllItem.Hint = "Receive all items"
+        Me.btnReceiveAllItem.Location = New System.Drawing.Point(393, 493)
+        Me.btnReceiveAllItem.Name = "btnReceiveAllItem"
+        Me.btnReceiveAllItem.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnReceiveAllItem.Size = New System.Drawing.Size(120, 32)
+        Me.btnReceiveAllItem.TabIndex = 649
+        Me.btnReceiveAllItem.TabStop = False
+        Me.btnReceiveAllItem.Text = "Receive All Items"
+        '
+        'ColPartId
+        '
+        Me.ColPartId.DataPropertyName = "PartId"
+        Me.ColPartId.HeaderText = "Part ID"
+        Me.ColPartId.Name = "ColPartId"
+        Me.ColPartId.ReadOnly = True
+        Me.ColPartId.Visible = False
+        '
         'MntTrxPartReceive
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -613,6 +637,9 @@ Partial Class MntTrxPartReceive
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1040, 528)
+        Me.Controls.Add(Me.btnReceiveAllItem)
+        Me.Controls.Add(Me.btnReceiveItem)
+        Me.Controls.Add(Me.chkFloat)
         Me.Controls.Add(Me.lblFloatQty)
         Me.Controls.Add(Me.txtFloatQty)
         Me.Controls.Add(Me.txtLocation)
@@ -698,9 +725,10 @@ Partial Class MntTrxPartReceive
     Friend WithEvents dtpDateReceived As DateTimePicker
     Public WithEvents txtLocation As Label
     Friend WithEvents lblLocation As Label
-    Friend WithEvents ColPartId As DataGridViewTextBoxColumn
-    Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
-    Friend WithEvents ColQty As DataGridViewTextBoxColumn
     Friend WithEvents lblFloatQty As Label
     Public WithEvents txtFloatQty As Label
+    Friend WithEvents chkFloat As CheckBox
+    Friend WithEvents btnReceiveItem As PinkieControls.ButtonXP
+    Friend WithEvents btnReceiveAllItem As PinkieControls.ButtonXP
+    Friend WithEvents ColPartId As DataGridViewTextBoxColumn
 End Class

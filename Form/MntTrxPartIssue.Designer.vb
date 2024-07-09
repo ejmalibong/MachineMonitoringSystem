@@ -60,6 +60,7 @@ Partial Class MntTrxPartIssue
         Me.chkFloat = New System.Windows.Forms.CheckBox()
         Me.lblFloatQty = New System.Windows.Forms.Label()
         Me.txtFloatQty = New System.Windows.Forms.Label()
+        Me.btnCloseRecord = New PinkieControls.ButtonXP()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -595,6 +596,22 @@ Partial Class MntTrxPartIssue
         Me.txtFloatQty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.txtFloatQty.UseCompatibleTextRendering = True
         '
+        'btnCloseRecord
+        '
+        Me.btnCloseRecord.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCloseRecord.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnCloseRecord.DefaultScheme = False
+        Me.btnCloseRecord.DialogResult = System.Windows.Forms.DialogResult.None
+        Me.btnCloseRecord.Font = New System.Drawing.Font("Verdana", 8.5!)
+        Me.btnCloseRecord.Hint = "Remaining items returned by technician"
+        Me.btnCloseRecord.Location = New System.Drawing.Point(3, 493)
+        Me.btnCloseRecord.Name = "btnCloseRecord"
+        Me.btnCloseRecord.Scheme = PinkieControls.ButtonXP.Schemes.Blue
+        Me.btnCloseRecord.Size = New System.Drawing.Size(150, 32)
+        Me.btnCloseRecord.TabIndex = 646
+        Me.btnCloseRecord.TabStop = False
+        Me.btnCloseRecord.Text = "Close Record"
+        '
         'MntTrxPartIssue
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -602,6 +619,7 @@ Partial Class MntTrxPartIssue
         Me.BackColor = System.Drawing.Color.White
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(1040, 528)
+        Me.Controls.Add(Me.btnCloseRecord)
         Me.Controls.Add(Me.txtReferenceNo)
         Me.Controls.Add(Me.lblFloatQty)
         Me.Controls.Add(Me.txtFloatQty)
@@ -692,4 +710,5 @@ Partial Class MntTrxPartIssue
     Friend WithEvents lblFloatQty As Label
     Public WithEvents txtFloatQty As Label
     Friend WithEvents ColPartId As DataGridViewTextBoxColumn
+    Friend WithEvents btnCloseRecord As PinkieControls.ButtonXP
 End Class

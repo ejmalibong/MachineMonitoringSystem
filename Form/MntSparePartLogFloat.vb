@@ -1,11 +1,9 @@
 ﻿Imports System.Data.SqlClient
-Imports System.IO
 Imports BlackCoffeeLibrary
 Imports ClosedXML.Excel
-Imports DocumentFormat.OpenXml.Drawing
 
 Public Class MntSparePartLogFloat
-    Public bsTransactionPartDetail As New BindingSource
+    Public bsTransactionPartDetailFloat As New BindingSource
     Private connection As New Connection
 
     Private dbMain As New BlackCoffeeLibrary.Main
@@ -29,13 +27,14 @@ Public Class MntSparePartLogFloat
     Private consumedQty As Integer
     Private remainingQty As Integer
 
-    Private mStream As New MemoryStream
-    Private bite As Byte() 'the word `byte` is not a valid identifier
+    Private userId As Integer = 0
 
-    Public Sub New()
+    Public Sub New(_userId As Integer)
 
         ' This call is required by the designer.
         InitializeComponent()
+
+        userId = _userId
 
         ' Add any initialization after the InitializeComponent() call.
         dbMain.EnableDoubleBuffered(dgvList)
@@ -106,6 +105,8 @@ Public Class MntSparePartLogFloat
 
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
+            Exit Sub
+
             'Dim dt As DataTable = New DataTable()
             'Dim dtReport As DataTable = New DataTable()
 
@@ -294,62 +295,25 @@ Public Class MntSparePartLogFloat
 
     Private Sub btnView_Click(sender As Object, e As EventArgs) Handles btnView.Click
         Try
-            'If Me.dgvList.Rows.Count > 0 Then
-            '    Dim trxId As Integer = 0
-            '    Dim partTrxId As Integer = 0
+            If Me.dgvList.Rows.Count > 0 Then
+                Dim partTrxId As Integer = 0
 
-            '    If Not CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId") Is DBNull.Value Then
-            '        trxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TrxId")
-            '    Else
-            '        partTrxId = CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("PartTrxId")
-            '    End If
+                partTrxId = CType(Me.bsTransactionPartDetailFloat.Current, DataRowView).Item("PartTrxId")
 
-            '    If trxId = 0 Then
-            '        If CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TransactionTypeId") = 1 Then
-            '            Using frmReceive As New MntTrxPartReceive(0, partTrxId)
-            '                frmReceive.ShowDialog()
-            '            End Using
-            '        Else
-            '            Using frmIssue As New MntTrxPartIssue(0, partTrxId)
-            '                frmIssue.ShowDialog()
-            '            End Using
-            '        End If
-
-            '    Else
-            '        Dim isMachineActivity As Boolean = False
-            '        Dim isJigActivity As Boolean = False
-            '        Dim isOthActivity As Boolean = False
-
-            '        Dim prm(0) As SqlParameter
-            '        prm(0) = New SqlParameter("@TrxId", SqlDbType.Int)
-            '        prm(0).Value = trxId
-
-            '        Dim rdr As IDataReader = dbMethod.ExecuteReader("SELECT Machineid, JigId FROM MntTransactionHeader WHERE TrxId = @TrxId", CommandType.Text, prm)
-
-            '        While rdr.Read
-            '            If rdr.Item("MachineId") Is DBNull.Value AndAlso rdr.Item("JigId") Is DBNull.Value Then
-            '                Using frmDetail As New MntTrxDetailOth(0, 0, 0, trxId)
-            '                    frmDetail.ShowDialog()
-            '                End Using
-            '            End If
-
-            '            If Not rdr.Item("MachineId") Is DBNull.Value Then
-            '                Using frmDetail As New MntTrxDetailMch(0, 0, 0, trxId)
-            '                    frmDetail.fromPmCalendar = True
-            '                    frmDetail.ShowDialog()
-            '                End Using
-            '            End If
-
-            '            If Not rdr.Item("JigId") Is DBNull.Value Then
-            '                Using frmDetail As New MntTrxDetailJig(0, 0, 0, trxId)
-            '                    frmDetail.fromPmCalendar = True
-            '                    frmDetail.ShowDialog()
-            '                End Using
-            '            End If
-            '        End While
-            '        rdr.Close()
-            '    End If
-            'End If
+                If CType(Me.bsTransactionPartDetailFloat.Current, DataRowView).Item("TransactionTypeId") = 1 Then
+                    Using frmReceive As New MntTrxPartReceive(userId, partTrxId, True)
+                        If frmReceive.ShowDialog() = DialogResult.OK Then
+                            Reload()
+                        End If
+                    End Using
+                Else
+                    Using frmIssue As New MntTrxPartIssue(userId, partTrxId, True)
+                        If frmIssue.ShowDialog() = DialogResult.OK Then
+                            Reload()
+                        End If
+                    End Using
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -636,10 +600,13 @@ Public Class MntSparePartLogFloat
                 remainingQty = prmPart(5).Value
             End If
 
-            bsTransactionPartDetail.DataSource = dtSparePart
-            bsTransactionPartDetail.ResetBindings(True)
-            dgvList.AutoGenerateColumns = False
-            dgvList.DataSource = bsTransactionPartDetail
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            Else
+                CountToolStripLabel.Text = totalCount & " items"
+            End If
 
             If totalCount Mod pageSize = 0 Then
                 If totalCount = 0 Then
@@ -652,7 +619,18 @@ Public Class MntSparePartLogFloat
             End If
 
             'current page index and total number of pages
-            txtPageNumber.Text = pageIndex + 1
+            If pageIndex > pageCount Then
+                pageIndex = 0
+                txtPageNumber.Text = pageIndex + 1
+            Else
+                txtPageNumber.Text = pageIndex + 1
+            End If
+
+            bsTransactionPartDetailFloat.DataSource = dtSparePart
+            bsTransactionPartDetailFloat.ResetBindings(True)
+            dgvList.AutoGenerateColumns = False
+            dgvList.DataSource = bsTransactionPartDetailFloat
+
             txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
 
             txtTotalIssued.Text = issuedQty.ToString("N0")
@@ -768,7 +746,7 @@ Public Class MntSparePartLogFloat
         Else
             dgvList.Rows(indexPosition - 1).Selected = True
         End If
-        Me.bsTransactionPartDetail.Position = dgvList.SelectedCells(0).RowIndex
+        Me.bsTransactionPartDetailFloat.Position = dgvList.SelectedCells(0).RowIndex
     End Sub
 
     Private Sub SortChanged(sender As Object, e As EventArgs)

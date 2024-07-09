@@ -5,9 +5,13 @@ Imports BlackCoffeeLibrary
 
 Public Class MntTrxPartReceive
     Public bsTrxPartDetail As New BindingSource
+    Public bsTrxPartDetailFloat As New BindingSource
     Private dtTrxPartHeader As New DataTable
+    Private dtTrxPartHeaderFloat As New DataTable
     Public dtTrxPartDetail As New DataTable
+    Public dtTrxPartDetailFloat As New DataTable
     Private adpTrxPartDetail As New SqlDataAdapter
+    Private adpTrxPartDetailFloat As New SqlDataAdapter
     Private bite As Byte()
     Private bsSparePart As New BindingSource
     Private dbConnection As New Connection
@@ -19,16 +23,20 @@ Public Class MntTrxPartReceive
     Private mStream As New MemoryStream
     Private partTrxId As Integer = 0
     Private userId As Integer = 0
-    'the word `byte` is not a valid identifier
-    Public Sub New(Optional _userId As Integer = 0, Optional _partTrxId As Integer = 0)
+    Private isFloat As Boolean = False
+
+    Public Sub New(_userId As Integer, Optional _partTrxId As Integer = 0, Optional _isFloat As Boolean = False)
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         userId = _userId
         partTrxId = _partTrxId
+        isFloat = _isFloat
 
         dbMain.EnableDoubleBuffered(dgvPartDetail)
+
+        Dim isClosed As Boolean = False
 
         If partTrxId = 0 Then
             Dim prmUser(1) As SqlParameter
@@ -39,41 +47,86 @@ Public Class MntTrxPartReceive
             dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
 
             dtTrxPartDetail = CreateMntTransactionPartDetail()
+            dtTrxPartDetailFloat = CreateMntTransactionPartDetailFloat()
 
             ActiveControl = cmbTechnician
 
         Else
-            Dim prmUser(0) As SqlParameter
-            prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
-            prmUser(0).Value = 2
-            dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+            If isFloat Then
+                Dim prmUser(0) As SqlParameter
+                prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+                prmUser(0).Value = 2
+                dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
 
-            Dim prmHeader(0) As SqlParameter
-            prmHeader(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
-            prmHeader(0).Value = partTrxId
+                Dim prmHeader(0) As SqlParameter
+                prmHeader(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+                prmHeader(0).Value = partTrxId
 
-            dtTrxPartHeader = dbMethod.FillDataTable("RdMntTransactionPartHeaderByPartTrxId", CommandType.StoredProcedure, prmHeader)
+                dtTrxPartHeaderFloat = dbMethod.FillDataTable("RdMntTransactionPartHeaderFloatByPartTrxId", CommandType.StoredProcedure, prmHeader)
 
-            Dim prmDetail(0) As SqlParameter
-            prmDetail(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
-            prmDetail(0).Value = partTrxId
+                Dim prmDetail(0) As SqlParameter
+                prmDetail(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+                prmDetail(0).Value = partTrxId
 
-            dtTrxPartDetail = dbMethod.FillDataTable("RdMntTransactionPartDetailByPartTrxId", CommandType.StoredProcedure, prmDetail)
+                dtTrxPartDetailFloat = dbMethod.FillDataTable("RdMntTransactionPartDetailFloatByPartTrxId", CommandType.StoredProcedure, prmDetail)
 
-            Me.Text = "Transaction No. " & partTrxId
+                For Each row As DataRow In dtTrxPartHeaderFloat.Rows
+                    dtpDateReceived.Value = row("CreatedDate")
+                    cmbTechnician.SelectedValue = row("CreatedBy")
 
-            For Each row As DataRow In dtTrxPartHeader.Rows
-                dtpDateReceived.Value = row("TrxDate")
-                cmbTechnician.SelectedValue = row("CreatedBy")
+                    If Not row("ReferenceNo") Is DBNull.Value Then
+                        txtReferenceNo.Text = row("ReferenceNo").ToString.Trim
+                    End If
 
-                If Not row("ReferenceNo") Is DBNull.Value Then
-                    txtReferenceNo.Text = row("ReferenceNo").ToString.Trim
-                End If
+                    If Not row("Remarks") Is DBNull.Value Then
+                        txtRemarks.Text = row("Remarks").ToString.Trim
+                    End If
 
-                If Not row("Remarks") Is DBNull.Value Then
-                    txtRemarks.Text = row("Remarks").ToString.Trim
-                End If
-            Next
+                    isClosed = row("IsClosed")
+                Next
+
+            Else
+                Dim prmUser(0) As SqlParameter
+                prmUser(0) = New SqlParameter("@SectionId", SqlDbType.Int)
+                prmUser(0).Value = 2
+                dbMethod.FillCmbWithCaption("RdSecUser", CommandType.StoredProcedure, "UserId", "UserName", cmbTechnician, "", prmUser)
+
+                Dim prmHeader(0) As SqlParameter
+                prmHeader(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+                prmHeader(0).Value = partTrxId
+
+                dtTrxPartHeader = dbMethod.FillDataTable("RdMntTransactionPartHeaderByPartTrxId", CommandType.StoredProcedure, prmHeader)
+
+                Dim prmDetail(0) As SqlParameter
+                prmDetail(0) = New SqlParameter("PartTrxId", SqlDbType.Int)
+                prmDetail(0).Value = partTrxId
+
+                dtTrxPartDetail = dbMethod.FillDataTable("RdMntTransactionPartDetailByPartTrxId", CommandType.StoredProcedure, prmDetail)
+
+                For Each row As DataRow In dtTrxPartHeader.Rows
+                    dtpDateReceived.Value = row("TrxDate")
+                    cmbTechnician.SelectedValue = row("CreatedBy")
+
+                    If Not row("ReferenceNo") Is DBNull.Value Then
+                        txtReferenceNo.Text = row("ReferenceNo").ToString.Trim
+                    End If
+
+                    If Not row("Remarks") Is DBNull.Value Then
+                        txtRemarks.Text = row("Remarks").ToString.Trim
+                    End If
+                Next
+
+                btnReceiveItem.Enabled = False
+                btnReceiveAllItem.Enabled = False
+            End If
+
+            If isClosed = True Then
+                Me.Text = "Transaction No. " & partTrxId & " (CLOSED)"
+                btnReceiveItem.Enabled = False
+                btnReceiveAllItem.Enabled = False
+            Else
+                Me.Text = "Transaction No. " & partTrxId
+            End If
 
             Me.ActiveControl = btnClose
         End If
@@ -93,11 +146,11 @@ Public Class MntTrxPartReceive
         colPartNo.DataSource = Me.bsSparePart
         colPartNo.ValueMember = "PartId"
         colPartNo.DisplayMember = "PartNo"
-        colPartNo.Width = 415
+        colPartNo.Width = 430
         colPartNo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         colPartNo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
         colPartNo.SortMode = DataGridViewColumnSortMode.Automatic
-        dgvPartDetail.Columns.Insert(2, colPartNo)
+        dgvPartDetail.Columns.Insert(1, colPartNo)
 
         Dim colPartName As DataGridViewComboBoxColumn = New DataGridViewComboBoxColumn()
         colPartName.Name = "ColPartName"
@@ -106,11 +159,11 @@ Public Class MntTrxPartReceive
         colPartName.DataSource = Me.bsSparePart
         colPartName.ValueMember = "PartId"
         colPartName.DisplayMember = "PartName"
-        colPartName.Width = 415
+        colPartName.Width = 430
         colPartName.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         colPartName.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
         colPartName.SortMode = DataGridViewColumnSortMode.Automatic
-        dgvPartDetail.Columns.Insert(3, colPartName)
+        dgvPartDetail.Columns.Insert(2, colPartName)
 
         AddHandler cmbTechnician.Validating, AddressOf cmbTechnician_Validating
         AddHandler cmbTechnician.Validated, AddressOf cmbTechnician_Validated
@@ -143,14 +196,28 @@ Public Class MntTrxPartReceive
                 Exit Sub
             End If
 
-            Me.bsTrxPartDetail.AddNew()
-            Me.bsTrxPartDetail.MoveLast()
-            Me.bsTrxPartDetail.Current("CreatedBy") = cmbTechnician.SelectedValue
-            Me.bsTrxPartDetail.Current("CreatedDate") = dbMethod.GetServerDate
-            Me.bsTrxPartDetail.Current("UserId") = cmbTechnician.SelectedValue
-            Me.bsTrxPartDetail.Current("PartId") = cmbPart.SelectedValue
-            Me.bsTrxPartDetail.Current("Qty") = txtQty.Text.Trim
-            Me.bsTrxPartDetail.EndEdit()
+            If chkFloat.Checked Then
+                Me.bsTrxPartDetailFloat.AddNew()
+                Me.bsTrxPartDetailFloat.MoveLast()
+                Me.bsTrxPartDetailFloat.Current("CreatedBy") = cmbTechnician.SelectedValue
+                Me.bsTrxPartDetailFloat.Current("CreatedDate") = dbMethod.GetServerDate
+                Me.bsTrxPartDetailFloat.Current("IssuedTo") = cmbTechnician.SelectedValue
+                Me.bsTrxPartDetailFloat.Current("PartId") = cmbPart.SelectedValue
+                Me.bsTrxPartDetailFloat.Current("IssuedQty") = txtQty.Text.Trim
+                Me.bsTrxPartDetailFloat.Current("ConsumedQty") = 0
+                Me.bsTrxPartDetailFloat.Current("RemainingQty") = 0
+                Me.bsTrxPartDetailFloat.EndEdit()
+
+            Else
+                Me.bsTrxPartDetail.AddNew()
+                Me.bsTrxPartDetail.MoveLast()
+                Me.bsTrxPartDetail.Current("CreatedBy") = cmbTechnician.SelectedValue
+                Me.bsTrxPartDetail.Current("CreatedDate") = dbMethod.GetServerDate
+                Me.bsTrxPartDetail.Current("UserId") = cmbTechnician.SelectedValue
+                Me.bsTrxPartDetail.Current("PartId") = cmbPart.SelectedValue
+                Me.bsTrxPartDetail.Current("Qty") = txtQty.Text.Trim
+                Me.bsTrxPartDetail.EndEdit()
+            End If
 
             cmbPart.SelectedValue = 0
 
@@ -228,45 +295,76 @@ Public Class MntTrxPartReceive
                 Exit Sub
             End If
 
-            Dim prmPrHeader(7) As SqlParameter
-            prmPrHeader(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
-            prmPrHeader(0).Direction = ParameterDirection.Output
-            prmPrHeader(1) = New SqlParameter("@CreatedBy", SqlDbType.Int)
-            prmPrHeader(1).Value = cmbTechnician.SelectedValue
-            prmPrHeader(2) = New SqlParameter("@CreatedDate", SqlDbType.DateTime)
-            prmPrHeader(2).Value = dbMethod.GetServerDate
-            prmPrHeader(3) = New SqlParameter("@TrxId", SqlDbType.Int)
-            prmPrHeader(3).Value = Nothing
-            prmPrHeader(4) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
-            prmPrHeader(4).Value = 1
-            prmPrHeader(5) = New SqlParameter("@ReferenceNo", SqlDbType.Char)
-            prmPrHeader(5).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
-            prmPrHeader(6) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
-            prmPrHeader(6).Value = IIf(String.IsNullOrEmpty(txtRemarks.Text.Trim), Nothing, txtRemarks.Text.Trim)
-            prmPrHeader(7) = New SqlParameter("@TrxDate", SqlDbType.Date)
-            prmPrHeader(7).Value = CDate(dbMethod.GetServerDate).Date
-            dbMethod.ExecuteNonQuery("InsMntTransactionPartHeader", CommandType.StoredProcedure, prmPrHeader)
+            If chkFloat.Checked Then
+                Dim prmPrHeaderFloat(6) As SqlParameter
+                prmPrHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                prmPrHeaderFloat(0).Direction = ParameterDirection.Output
+                prmPrHeaderFloat(1) = New SqlParameter("@CreatedBy", SqlDbType.Int)
+                prmPrHeaderFloat(1).Value = userId
+                prmPrHeaderFloat(2) = New SqlParameter("@CreatedDate", SqlDbType.DateTime)
+                prmPrHeaderFloat(2).Value = dbMethod.GetServerDate
+                prmPrHeaderFloat(3) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                prmPrHeaderFloat(3).Value = 1
+                prmPrHeaderFloat(4) = New SqlParameter("@ReferenceNo", SqlDbType.Char)
+                prmPrHeaderFloat(4).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
+                prmPrHeaderFloat(5) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                prmPrHeaderFloat(5).Value = IIf(String.IsNullOrEmpty(txtRemarks.Text.Trim), Nothing, txtRemarks.Text.Trim)
+                prmPrHeaderFloat(6) = New SqlParameter("@IsClosed", SqlDbType.Bit)
+                prmPrHeaderFloat(6).Value = 0
+                dbMethod.ExecuteNonQuery("InsMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmPrHeaderFloat)
 
-            Dim rowCount As Integer = 0
-            For Each dataRowView As DataRowView In Me.bsTrxPartDetail
-                rowCount = rowCount + 1
+                Dim rowCount As Integer = 0
+                For Each dataRowView As DataRowView In Me.bsTrxPartDetailFloat
+                    rowCount = rowCount + 1
 
-                Dim row = dataRowView.Row
-                row.Item("PartTrxId") = prmPrHeader(0).Value
-                row.Item("SeqId") = rowCount
-            Next
-            Me.bsTrxPartDetail.EndEdit()
-            adpTrxPartDetail.Update(dtTrxPartDetail)
+                    Dim row = dataRowView.Row
+                    row.Item("PartTrxId") = prmPrHeaderFloat(0).Value
+                    row.Item("SeqId") = rowCount
+                Next
+                Me.bsTrxPartDetailFloat.EndEdit()
+                adpTrxPartDetailFloat.Update(dtTrxPartDetailFloat)
 
-            For Each row As DataGridViewRow In dgvPartDetail.Rows
-                Dim prmIss(1) As SqlParameter
-                prmIss(0) = New SqlParameter("@PartId", SqlDbType.Int)
-                prmIss(0).Value = row.Cells("ColPartId").Value
-                prmIss(1) = New SqlParameter("@Qty", SqlDbType.Int)
-                prmIss(1).Value = row.Cells("ColQty").Value
+            Else
+                Dim prmPrHeader(7) As SqlParameter
+                prmPrHeader(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                prmPrHeader(0).Direction = ParameterDirection.Output
+                prmPrHeader(1) = New SqlParameter("@CreatedBy", SqlDbType.Int)
+                prmPrHeader(1).Value = cmbTechnician.SelectedValue
+                prmPrHeader(2) = New SqlParameter("@CreatedDate", SqlDbType.DateTime)
+                prmPrHeader(2).Value = dbMethod.GetServerDate
+                prmPrHeader(3) = New SqlParameter("@TrxId", SqlDbType.Int)
+                prmPrHeader(3).Value = Nothing
+                prmPrHeader(4) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                prmPrHeader(4).Value = 1
+                prmPrHeader(5) = New SqlParameter("@ReferenceNo", SqlDbType.Char)
+                prmPrHeader(5).Value = IIf(String.IsNullOrEmpty(txtReferenceNo.Text.Trim), Nothing, txtReferenceNo.Text.Trim)
+                prmPrHeader(6) = New SqlParameter("@Remarks", SqlDbType.NVarChar)
+                prmPrHeader(6).Value = IIf(String.IsNullOrEmpty(txtRemarks.Text.Trim), Nothing, txtRemarks.Text.Trim)
+                prmPrHeader(7) = New SqlParameter("@TrxDate", SqlDbType.Date)
+                prmPrHeader(7).Value = CDate(dbMethod.GetServerDate).Date
+                dbMethod.ExecuteNonQuery("InsMntTransactionPartHeader", CommandType.StoredProcedure, prmPrHeader)
 
-                dbMethod.ExecuteNonQuery("UpdMntSparePartRec", CommandType.StoredProcedure, prmIss)
-            Next
+                Dim rowCount As Integer = 0
+                For Each dataRowView As DataRowView In Me.bsTrxPartDetail
+                    rowCount = rowCount + 1
+
+                    Dim row = dataRowView.Row
+                    row.Item("PartTrxId") = prmPrHeader(0).Value
+                    row.Item("SeqId") = rowCount
+                Next
+                Me.bsTrxPartDetail.EndEdit()
+                adpTrxPartDetail.Update(dtTrxPartDetail)
+
+                For Each row As DataGridViewRow In dgvPartDetail.Rows
+                    Dim prmIss(1) As SqlParameter
+                    prmIss(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmIss(0).Value = row.Cells("ColPartId").Value
+                    prmIss(1) = New SqlParameter("@Qty", SqlDbType.Int)
+                    prmIss(1).Value = row.Cells("ColQty").Value
+
+                    dbMethod.ExecuteNonQuery("UpdMntSparePartRec", CommandType.StoredProcedure, prmIss)
+                Next
+            End If
 
             Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex As Exception
@@ -502,6 +600,75 @@ Public Class MntTrxPartReceive
         Return dtMntTrxPartDetail
     End Function
 
+    Private Function CreateMntTransactionPartDetailFloat() As DataTable
+        Dim dtMntTrxPartDetailFloat As New DataTable
+        Dim con As New SqlConnection(dbConnection.GetConnectionString)
+
+        Try
+            Dim query As String = String.Empty
+
+            query = "SELECT PartTrxDetailId, PartTrxId, SeqId, CreatedBy, CreatedDate, IssuedTo, PartId, IssuedQty, ConsumedQty, RemainingQty, ModifiedBy, ModifiedDate FROM dbo.MntTransactionPartDetailFloat"
+
+            Dim cmd As New SqlCommand(query, con)
+            adpTrxPartDetailFloat = New SqlDataAdapter(cmd)
+            Dim cbTrxDetail As New SqlCommandBuilder(adpTrxPartDetailFloat)
+
+            Dim colPartTrxDetailId As DataColumn = New DataColumn("PartTrxDetailId")
+            colPartTrxDetailId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxDetailId)
+
+            Dim colPartTrxId As DataColumn = New DataColumn("PartTrxId")
+            colPartTrxId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartTrxId)
+
+            Dim colSeqId As DataColumn = New DataColumn("SeqId")
+            colSeqId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colSeqId)
+
+            Dim colCreatedBy As DataColumn = New DataColumn("CreatedBy")
+            colCreatedBy.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colCreatedBy)
+
+            Dim colCreateDate As DataColumn = New DataColumn("CreatedDate")
+            colCreateDate.DataType = System.Type.GetType("System.DateTime")
+            dtMntTrxPartDetailFloat.Columns.Add(colCreateDate)
+
+            Dim colIssuedTo As DataColumn = New DataColumn("IssuedTo")
+            colIssuedTo.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colIssuedTo)
+
+            Dim colPartId As DataColumn = New DataColumn("PartId")
+            colPartId.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colPartId)
+
+            Dim colIssuedQty As DataColumn = New DataColumn("IssuedQty")
+            colIssuedQty.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colIssuedQty)
+
+            Dim colConsumed As DataColumn = New DataColumn("ConsumedQty")
+            colConsumed.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colConsumed)
+
+            Dim colRemaining As DataColumn = New DataColumn("RemainingQty")
+            colRemaining.DataType = System.Type.GetType("System.Int32")
+            dtMntTrxPartDetailFloat.Columns.Add(colRemaining)
+
+            Dim colModifiedBy As DataColumn = New DataColumn("ModifiedBy")
+            colModifiedBy.DataType = System.Type.GetType("System.Int32")
+            colModifiedBy.AllowDBNull = True
+            dtMntTrxPartDetailFloat.Columns.Add(colModifiedBy)
+
+            Dim colModifiedDate As DataColumn = New DataColumn("ModifiedDate")
+            colModifiedDate.DataType = System.Type.GetType("System.DateTime")
+            colModifiedDate.AllowDBNull = True
+            dtMntTrxPartDetailFloat.Columns.Add(colModifiedDate)
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        Return dtMntTrxPartDetailFloat
+    End Function
+
     Private Sub dgvPartDetail_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvPartDetail.DataError
         e.Cancel = False
     End Sub
@@ -528,6 +695,7 @@ Public Class MntTrxPartReceive
 
     Private Sub MntTrxActvityLog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadPartSelection()
+        dgvPartDetail.AutoGenerateColumns = False
 
         If partTrxId = 0 Then
             cmbPartSelection.SelectedValue = 1
@@ -547,9 +715,19 @@ Public Class MntTrxPartReceive
             btnSave.Enabled = False
         End If
 
-        Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
-        dgvPartDetail.AutoGenerateColumns = False
-        dgvPartDetail.DataSource = Me.bsTrxPartDetail
+        Dim colIssuedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        colIssuedQty.Name = "ColIssuedQty"
+        colIssuedQty.DataPropertyName = "IssuedQty"
+        colIssuedQty.HeaderText = "Qty"
+        colIssuedQty.Width = 60
+        colIssuedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        colIssuedQty.SortMode = DataGridViewColumnSortMode.Automatic
+        dgvPartDetail.Columns.Insert(3, colIssuedQty)
+
+        Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
+        dgvPartDetail.DataSource = Me.bsTrxPartDetailFloat
+
+        AddHandler chkFloat.CheckedChanged, AddressOf chkFloat_CheckedChanged
 
         If partTrxId <> 0 Then
             dgvPartDetail.ClearSelection()
@@ -570,6 +748,103 @@ Public Class MntTrxPartReceive
         Try
             If partTrxId <> 0 Then
                 cmbTechnician.SelectionLength = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnReceiveItem_Click(sender As Object, e As EventArgs) Handles btnReceiveItem.Click
+        Try
+            Exit Sub
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub btnReceiveAllItem_Click(sender As Object, e As EventArgs) Handles btnReceiveAllItem.Click
+        Try
+            Exit Sub
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub chkFloat_CheckedChanged(sender As Object, e As EventArgs)
+        Try
+            'Cancel CheckChanged event of CheckBox
+            'https://bytes.com/topic/visual-basic-net/answers/689321-how-cancel-checkchanged-click-event-checkbox
+            If dgvPartDetail.Rows.Count > 0 Then
+                If MessageBox.Show("All items below will be cleared. Continue?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) =
+                        DialogResult.No Then
+
+                    Dim cb As CheckBox = DirectCast(sender, CheckBox)
+                    RemoveHandler cb.CheckedChanged, AddressOf chkFloat_CheckedChanged
+                    cb.Checked = Not cb.Checked
+                    AddHandler cb.CheckedChanged, AddressOf chkFloat_CheckedChanged
+                    Exit Sub
+                End If
+            End If
+
+            If chkFloat.Checked Then
+                dtTrxPartDetail.Clear()
+                dgvPartDetail.Columns.RemoveAt(3)
+
+                Dim colIssuedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+                colIssuedQty.Name = "ColIssuedQty"
+                colIssuedQty.DataPropertyName = "IssuedQty"
+                colIssuedQty.HeaderText = "Qty"
+                colIssuedQty.Width = 60
+                colIssuedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+                colIssuedQty.SortMode = DataGridViewColumnSortMode.Automatic
+                dgvPartDetail.Columns.Insert(3, colIssuedQty)
+
+                Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
+                dgvPartDetail.DataSource = Me.bsTrxPartDetailFloat
+            Else
+                dtTrxPartDetailFloat.Clear()
+                dgvPartDetail.Columns.RemoveAt(3)
+
+                Dim colQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+                colQty.Name = "ColIssuedQty"
+                colQty.DataPropertyName = "Qty"
+                colQty.HeaderText = "Qty"
+                colQty.Width = 60
+                colQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+                colQty.SortMode = DataGridViewColumnSortMode.Automatic
+                dgvPartDetail.Columns.Insert(3, colQty)
+
+                Me.bsTrxPartDetail.DataSource = dtTrxPartDetail
+                dgvPartDetail.DataSource = Me.bsTrxPartDetail
+            End If
+
+            Me.ActiveControl = cmbPart
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub cmbTechnician_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbTechnician.SelectedValueChanged
+        Try
+            If partTrxId = 0 Then
+                If dgvPartDetail.Rows.Count > 0 Then
+                    Dim techName As String = cmbTechnician.Text
+                    Dim question As String = String.Format("All the items below will be transferred to {0}." & Environment.NewLine & "Do you want to contiue?", techName)
+                    If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                        If chkFloat.Checked Then
+                            For Each dataRowView As DataRowView In Me.bsTrxPartDetailFloat
+                                Dim row = dataRowView.Row
+                                row.Item("CreatedBy") = cmbTechnician.SelectedValue
+                                row.Item("IssuedTo") = cmbTechnician.SelectedValue
+                            Next
+                        Else
+                            For Each dataRowView As DataRowView In Me.bsTrxPartDetail
+                                Dim row = dataRowView.Row
+                                row.Item("UserId") = cmbTechnician.SelectedValue
+                            Next
+                        End If
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)

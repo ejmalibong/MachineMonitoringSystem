@@ -3950,15 +3950,18 @@ Public Class FacTrxDetailMch
                 Next
             End If
 
-            If cmbApp1Name.Items.Count = 2 Then
-                cmbApp1Name.SelectedIndex = 1
-            ElseIf cmbApp1Name.Items.Count > 2 Then
-                For Each item In cmbApp2Name.Items
-                    If InStr(item.Row(1).ToString, 12) > 0 Then 'mam liza
-                        cmbApp1Name.SelectedValue = 12
-                    End If
-                Next
-            End If
+            'temporarily set default value to allyssa
+            cmbApp1Name.SelectedValue = 53
+
+            'If cmbApp1Name.Items.Count = 2 Then
+            '    cmbApp1Name.SelectedValue = 53
+            'ElseIf cmbApp1Name.Items.Count > 2 Then
+            '    For Each item In cmbApp2Name.Items
+            '        If InStr(item.Row(1).ToString, 12) > 0 Then 'allyssa
+            '            cmbApp1Name.SelectedValue = 53
+            '        End If
+            '    Next
+            'End If
 
             AddHandler cmbApp3Name.Validating, AddressOf cmbApp3Name_Validating
             AddHandler cmbApp2Name.Validating, AddressOf cmbApp2Name_Validating

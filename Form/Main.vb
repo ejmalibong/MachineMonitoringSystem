@@ -76,7 +76,7 @@ Public Class Main
     End Sub
 
     Public Sub ClickMntSparePartsFloatLogs()
-        dbMain.FormLoader(Me, New MntSparePartLogFloat)
+        dbMain.FormLoader(Me, New MntSparePartLogFloat(userId))
     End Sub
 
     Public Sub ClickFacSparePartsLogs()
@@ -792,7 +792,7 @@ Public Class Main
     End Sub
 
     Private Sub MntSparePartFloatLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MntSparePartFloatLogToolStripMenuItem.Click
-        dbMain.FormLoader(Me, New MntSparePartLogFloat)
+        dbMain.FormLoader(Me, New MntSparePartLogFloat(userId))
     End Sub
 
     Private Sub FacSpartPartToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FacSpartPartToolStripMenuItem.Click

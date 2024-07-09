@@ -305,7 +305,7 @@ Public Class MntSparePartIncoming
 
                 If trxId = 0 Then
                     If CType(Me.bsTransactionPartDetail.Current, DataRowView).Item("TransactionTypeId") = 1 Then
-                        Using frmReceive As New MntTrxPartReceive(0, partTrxId)
+                        Using frmReceive As New MntTrxPartReceive(partTrxId)
                             frmReceive.ShowDialog()
                         End Using
                     Else

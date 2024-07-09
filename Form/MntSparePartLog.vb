@@ -600,21 +600,18 @@ Public Class MntSparePartLog
                 totalQty = prmPart(3).Value
             End If
 
-            bsTransactionPartDetail.DataSource = dtSparePart
-            bsTransactionPartDetail.ResetBindings(True)
-            dgvList.AutoGenerateColumns = False
-            dgvList.DataSource = bsTransactionPartDetail
-
-            Me.Text = String.Empty
-            If CInt(totalCount) = 0 Or CInt(totalCount) = 1 Then
-                Me.Text = "Spare Parts Logs - " & totalCount.ToString("N0") & " item"
+            If totalCount = 0 Then
+                CountToolStripLabel.Text = totalCount & " item"
+            ElseIf totalCount = 1 Then
+                CountToolStripLabel.Text = totalCount & " item"
             Else
-                Me.Text = "Spare Parts Logs - " & totalCount.ToString("N0") & " items"
+                CountToolStripLabel.Text = totalCount & " items"
             End If
 
             If totalCount Mod pageSize = 0 Then
                 If totalCount = 0 Then
                     pageCount = (totalCount / pageSize) + 1
+                    pageIndex = 0
                 Else
                     pageCount = totalCount / pageSize
                 End If
@@ -623,10 +620,21 @@ Public Class MntSparePartLog
             End If
 
             'current page index and total number of pages
-            txtPageNumber.Text = pageIndex + 1
+            If pageIndex > pageCount Then
+                pageIndex = 0
+                txtPageNumber.Text = pageIndex + 1
+            Else
+                txtPageNumber.Text = pageIndex + 1
+            End If
+
             txtTotalPageNumber.Text = "of " & CInt(pageCount) & " Page(s)"
 
             txtTotal.Text = totalQty.ToString("N0")
+
+            bsTransactionPartDetail.DataSource = dtSparePart
+            bsTransactionPartDetail.ResetBindings(True)
+            dgvList.AutoGenerateColumns = False
+            dgvList.DataSource = bsTransactionPartDetail
 
             'enables pager
             txtPageNumber.Enabled = True

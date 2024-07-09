@@ -866,6 +866,7 @@ Public Class MntSparePart
 
         Me.ActiveControl = dgvList
     End Sub
+
     Private Sub SetScrollingIndex()
         If dgvList.FirstDisplayedScrollingRowIndex < indexScroll Then
             dgvList.FirstDisplayedScrollingRowIndex = 0

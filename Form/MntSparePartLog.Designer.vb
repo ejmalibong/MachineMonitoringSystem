@@ -67,12 +67,6 @@ Partial Class MntSparePartLog
         Me.rdDesc = New System.Windows.Forms.RadioButton()
         Me.rdAsc = New System.Windows.Forms.RadioButton()
         Me.dgvList = New System.Windows.Forms.DataGridView()
-        Me.lblTotal = New System.Windows.Forms.Label()
-        Me.txtTotal = New System.Windows.Forms.Label()
-        Me.grpTrxType = New System.Windows.Forms.GroupBox()
-        Me.rdIssue = New System.Windows.Forms.RadioButton()
-        Me.rdReceive = New System.Windows.Forms.RadioButton()
-        Me.rdAll = New System.Windows.Forms.RadioButton()
         Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTransactionCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -81,6 +75,14 @@ Partial Class MntSparePartLog
         Me.ColQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lblTotal = New System.Windows.Forms.Label()
+        Me.txtTotal = New System.Windows.Forms.Label()
+        Me.grpTrxType = New System.Windows.Forms.GroupBox()
+        Me.rdIssue = New System.Windows.Forms.RadioButton()
+        Me.rdReceive = New System.Windows.Forms.RadioButton()
+        Me.rdAll = New System.Windows.Forms.RadioButton()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -236,7 +238,7 @@ Partial Class MntSparePartLog
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.CountToolStripLabel})
         Me.bindingNavigator.Location = New System.Drawing.Point(4, 547)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -245,7 +247,7 @@ Partial Class MntSparePartLog
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
         Me.bindingNavigator.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(297, 25)
         Me.bindingNavigator.TabIndex = 554
         '
         'txtTotalPageNumber
@@ -282,7 +284,6 @@ Partial Class MntSparePartLog
         '
         Me.txtPageNumber.AccessibleName = "Position"
         Me.txtPageNumber.AutoSize = False
-        Me.txtPageNumber.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.txtPageNumber.Name = "txtPageNumber"
         Me.txtPageNumber.Size = New System.Drawing.Size(30, 23)
         Me.txtPageNumber.Text = "0"
@@ -524,6 +525,77 @@ Partial Class MntSparePartLog
         Me.dgvList.Size = New System.Drawing.Size(1134, 480)
         Me.dgvList.TabIndex = 553
         '
+        'ColCreatedDate
+        '
+        Me.ColCreatedDate.DataPropertyName = "TrxDate"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColCreatedDate.HeaderText = "Transaction Date"
+        Me.ColCreatedDate.Name = "ColCreatedDate"
+        Me.ColCreatedDate.ReadOnly = True
+        Me.ColCreatedDate.Width = 120
+        '
+        'ColTransactionCode
+        '
+        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColTransactionCode.HeaderText = "Type"
+        Me.ColTransactionCode.Name = "ColTransactionCode"
+        Me.ColTransactionCode.ReadOnly = True
+        Me.ColTransactionCode.Width = 50
+        '
+        'ColUserName
+        '
+        Me.ColUserName.DataPropertyName = "UserName"
+        Me.ColUserName.HeaderText = "Technician"
+        Me.ColUserName.Name = "ColUserName"
+        Me.ColUserName.ReadOnly = True
+        Me.ColUserName.Width = 180
+        '
+        'ColPartNo
+        '
+        Me.ColPartNo.DataPropertyName = "PartNo"
+        Me.ColPartNo.HeaderText = "Part Number"
+        Me.ColPartNo.Name = "ColPartNo"
+        Me.ColPartNo.ReadOnly = True
+        Me.ColPartNo.Width = 280
+        '
+        'ColPartName
+        '
+        Me.ColPartName.DataPropertyName = "PartName"
+        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.Name = "ColPartName"
+        Me.ColPartName.ReadOnly = True
+        Me.ColPartName.Width = 280
+        '
+        'ColQty
+        '
+        Me.ColQty.DataPropertyName = "Qty"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColQty.HeaderText = "Qty"
+        Me.ColQty.Name = "ColQty"
+        Me.ColQty.ReadOnly = True
+        Me.ColQty.Width = 50
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "TrxId"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Visible = False
+        '
+        'ColReferenceNo
+        '
+        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
+        Me.ColReferenceNo.HeaderText = "Reference No"
+        Me.ColReferenceNo.Name = "ColReferenceNo"
+        Me.ColReferenceNo.ReadOnly = True
+        Me.ColReferenceNo.Width = 90
+        '
         'lblTotal
         '
         Me.lblTotal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -606,76 +678,15 @@ Partial Class MntSparePartLog
         Me.rdAll.Text = "All"
         Me.rdAll.UseVisualStyleBackColor = True
         '
-        'ColCreatedDate
+        'BindingNavigatorSeparator5
         '
-        Me.ColCreatedDate.DataPropertyName = "TrxDate"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColCreatedDate.HeaderText = "Transaction Date"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
         '
-        'ColTransactionCode
+        'CountToolStripLabel
         '
-        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColTransactionCode.HeaderText = "Type"
-        Me.ColTransactionCode.Name = "ColTransactionCode"
-        Me.ColTransactionCode.ReadOnly = True
-        Me.ColTransactionCode.Width = 50
-        '
-        'ColUserName
-        '
-        Me.ColUserName.DataPropertyName = "UserName"
-        Me.ColUserName.HeaderText = "Technician"
-        Me.ColUserName.Name = "ColUserName"
-        Me.ColUserName.ReadOnly = True
-        Me.ColUserName.Width = 180
-        '
-        'ColPartNo
-        '
-        Me.ColPartNo.DataPropertyName = "PartNo"
-        Me.ColPartNo.HeaderText = "Part Number"
-        Me.ColPartNo.Name = "ColPartNo"
-        Me.ColPartNo.ReadOnly = True
-        Me.ColPartNo.Width = 280
-        '
-        'ColPartName
-        '
-        Me.ColPartName.DataPropertyName = "PartName"
-        Me.ColPartName.HeaderText = "Part Name"
-        Me.ColPartName.Name = "ColPartName"
-        Me.ColPartName.ReadOnly = True
-        Me.ColPartName.Width = 280
-        '
-        'ColQty
-        '
-        Me.ColQty.DataPropertyName = "Qty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColQty.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColQty.HeaderText = "Qty"
-        Me.ColQty.Name = "ColQty"
-        Me.ColQty.ReadOnly = True
-        Me.ColQty.Width = 50
-        '
-        'ColTrxId
-        '
-        Me.ColTrxId.DataPropertyName = "TrxId"
-        Me.ColTrxId.HeaderText = "TrxId"
-        Me.ColTrxId.Name = "ColTrxId"
-        Me.ColTrxId.ReadOnly = True
-        Me.ColTrxId.Visible = False
-        '
-        'ColReferenceNo
-        '
-        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
-        Me.ColReferenceNo.HeaderText = "Reference No"
-        Me.ColReferenceNo.Name = "ColReferenceNo"
-        Me.ColReferenceNo.ReadOnly = True
-        Me.ColReferenceNo.Width = 90
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
         '
         'MntSparePartLog
         '
@@ -785,4 +796,6 @@ Partial Class MntSparePartLog
     Friend WithEvents ColQty As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
     Friend WithEvents ColReferenceNo As DataGridViewTextBoxColumn
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
 End Class

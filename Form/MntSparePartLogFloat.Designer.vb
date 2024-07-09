@@ -55,6 +55,8 @@ Partial Class MntSparePartLogFloat
         Me.btnGo = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRefresh = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CountToolStripLabel = New System.Windows.Forms.ToolStripLabel()
         Me.btnExport = New PinkieControls.ButtonXP()
         Me.btnView = New PinkieControls.ButtonXP()
         Me.btnClose = New PinkieControls.ButtonXP()
@@ -69,6 +71,16 @@ Partial Class MntSparePartLogFloat
         Me.rdDesc = New System.Windows.Forms.RadioButton()
         Me.rdAsc = New System.Windows.Forms.RadioButton()
         Me.dgvList = New System.Windows.Forms.DataGridView()
+        Me.txtTotalIssued = New System.Windows.Forms.Label()
+        Me.grpTrxType = New System.Windows.Forms.GroupBox()
+        Me.rdIssue = New System.Windows.Forms.RadioButton()
+        Me.rdReceive = New System.Windows.Forms.RadioButton()
+        Me.rdAll = New System.Windows.Forms.RadioButton()
+        Me.txtTotalConsumed = New System.Windows.Forms.Label()
+        Me.txtTotalRemaining = New System.Windows.Forms.Label()
+        Me.lblTotalQty = New System.Windows.Forms.Label()
+        Me.lblTotalConsumed = New System.Windows.Forms.Label()
+        Me.lblTotalRemaining = New System.Windows.Forms.Label()
         Me.ColCreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTransactionCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColUserName = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -79,16 +91,6 @@ Partial Class MntSparePartLogFloat
         Me.ColRemainingQty = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColTrxId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColReferenceNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.txtTotalIssued = New System.Windows.Forms.Label()
-        Me.grpTrxType = New System.Windows.Forms.GroupBox()
-        Me.rdIssue = New System.Windows.Forms.RadioButton()
-        Me.rdReceive = New System.Windows.Forms.RadioButton()
-        Me.rdAll = New System.Windows.Forms.RadioButton()
-        Me.txtTotalConsumed = New System.Windows.Forms.Label()
-        Me.txtTotalRemaining = New System.Windows.Forms.Label()
-        Me.lblTotalIssued = New System.Windows.Forms.Label()
-        Me.lblTotalConsumed = New System.Windows.Forms.Label()
-        Me.lblTotalRemaining = New System.Windows.Forms.Label()
         Me.pnlSearchByText.SuspendLayout()
         Me.pnlSearchByCmb.SuspendLayout()
         Me.pnlSearchByDate.SuspendLayout()
@@ -244,7 +246,7 @@ Partial Class MntSparePartLogFloat
         Me.bindingNavigator.Dock = System.Windows.Forms.DockStyle.None
         Me.bindingNavigator.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.bindingNavigator.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh})
+        Me.bindingNavigator.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator1, Me.txtPageNumber, Me.txtTotalPageNumber, Me.BindingNavigatorSeparator2, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator3, Me.btnGo, Me.BindingNavigatorSeparator4, Me.btnRefresh, Me.BindingNavigatorSeparator5, Me.CountToolStripLabel})
         Me.bindingNavigator.Location = New System.Drawing.Point(4, 547)
         Me.bindingNavigator.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
         Me.bindingNavigator.MoveLastItem = Me.BindingNavigatorMoveLastItem
@@ -253,7 +255,7 @@ Partial Class MntSparePartLogFloat
         Me.bindingNavigator.Name = "bindingNavigator"
         Me.bindingNavigator.PositionItem = Me.txtPageNumber
         Me.bindingNavigator.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.bindingNavigator.Size = New System.Drawing.Size(260, 25)
+        Me.bindingNavigator.Size = New System.Drawing.Size(266, 25)
         Me.bindingNavigator.TabIndex = 554
         '
         'txtTotalPageNumber
@@ -351,6 +353,16 @@ Partial Class MntSparePartLogFloat
         Me.btnRefresh.Text = " Refresh"
         Me.btnRefresh.ToolTipText = "Refresh list"
         '
+        'BindingNavigatorSeparator5
+        '
+        Me.BindingNavigatorSeparator5.Name = "BindingNavigatorSeparator5"
+        Me.BindingNavigatorSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'CountToolStripLabel
+        '
+        Me.CountToolStripLabel.Name = "CountToolStripLabel"
+        Me.CountToolStripLabel.Size = New System.Drawing.Size(0, 22)
+        '
         'btnExport
         '
         Me.btnExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -368,7 +380,6 @@ Partial Class MntSparePartLogFloat
         Me.btnExport.Size = New System.Drawing.Size(90, 32)
         Me.btnExport.TabIndex = 557
         Me.btnExport.Text = "Export"
-        Me.btnExport.Visible = False
         '
         'btnView
         '
@@ -387,7 +398,6 @@ Partial Class MntSparePartLogFloat
         Me.btnView.Size = New System.Drawing.Size(140, 32)
         Me.btnView.TabIndex = 556
         Me.btnView.Text = "View Transaction"
-        Me.btnView.Visible = False
         '
         'btnClose
         '
@@ -534,97 +544,6 @@ Partial Class MntSparePartLogFloat
         Me.dgvList.Size = New System.Drawing.Size(1269, 480)
         Me.dgvList.TabIndex = 553
         '
-        'ColCreatedDate
-        '
-        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
-        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
-        Me.ColCreatedDate.HeaderText = "Transaction Date"
-        Me.ColCreatedDate.Name = "ColCreatedDate"
-        Me.ColCreatedDate.ReadOnly = True
-        Me.ColCreatedDate.Width = 120
-        '
-        'ColTransactionCode
-        '
-        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
-        Me.ColTransactionCode.HeaderText = "Type"
-        Me.ColTransactionCode.Name = "ColTransactionCode"
-        Me.ColTransactionCode.ReadOnly = True
-        Me.ColTransactionCode.Width = 50
-        '
-        'ColUserName
-        '
-        Me.ColUserName.DataPropertyName = "UserName"
-        Me.ColUserName.HeaderText = "User"
-        Me.ColUserName.Name = "ColUserName"
-        Me.ColUserName.ReadOnly = True
-        Me.ColUserName.Width = 180
-        '
-        'ColPartNo
-        '
-        Me.ColPartNo.DataPropertyName = "PartNo"
-        Me.ColPartNo.HeaderText = "Part No"
-        Me.ColPartNo.Name = "ColPartNo"
-        Me.ColPartNo.ReadOnly = True
-        Me.ColPartNo.Width = 280
-        '
-        'ColPartName
-        '
-        Me.ColPartName.DataPropertyName = "PartName"
-        Me.ColPartName.HeaderText = "Part Name"
-        Me.ColPartName.Name = "ColPartName"
-        Me.ColPartName.ReadOnly = True
-        Me.ColPartName.Width = 280
-        '
-        'ColIssuedQty
-        '
-        Me.ColIssuedQty.DataPropertyName = "IssuedQty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColIssuedQty.DefaultCellStyle = DataGridViewCellStyle4
-        Me.ColIssuedQty.HeaderText = "Issued"
-        Me.ColIssuedQty.Name = "ColIssuedQty"
-        Me.ColIssuedQty.ReadOnly = True
-        Me.ColIssuedQty.Width = 80
-        '
-        'ColConsumedQty
-        '
-        Me.ColConsumedQty.DataPropertyName = "ConsumedQty"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColConsumedQty.DefaultCellStyle = DataGridViewCellStyle5
-        Me.ColConsumedQty.HeaderText = "Consumed"
-        Me.ColConsumedQty.Name = "ColConsumedQty"
-        Me.ColConsumedQty.ReadOnly = True
-        Me.ColConsumedQty.Width = 80
-        '
-        'ColRemainingQty
-        '
-        Me.ColRemainingQty.DataPropertyName = "RemainingQty"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.ColRemainingQty.DefaultCellStyle = DataGridViewCellStyle6
-        Me.ColRemainingQty.HeaderText = "Remaining"
-        Me.ColRemainingQty.Name = "ColRemainingQty"
-        Me.ColRemainingQty.ReadOnly = True
-        Me.ColRemainingQty.Width = 80
-        '
-        'ColTrxId
-        '
-        Me.ColTrxId.DataPropertyName = "TrxId"
-        Me.ColTrxId.HeaderText = "TrxId"
-        Me.ColTrxId.Name = "ColTrxId"
-        Me.ColTrxId.ReadOnly = True
-        Me.ColTrxId.Visible = False
-        '
-        'ColReferenceNo
-        '
-        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
-        Me.ColReferenceNo.HeaderText = "Ref No"
-        Me.ColReferenceNo.Name = "ColReferenceNo"
-        Me.ColReferenceNo.ReadOnly = True
-        Me.ColReferenceNo.Width = 90
-        '
         'txtTotalIssued
         '
         Me.txtTotalIssued.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -720,20 +639,20 @@ Partial Class MntSparePartLogFloat
         Me.txtTotalRemaining.TabIndex = 571
         Me.txtTotalRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lblTotalIssued
+        'lblTotalQty
         '
-        Me.lblTotalIssued.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblTotalIssued.BackColor = System.Drawing.SystemColors.Control
-        Me.lblTotalIssued.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lblTotalIssued.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblTotalIssued.ForeColor = System.Drawing.Color.Black
-        Me.lblTotalIssued.Location = New System.Drawing.Point(748, 512)
-        Me.lblTotalIssued.Name = "lblTotalIssued"
-        Me.lblTotalIssued.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.lblTotalIssued.Size = New System.Drawing.Size(85, 25)
-        Me.lblTotalIssued.TabIndex = 572
-        Me.lblTotalIssued.Text = "Total Issued"
-        Me.lblTotalIssued.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblTotalQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTotalQty.BackColor = System.Drawing.SystemColors.Control
+        Me.lblTotalQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lblTotalQty.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblTotalQty.ForeColor = System.Drawing.Color.Black
+        Me.lblTotalQty.Location = New System.Drawing.Point(748, 512)
+        Me.lblTotalQty.Name = "lblTotalQty"
+        Me.lblTotalQty.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.lblTotalQty.Size = New System.Drawing.Size(85, 25)
+        Me.lblTotalQty.TabIndex = 572
+        Me.lblTotalQty.Text = "Total Qty"
+        Me.lblTotalQty.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblTotalConsumed
         '
@@ -765,6 +684,97 @@ Partial Class MntSparePartLogFloat
         Me.lblTotalRemaining.Text = "Total Remaining"
         Me.lblTotalRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'ColCreatedDate
+        '
+        Me.ColCreatedDate.DataPropertyName = "CreatedDate"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.Format = "MM/dd/yyyy"
+        Me.ColCreatedDate.DefaultCellStyle = DataGridViewCellStyle2
+        Me.ColCreatedDate.HeaderText = "Transaction Date"
+        Me.ColCreatedDate.Name = "ColCreatedDate"
+        Me.ColCreatedDate.ReadOnly = True
+        Me.ColCreatedDate.Width = 120
+        '
+        'ColTransactionCode
+        '
+        Me.ColTransactionCode.DataPropertyName = "TransactionCode"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColTransactionCode.DefaultCellStyle = DataGridViewCellStyle3
+        Me.ColTransactionCode.HeaderText = "Type"
+        Me.ColTransactionCode.Name = "ColTransactionCode"
+        Me.ColTransactionCode.ReadOnly = True
+        Me.ColTransactionCode.Width = 50
+        '
+        'ColUserName
+        '
+        Me.ColUserName.DataPropertyName = "UserName"
+        Me.ColUserName.HeaderText = "User"
+        Me.ColUserName.Name = "ColUserName"
+        Me.ColUserName.ReadOnly = True
+        Me.ColUserName.Width = 180
+        '
+        'ColPartNo
+        '
+        Me.ColPartNo.DataPropertyName = "PartNo"
+        Me.ColPartNo.HeaderText = "Part No"
+        Me.ColPartNo.Name = "ColPartNo"
+        Me.ColPartNo.ReadOnly = True
+        Me.ColPartNo.Width = 280
+        '
+        'ColPartName
+        '
+        Me.ColPartName.DataPropertyName = "PartName"
+        Me.ColPartName.HeaderText = "Part Name"
+        Me.ColPartName.Name = "ColPartName"
+        Me.ColPartName.ReadOnly = True
+        Me.ColPartName.Width = 280
+        '
+        'ColIssuedQty
+        '
+        Me.ColIssuedQty.DataPropertyName = "IssuedQty"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColIssuedQty.DefaultCellStyle = DataGridViewCellStyle4
+        Me.ColIssuedQty.HeaderText = "Qty"
+        Me.ColIssuedQty.Name = "ColIssuedQty"
+        Me.ColIssuedQty.ReadOnly = True
+        Me.ColIssuedQty.Width = 80
+        '
+        'ColConsumedQty
+        '
+        Me.ColConsumedQty.DataPropertyName = "ConsumedQty"
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColConsumedQty.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColConsumedQty.HeaderText = "Consumed"
+        Me.ColConsumedQty.Name = "ColConsumedQty"
+        Me.ColConsumedQty.ReadOnly = True
+        Me.ColConsumedQty.Width = 80
+        '
+        'ColRemainingQty
+        '
+        Me.ColRemainingQty.DataPropertyName = "RemainingQty"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.ColRemainingQty.DefaultCellStyle = DataGridViewCellStyle6
+        Me.ColRemainingQty.HeaderText = "Remaining"
+        Me.ColRemainingQty.Name = "ColRemainingQty"
+        Me.ColRemainingQty.ReadOnly = True
+        Me.ColRemainingQty.Width = 80
+        '
+        'ColTrxId
+        '
+        Me.ColTrxId.DataPropertyName = "TrxId"
+        Me.ColTrxId.HeaderText = "TrxId"
+        Me.ColTrxId.Name = "ColTrxId"
+        Me.ColTrxId.ReadOnly = True
+        Me.ColTrxId.Visible = False
+        '
+        'ColReferenceNo
+        '
+        Me.ColReferenceNo.DataPropertyName = "ReferenceNo"
+        Me.ColReferenceNo.HeaderText = "Ref No"
+        Me.ColReferenceNo.Name = "ColReferenceNo"
+        Me.ColReferenceNo.ReadOnly = True
+        Me.ColReferenceNo.Width = 90
+        '
         'MntSparePartLogFloat
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -791,7 +801,7 @@ Partial Class MntSparePartLogFloat
         Me.Controls.Add(Me.grpTrxType)
         Me.Controls.Add(Me.txtTotalConsumed)
         Me.Controls.Add(Me.txtTotalRemaining)
-        Me.Controls.Add(Me.lblTotalIssued)
+        Me.Controls.Add(Me.lblTotalQty)
         Me.Controls.Add(Me.lblTotalConsumed)
         Me.Controls.Add(Me.lblTotalRemaining)
         Me.DoubleBuffered = True
@@ -868,6 +878,13 @@ Partial Class MntSparePartLogFloat
     Public WithEvents rdReceive As RadioButton
     Public WithEvents rdAll As RadioButton
     Public WithEvents rdIssue As RadioButton
+    Friend WithEvents txtTotalConsumed As Label
+    Friend WithEvents txtTotalRemaining As Label
+    Friend WithEvents lblTotalQty As Label
+    Friend WithEvents lblTotalConsumed As Label
+    Friend WithEvents lblTotalRemaining As Label
+    Friend WithEvents BindingNavigatorSeparator5 As ToolStripSeparator
+    Friend WithEvents CountToolStripLabel As ToolStripLabel
     Friend WithEvents ColCreatedDate As DataGridViewTextBoxColumn
     Friend WithEvents ColTransactionCode As DataGridViewTextBoxColumn
     Friend WithEvents ColUserName As DataGridViewTextBoxColumn
@@ -878,9 +895,4 @@ Partial Class MntSparePartLogFloat
     Friend WithEvents ColRemainingQty As DataGridViewTextBoxColumn
     Friend WithEvents ColTrxId As DataGridViewTextBoxColumn
     Friend WithEvents ColReferenceNo As DataGridViewTextBoxColumn
-    Friend WithEvents txtTotalConsumed As Label
-    Friend WithEvents txtTotalRemaining As Label
-    Friend WithEvents lblTotalIssued As Label
-    Friend WithEvents lblTotalConsumed As Label
-    Friend WithEvents lblTotalRemaining As Label
 End Class
