@@ -116,14 +116,14 @@ Public Class MntTrxPartReceive
                     End If
                 Next
 
-                btnReceiveItem.Enabled = False
-                btnReceiveAllItem.Enabled = False
+                btnReceiveItem.Visible = False
+                btnReceiveAllItem.Visible = False
             End If
 
             If isClosed = True Then
                 Me.Text = "Transaction No. " & partTrxId & " (CLOSED)"
-                btnReceiveItem.Enabled = False
-                btnReceiveAllItem.Enabled = False
+                btnReceiveItem.Visible = False
+                btnReceiveAllItem.Visible = False
             Else
                 Me.Text = "Transaction No. " & partTrxId
             End If
@@ -205,7 +205,7 @@ Public Class MntTrxPartReceive
                 Me.bsTrxPartDetailFloat.Current("PartId") = cmbPart.SelectedValue
                 Me.bsTrxPartDetailFloat.Current("IssuedQty") = txtQty.Text.Trim
                 Me.bsTrxPartDetailFloat.Current("ConsumedQty") = 0
-                Me.bsTrxPartDetailFloat.Current("RemainingQty") = 0
+                Me.bsTrxPartDetailFloat.Current("RemainingQty") = txtQty.Text.Trim
                 Me.bsTrxPartDetailFloat.EndEdit()
 
             Else
@@ -245,31 +245,60 @@ Public Class MntTrxPartReceive
 
     Private Sub btnRemove_Click(sender As Object, e As EventArgs) Handles btnRemove.Click
         Try
-            If dgvPartDetail.Rows.Count > 0 Then
+            If dgvPartDetail.Rows.Count > 0 AndAlso dgvPartDetail.SelectedRows.Count > 0 Then
                 Dim question As String = "Are you sure you want to remove this item?"
 
                 If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                    Dim currentRow = CType(Me.bsTrxPartDetail.Current, DataRowView).Row
-                    Dim rowState = currentRow.RowState
+                    If chkFloat.Checked Then
+                        Dim consumedQty As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("ConsumedQty")
 
-                    Select Case rowState
-                        Case DataRowState.Added
-                            Me.bsTrxPartDetail.RemoveCurrent()
+                        If consumedQty = 0 Then
+                            Dim currentRow = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Row
+                            Dim rowState = currentRow.RowState
 
-                        Case DataRowState.Detached
-                            Me.bsTrxPartDetail.CancelEdit()
+                            Select Case rowState
+                                Case DataRowState.Added
+                                    Me.bsTrxPartDetailFloat.RemoveCurrent()
 
-                        Case DataRowState.Modified, DataRowState.Unchanged
-                            If dgvPartDetail.SelectedCells.Count > 0 AndAlso dgvPartDetail.SelectedCells(0).RowIndex = dgvPartDetail.NewRowIndex Then
+                                Case DataRowState.Detached
+                                    Me.bsTrxPartDetailFloat.CancelEdit()
+
+                                Case DataRowState.Modified, DataRowState.Unchanged
+                                    If dgvPartDetail.SelectedCells.Count > 0 AndAlso dgvPartDetail.SelectedCells(0).RowIndex = dgvPartDetail.NewRowIndex Then
+                                        Me.bsTrxPartDetailFloat.CancelEdit()
+                                        Exit Sub
+                                    End If
+
+                                    Me.bsTrxPartDetailFloat.RemoveCurrent()
+
+                                Case Else
+                                    Me.bsTrxPartDetailFloat.RemoveCurrent()
+                            End Select
+                        End If
+
+                    Else
+                        Dim currentRow = CType(Me.bsTrxPartDetail.Current, DataRowView).Row
+                        Dim rowState = currentRow.RowState
+
+                        Select Case rowState
+                            Case DataRowState.Added
+                                Me.bsTrxPartDetail.RemoveCurrent()
+
+                            Case DataRowState.Detached
                                 Me.bsTrxPartDetail.CancelEdit()
-                                Exit Sub
-                            End If
 
-                            Me.bsTrxPartDetail.RemoveCurrent()
+                            Case DataRowState.Modified, DataRowState.Unchanged
+                                If dgvPartDetail.SelectedCells.Count > 0 AndAlso dgvPartDetail.SelectedCells(0).RowIndex = dgvPartDetail.NewRowIndex Then
+                                    Me.bsTrxPartDetail.CancelEdit()
+                                    Exit Sub
+                                End If
 
-                        Case Else
-                            Me.bsTrxPartDetail.RemoveCurrent()
-                    End Select
+                                Me.bsTrxPartDetail.RemoveCurrent()
+
+                            Case Else
+                                Me.bsTrxPartDetail.RemoveCurrent()
+                        End Select
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -699,6 +728,8 @@ Public Class MntTrxPartReceive
 
         If partTrxId = 0 Then
             cmbPartSelection.SelectedValue = 1
+            btnReceiveItem.Visible = False
+            btnReceiveAllItem.Visible = False
         Else
             dtpDateReceived.Enabled = False
             txtReferenceNo.Enabled = False
@@ -709,20 +740,29 @@ Public Class MntTrxPartReceive
             txtRemarks.Enabled = False
             btnAdd.Enabled = False
             btnRemove.Enabled = False
-            dgvPartDetail.Enabled = False
             btnDelete.Enabled = False
             btnCancel.Enabled = False
             btnSave.Enabled = False
+            chkFloat.Enabled = False
         End If
 
         Dim colIssuedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
         colIssuedQty.Name = "ColIssuedQty"
         colIssuedQty.DataPropertyName = "IssuedQty"
-        colIssuedQty.HeaderText = "Qty"
+        colIssuedQty.HeaderText = "Incoming"
         colIssuedQty.Width = 60
         colIssuedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
         colIssuedQty.SortMode = DataGridViewColumnSortMode.Automatic
         dgvPartDetail.Columns.Insert(3, colIssuedQty)
+
+        Dim colConsumedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        colConsumedQty.Name = "ColConsumedQty"
+        colConsumedQty.DataPropertyName = "ConsumedQty"
+        colConsumedQty.HeaderText = "Delivered"
+        colConsumedQty.Width = 60
+        colConsumedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        colConsumedQty.SortMode = DataGridViewColumnSortMode.Automatic
+        dgvPartDetail.Columns.Insert(4, colConsumedQty)
 
         Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
         dgvPartDetail.DataSource = Me.bsTrxPartDetailFloat
@@ -756,7 +796,50 @@ Public Class MntTrxPartReceive
 
     Private Sub btnReceiveItem_Click(sender As Object, e As EventArgs) Handles btnReceiveItem.Click
         Try
-            Exit Sub
+            If dgvPartDetail.Rows.Count > 0 AndAlso dgvPartDetail.SelectedRows.Count > 0 Then
+                Dim partTrxDetailId As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("PartTrxDetailId")
+                Dim receivedQty As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("IssuedQty")
+                Dim consumedQty As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("ConsumedQty")
+                Dim incomingQty As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("RemainingQty")
+                Dim partId As Integer = CType(Me.bsTrxPartDetailFloat.Current, DataRowView).Item("PartId")
+
+                If receivedQty <> consumedQty Then
+                    Dim prmLog(4) As SqlParameter
+                    prmLog(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                    prmLog(0).Value = partTrxDetailId
+                    prmLog(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                    prmLog(1).Value = Nothing
+                    prmLog(2) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                    prmLog(2).Value = 1
+                    prmLog(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmLog(3).Value = partId
+                    prmLog(4) = New SqlParameter("@Qty", SqlDbType.Int)
+                    prmLog(4).Value = incomingQty
+                    dbMethod.ExecuteNonQuery("InsMntTransactionPartDetailLogFloat", CommandType.StoredProcedure, prmLog)
+
+                    Dim prmDetailFloat(1) As SqlParameter
+                    prmDetailFloat(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                    prmDetailFloat(0).Value = partTrxDetailId
+                    prmDetailFloat(1) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                    prmDetailFloat(1).Value = incomingQty
+                    Dim updDtlQry = "UPDATE dbo.MntTransactionPartDetailFloat SET ConsumedQty = @ConsumedQty, RemainingQty = 0 WHERE PartTrxDetailId = @PartTrxDetailId"
+                    dbMethod.ExecuteNonQuery(updDtlQry, CommandType.Text, prmDetailFloat)
+
+                    Dim prmHeaderFloat(0) As SqlParameter
+                    prmHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                    prmHeaderFloat(0).Value = partTrxId
+                    dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmHeaderFloat)
+
+                    Dim prmPart(1) As SqlParameter
+                    prmPart(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                    prmPart(0).Value = partId
+                    prmPart(1) = New SqlParameter("Qty", SqlDbType.Int)
+                    prmPart(1).Value = incomingQty
+                    dbMethod.ExecuteNonQuery("UpdMntSparePartRec", CommandType.StoredProcedure, prmPart)
+
+                    Me.DialogResult = Windows.Forms.DialogResult.OK
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -764,7 +847,49 @@ Public Class MntTrxPartReceive
 
     Private Sub btnReceiveAllItem_Click(sender As Object, e As EventArgs) Handles btnReceiveAllItem.Click
         Try
-            Exit Sub
+            If dgvPartDetail.Rows.Count > 0 AndAlso isFloat AndAlso Not Me.Text.Contains("(CLOSED") Then
+                Dim question = "Are you sure all remaining items were delivered?"
+                If MessageBox.Show(question, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    For Each row As DataRowView In Me.bsTrxPartDetailFloat
+                        If row("RemainingQty") > 0 Then
+                            Dim prmLog(4) As SqlParameter
+                            prmLog(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                            prmLog(0).Value = row("PartTrxDetailId")
+                            prmLog(1) = New SqlParameter("@TrxId", SqlDbType.Int)
+                            prmLog(1).Value = Nothing
+                            prmLog(2) = New SqlParameter("@TransactionTypeId", SqlDbType.Int)
+                            prmLog(2).Value = 1
+                            prmLog(3) = New SqlParameter("@PartId", SqlDbType.Int)
+                            prmLog(3).Value = row("PartId")
+                            prmLog(4) = New SqlParameter("@Qty", SqlDbType.Int)
+                            prmLog(4).Value = row("RemainingQty")
+                            dbMethod.ExecuteNonQuery("InsMntTransactionPartDetailLogFloat", CommandType.StoredProcedure, prmLog)
+
+                            Dim prmDetailFloat(1) As SqlParameter
+                            prmDetailFloat(0) = New SqlParameter("@PartTrxDetailId", SqlDbType.Int)
+                            prmDetailFloat(0).Value = row("PartTrxDetailId")
+                            prmDetailFloat(1) = New SqlParameter("@ConsumedQty", SqlDbType.Int)
+                            prmDetailFloat(1).Value = row("RemainingQty")
+                            Dim updDtlQry = "UPDATE dbo.MntTransactionPartDetailFloat SET ConsumedQty = @ConsumedQty, RemainingQty = 0 WHERE PartTrxDetailId = @PartTrxDetailId"
+                            dbMethod.ExecuteNonQuery(updDtlQry, CommandType.Text, prmDetailFloat)
+
+                            Dim prmHeaderFloat(0) As SqlParameter
+                            prmHeaderFloat(0) = New SqlParameter("@PartTrxId", SqlDbType.Int)
+                            prmHeaderFloat(0).Value = partTrxId
+                            dbMethod.ExecuteNonQuery("UpdMntTransactionPartHeaderFloat", CommandType.StoredProcedure, prmHeaderFloat)
+
+                            Dim prmPart(1) As SqlParameter
+                            prmPart(0) = New SqlParameter("@PartId", SqlDbType.Int)
+                            prmPart(0).Value = row("PartId")
+                            prmPart(1) = New SqlParameter("Qty", SqlDbType.Int)
+                            prmPart(1).Value = row("RemainingQty")
+                            dbMethod.ExecuteNonQuery("UpdMntSparePartRec", CommandType.StoredProcedure, prmPart)
+                        End If
+                    Next
+
+                    Me.DialogResult = Windows.Forms.DialogResult.OK
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -793,11 +918,20 @@ Public Class MntTrxPartReceive
                 Dim colIssuedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
                 colIssuedQty.Name = "ColIssuedQty"
                 colIssuedQty.DataPropertyName = "IssuedQty"
-                colIssuedQty.HeaderText = "Qty"
+                colIssuedQty.HeaderText = "Incoming"
                 colIssuedQty.Width = 60
                 colIssuedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
                 colIssuedQty.SortMode = DataGridViewColumnSortMode.Automatic
                 dgvPartDetail.Columns.Insert(3, colIssuedQty)
+
+                Dim colConsumedQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+                colConsumedQty.Name = "ColConsumedQty"
+                colConsumedQty.DataPropertyName = "ConsumedQty"
+                colConsumedQty.HeaderText = "Delivered"
+                colConsumedQty.Width = 60
+                colConsumedQty.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+                colConsumedQty.SortMode = DataGridViewColumnSortMode.Automatic
+                dgvPartDetail.Columns.Insert(4, colConsumedQty)
 
                 Me.bsTrxPartDetailFloat.DataSource = dtTrxPartDetailFloat
                 dgvPartDetail.DataSource = Me.bsTrxPartDetailFloat
@@ -806,7 +940,7 @@ Public Class MntTrxPartReceive
                 dgvPartDetail.Columns.RemoveAt(3)
 
                 Dim colQty As DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-                colQty.Name = "ColIssuedQty"
+                colQty.Name = "ColQty"
                 colQty.DataPropertyName = "Qty"
                 colQty.HeaderText = "Qty"
                 colQty.Width = 60
@@ -845,6 +979,23 @@ Public Class MntTrxPartReceive
                         End If
                     End If
                 End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub dgvPartDetail_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvPartDetail.CellFormatting
+        Try
+            If chkFloat.Checked Then
+                For i As Integer = 0 To dgvPartDetail.Rows.Count - 1
+                    Dim issuedQty As Integer = dgvPartDetail.Rows(i).Cells("ColIssuedQty").Value 'for receive qty
+                    Dim remainingQty As Integer = dgvPartDetail.Rows(i).Cells("ColConsumedQty").Value
+
+                    If issuedQty = remainingQty Then
+                        dgvPartDetail.Rows(i).DefaultCellStyle.BackColor = Color.LightGreen
+                    End If
+                Next
             End If
         Catch ex As Exception
             MessageBox.Show(dbMain.SetExceptionMessage(ex), "", MessageBoxButtons.OK, MessageBoxIcon.Error)

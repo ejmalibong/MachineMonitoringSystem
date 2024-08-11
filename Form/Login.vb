@@ -33,13 +33,17 @@ Public Class Login
             'txtEmployeeId.Text = "1506-001"
             'txtPassword.Text = "bayani"
 
-            'sir emman
-            'txtEmployeeId.Text = "1701-066"
-            'txtPassword.Text = "ESandoval"
-
             'sir harry
             'txtEmployeeId.Text = "1807-002"
             'txtPassword.Text = "tanega"
+
+            'nelson
+            'txtEmployeeId.Text = "2308-001"
+            'txtPassword.Text = "Bayani"
+
+            'jen
+            'txtEmployeeId.Text = "1910-020"
+            'txtPassword.Text = "jen"
 
             'sys admin
             'txtEmployeeId.Text = "XXXX-XXX"
@@ -56,10 +60,6 @@ Public Class Login
             'noriel
             'txtEmployeeId.Text = "1901-033"
             'txtPassword.Text = "aquino"
-
-            'liza
-            'txtEmployeeId.Text = "2009-015"
-            'txtPassword.Text = "pastrana"
 
             'mam cath
             'txtEmployeeId.Text = "2107-001"

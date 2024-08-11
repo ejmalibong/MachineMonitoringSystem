@@ -22,7 +22,7 @@ Partial Class MntTrxPartReceive
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblPartsReceiving = New System.Windows.Forms.Label()
         Me.btnClose = New PinkieControls.ButtonXP()
         Me.btnDelete = New PinkieControls.ButtonXP()
@@ -38,6 +38,7 @@ Partial Class MntTrxPartReceive
         Me.btnAdd = New PinkieControls.ButtonXP()
         Me.btnRemove = New PinkieControls.ButtonXP()
         Me.dgvPartDetail = New System.Windows.Forms.DataGridView()
+        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblPartDescription = New System.Windows.Forms.Label()
         Me.txtPartDescription = New System.Windows.Forms.Label()
         Me.txtOrderingPoint = New System.Windows.Forms.Label()
@@ -61,7 +62,6 @@ Partial Class MntTrxPartReceive
         Me.chkFloat = New System.Windows.Forms.CheckBox()
         Me.btnReceiveItem = New PinkieControls.ButtonXP()
         Me.btnReceiveAllItem = New PinkieControls.ButtonXP()
-        Me.ColPartId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvPartDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlImage.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -285,14 +285,14 @@ Partial Class MntTrxPartReceive
         Me.dgvPartDetail.AllowUserToResizeRows = False
         Me.dgvPartDetail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPartDetail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvPartDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.dgvPartDetail.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColPartId})
         Me.dgvPartDetail.Location = New System.Drawing.Point(3, 335)
@@ -305,6 +305,14 @@ Partial Class MntTrxPartReceive
         Me.dgvPartDetail.Size = New System.Drawing.Size(1034, 150)
         Me.dgvPartDetail.TabIndex = 603
         Me.dgvPartDetail.TabStop = False
+        '
+        'ColPartId
+        '
+        Me.ColPartId.DataPropertyName = "PartId"
+        Me.ColPartId.HeaderText = "Part ID"
+        Me.ColPartId.Name = "ColPartId"
+        Me.ColPartId.ReadOnly = True
+        Me.ColPartId.Visible = False
         '
         'lblPartDescription
         '
@@ -597,14 +605,14 @@ Partial Class MntTrxPartReceive
         Me.btnReceiveItem.DefaultScheme = False
         Me.btnReceiveItem.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReceiveItem.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnReceiveItem.Hint = "Receive highlighted item"
-        Me.btnReceiveItem.Location = New System.Drawing.Point(517, 493)
+        Me.btnReceiveItem.Hint = "Receive selected item"
+        Me.btnReceiveItem.Location = New System.Drawing.Point(169, 493)
         Me.btnReceiveItem.Name = "btnReceiveItem"
         Me.btnReceiveItem.Scheme = PinkieControls.ButtonXP.Schemes.Blue
         Me.btnReceiveItem.Size = New System.Drawing.Size(120, 32)
         Me.btnReceiveItem.TabIndex = 648
         Me.btnReceiveItem.TabStop = False
-        Me.btnReceiveItem.Text = "Receive Item"
+        Me.btnReceiveItem.Text = "Receive This Item"
         '
         'btnReceiveAllItem
         '
@@ -613,22 +621,14 @@ Partial Class MntTrxPartReceive
         Me.btnReceiveAllItem.DefaultScheme = False
         Me.btnReceiveAllItem.DialogResult = System.Windows.Forms.DialogResult.None
         Me.btnReceiveAllItem.Font = New System.Drawing.Font("Verdana", 8.5!)
-        Me.btnReceiveAllItem.Hint = "Receive all items"
-        Me.btnReceiveAllItem.Location = New System.Drawing.Point(393, 493)
+        Me.btnReceiveAllItem.Hint = "Receive all remaining items"
+        Me.btnReceiveAllItem.Location = New System.Drawing.Point(3, 493)
         Me.btnReceiveAllItem.Name = "btnReceiveAllItem"
         Me.btnReceiveAllItem.Scheme = PinkieControls.ButtonXP.Schemes.Blue
-        Me.btnReceiveAllItem.Size = New System.Drawing.Size(120, 32)
+        Me.btnReceiveAllItem.Size = New System.Drawing.Size(160, 32)
         Me.btnReceiveAllItem.TabIndex = 649
         Me.btnReceiveAllItem.TabStop = False
-        Me.btnReceiveAllItem.Text = "Receive All Items"
-        '
-        'ColPartId
-        '
-        Me.ColPartId.DataPropertyName = "PartId"
-        Me.ColPartId.HeaderText = "Part ID"
-        Me.ColPartId.Name = "ColPartId"
-        Me.ColPartId.ReadOnly = True
-        Me.ColPartId.Visible = False
+        Me.btnReceiveAllItem.Text = "Receive Remaining Items"
         '
         'MntTrxPartReceive
         '
