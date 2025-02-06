@@ -616,9 +616,11 @@ Public Class Main
             If sectionId = 2 Then
                 Select Case stockStatusId
                     Case 1
-                        Dim prm(0) As SqlParameter
+                        Dim prm(1) As SqlParameter
                         prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
                         prm(0).Value = 1
+                        prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
+                        prm(1).Value = 1
 
                         Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
@@ -636,9 +638,11 @@ Public Class Main
                         End If
 
                     Case 2
-                        Dim prm(0) As SqlParameter
+                        Dim prm(1) As SqlParameter
                         prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
                         prm(0).Value = 2
+                        prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
+                        prm(1).Value = 1
 
                         Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
@@ -656,9 +660,11 @@ Public Class Main
                         End If
 
                     Case 3
-                        Dim prm(0) As SqlParameter
+                        Dim prm(1) As SqlParameter
                         prm(0) = New SqlParameter("@StockStatusId", SqlDbType.Int)
                         prm(0).Value = 3
+                        prm(1) = New SqlParameter("@IsActive", SqlDbType.Int)
+                        prm(1).Value = 1
 
                         Dim rdrSparePart As IDataReader = dbMethod.ExecuteReader("RdMntSparePart", CommandType.StoredProcedure, prm)
 
