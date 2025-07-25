@@ -24,48 +24,6 @@ Public Class Login
     Private isDebug As Boolean = My.Settings.IsDebug
 
     Private Sub Login_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If isDebug = True Then
-            'sir alvin
-            'txtEmployeeId.Text = "1705-025"
-            'txtPassword.Text = "alvin"
-
-            'sir mon
-            'txtEmployeeId.Text = "1506-001"
-            'txtPassword.Text = "bayani"
-
-            'sir harry
-            'txtEmployeeId.Text = "1807-002"
-            'txtPassword.Text = "tanega"
-
-            'nelson
-            'txtEmployeeId.Text = "2308-001"
-            'txtPassword.Text = "Bayani"
-
-            'jen
-            'txtEmployeeId.Text = "1910-020"
-            'txtPassword.Text = "jen"
-
-            'sys admin
-            'txtEmployeeId.Text = "XXXX-XXX"
-            'txtPassword.Text = "Adm1nAcc3ss"
-
-            'ej
-            'txtEmployeeId.Text = "2009-002"
-            'txtPassword.Text = "ej"
-
-            'sir tony
-            'txtEmployeeId.Text = "1605-002"
-            'txtPassword.Text = "atienza"
-
-            'noriel
-            'txtEmployeeId.Text = "1901-033"
-            'txtPassword.Text = "aquino"
-
-            'mam cath
-            'txtEmployeeId.Text = "2107-001"
-            'txtPassword.Text = "sim"
-        End If
-
         picPassword.Image = imgHide
         txtPassword.UseSystemPasswordChar = True
         txtPassword.PasswordChar = "●"
